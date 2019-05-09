@@ -7,7 +7,7 @@ import { HttpHeaders } from '@angular/common/http';
 @Injectable({
   providedIn: 'root'
 })
-export class SampleExService {
+export class ServiceTypeService {
 
   constructor(private http: HttpClient) { }
 

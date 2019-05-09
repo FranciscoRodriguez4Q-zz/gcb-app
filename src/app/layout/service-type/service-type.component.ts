@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { SelectItem } from 'primeng/api';
-import { SampleExService } from './service-type.service';
 import { Message } from 'primeng/components/common/api';
 import { MessageService } from 'primeng/api';
+import { ServiceTypeService } from './service-type.service';
 @Component({
   selector: 'app-service-type',
   templateUrl: './service-type.component.html',
   styleUrls: ['./service-type.component.scss'],
-  providers: [SampleExService, MessageService]
+  providers: [ServiceTypeService, MessageService]
 
 })
 export class ServiceTypeComponent implements OnInit {
@@ -33,7 +33,7 @@ export class ServiceTypeComponent implements OnInit {
     serviceTypeMessage: "",
     useSuggested: true
   };
-  constructor(private sampleExService: SampleExService, private messageService: MessageService) { }
+  constructor(private serviceTypeService: ServiceTypeService, private messageService: MessageService) { }
 
   public cols = [
     { field: 'productNm', header: 'Product Name', width: '15%' },
@@ -105,7 +105,7 @@ export class ServiceTypeComponent implements OnInit {
       this.gcbDetailFilters.suggestedServiceType = productData.serviceTypePrefix + this.gcbDetailFilters.countryCode;
       console.log("Product this.gcbDetailFilters.suggestedServiceType : " + this.gcbDetailFilters.suggestedServiceType);
       this.gcbDetailFilters.serviceType = this.gcbDetailFilters.suggestedServiceType;
-      this.sampleExService.getServicetype(this.gcbDetailFilters).subscribe(
+      this.serviceTypeService.getServicetype(this.gcbDetailFilters).subscribe(
         refData => {
           this.gcbDetailFilters = refData;
         },
@@ -120,7 +120,7 @@ export class ServiceTypeComponent implements OnInit {
     console.log("test button click");
     if (this.validation()) {
       if (this.gcbDetailFilters.productId != "Select" && this.gcbDetailFilters.countryCode != "Select" && this.gcbDetailFilters.billingBasis != "Select") {
-        this.sampleExService.upsertServiceType(this.gcbDetailFilters).subscribe(
+        this.serviceTypeService.upsertServiceType(this.gcbDetailFilters).subscribe(
           refData => {
             this.saveMessage = refData;
             this.errorMessage = this.saveMessage.statusMessage;
@@ -158,7 +158,7 @@ export class ServiceTypeComponent implements OnInit {
   }
   getAllServiceType() {
     console.log("getAllServiceType");
-    this.sampleExService.getServicetypeData().subscribe(
+    this.serviceTypeService.getServicetypeData().subscribe(
       refData => {
         this.serviceTypes = refData;
       },
