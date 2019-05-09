@@ -10,16 +10,14 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
-
 import { FileDownloadComponent } from './file-download/file-download.component';
-import { SampleExComponent } from './sample-ex/sample-ex.component';
-import { SampleExModule } from 'src/app/layout/sample-ex/sample-ex.module';
  
 @NgModule({
   declarations: [LayoutComponent,
     FooterComponent,
     HeaderComponent,
-    NavbarComponent,FileDownloadComponent
+    NavbarComponent,
+    FileDownloadComponent
   ],
   imports: [
     CommonModule, TranslateModule,

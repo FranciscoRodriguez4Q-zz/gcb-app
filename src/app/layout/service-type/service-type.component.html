@@ -5,7 +5,7 @@
 -->
 <div class="card card-default mb-3">
 <div class="card-header">
-          <span *ngIf="!editFlag">Add</span> <span *ngIf="editFlag">Edit</span> 
+          <span *ngIf="!editFlag">Service Type : Create</span> <span *ngIf="editFlag">Service Type : Modify</span> 
           <span class="fa fa-minus fa-fw pull-right" *ngIf="expansionEventFlag" (click)="expansionEventFlag = false"></span>
           <span class="fa fa-plus fa-fw pull-right" *ngIf="!expansionEventFlag" (click)="expansionEventFlag = true"></span>
 </div>

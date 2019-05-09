@@ -1,0 +1,65 @@
+<div class="-font--serif">
+  <div class="-font--plus-1">Vendor Service Country : Add/Update </div>
+  <div class="card card-default mb-3">
+    <div class="card-header">
+      Vendor Service Country : Create
+    </div>
+
+    <div class="ui-g">
+
+      <div class="ui-g-12 ui-md-6 ui-lg-3 productLabel">
+        <div class="ui-g-4"><label class="label">Vednor Entity Name <span class="required">*</span></label></div>
+        <div class="ui-g-7">
+          <p-dropdown placeholder="Select" [autoWidth]="true" [style]="{'width': '100%' ,'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
+            [filter]="true" scrollHeight="150px" [disabled]="editFlag">
+          </p-dropdown>
+        </div>
+      </div>
+
+      <div class="ui-g-12 ui-md-6 ui-lg-3">
+        <div class="ui-g-4" style="text-align:right">
+          <label class="label">Service Type Name <span class="required">*</span></label></div>
+        <div class="ui-g-7">
+          <p-dropdown [disabled]="editFlag" placeholder="Select" [autoWidth]="true" [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
+            [filter]="true" scrollHeight="150px">
+          </p-dropdown>
+        </div>
+      </div>
+
+      <div class="ui-g-12 ui-md-6 ui-lg-3">
+        <div class="ui-g-4" style="text-align:right"><label class="label">Service From Country <span class="required">*</span></label></div>
+        <div class="ui-g-7">
+          <p-dropdown placeholder="Select" [autoWidth]="true" [style]="{'width': '100%' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
+            [filter]="true" scrollHeight="150px">
+          </p-dropdown>
+        </div>
+
+      </div>
+
+      <div class="ui-g-12 ui-md-6 ui-lg-3">
+        <div class="ui-g-4" style="text-align:right"><label class="label">Billed From Country <span class="required">*</span></label></div>
+        <div class="ui-g-7">
+          <p-dropdown placeholder="Select" [autoWidth]="true" [style]="{'width': '100%' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
+            [filter]="true" scrollHeight="150px">
+          </p-dropdown>
+        </div>
+      </div>
+    </div>
+    <div class="ui-g">
+      <div class="ui-g-2">
+        <label class="label">Suggested Cost Center : </label>
+      </div>
+      <div class="ui-g-2">
+        <input class="form-control">
+      </div>
+    </div>
+
+    <div class="ui-g">
+        <div class="ui-g-12" style="text-align:right">
+            <button class="ge-button -fill--solid" >Submit</button>
+            <button class="ge-button -fill--solid" >Cancel</button>
+        </div>
+    </div>
+
+  </div>
+</div>

@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { SelectItem } from 'primeng/api';
-import { SampleExService } from './sample-ex.service';
+import { SampleExService } from './service-type.service';
 import { Message } from 'primeng/components/common/api';
 import { MessageService } from 'primeng/api';
 @Component({
-  selector: 'app-sample-ex',
-  templateUrl: './sample-ex.component.html',
-  styleUrls: ['./sample-ex.component.scss'],
+  selector: 'app-service-type',
+  templateUrl: './service-type.component.html',
+  styleUrls: ['./service-type.component.scss'],
   providers: [SampleExService, MessageService]
 
 })
-export class SampleExComponent implements OnInit {
+export class ServiceTypeComponent implements OnInit {
   checked1: boolean = false;
   serviceTypes: any = [];
   msgs: Message[] = [];

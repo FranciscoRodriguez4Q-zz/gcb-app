@@ -1,30 +1,23 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
- 
-import { SampleExRoutingModule } from './sample-ex-routing.module';
-import { SampleExComponent } from './sample-ex.component';
 import { PrimeModule } from 'src/app/prime';
 import { FileDownloadModule } from 'src/app/layout/file-download/file-download.module';
- 
 import { NgbModule,NgbCarouselModule, NgbAlertModule,NgbDropdownModule,NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
- 
 import { LayoutModule } from '../layout.module';
- 
- 
-   
-   
 import {DropdownModule} from 'primeng/dropdown';
 import {FileDownloadComponent} from '../file-download/file-download.component';
+import { ServiceTypeComponent } from './service-type.component';
+import { ServiceTypeRoutingModule } from './service-type-routing.module';
 /* import {EsbDatamartModifyComponent} from './esb-detail-modify.component';
  */ 
  
  
 @NgModule({
-  declarations: [SampleExComponent],
+  declarations: [ServiceTypeComponent],
   imports: [ 
     CommonModule,FormsModule,
-    SampleExRoutingModule,
+    ServiceTypeRoutingModule,
     CommonModule,
     FormsModule,  PrimeModule,
     ReactiveFormsModule,
@@ -39,4 +32,4 @@ import {FileDownloadComponent} from '../file-download/file-download.component';
     DropdownModule
   ]
 })
-export class SampleExModule { }
+export class ServiceTypeModule { }
