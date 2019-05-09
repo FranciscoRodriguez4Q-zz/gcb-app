@@ -1,0 +1,79 @@
+{
+      "actions": {
+      "columnTitle": "",
+      "add": false,
+      "delete": false,
+      "filter": false,
+      "edit": false
+      
+},
+      "pager": {
+        "display": true,
+        "perPage": 10
+       },
+        "columns": {
+                  "Action": {
+                        "title":"Select",
+                        "filter": false,
+                        "sort": false,
+                        "editable": false,
+                        "type": "",
+                        "renderComponent": "" 
+                      
+                       
+                      },
+                      "billRefIdCount": {
+                        "title": "Count of Associated Entities",
+                        
+                        "type": "",
+                        "editable": false,
+                        "valuePrepareFunction": "",
+                        "renderComponent": ""
+                      },
+                    "valid": {
+                            "title": "Valid",
+                            "editable": false,
+                            "valuePrepareFunction": "",
+                            "type": "",
+                            "renderComponent": ""   
+
+                            
+                           
+                        },  
+                       
+                        "ibsErrorMessage": {
+                          "title": "ibsErrorMessage",
+                          "editable": false,
+                          "valuePrepareFunction": "",
+                          "type": "",
+                          "renderComponent": ""
+                      },   
+                        "fromBuc": {
+                        "title": "From BUC",
+                        
+                        "type": "",
+                        "editable": false,
+                        "valuePrepareFunction": "",
+                        "renderComponent": ""
+                      },
+                      "buc": {
+                        "title": "BUC",
+                        "editable": false,
+                        "valuePrepareFunction": "",
+                        "type": "",
+                        "renderComponent": ""
+                        
+                      },
+                      "adn": {
+                        "title": "ADN",
+                        
+                        "type": "",
+                        "editable": false,
+                        "valuePrepareFunction": "",
+                        "renderComponent": ""
+                      }
+                     
+                    
+                       
+        }
+      }

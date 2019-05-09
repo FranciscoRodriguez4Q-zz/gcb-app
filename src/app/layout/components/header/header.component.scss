@@ -1,0 +1,94 @@
+#header {
+    background-color: #63666A;
+    height: 45px;
+    position: fixed;
+    top: 0px;
+    z-index: 99;
+    width: 100%;
+    color: #fff;
+  }
+  
+  #top-logo {
+    height: 35px;
+    width: 35px; 
+  }
+$topnav-background-color: #63666A;
+:host {
+    
+    .navbar-toggler{
+        display:none;
+    }
+    .sub-menu {
+        display: block;
+    }
+    .margin-sixty {
+        margin-left: 60%;
+    }
+    .sub-menu-hide {
+        display:none;
+    }
+   .mainnav .dropdown-toggle::after {
+        display: none;
+    }
+    .btn-primary {
+        background-color: $topnav-background-color;
+        border-color: #598bdb;
+    }
+    
+    .dropdown-item:focus, .dropdown-item:hover {
+        color: #16181b;
+        text-decoration: none;
+        background-color: #e9ecef !important;
+    }
+    .navbar {
+      
+        height: 45px;
+        #header-controls {
+            border-right: 1px solid;
+            border-color: #fff;
+        } 
+        
+        background-color: $topnav-background-color;
+        .navbar-brand {
+            color: #fff;
+            margin-left:25px;
+            font-size: 17px;
+        }
+        .navbar-brand > img {
+            height: 35px;
+            width: 35px; 
+        }
+        .nav-item {
+            font: size 4px;
+        }
+        .nav-item > a {
+            color: #fff;
+            &:hover {
+                color: #999;
+            }
+        }
+    }
+    .messages {
+        width: 300px; 
+        .media {
+            border-bottom: 1px solid #ddd;
+            padding: 2px 7px;
+            &:last-child {
+                border-bottom: none;
+            }
+        }
+        .media-body {
+            h5 {
+                font-size: 13px;
+                font-weight: 600;
+            }
+            .small {
+                margin: 0;
+            }
+            .last {
+                font-size: 12px;
+                margin: 0;
+            }
+        }
+    }
+}

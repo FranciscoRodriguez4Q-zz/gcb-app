@@ -1,0 +1,65 @@
+{
+      "actions": {
+      "columnTitle": "",
+      "add": false,
+      "delete": false,
+      "filter": false,
+      "edit": false
+},
+      "pager": {
+        "display": true,
+        "perPage": 10
+       },
+        "columns": {
+                  
+                      "fileName": {
+                        "title": "File Name",
+                        "editable": false,
+                        "valuePrepareFunction": "",
+                        "type": "",
+                        "renderComponent": ""
+                        
+                      },
+                      "buc": {
+                        "title": "BUC",
+                        
+                        "type": "",
+                        "editable": false,
+                        "valuePrepareFunction": "",
+                        "renderComponent": ""
+                      },
+                      "createdDate": {
+                        "title": "Created On",
+                        
+                        "type": "",
+                        "editable": false,
+                        "valuePrepareFunction": "",
+                        "renderComponent": ""
+                      },
+                      "recordCount": {
+                        "title": "Record Count",
+                        
+                        "type": "",
+                        "editable": false,
+                        "valuePrepareFunction": "",
+                        "renderComponent": ""
+                      },
+                      "status": {
+                        "title": "Status",
+                        
+                        "type": "",
+                        "editable": false,
+                        "valuePrepareFunction": "",
+                        "renderComponent": ""
+                      },
+                      "Action": {
+                        "title":"Action",
+                        "filter": false,
+                        "sort": false,
+                        "editable": false,
+                        "type": "",
+                        "renderComponent": ""
+                      }
+                       
+        }
+      }

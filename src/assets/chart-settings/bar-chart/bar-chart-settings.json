@@ -1,0 +1,23 @@
+{
+        "labels": [],
+        "datasets": [
+            {
+                "label": "CCL",
+                "backgroundColor": "#24436A",
+                "borderColor": "#222",
+                "data": []
+            },
+            {
+                "label": "CCF",
+                "backgroundColor": "#355A86",
+                "borderColor": "#222",
+                "data": []
+            },
+            {
+                "label": "CCL AR",
+                "backgroundColor": "#406A9C",
+                "borderColor": "#222",
+                "data": []
+            }
+        ]
+}

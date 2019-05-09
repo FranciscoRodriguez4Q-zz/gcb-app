@@ -1,0 +1,42 @@
+[
+    {
+        "id": "1",
+        "AccountingType": "Pass Through Primary",
+        "BUC": "EB7801",
+        "ADN": "850850001000XXXCT9IFC",
+        "RefId": "2",
+        "check": false,
+        "Status": "Sucess"
+        
+    },
+    {
+        "id": "2",
+        "AccountingType": "Pass Through VAT",
+        "BUC": "EB7801",
+        "ADN": "850850001000XXXCT9IFC",
+        "RefId": "1",
+        "check": false,
+        "Status": "Sucess"
+
+        
+    },
+    {
+        "id": "3",
+        "AccountingType": "Service management Primary",
+        "BUC": "EB7801",
+        "ADN": "850850001000XXXCT9IFC",
+        "RefId": "4",
+        "check": false,
+        "Status": "Sucess"
+        
+    },
+    {
+        "id": "4",
+        "AccountingType": "Service management VAT",
+        "BUC": "EB7801",
+        "ADN": "850850001000XXXCT9IFC",
+        "RefId": "3",
+        "check": false,
+        "Status": "Sucess"
+    }
+  ]

@@ -1,0 +1,48 @@
+{
+        "actions": {
+      "columnTitle": "",
+      "add": false,
+      "delete": false,
+      "filter": false,
+      "edit": false
+}
+,
+      "pager": {
+        "display": true,
+        "perPage": 10
+        },
+        "columns": {
+                    "AccountingType": {
+                            "title": "Accounting Type",
+                            "editable": false,
+                            "valuePrepareFunction": "",
+                            "type": "",
+                            "renderComponent": ""
+                        },
+                      "BUC": {
+                        "title": "BUC",
+                        "editable": false,
+                        "valuePrepareFunction": "",
+                        "type": "",
+                        "renderComponent": ""
+                        
+                      },
+                      "ADN": {
+                        "title": "ADN",
+                        
+                        "type": "",
+                        "editable": false,
+                        "valuePrepareFunction": "",
+                        "renderComponent": ""
+                      },
+                      "Action": {
+                        "title":"Select",
+                        "type": "custom",
+                        "filter": false,
+                        "sort": false,
+                        "editable": false,
+                        "renderComponent": "",
+                        "valuePrepareFunction": ""
+                      }    
+        }
+      }

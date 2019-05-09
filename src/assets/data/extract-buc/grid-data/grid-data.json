@@ -1,0 +1,30 @@
+[
+    {
+        "Id": "17",
+        "FileName": "bill_hub_extract_by_buc_503036830_219.txt",
+        "CreatedOn": "2018/09/04",
+        "Status": "Completed"
+        
+    },
+    {
+        "Id": "15",
+        "FileName": "bill_hub_extract_by_buc_503036830_219.txt",
+        "CreatedOn": "2018/09/04",
+        "Status": "Completed"
+        
+    },
+    {
+        "Id": "3",
+        "FileName": "bill_hub_extract_by_buc_503036830_219.txt",
+        "CreatedOn": "2018/09/04",
+        "Status": "Pending"
+        
+    },
+    {
+        "Id": "1",
+        "FileName": "bill_hub_extract_by_buc_503036830_219.txt",
+        "CreatedOn": "2018/09/04",
+        "Status": "Completed"
+        
+    }
+  ]

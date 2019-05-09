@@ -1,0 +1,126 @@
+<div class="-font--serif">
+  <div class="-font--plus-2">Service Type : Add/Update </div>
+  <p-messages  [(value)]="msgs"></p-messages>
+<!--     <p-toast key="msgs1" position="center" (onClose)="onReject()" [modal]="true" [baseZIndex]="5000"></p-toast>
+-->
+<div class="card card-default mb-3">
+<div class="card-header">
+          <span *ngIf="!editFlag">Add</span> <span *ngIf="editFlag">Edit</span> 
+          <span class="fa fa-minus fa-fw pull-right" *ngIf="expansionEventFlag" (click)="expansionEventFlag = false"></span>
+          <span class="fa fa-plus fa-fw pull-right" *ngIf="!expansionEventFlag" (click)="expansionEventFlag = true"></span>
+</div>
+<div class="card-body" *ngIf="expansionEventFlag">
+  <div class="ui-g">
+    <div class="ui-g-12 ui-md-6 ui-lg-3 productLabel">
+        <div class="ui-g-5"><label class="label">Product Name <span class="required">*</span></label></div>
+        <div class="ui-g-7"> <p-dropdown 
+        
+        [options]="productReferenceDataList"
+        [(ngModel)]="gcbDetailFilters.productId"      placeholder="Select"   [autoWidth]="true"
+        [style]="{'width': '100%' ,'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"   
+        [filter]="true" (click)="getServicetype()" 
+        scrollHeight="150px"  [disabled]="editFlag">
+        
+        </p-dropdown>
+      </div>
+    </div>
+    <div class="ui-g-12 ui-md-6 ui-lg-3">
+      <div class="ui-g-4" style="text-align:right"><label class="label">Country <span class="required">*</span></label></div>
+        <div class="ui-g-7">    
+          <p-dropdown [options]="countryCodeReferenceDataList" [disabled]="editFlag"
+          [(ngModel)]="gcbDetailFilters.countryCode"      placeholder="Select"   [autoWidth]="true"
+          [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"   
+          [filter]="true" (click)="getServicetype()" 
+          scrollHeight="150px">
+          
+          </p-dropdown>
+        </div>
+    </div>
+
+    <div class="ui-g-12 ui-md-6 ui-lg-3">
+      <div class="ui-g-5" style="text-align:right"><label class="label">Billing Basis <span class="required">*</span></label></div>
+        <div class="ui-g-7">
+          <p-dropdown [options]="billingReferenceDataList"
+          [(ngModel)]="gcbDetailFilters.billingBasis"      placeholder="Select"   [autoWidth]="true"
+          [style]="{'width': '100%' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"   
+          [filter]="true"
+          scrollHeight="150px">
+          
+          </p-dropdown>
+        </div>
+        
+    </div>
+  </div>
+  <div class="ui-g" *ngIf="!editFlag">
+        <div class="ui-g-2" ><label class="label">Suggested Service Type Name : </label></div>
+        <div class="ui-g-2">    
+          <input class="form-control" [(ngModel)]="gcbDetailFilters.suggestedServiceType" tooltip="gcbDetailFilters.suggestedServiceType" placeholder="Service Type" >
+        
+        </div>
+        <div class="ui-g-2">{{gcbDetailFilters.serviceTypeMessage}}  </div>
+  </div>
+  <div class="ui-g">
+          <div class="ui-g-2" ><label class="label">New Service Type Name : </label></div>
+          <div class="ui-g-2">    
+            <input class="form-control" [(ngModel)]="gcbDetailFilters.serviceType" tooltip="gcbDetailFilters.serviceType" placeholder="Service Type" [disabled]="gcbDetailFilters.useSuggested">
+          </div>
+          <div  class="ui-g-2" *ngIf="!editFlag">
+            <p-checkbox [(ngModel)]="gcbDetailFilters.useSuggested" binary="true" label="Use Suggested Name" labelStyleClass="chkLabel"></p-checkbox><label class="label"></label>
+          </div>
+
+
+  </div>
+  <div class="ui-g">
+      <div class="ui-g-12" style="text-align:right">
+          <button class="ge-button -fill--solid" (click)="upsertServiceType()">Submit</button>
+          <button class="ge-button -fill--solid" (click)="clearAllFilters()">Cancel</button>
+      </div>
+      <app-file-download  [fileName]="fileNa_ads_fs"></app-file-download>
+      <div class="col-lg-2 pull-right">
+       
+    </div>
+  </div>
+</div>  
+</div>  
+<!-- <div class="ui-g">
+<label class="errorMessage">{{errorMessage}}</label>
+</div> -->
+<div class="ui-g">
+<div class="ui-g-12">
+ <p-table #tt [columns]="cols" [value]="serviceTypes" [style]="{'margin-top':'2px','width':'100%'}" [rows]="10" [paginator]="true" [pageLinks]="3" [responsive]="true">
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th [ngStyle]="{'width': '5%'}">Modify</th>
+            <th *ngFor="let col of columns" [pSortableColumn]="col.field" [ngStyle]="{'width': col.width}">
+                {{col.header}}
+                <p-sortIcon [field]="col.field"></p-sortIcon>
+            </th>
+        </tr>
+         <tr>
+           <th></th>
+            <th *ngFor="let col of columns" [ngSwitch]="col.field">
+                
+                <input *ngSwitchCase="'productNm'" pInputText type="text" (input)="tt.filter($event.target.value, col.field, 'contains')">
+                <input *ngSwitchCase="'countryNm'" pInputText type="text" (input)="tt.filter($event.target.value, col.field, 'contains')">
+                <input *ngSwitchCase="'serviceType'" pInputText type="text" (input)="tt.filter($event.target.value, col.field,'contains')">
+                <input *ngSwitchCase="'billingBasis'" pInputText type="text" (input)="tt.filter($event.target.value, col.field,'contains')">
+
+            </th>
+        </tr> 
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr>
+            <td>
+                <p-tableRadioButton [value]="rowData" (click)="showSelectedData(rowData['serviceTypeId'])" ></p-tableRadioButton>
+            </td>
+            <td *ngFor="let col of columns" >
+              <div> {{rowData[col.field]}}</div>
+            </td>
+        </tr>
+    </ng-template>
+  </p-table>
+</div>
+</div>
+</div>
+
+ 

@@ -1,0 +1,74 @@
+[
+    {
+        "id": "1",
+        "Valid": true,
+        "BUC": "GIS001",
+        "AccountingMethodDESC": "General Ledger",
+        "LegacyADN": ""
+    },
+    {
+        "id": "2",
+        "Valid": true,
+        "BUC": "GIS001",
+        "AccountingMethodDESC": "General Ledger",
+        "LegacyADN": ""
+        
+    },
+    {
+        "id": "3",
+        "Valid": true,
+        "BUC": "GIS001",
+        "AccountingMethodDESC": "General Ledger",
+        "LegacyADN": "SGIS/503036830/0000/CSSD920/000/0000000000/0000000/P/000000000/000000"
+        
+    },
+    {
+        "id": "4",
+        "Valid": false,
+        "BUC": "GIS001",
+        "AccountingMethodDESC": "General Ledger",
+        "LegacyADN": ""
+    },
+    {
+        "id": "5",
+        "Valid": false,
+        "BUC": "GIS001",
+        "AccountingMethodDESC": "General Ledger",
+        "LegacyADN": ""
+    },
+    {
+        "id": "6",
+        "Valid": false,
+        "BUC": "GIS001",
+        "AccountingMethodDESC": "General Ledger",
+        "LegacyADN": ""
+    },
+    {
+        "id": "7",
+        "Valid": false,
+        "BUC": "GIS001",
+        "AccountingMethodDESC": "General Ledger",
+        "LegacyADN": ""
+    },
+    {
+        "id": "8",
+        "Valid": false,
+        "BUC": "GIS001",
+        "AccountingMethodDESC": "General Ledger",
+        "LegacyADN": ""
+    },
+    {
+        "id": "9",
+        "Valid": false,
+        "BUC": "GIS001",
+        "AccountingMethodDESC": "General Ledger",
+        "LegacyADN": ""
+    },
+    {
+        "id": "10",
+        "Valid": false,
+        "BUC": "GIS001",
+        "AccountingMethodDESC": "General Ledger",
+        "LegacyADN": ""
+    }
+  ]

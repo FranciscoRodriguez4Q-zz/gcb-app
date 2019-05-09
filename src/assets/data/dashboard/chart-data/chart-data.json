@@ -1,0 +1,13 @@
+[   {"month":"Jan","ccl":3500, "ccf":1750,"cclAF":4130},
+    {"month":"Feb","ccl":3800,"ccf":1250,"cclAF":3130},
+    {"month":"Mar","ccl":2800,"ccf":1250,"cclAF":1130},
+    {"month":"Apr","ccl":2500,"ccf":1150,"cclAF":1130},
+    {"month":"May","ccl":3500,"ccf":1750,"cclAF":4130},
+    {"month":"Jun","ccl":3800,"ccf":1250,"cclAF":3130},
+    {"month":"Jul","ccl":2800,"ccf":1250,"cclAF":1130},
+    {"month":"Aug","ccl":2500,"ccf":1150,"cclAF":1130},
+    {"month":"Sep","ccl":3500,"ccf":1750,"cclAF":4130},
+    {"month":"Oct","ccl":3800,"ccf":1250,"cclAF":3130},
+    {"month":"Nov","ccl":2200,"ccf":1250,"cclAF":1130},
+    {"month":"Dec","ccl":2500,"ccf":1250,"cclAF":1130}
+]

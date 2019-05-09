@@ -1,0 +1,14 @@
+{
+  "actions": {
+  "columnTitle": "",
+  "add": false,
+  "delete": false,
+  "filter": false,
+  "edit": false
+},
+  "pager": {
+    "display": true,
+    "perPage": 10
+   }, 
+  "columns":{ } 
+  }

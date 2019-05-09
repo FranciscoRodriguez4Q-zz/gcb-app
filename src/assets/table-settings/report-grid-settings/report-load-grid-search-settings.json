@@ -1,0 +1,18 @@
+[
+          {
+            "field": "ReportName",
+            "search": ""
+          },
+          {
+            "field": "Visibility",
+            "search": ""
+          },
+          {
+            "field": "createdBySso",
+            "search": ""
+          },
+		   {
+            "field": "createDate",
+            "search": ""
+          }
+]

@@ -1,0 +1,19 @@
+[
+          {
+            "field": "Id",
+            "search": ""
+          },
+          {
+            "field": "FileName",
+            "search": ""
+          },
+          {
+            "field": "UploadedDateTime",
+            "search": ""
+          },
+          {
+            "field": "ValidateStatus",
+            "search": ""
+          }
+          
+]

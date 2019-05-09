@@ -1,0 +1,49 @@
+.ui-multiselect-label-container {
+    background-color: red !important;
+  }
+  
+  label {
+    margin-top: 15px;
+  }
+  
+  button {
+    margin-top: 1em;
+  }
+  ui-fieldset-legend	{
+    font-size: medium;
+  }
+  p-radioButton {
+   display:block;
+   margin: .7em;
+  }
+  
+  p-listbox >>> .ui-listbox {
+   width: 100%;
+  }
+  
+  p-listbox >>> .ui-listbox-list-wrapper {
+    height: 250px;
+  }
+  
+  .avatar {
+   float: left;
+   margin: 5px;
+  }
+  
+  .devName {
+   font-size: medium;
+   display:inline-block;
+   margin:5px 1px 0 1px;
+   min-height: 10px;
+  }
+  
+  p-rating {
+   font-size: medium;
+  }
+  
+  #ratingLabel {
+   margin-top: 20px;
+  }
+  
+  
+  

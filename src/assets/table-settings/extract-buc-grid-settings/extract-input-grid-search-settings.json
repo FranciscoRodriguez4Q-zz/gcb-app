@@ -1,0 +1,15 @@
+[
+          {
+            "field": "Id",
+            "search": ""
+          },
+          {
+            "field": "FileName",
+            "search": ""
+          },
+          {
+            "field": "ValidateStatus",
+            "search": ""
+          }
+          
+]

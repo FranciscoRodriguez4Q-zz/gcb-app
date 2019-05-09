@@ -1,0 +1,40 @@
+.navbar-static-bottom {
+    background-color: #63666A !important;
+    height: 23px;
+    width: 100%;
+    position: fixed;
+    bottom: 0px;
+    margin: 0 auto;
+    z-index: 1;
+}
+
+.copyright-bottom {
+    color: #FFF !important;
+    display: block!important;
+    font-size: 0.8rem;
+    margin-left: 500px;
+    margin-bottom: 10px;
+}
+
+.footerBottom {
+    position: absolute;
+    bottom: 0;
+    margin: 0 auto !important;
+    text-align: center !important;
+    width: 100% !important;
+}
+
+a {
+    color: #fff;
+    font-size: 0.8rem;
+}
+
+.right-align {
+    margin-left: 300px;
+    margin-bottom: 10px;
+}
+
+.right-align-x {
+    margin-right:100px;
+    margin-bottom: 10px;
+}

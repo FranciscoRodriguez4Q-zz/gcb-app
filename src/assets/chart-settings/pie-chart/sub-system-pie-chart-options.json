@@ -1,0 +1,8 @@
+{
+        "borderColor": "#222",
+        "scaleFontColor": "#ccc",
+            "legend": {
+            "display": false,
+            "onClick": null           
+            }
+}

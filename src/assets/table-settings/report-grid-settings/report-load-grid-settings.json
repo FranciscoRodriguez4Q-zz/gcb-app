@@ -1,0 +1,54 @@
+{
+      "actions": {
+      "columnTitle": "",
+      "add": false,
+      "delete": false,
+      "filter": false,
+      "edit": false
+},
+      "pager": {
+        "display": true,
+        "perPage": 10
+       },
+        "columns": {
+					"Action": {
+                        "title":"Select",
+                        "filter": false,
+                        "sort": false,
+                        "editable": false,
+                        "type": "",
+                        "renderComponent": ""
+                      },
+                      "reportName": {
+                        "title": "Report Name",
+                        "editable": false,
+                        "valuePrepareFunction": "",
+                        "type": "",
+                        "renderComponent": ""
+                        
+                      },
+                      "visibility": {
+                        "title": "Visibility",    
+                        "type": "",
+                        "editable": false,
+                        "valuePrepareFunction": "",
+                        "renderComponent": ""
+                      },
+                      "createdBySso": {
+                        "title": "SSO",
+                        "type": "",
+                        "editable": false,
+                        "valuePrepareFunction": "",
+                        "renderComponent": ""
+                      },
+					  "createDate": {
+                        "title": "Create Date",
+                        "type": "",
+                        "editable": false,
+                        "valuePrepareFunction": "",
+                        "renderComponent": ""
+                      }
+                     
+                       
+        }
+      }

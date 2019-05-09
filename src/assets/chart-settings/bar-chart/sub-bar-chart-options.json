@@ -1,0 +1,39 @@
+        {
+        "scaleFontColor": "#ccc",
+        "legend": {
+        "onClick": null,
+        "labels": {
+        "fontColor": "#868e96"
+        }
+        },
+        "scales": {
+            "xAxes": [{
+            "gridLines": {
+            "color": "#ccc",
+            "display": false
+            },
+            "stacked": false,
+            "ticks": {
+                "autoSkip": false,
+                "fontColor": "#244364"
+            }
+            
+            }],
+            
+            "yAxes": [{
+            "scaleLabel": {
+            "display": true,
+            "fontColor": "#ccc"
+            },
+            "gridLines": {
+            "color": "#ccc",
+            "display": true
+            },
+            "stacked": false,
+            "ticks": {
+                "autoSkip": false,
+                "fontColor": "#244364"
+            }
+            }]
+            }
+    }

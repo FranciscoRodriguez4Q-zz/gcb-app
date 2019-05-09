@@ -1,0 +1,56 @@
+{
+      "actions": {
+      "columnTitle": "",
+      "add": false,
+      "delete": false,
+      "filter": false,
+      "edit": false
+},
+      "pager": {
+        "display": true,
+        "perPage": 10
+       },
+        "columns": {
+                  
+                    "uploadId": {
+                            "title": "Upload ID",
+                            "editable": false,
+                            "valuePrepareFunction": "",
+                            "type": "",
+                            "renderComponent": ""
+                        },
+                      "fileName": {
+                        "title": "File Name",
+                        "editable": false,
+                        "valuePrepareFunction": "",
+                        "type": "",
+                        "renderComponent": ""
+                        
+                      },
+                      "uploadeddateTimeStr": {
+                        "title": "Uploaded Date Time",
+                        
+                        "type": "",
+                        "editable": false,
+                        "valuePrepareFunction": "",
+                        "renderComponent": ""
+                      },
+                      "validateStatus": {
+                        "title": "Validate Status",
+                        
+                        "type": "",
+                        "editable": false,
+                        "valuePrepareFunction": "",
+                        "renderComponent": ""
+                      },
+                      "Action": {
+                        "title":"Action",
+                        "filter": false,
+                        "sort": false,
+                        "editable": false,
+                        "type": "",
+                        "renderComponent": ""
+                      }
+                       
+        }
+      }

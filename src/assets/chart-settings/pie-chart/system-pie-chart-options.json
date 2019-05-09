@@ -1,0 +1,13 @@
+{
+        "borderColor": "#222",
+        "scaleFontColor": "#ccc",
+            "legend": { 
+                "responsive": true,
+                "maintainAspectRatio": false,
+             "position": "right",
+            "onClick": null,
+            "labels": {
+            "fontColor": "#FF0000"
+            }
+            }
+}

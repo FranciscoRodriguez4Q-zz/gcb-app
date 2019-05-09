@@ -1,0 +1,23 @@
+{
+      "actions": {
+      "columnTitle": "",
+      "add": false,
+      "delete": false,
+      "filter": false,
+      "edit": false
+},
+      "pager": {
+        "display": true,
+        "perPage": 10
+       },
+        "columns": {
+                    "billRefId": {
+                            "title": "Bill Reference ID",
+                            "editable": false
+                        },
+                      "externalSysID": {
+                        "title": "Asset ID"
+                      }
+                       
+        }
+      }

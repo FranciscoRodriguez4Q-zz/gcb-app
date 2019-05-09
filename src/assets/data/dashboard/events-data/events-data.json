@@ -1,0 +1,86 @@
+[{
+            "id": 1,
+            "title": "OneBiller:REG+IT",
+            "url": "http://google.com/",
+            "start":  "-01",
+            "backgroundColor": "#244364"
+        },
+        {
+            "id": 2,
+            "title": "OneBiller:REG",
+            "url": "http://google.com/",
+            "start":  "-07",
+            "end":  "-10",
+            "backgroundColor": "#244364"
+        },
+        {
+            "id": 3,
+            "title": "OneBiller:AHB/SVB/ESB",
+            "url": "http://google.com/",
+            "start":  "-09T16:00:00",
+            "end": "",
+            "backgroundColor": "#244364"
+        },
+        {
+            "id": 4,
+            "title": "OneBiller: CMB",
+            "url": "http://google.com/",
+            "start":  "-16T16:00:00",
+            "end": "",
+            "backgroundColor": "#244364"
+        },
+        {
+            "id": 5,
+            "title": "OneBiller: Team Meet",
+            "url": "http://google.com/",
+            "start":  "-11",
+            "end":  "-13",
+            "backgroundColor": "#244364"
+        },
+        {
+            "id": 6,
+            "title": "OneBiller Meeting",
+            "url": "http://google.com/",
+            "start":  "-12T10:30:00",
+            "end":  "-12T12:30:00",
+            "backgroundColor": "#244364"
+        },
+        {
+            "id": 7,
+            "title": "Team Lunch",
+            "url": "http://google.com/",
+            "start":  "-12T12:00:00",
+            "end": "",
+            "backgroundColor": "#244364"
+        },
+        {
+            "id": 8,
+            "title": "Meeting",
+            "url": "http://google.com/",
+            "start":  "-12T14:30:00",
+            "end": "",
+            "backgroundColor": "#244364"
+        },
+        {
+            "id": 9,
+            "title": "Happy Hour",
+            "url": "http://google.com/",
+            "start":  "-12T17:30:00",
+            "backgroundColor": "#244364"
+        },
+        {
+            "id": 10,
+            "title": "Dinner",
+            "url": "http://google.com/",
+            "start":  "-12T20:00:00",
+            "end": "",
+            "backgroundColor": "#244364"
+        },
+        {
+            "id": 11,
+            "title": "Birthday Party",
+            "url": "http://google.com/",
+            "start":  "-13T07:00:00",
+            "end": "",
+            "backgroundColor": "#244364"
+        }]
