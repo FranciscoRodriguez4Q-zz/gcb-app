@@ -75,16 +75,17 @@
           <button class="ge-button -fill--solid" (click)="upsertServiceType()">Submit</button>
           <button class="ge-button -fill--solid" (click)="clearAllFilters()">Cancel</button>
       </div>
-      <app-file-download  [fileName]="fileNa_ads_fs"></app-file-download>
-      <div class="col-lg-2 pull-right">
-       
-    </div>
   </div>
 </div>  
 </div>  
 <!-- <div class="ui-g">
 <label class="errorMessage">{{errorMessage}}</label>
 </div> -->
+<div class="ui-g">
+    <div class="ui-g-12">
+    <app-file-download [dwnData]="serviceTypes" [fileName]="fileName"></app-file-download>
+    </div>
+</div>
 <div class="ui-g">
 <div class="ui-g-12">
  <p-table #tt [columns]="cols" [value]="serviceTypes" [style]="{'margin-top':'2px','width':'100%'}" [rows]="10" [paginator]="true" [pageLinks]="3" [responsive]="true">
@@ -100,10 +101,10 @@
            <th></th>
             <th *ngFor="let col of columns" [ngSwitch]="col.field">
                 
-                <input *ngSwitchCase="'productNm'" pInputText type="text" (input)="tt.filter($event.target.value, col.field, 'contains')">
-                <input *ngSwitchCase="'countryNm'" pInputText type="text" (input)="tt.filter($event.target.value, col.field, 'contains')">
-                <input *ngSwitchCase="'serviceType'" pInputText type="text" (input)="tt.filter($event.target.value, col.field,'contains')">
-                <input *ngSwitchCase="'billingBasis'" pInputText type="text" (input)="tt.filter($event.target.value, col.field,'contains')">
+                <input [ngStyle]="{'width': '99%'}" *ngSwitchCase="'productNm'" pInputText type="text" (input)="tt.filter($event.target.value, col.field, 'contains')">
+                <input [ngStyle]="{'width': '99%'}" *ngSwitchCase="'countryNm'" pInputText type="text" (input)="tt.filter($event.target.value, col.field, 'contains')">
+                <input [ngStyle]="{'width': '99%'}" *ngSwitchCase="'serviceType'" pInputText type="text" (input)="tt.filter($event.target.value, col.field,'contains')">
+                <input [ngStyle]="{'width': '99%'}" *ngSwitchCase="'billingBasis'" pInputText type="text" (input)="tt.filter($event.target.value, col.field,'contains')">
 
             </th>
         </tr> 

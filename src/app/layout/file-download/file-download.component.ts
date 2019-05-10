@@ -46,6 +46,17 @@ export class FileDownloadComponent implements OnInit {
   }
 
   downloadReport() {
+    
+    if(this.nameCheck=='ServiceType'){
+      for (let i = 0; i < this.dwnData.length; i++) {
+        delete this.dwnData[i].productId;
+        delete this.dwnData[i].serviceTypeId;
+        delete this.dwnData[i].countryCode;
+        delete this.dwnData[i].suggestedServiceType;
+        delete this.dwnData[i].serviceTypeMessage;
+        delete this.dwnData[i].useSuggested;
+      }
+    }
     switch (this.defaultOption) {
       case AppConstants.CASE_DOWNLOAD_CSV:
         this.processCSVFile();

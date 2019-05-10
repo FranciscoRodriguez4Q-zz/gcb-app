@@ -10,7 +10,6 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { SampleFormComponent } from './layout/components/sample-form/sample-form.component';
 import { FieldErrorsComponent } from './shared/modules/field-errors/field-errors.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { LayoutComponent } from 'src/app/layout/layout.component';
 
 export const createTranslateLoader = (http: HttpClient) => {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');

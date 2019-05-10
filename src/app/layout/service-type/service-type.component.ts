@@ -24,6 +24,7 @@ export class ServiceTypeComponent implements OnInit {
   public errorMessage = "";
   public editFlag = false;
   public expansionEventFlag = true;
+  public fileName : any ="ServiceType";
   public gcbDetailFilters: any = {
     productId: "Select",
     countryCode: "Select",
@@ -48,50 +49,50 @@ export class ServiceTypeComponent implements OnInit {
   ];
 
    ngOnInit() {
-  //   this.getAllServiceType();
-  //   console.log("im in ngonit");
-  //   this.sampleExService.getAllSegmentData()
-  //     .subscribe(
-  //     refData => {
-  //       let arr: any = [];
-  //       this.productReferenceData = refData;
-  //       this.productReferenceDataList.push({ label: "Select", value: "Select" })
-  //       for (let data of this.productReferenceData) {
-  //         this.productReferenceDataList.push({ label: data.productName, value: data.productId })
+    this.getAllServiceType();
+    console.log("im in ngonit");
+    this.serviceTypeService.getAllSegmentData()
+      .subscribe(
+      refData => {
+        let arr: any = [];
+        this.productReferenceData = refData;
+        this.productReferenceDataList.push({ label: "Select", value: "Select" })
+        for (let data of this.productReferenceData) {
+          this.productReferenceDataList.push({ label: data.productName, value: data.productId })
 
-  //       }
-  //     },
-  //     error => {
-  //       console.log(error);
-  //     });
+        }
+      },
+      error => {
+        console.log(error);
+      });
 
 
-  //   this.sampleExService.getAllCountryData().subscribe(
-  //     refData => {
-  //       let arr: any = [];
-  //       this.countryCodeReferenceData = refData;
-  //       this.countryCodeReferenceDataList.push({ label: "Select", value: "Select" })
+    this.serviceTypeService.getAllCountryData().subscribe(
+      refData => {
+        let arr: any = [];
+        this.countryCodeReferenceData = refData;
+        this.countryCodeReferenceDataList.push({ label: "Select", value: "Select" })
 
-  //       for (let data of this.countryCodeReferenceData) {
-  //         this.countryCodeReferenceDataList.push({ label: data.countryName, value: data.countryAbbreviation })
-  //       }
-  //     },
-  //     error => {
-  //     });
+        for (let data of this.countryCodeReferenceData) {
+          this.countryCodeReferenceDataList.push({ label: data.countryName, value: data.countryAbbreviation })
+        }
+      },
+      error => {
+      });
 
-  //   this.sampleExService.getBillingBasisData().subscribe(
-  //     refData => {
-  //       let arr: any = [];
+    this.serviceTypeService.getBillingBasisData().subscribe(
+      refData => {
+        let arr: any = [];
 
-  //       this.billingBasisReferenceData = refData;
-  //       this.billingReferenceDataList.push({ label: "Select", value: "Select" })
+        this.billingBasisReferenceData = refData;
+        this.billingReferenceDataList.push({ label: "Select", value: "Select" })
 
-  //       for (let data of this.billingBasisReferenceData) {
-  //         this.billingReferenceDataList.push({ label: data.billbasisname, value: data.billbasisname })
-  //       }
-  //     },
-  //     error => {
-  //     });
+        for (let data of this.billingBasisReferenceData) {
+          this.billingReferenceDataList.push({ label: data.billbasisname, value: data.billbasisname })
+        }
+      },
+      error => {
+      });
 
 
   }
