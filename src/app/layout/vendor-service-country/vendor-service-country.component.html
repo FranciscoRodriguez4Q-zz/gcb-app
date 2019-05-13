@@ -10,9 +10,16 @@
       <div class="ui-g-12 ui-md-6 ui-lg-3 productLabel">
         <div class="ui-g-4"><label class="label">Vednor Entity Name <span class="required">*</span></label></div>
         <div class="ui-g-7">
-          <p-dropdown placeholder="Select" [autoWidth]="true" [style]="{'width': '100%' ,'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
-            [filter]="true" scrollHeight="150px" [disabled]="editFlag">
-          </p-dropdown>
+          <p-dropdown 
+          [options]="vendorEntityReferenceDataList" 
+          [disabled]="editFlag"
+          [(ngModel)]="vscFilters.vendorEntity"    
+          placeholder="Select"   
+          [autoWidth]="true"
+          [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"   
+          [filter]="true" 
+          scrollHeight="150px">
+        </p-dropdown>
         </div>
       </div>
 
@@ -20,18 +27,32 @@
         <div class="ui-g-4" style="text-align:right">
           <label class="label">Service Type Name <span class="required">*</span></label></div>
         <div class="ui-g-7">
-          <p-dropdown [disabled]="editFlag" placeholder="Select" [autoWidth]="true" [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
-            [filter]="true" scrollHeight="150px">
-          </p-dropdown>
+          <p-dropdown 
+          [options]="serviceTypeReferenceDataList" 
+          [disabled]="editFlag"
+          [(ngModel)]="vscFilters.serviceType"    
+          placeholder="Select"   
+          [autoWidth]="true"
+          [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"   
+          [filter]="true" 
+          scrollHeight="150px">
+        </p-dropdown>
         </div>
       </div>
 
       <div class="ui-g-12 ui-md-6 ui-lg-3">
         <div class="ui-g-4" style="text-align:right"><label class="label">Service From Country <span class="required">*</span></label></div>
         <div class="ui-g-7">
-          <p-dropdown placeholder="Select" [autoWidth]="true" [style]="{'width': '100%' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
-            [filter]="true" scrollHeight="150px">
-          </p-dropdown>
+          <p-dropdown 
+          [options]="countryCodeReferenceDataList" 
+          [disabled]="editFlag"
+          [(ngModel)]="vscFilters.serviceFromCountryCode"    
+          placeholder="Select"   
+          [autoWidth]="true"
+          [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"   
+          [filter]="true" 
+          scrollHeight="150px">
+        </p-dropdown>
         </div>
 
       </div>
@@ -39,9 +60,16 @@
       <div class="ui-g-12 ui-md-6 ui-lg-3">
         <div class="ui-g-4" style="text-align:right"><label class="label">Billed From Country <span class="required">*</span></label></div>
         <div class="ui-g-7">
-          <p-dropdown placeholder="Select" [autoWidth]="true" [style]="{'width': '100%' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
-            [filter]="true" scrollHeight="150px">
-          </p-dropdown>
+          <p-dropdown 
+          [options]="countryCodeReferenceDataList" 
+          [disabled]="editFlag"
+          [(ngModel)]="vscFilters.billedFromCountryCode"    
+          placeholder="Select"   
+          [autoWidth]="true"
+          [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"   
+          [filter]="true" 
+          scrollHeight="150px">
+        </p-dropdown>
         </div>
       </div>
     </div>

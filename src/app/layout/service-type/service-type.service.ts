@@ -14,32 +14,32 @@ export class ServiceTypeService {
 
   public getAllCountryData(): Observable<Object> {
     //return this.http.get("http://localhost:4200/assets/data/sample-ex/dropDown-data/country-data.json");
-    return this.http.get("http://localhost:8081/gcbapi/country");
+    return this.http.get("http://localhost:8080/country");
   }
   public getAllSegmentData(): Observable<Object> {
     //return this.http.get("http://localhost:4200/assets/data/sample-ex/dropDown-data/segment-data.json");
-    return this.http.get("http://localhost:8081/gcbapi/product");
+    return this.http.get("http://localhost:8080/product");
   }
   public getBillingBasisData(): Observable<Object> {
     // return this.http.get("http://localhost:4200/assets/data/sample-ex/dropDown-data/billingBasis-data.json");
-    return this.http.get("http://localhost:8081/gcbapi/billingBasis");
+    return this.http.get("http://localhost:8080/billingBasis");
 
   }
   public getServicetype(gcbDetailFilters): Observable<Object> {
     // return this.http.get("http://localhost:4200/assets/data/sample-ex/dropDown-data/billingBasis-data.json");
-    return this.http.post("http://localhost:8081/gcbapi/serviceType", gcbDetailFilters);
+    return this.http.post("http://localhost:8080/serviceType", gcbDetailFilters);
 
   }
 
   public getServicetypeData(): Observable<Object> {
     // return this.http.get("http://localhost:4200/assets/data/sample-ex/dropDown-data/billingBasis-data.json");
-    return this.http.get("http://localhost:8081/gcbapi/serviceTypeData");
+    return this.http.get("http://localhost:8080/serviceTypeData");
 
   }
 
   public upsertServiceType(gcbDetailFilters): Observable<Object> {
     // return this.http.get("http://localhost:4200/assets/data/sample-ex/dropDown-data/billingBasis-data.json");
-    return this.http.post("http://localhost:8081/gcbapi/upsertServiceType", gcbDetailFilters);
+    return this.http.post("http://localhost:8080/upsertServiceType", gcbDetailFilters);
 
   }
 }
