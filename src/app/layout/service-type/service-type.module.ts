@@ -8,10 +8,7 @@ import {FileDownloadComponent} from '../file-download/file-download.component';
 import { ServiceTypeComponent } from './service-type.component';
 import { ServiceTypeRoutingModule } from './service-type-routing.module';
 import { PrimeModule } from '../../prime';
-/* import {EsbDatamartModifyComponent} from './esb-detail-modify.component';
- */ 
- 
- 
+
 @NgModule({
   declarations: [ServiceTypeComponent],
   imports: [ 
@@ -24,10 +21,8 @@ import { PrimeModule } from '../../prime';
     NgbAlertModule.forRoot(),
     NgbModule.forRoot(),
     NgbDropdownModule.forRoot(),
-   LayoutModule,
+    LayoutModule,
     NgbModalModule.forRoot(),
- 
- //   DashboardModule,
     DropdownModule
   ]
 })

@@ -2,18 +2,19 @@
   <div class="-font--plus-1">Vendor Service Country : Add/Update </div>
   <div class="card card-default mb-3">
     <div class="card-header">
-      Vendor Service Country : Create
+      <div class="card-header">
+        <span *ngIf="!editFlag">Vendor Service Country : Create</span> 
+        <span *ngIf="editFlag">Vendor Service Country : Modify</span> 
+       </div>
     </div>
-
     <div class="ui-g">
-
       <div class="ui-g-12 ui-md-6 ui-lg-3 productLabel">
         <div class="ui-g-4"><label class="label">Vednor Entity Name <span class="required">*</span></label></div>
         <div class="ui-g-7">
           <p-dropdown 
           [options]="vendorEntityReferenceDataList" 
           [disabled]="editFlag"
-          [(ngModel)]="vscFilters.vendorEntity"    
+          [(ngModel)]="vscDtoObj.vendorEntityId"    
           placeholder="Select"   
           [autoWidth]="true"
           [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"   
@@ -30,7 +31,7 @@
           <p-dropdown 
           [options]="serviceTypeReferenceDataList" 
           [disabled]="editFlag"
-          [(ngModel)]="vscFilters.serviceType"    
+          [(ngModel)]="vscDtoObj.serviceTypeId"    
           placeholder="Select"   
           [autoWidth]="true"
           [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"   
@@ -45,8 +46,7 @@
         <div class="ui-g-7">
           <p-dropdown 
           [options]="countryCodeReferenceDataList" 
-          [disabled]="editFlag"
-          [(ngModel)]="vscFilters.serviceFromCountryCode"    
+          [(ngModel)]="vscDtoObj.servicedFromCountryCode"    
           placeholder="Select"   
           [autoWidth]="true"
           [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"   
@@ -62,8 +62,7 @@
         <div class="ui-g-7">
           <p-dropdown 
           [options]="countryCodeReferenceDataList" 
-          [disabled]="editFlag"
-          [(ngModel)]="vscFilters.billedFromCountryCode"    
+          [(ngModel)]="vscDtoObj.billedFromCountryCode"    
           placeholder="Select"   
           [autoWidth]="true"
           [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"   
@@ -78,16 +77,63 @@
         <label class="label">Suggested Cost Center : </label>
       </div>
       <div class="ui-g-2">
-        <input class="form-control">
+        <input class="form-control"  [(ngModel)]="vscDtoObj.suggestedCostCenterDefault" >
       </div>
     </div>
 
     <div class="ui-g">
         <div class="ui-g-12" style="text-align:right">
-            <button class="ge-button -fill--solid" >Submit</button>
-            <button class="ge-button -fill--solid" >Cancel</button>
+            <button class="ge-button -fill--solid" (click)="upsertVendorServiceCountry()">Submit</button>
+            <button class="ge-button -fill--solid" (click)="clearAll()">Cancel</button>
         </div>
     </div>
 
   </div>
+
+<div class="ui-g">
+    <div class="ui-g-12">
+    <app-file-download [dwnData]="vendorSrCountryData" [fileName]="fileName"></app-file-download>
+    </div>
+</div>
+<div class="ui-g">
+<div class="ui-g-12">
+ <p-table #tt [columns]="cols" [value]="vendorSrCountryData" [style]="{'margin-top':'2px','width':'100%'}" [rows]="8" [paginator]="true" [pageLinks]="3" [responsive]="true">
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th [ngStyle]="{'width': '5%'}">Modify</th>
+            <th *ngFor="let col of columns" [pSortableColumn]="col.field" [ngStyle]="{'width': col.width}">
+                {{col.header}}
+                <p-sortIcon [field]="col.field"></p-sortIcon>
+            </th>
+        </tr>
+         <tr>
+           <th></th>
+            <th *ngFor="let col of columns" [ngSwitch]="col.field">
+                <input [ngStyle]="{'width': '99%'}" *ngSwitchCase="'vendorServiceCountryId'" pInputText type="text" (input)="tt.filter($event.target.value, col.field, 'contains')">
+                <input [ngStyle]="{'width': '99%'}" *ngSwitchCase="'vendorEntityName'" pInputText type="text" (input)="tt.filter($event.target.value, col.field, 'contains')">
+                <input [ngStyle]="{'width': '99%'}" *ngSwitchCase="'serviceTypeName'" pInputText type="text" (input)="tt.filter($event.target.value, col.field,'contains')">
+                <input [ngStyle]="{'width': '99%'}" *ngSwitchCase="'billedFromCountryCode'" pInputText type="text" (input)="tt.filter($event.target.value, col.field,'contains')">
+                <input [ngStyle]="{'width': '99%'}" *ngSwitchCase="'servicedFromCountryCode'" pInputText type="text" (input)="tt.filter($event.target.value, col.field,'contains')">
+                <input [ngStyle]="{'width': '99%'}" *ngSwitchCase="'suggestedCostCenterDefault'" pInputText type="text" (input)="tt.filter($event.target.value, col.field,'contains')">
+                <input [ngStyle]="{'width': '99%'}" *ngSwitchCase="'createdDate'" pInputText type="text" (input)="tt.filter($event.target.value, col.field,'contains')">
+                <input [ngStyle]="{'width': '99%'}" *ngSwitchCase="'createdBy'" pInputText type="text" (input)="tt.filter($event.target.value, col.field,'contains')">
+                <input [ngStyle]="{'width': '99%'}" *ngSwitchCase="'lastUpdatedDate'" pInputText type="text" (input)="tt.filter($event.target.value, col.field,'contains')">
+                <input [ngStyle]="{'width': '99%'}" *ngSwitchCase="'updatedBy'" pInputText type="text" (input)="tt.filter($event.target.value, col.field,'contains')">
+              </th>
+        </tr> 
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr>
+            <td>
+                <p-tableRadioButton [value]="rowData" (click)="showSelectedData(rowData['vendorServiceCountryId'])" ></p-tableRadioButton>
+              </td>
+            <td *ngFor="let col of columns" >
+              <div> {{rowData[col.field]}}</div>
+            </td>
+        </tr>
+    </ng-template>
+  </p-table>
+</div>
+</div>
+
 </div>

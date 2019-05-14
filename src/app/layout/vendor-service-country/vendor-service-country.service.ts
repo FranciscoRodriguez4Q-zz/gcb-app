@@ -23,4 +23,11 @@ import { Injectable } from '@angular/core';
         return this.http.get("http://localhost:8080/vendorEntity");
       }
 
+    public getVendorSrCountryData(): Observable<Object> {
+        return this.http.get("http://localhost:8080/vendorServiceCountry");
+      }
+      public upsertVendorServiceCountry(vscObj): Observable<Object> {
+        return this.http.post("http://localhost:8080/upsertVendorServiceCountry",vscObj);
+      }
+
   }
