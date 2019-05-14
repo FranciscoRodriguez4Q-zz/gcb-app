@@ -4,7 +4,7 @@ import { LocationStrategy,HashLocationStrategy } from '@angular/common';
 import { SampleFormComponent} from './layout/components/sample-form/sample-form.component';
 
 const routes: Routes = [
-
+  { path: '', redirectTo: 'layout', pathMatch: 'full' },
   {
     path: 'layout', loadChildren: './layout/layout.module#LayoutModule' 
    },
