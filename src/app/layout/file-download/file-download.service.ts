@@ -17,9 +17,13 @@ export class FileDownloadService {
     return `${excelFileName}.xlsx`;
   }
 
-  public exportAsExcelFile(json: any[], excelFileName: string,fileNameCheck:string): void {
+  public exportAsExcelFile(json: any[], excelFileName: string,fileNameCheck:string,colsHeader: any[]): void {
     const workbook: XLSX.WorkBook = { Sheets: {}, SheetNames: [] };
     let worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(json);
+    if(fileNameCheck==="ServiceType")
+    { //Custom Headers for ESB download Report
+      XLSX.utils.sheet_add_json(worksheet, [], { header:colsHeader} ); 
+    }
     const ws_name = excelFileName;
     XLSX.utils.book_append_sheet(workbook, worksheet, ws_name);
    
@@ -33,15 +37,19 @@ export class FileDownloadService {
     XLSX.writeFile(workbook, excelFileName + ".xlsx");
   }
 
-  public procesTextFile(delimt: string, dwnData: any, fileName: string,fileNameCheck:string) {
+  public procesTextFile(delimt: string, dwnData: any, fileName: string,fileNameCheck:string,colsHeader: any[]) {
     this.delimitArray = dwnData;
     var i = 0; var j = 0;
-
+    if(fileNameCheck==="ServiceType")
+    { //Custom Headers for ServiceType download Report
+      this.tempData[0]  = colsHeader;
+    }
     for (i = 0; i < this.delimitArray.length; i++) {
       if (this.delimitArray[i] != null) {
         this.tempData.push(this.delimitArray[i]);
       }
     }
+    
 
     
     var txtData = new Blob([this.ConvertToFile(this.tempData, delimt)], { type: 'text/plain;charset=utf-8;'  });
@@ -85,15 +93,21 @@ export class FileDownloadService {
     return str;
   }
 
-  processCSVFile(dwnData: any, fileName: string,fileNameCheck:string) {
+  processCSVFile(dwnData: any, fileName: string,fileNameCheck:string,colsHeader: any[]) {
     var header = [];
     this.csvArry = dwnData;
     var i = 0; var j = 0;
-    for (i = 0; i < this.csvArry.length; i++) {
-      if (this.csvArry[i] != null) {
-          this.tempData.push(this.csvArry[i]);
-          if (header.length == 0)
-            header = Object.getOwnPropertyNames(this.csvArry[i]);
+    if(fileNameCheck==="ServiceType")
+    { //Custom Headers for ESB download Report
+      header = colsHeader;
+    }
+    else{
+      for (i = 0; i < this.csvArry.length; i++) {
+        if (this.csvArry[i] != null) {
+            this.tempData.push(this.csvArry[i]);
+            if (header.length == 0)
+              header = Object.getOwnPropertyNames(this.csvArry[i]);
+        }
       }
     }
    // new Angular5Csv(this.tempData, fileName, { headers: (header) });
