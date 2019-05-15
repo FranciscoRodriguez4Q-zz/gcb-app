@@ -42,7 +42,12 @@ export class FileDownloadService {
     var i = 0; var j = 0;
     if(fileNameCheck==="ServiceType")
     { //Custom Headers for ServiceType download Report
-      this.tempData[0]  = colsHeader;
+      let colNm = [];
+      debugger;
+      for (i = 0; i < colsHeader.length; i++) {
+        colNm[colsHeader[i]] = "";
+      }
+      this.tempData[0]  = colNm;
     }
     for (i = 0; i < this.delimitArray.length; i++) {
       if (this.delimitArray[i] != null) {
@@ -97,20 +102,33 @@ export class FileDownloadService {
     var header = [];
     this.csvArry = dwnData;
     var i = 0; var j = 0;
-    if(fileNameCheck==="ServiceType")
-    { //Custom Headers for ESB download Report
-      header = colsHeader;
-    }
-    else{
-      for (i = 0; i < this.csvArry.length; i++) {
-        if (this.csvArry[i] != null) {
-            this.tempData.push(this.csvArry[i]);
-            if (header.length == 0)
-              header = Object.getOwnPropertyNames(this.csvArry[i]);
-        }
+    for (i = 0; i < this.csvArry.length; i++) {
+      if (this.csvArry[i] != null) {
+        this.tempData.push(this.csvArry[i]);
+        if (header.length == 0)
+          header = Object.getOwnPropertyNames(this.csvArry[i]);
       }
     }
    // new Angular5Csv(this.tempData, fileName, { headers: (header) });
+   const replacer = (key, value) => value === null ? '' : value;
+   let csv = dwnData.map(row => header.map(fieldName => JSON.stringify(row[fieldName], replacer)).join(','));
+   if(fileNameCheck==="ServiceType")
+   { //Custom Headers for ESB download Report
+    csv.unshift(colsHeader.join(','));
+    }else{
+    csv.unshift(header.join(','));
+    }
+    let csvArray = csv.join('\r\n');
+
+    var a = document.createElement('a');
+    var blob = new Blob([csvArray], {type: 'text/csv' }),
+    url = window.URL.createObjectURL(blob);
+
+    a.href = url;
+    a.download = "myFile.csv";
+    a.click();
+    window.URL.revokeObjectURL(url);
+    a.remove();
   }
 
 }

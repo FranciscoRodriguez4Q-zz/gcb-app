@@ -60,8 +60,8 @@ export class ServiceTypeComponent implements OnInit {
     this.getAllServiceType();
     //this.downloadCols = this.cols;
     for (let i = 0; i < this.cols.length; i++) {
-      //this.downloadCols.push(this.cols[i].header);
-      this.downloadCols[this.cols[i].header] = "";
+      this.downloadCols.push(this.cols[i].header);
+      //this.downloadCols[this.cols[i].header] = "";
     }
     
     console.log("im in ngonit");
