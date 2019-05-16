@@ -1,5 +1,5 @@
 <div class="-font--serif">
-  <div class="-font--plus-1">Vendor Service Country : Add/Update </div>
+  <div class="-font--plus-2">Vendor Service Country : Add/Update </div>
   <div class="card card-default mb-3">
     <div class="card-header">
       <div class="card-header">
@@ -7,9 +7,10 @@
         <span *ngIf="editFlag">Vendor Service Country : Modify</span> 
        </div>
     </div>
+<p-fieldset legend="Product Info">
     <div class="ui-g">
       <div class="ui-g-12 ui-md-6 ui-lg-3 productLabel">
-        <div class="ui-g-4"><label class="label">Vednor Entity Name <span class="required">*</span></label></div>
+        <div class="ui-g-5"><label class="label">Product<span class="required">*</span></label></div>
         <div class="ui-g-7">
           <p-dropdown 
           [options]="vendorEntityReferenceDataList" 
@@ -23,27 +24,10 @@
         </p-dropdown>
         </div>
       </div>
-
       <div class="ui-g-12 ui-md-6 ui-lg-3">
-        <div class="ui-g-4" style="text-align:right">
-          <label class="label">Service Type Name <span class="required">*</span></label></div>
-        <div class="ui-g-7">
-          <p-dropdown 
-          [options]="serviceTypeReferenceDataList" 
-          [disabled]="editFlag"
-          [(ngModel)]="vscDtoObj.serviceTypeId"    
-          placeholder="Select"   
-          [autoWidth]="true"
-          [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"   
-          [filter]="true" 
-          scrollHeight="150px">
-        </p-dropdown>
-        </div>
-      </div>
-
-      <div class="ui-g-12 ui-md-6 ui-lg-3">
-        <div class="ui-g-4" style="text-align:right"><label class="label">Service From Country <span class="required">*</span></label></div>
-        <div class="ui-g-7">
+        <div class="ui-g-7" style="text-align:right">
+          <label class="label">Consumed In <span class="required">*</span></label></div>
+        <div class="ui-g-5">
           <p-dropdown 
           [options]="countryCodeReferenceDataList" 
           [(ngModel)]="vscDtoObj.servicedFromCountryCode"    
@@ -54,33 +38,140 @@
           scrollHeight="150px">
         </p-dropdown>
         </div>
-
       </div>
-
-      <div class="ui-g-12 ui-md-6 ui-lg-3">
-        <div class="ui-g-4" style="text-align:right"><label class="label">Billed From Country <span class="required">*</span></label></div>
-        <div class="ui-g-7">
-          <p-dropdown 
-          [options]="countryCodeReferenceDataList" 
-          [(ngModel)]="vscDtoObj.billedFromCountryCode"    
-          placeholder="Select"   
-          [autoWidth]="true"
-          [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"   
-          [filter]="true" 
-          scrollHeight="150px">
-        </p-dropdown>
-        </div>
-      </div>
+    </div>
+  </p-fieldset>
+  <p-fieldset legend="Vendor Info">
+    <div class="ui-g">
+        <div class="ui-g-12 ui-md-6 ui-lg-3 productLabel">
+            <div class="ui-g-5"><label class="label">Vendor<span class="required">*</span></label></div>
+            <div class="ui-g-7">
+              <p-dropdown 
+              [options]="vendorEntityReferenceDataList" 
+              [disabled]="editFlag"
+              [(ngModel)]="vscDtoObj.vendorEntityId"    
+              placeholder="Select"   
+              [autoWidth]="true"
+              [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"   
+              [filter]="true" 
+              scrollHeight="150px">
+            </p-dropdown>
+            </div>
+          </div>
+          <div class="ui-g-12 ui-md-6 ui-lg-3">
+              <div class="ui-g-7" style="text-align:right">
+                <label class="label">Vendor Product Prefix<span class="required">*</span></label></div>
+              <div class="ui-g-5">
+                  <input class="form-control" >
+              </div>
+          </div>
     </div>
     <div class="ui-g">
-      <div class="ui-g-2">
-        <label class="label">Suggested Cost Center : </label>
-      </div>
-      <div class="ui-g-2">
-        <input class="form-control"  [(ngModel)]="vscDtoObj.suggestedCostCenterDefault" >
-      </div>
+        <div class="ui-g-12 ui-md-6 ui-lg-3 productLabel">
+            <div class="ui-g-5"><label class="label">Billing From<span class="required">*</span></label></div>
+            <div class="ui-g-7">
+                <p-dropdown 
+                [options]="countryCodeReferenceDataList" 
+                [(ngModel)]="vscDtoObj.servicedFromCountryCode"    
+                placeholder="Select"   
+                [autoWidth]="true"
+                [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"   
+                [filter]="true" 
+                scrollHeight="150px">
+              </p-dropdown>
+            </div>
+          </div>
+          <div class="ui-g-12 ui-md-6 ui-lg-3">
+              <div class="ui-g-7" style="text-align:right">
+                <label class="label">Vendor Inv Desc<span class="required">*</span></label></div>
+              <div class="ui-g-5">
+                  <input class="form-control" >
+              </div>
+          </div>
     </div>
-
+    <div class="ui-g">
+        <div class="ui-g-12 ui-md-6 ui-lg-3 productLabel">
+            <div class="ui-g-5"><label class="label">Servicing From<span class="required">*</span></label></div>
+            <div class="ui-g-7">
+                <p-dropdown 
+                [options]="countryCodeReferenceDataList" 
+                [(ngModel)]="vscDtoObj.servicedFromCountryCode"    
+                placeholder="Select"   
+                [autoWidth]="true"
+                [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"   
+                [filter]="true" 
+                scrollHeight="150px">
+              </p-dropdown>
+            </div>
+          </div>
+          <div class="ui-g-12 ui-md-6 ui-lg-3">
+              <div class="ui-g-7" style="text-align:right">
+                <label class="label">UNSPSC<span class="required">*</span></label></div>
+              <div class="ui-g-5">
+                  <input class="form-control" >
+              </div>
+          </div>
+    </div>
+    <div class="ui-g">
+        <div class="ui-g-12 ui-md-6 ui-lg-3 productLabel">
+            <div class="ui-g-5"><label class="label">Billing To<span class="required">*</span></label></div>
+            <div class="ui-g-7">
+                <p-dropdown 
+                [options]="countryCodeReferenceDataList" 
+                [(ngModel)]="vscDtoObj.servicedFromCountryCode"    
+                placeholder="Select"   
+                [autoWidth]="true"
+                [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"   
+                [filter]="true" 
+                scrollHeight="150px">
+              </p-dropdown>
+            </div>
+          </div>
+    </div>
+  </p-fieldset>
+  <p-fieldset legend="Service Type Info">
+      <div class="ui-g">
+          <div class="ui-g-12 ui-md-6 ui-lg-3 productLabel">
+          <div class="ui-g-5" ><label class="label">Service Type Name </label></div>
+          <div class="ui-g-6">    
+            <input class="form-control" >
+          </div>
+          <div  class="ui-g-1" >
+            <p-checkbox  label="Use Suggested Name" labelStyleClass="chkLabel"></p-checkbox><label class="label"></label>
+          </div>
+        </div>
+        <div class="ui-g-12 ui-md-6 ui-lg-3">
+            <div class="ui-g-7">
+              <label class="label">Suggested Service Type Name<span class="required">*</span></label></div>
+            <div class="ui-g-5">
+                SuggestedServiceTypeName
+            </div>
+        </div>
+      </div>
+      <div class="ui-g">
+          <div class="ui-g-12 ui-md-6 ui-lg-3 productLabel">
+              <div class="ui-g-5"><label class="label">Billing Basis<span class="required">*</span></label></div>
+              <div class="ui-g-7">
+                  <p-dropdown 
+                  [options]="countryCodeReferenceDataList" 
+                  [(ngModel)]="vscDtoObj.servicedFromCountryCode"    
+                  placeholder="Select"   
+                  [autoWidth]="true"
+                  [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"   
+                  [filter]="true" 
+                  scrollHeight="150px">
+                </p-dropdown>
+              </div>
+            </div>
+            <div class="ui-g-12 ui-md-6 ui-lg-3">
+                <div class="ui-g-7" style="text-align:right">
+                  <label class="label">Suggested Cost Center<span class="required">*</span></label></div>
+                <div class="ui-g-5">
+                    <input class="form-control" >
+                </div>
+            </div>
+      </div>
+    </p-fieldset>      
     <div class="ui-g">
         <div class="ui-g-12" style="text-align:right">
             <button class="ge-button -fill--solid" (click)="upsertVendorServiceCountry()">Submit</button>
