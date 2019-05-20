@@ -20,8 +20,8 @@ export class NavbarComponent implements OnInit {
           label: 'Create/Modify',
           items:  [
             {label: 'Chargeback',  routerLink: ['Chargeback']},
-            {label: 'Service Type', routerLink: ['ServiceType']}, 
-            {label: 'Vendor Service Country',  routerLink: ['VendorServiceCountry']},
+/*             {label: 'Service Type', routerLink: ['ServiceType']}, 
+ */            {label: 'Vendor Service Country',  routerLink: ['VendorServiceCountry']},
        ]
 }
 ];

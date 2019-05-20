@@ -155,7 +155,8 @@ export class ChargebackComponent implements OnInit {
                     this.countryDataList.push({ label: "Select", value: "Select" })
             
                     for (let data of this.countryReferenceData) {
-                      this.countryDataList.push({ label: data.billingModelDesc, value: data.billingModelId })
+                      let labelCountry = data.countryAbbreviation + " | " + data.countryName;
+                      this.countryDataList.push({ label: labelCountry, value: data.countryAbbreviation })
                     }
                   },
                   error => {

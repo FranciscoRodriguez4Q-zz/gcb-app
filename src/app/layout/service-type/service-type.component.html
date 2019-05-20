@@ -11,7 +11,7 @@
 </div>
 <div class="card-body" *ngIf="expansionEventFlag">
   <div class="ui-g">
-    <div class="ui-g-12 ui-md-6 ui-lg-3 productLabel">
+    <div class="ui-g-12 ui-md-6 ui-lg-3 ui-g-nopad">
         <div class="ui-g-5"><label class="label">Product Name <span class="required">*</span></label></div>
         <div class="ui-g-7"> <p-dropdown 
         
@@ -24,7 +24,7 @@
         </p-dropdown>
       </div>
     </div>
-    <div class="ui-g-12 ui-md-6 ui-lg-3">
+    <div class="ui-g-12 ui-md-6 ui-lg-3 ui-g-nopad">
       <div class="ui-g-4" style="text-align:right"><label class="label">Country <span class="required">*</span></label></div>
         <div class="ui-g-7">    
           <p-dropdown [options]="countryCodeReferenceDataList" [disabled]="editFlag"
@@ -37,8 +37,8 @@
         </div>
     </div>
 
-    <div class="ui-g-12 ui-md-6 ui-lg-3">
-      <div class="ui-g-5" style="text-align:right"><label class="label">Billing Basis <span class="required">*</span></label></div>
+    <div class="ui-g-12 ui-md-6 ui-lg-3 ui-g-nopad">
+      <div class="ui-g-5 label-align"><label class="label">Billing Basis <span class="required">*</span></label></div>
         <div class="ui-g-7">
           <p-dropdown [options]="billingReferenceDataList"
           [(ngModel)]="gcbDetailFilters.billingBasis"      placeholder="Select"   [autoWidth]="true"
@@ -119,8 +119,7 @@
   </p-table>
 </div>
 </div>
-<div class="ui-g">
-  </div> 
+<footer class="ge-footer"></footer>
 </div>
 
 <ng-template #content1 let-c="close" let-d="dismiss">
