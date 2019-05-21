@@ -1,6 +1,6 @@
-<div class="">
-        <div class="-font--plus-2 ui-g">Chargeback </div>
-        <p-messages [(value)]="msgs"></p-messages>
+
+        <!-- <div class="-font--plus-2 ui-g">Chargeback </div>
+        <p-messages [(value)]="msgs"></p-messages> -->
   <!--     <p-toast key="msgs1" position="center" (onClose)="onReject()" [modal]="true" [baseZIndex]="5000"></p-toast>
   -->
   <!-- <div class="card-header">
@@ -9,14 +9,13 @@
             <span class="fa fa-plus fa-fw pull-right" *ngIf="!expansionEventFlag" (click)="expansionEventFlag = true"></span>
   </div> -->
   <div class="ui-g  ui-fluid ">
-
-
   <p-panel  class="ui-g-12">
       <p-header>       
             <div class="p-grid">
                     <div class="p-col ">
                         <div>
-                            <span class="ui-panel-title" style="font-size:14px;display:inline-block;margin-top:2px">Add ChargeBack</span>
+                            <span class="ui-panel-title" style="font-size:14px;display:inline-block;margin-top:2px">ChargeBack Add/Update</span>
+                            <span *ngIf="!editFlag">ChargeBack : Create</span> <span *ngIf="editFlag">ChargeBack : Modify (Internal ChargeBack ID:{{chargeBackFilters.internalCbId}})</span> 
 
                         </div>
                     </div>
@@ -41,7 +40,7 @@
           <div class="ui-g">
             <div class="ui-g-12 ui-md-4 ui-lg-4">
               <div class="ui-g-4"><label class="label">Vendor BAN</label></div>
-              <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.vendorBan"/></div>
+              <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.vendorBanId"/></div>
             </div>
            
             <div class="ui-g-12 ui-md-6 ui-lg-4">
@@ -49,8 +48,8 @@
                 <div class="ui-g-6">
                   
                     <p-dropdown [options]="vendorEntityDataList" 
-                    [disabled]="editFlag" placeholder="Select"
-                    [(ngModel)]="chargeBackFilters.vendor"
+                    placeholder="Select"
+                    [(ngModel)]="chargeBackFilters.vendorId"
                      [autoWidth]="true" (onChange)="getProductLst($event)"
                      [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
                     [filter]="true" scrollHeight="150px">
@@ -60,11 +59,10 @@
             </div>
             <div class="ui-g-12 ui-md-6 ui-lg-4">
               <div class="ui-g-4"><label class="label">Product</label></div>
-              <div class="ui-g-6">
-             
-                  <p-dropdown [options]="productDataList" [(ngModel)]="chargeBackFilters.product" 
+              <div class="ui-g-6">             
+                  <p-dropdown [options]="productDataList" [(ngModel)]="chargeBackFilters.productId" 
                   (onChange)="getServiceType($event)"
-                  [disabled]="editFlag" placeholder="Select" [autoWidth]="true" [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
+                  placeholder="Select" [autoWidth]="true" [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
                   [filter]="true" scrollHeight="150px">
                   </p-dropdown>
                
@@ -78,7 +76,7 @@
                     <p-dropdown [options]="serviceTypeDataList" 
                     [(ngModel)]="chargeBackFilters.serviceType" 
                     (onChange)="getCostCenter($event)"
-                    [disabled]="editFlag" placeholder="Select" [autoWidth]="true" [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
+                    placeholder="Select" [autoWidth]="true" [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
                     [filter]="true" scrollHeight="150px">
                     </p-dropdown>
                 </div>
@@ -90,7 +88,7 @@
                      [filter]="true" scrollHeight="150px">
                      </p-dropdown>
                      </div>                      -->
-                     <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.suggestedCostCenter" [disabled]="!chargeBackFilters.overrideOffsetCostCenter"/></div>
+                     <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.costCenter" [disabled]="!chargeBackFilters.overrideOffsetCostCenter"/></div>
 
                 </div>
 
@@ -113,12 +111,14 @@
               </div> -->
               <div class="ui-g-12 ui-md-6 ui-lg-4">
                   <div class="ui-g-4"><label class="label">GoldNet ID</label></div>
-                  <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.goldNetId"/></div>
+                  <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.goldnetId"/></div>
               </div>
               <div class="ui-g-12 ui-md-6 ui-lg-4">
                   <div class="ui-g-4"><label class="label">Legal Entity Name</label></div>
                   <div class="ui-g-6">
-                      <p-dropdown [disabled]="editFlag" [(ngModel)]="chargeBackFilters.legalEntityName" placeholder="Select" [autoWidth]="true" [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
+                      <p-dropdown [disabled]="editFlag" [(ngModel)]="chargeBackFilters.legalEntityId" 
+                      [options]="legalEntityDataList"
+                      placeholder="Select" [autoWidth]="true" [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
                        [filter]="true" scrollHeight="150px">
                        </p-dropdown>
                   </div>
@@ -153,7 +153,7 @@
               <div class="ui-g">
                 <div class="ui-g-12 ui-md-6 ui-lg-4">
                   <div class="ui-g-4"><label class="label">Bill Routing ID</label></div>
-                  <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.billRoutingId"/></div>
+                  <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.billroutingId"/></div>
                 </div>
                 <div class="ui-g-12 ui-md-6 ui-lg-4">
                     <div class="ui-g-4"><label class="label">Billing Model</label></div>
@@ -199,7 +199,7 @@
                         </div>
                         <div class="ui-g-12 ui-md-6 ui-lg-4">
                             <div class="ui-g-4"><label class="label">Indirect Offset BUC</label></div>
-                            <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.inDirectOffsetBuc"/>
+                            <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.indirectOffsetBuc"/>
                             </div>
                       </div>
               </div>
@@ -281,11 +281,11 @@
                       </div>
                       <div class="ui-g-12 ui-md-6 ui-lg-4">
                           <div class="ui-g-4"><label class="label">Project</label></div>
-                          <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.project"/></div>
+                          <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.sssProject"/></div>
                         </div>
                         <div class="ui-g-12 ui-md-6 ui-lg-4">
                             <div class="ui-g-4"><label class="label">Task</label></div>
-                            <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.task"/></div>
+                            <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.sssTask"/></div>
                           </div>                  
                     </div>
                     <div class="ui-g">
@@ -336,7 +336,7 @@
           <ng-template pTemplate="body" let-rowData let-columns="columns">
               <tr>
                   <td>
-                      <p-tableRadioButton [value]="rowData" (click)="showSelectedData(rowData['serviceTypeId'])" ></p-tableRadioButton>
+                      <p-tableRadioButton [value]="rowData" (click)="showSelectedData(rowData['internalCbId'])" ></p-tableRadioButton>
                   </td>
                   <td *ngFor="let col of columns" >
                     <div> {{rowData[col.field]}}</div>
@@ -346,6 +346,19 @@
         </p-table>
       </div>
       </div>
-</div>
+<ng-template #content1 let-c="close" let-d="dismiss">
+  <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Message</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+          <span aria-hidden="true">&times;</span>
+      </button>
+  </div>
+  <div class="modal-body">
+      <p class="text-center">{{popupErrorMessage}}</p>
+  </div>
+  <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark" (click)="c('Save click'); ">Ok</button>
+  </div>
+</ng-template>
   
    

@@ -1,20 +1,27 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit ,ViewChild} from '@angular/core';
 import { SelectItem } from 'primeng/api';
 import { ChargebackService } from './chargeback.service';
 import { Message } from 'primeng/components/common/api';
 import { MessageService } from 'primeng/api';
-
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-chargeback',
   templateUrl: './chargeback.component.html',
-  styleUrls: ['./chargeback.component.scss']
+  styleUrls: ['./chargeback.component.scss'],
+  providers: [MessageService]
 })
 export class ChargebackComponent implements OnInit {
 
   msgs: Message[] = [];
   public errorMessage = "";
   public saveMessage: any = [];
+
+  @ViewChild('content1') errorMessagePopUp;
+  public popupErrorMessage: any;
+  closeResult: string;
+
+  public editFlag = false;
 
   public expansionEventFlag = true;
   serviceTypeDataList: SelectItem[] = [];
@@ -25,6 +32,8 @@ export class ChargebackComponent implements OnInit {
   public productReferenceData: any;
   focusGroupDataList: SelectItem[] = [];
   public focusGroupReferenceData: any;
+  legalEntityDataList: SelectItem[] = [];
+  public legalEntityReferenceData: any;
   public currencyReferenceData: any;
   currencyDataList: SelectItem[] = [];
   public billingModelReferenceData: any;
@@ -37,24 +46,26 @@ export class ChargebackComponent implements OnInit {
 
   chargeBackData: any = [];
   public chargeBackFilters: any = {
-    vendorBan:"",
+    vendorBanId:"",
     vendorServiceCountryId:"",
-    vendor: "Select",
-    product: "Select",
+    vendorName: "Select",
+    productName: "Select",
+    productId:"",
+    vendorId:"",
     serviceType: "Select",
-    suggestedCostCenter: "",
+    costCenter: "",
     overrideOffsetCostCenter: false,
    // serviceTypeName: "",
-    goldNetId: "",
-    legalEntityName:"",
+   goldnetId: "",
+   legalEntityId:"",
     focusGroup:"",
     division:false,
-    billRoutingId:"",
+    billroutingId:"",
     billingModel:"",
     mode:"testing",
     currencyCode:"",
     directOffsetBuc:"",
-    inDirectOffsetBuc:"",
+    indirectOffsetBuc:"",
     vendorCode:"",
     shipFromAddress:"",
     shipToCountry:"",
@@ -68,15 +79,16 @@ export class ChargebackComponent implements OnInit {
     custRegNumber:"",
     globalSupplierNumber:"",
     siteNumber:"",
-    project:"",
-    task:"",
+    sssProject:"",
+    sssTask:"",
     awtGroupName:"",
     vatAwtGroupName:"",
-    paymentTerms:""
+    paymentTerms:"",
+    cloneOfId:""
   };
 
 
-  constructor(private chargebackService: ChargebackService) { }
+  constructor(private chargebackService: ChargebackService, private messageService: MessageService, private modalService: NgbModal) { }
 
   public cols = [
     { field: 'internalCbId', header: 'ChargeBack ID', width: '5%' },
@@ -102,9 +114,10 @@ export class ChargebackComponent implements OnInit {
             this.vendorEntityDataList.push({ label: data.vendorLegalEntityName, value: data.vendorEntityId })
           }
         },
-        error => {
-        });        
+        error => {        
 
+        });    
+      
           this.chargebackService.getFocusGroupData().subscribe(
             refData => {
               let arr: any = [];
@@ -119,13 +132,25 @@ export class ChargebackComponent implements OnInit {
             error => {
             });
 
+            this.chargebackService.getLegalEntityData().subscribe(
+              refData => {
+                let arr: any = [];
+        
+                this.legalEntityReferenceData = refData;
+                // this.focusGroupDataList.push({ label: "Select", value: "Select" })
+        
+                for (let data of this.legalEntityReferenceData) {
+                  this.legalEntityDataList.push({ label: data.legalEntityName, value: data.legalEntityId })
+                }
+              },
+              error => {
+              });
+
             this.chargebackService.getCurrencyData().subscribe(
               refData => {
                 let arr: any = [];
         
-                this.currencyReferenceData = refData;
-                this.currencyDataList.push({ label: "Select", value: "Select" })
-        
+                this.currencyReferenceData = refData;        
                 for (let data of this.currencyReferenceData) {
                   this.currencyDataList.push({ label: data.currencyDescription, value: data.currencyCode })
                 }
@@ -137,9 +162,7 @@ export class ChargebackComponent implements OnInit {
                 refData => {
                   let arr: any = [];
           
-                  this.billingModelReferenceData = refData;
-                  this.billingModelDataList.push({ label: "Select", value: "Select" })
-          
+                  this.billingModelReferenceData = refData;          
                   for (let data of this.billingModelReferenceData) {
                     this.billingModelDataList.push({ label: data.billingModelDesc, value: data.billingModelId })
                   }
@@ -151,9 +174,7 @@ export class ChargebackComponent implements OnInit {
                   refData => {
                     let arr: any = [];
             
-                    this.countryReferenceData = refData;
-                    this.countryDataList.push({ label: "Select", value: "Select" })
-            
+                    this.countryReferenceData = refData;            
                     for (let data of this.countryReferenceData) {
                       let labelCountry = data.countryAbbreviation + " | " + data.countryName;
                       this.countryDataList.push({ label: labelCountry, value: data.countryAbbreviation })
@@ -173,12 +194,12 @@ export class ChargebackComponent implements OnInit {
 
   getProductLst(event){
     this.productDataList=[];
+    this.chargeBackFilters.costCenter="";
+    this.serviceTypeDataList=[];
     this.chargebackService.getProductData(event.value).subscribe(
       refData => {
         let arr: any = [];
-
         this.productReferenceData = refData;
-        //this.productDataList.push({ label: "Select", value: "Select" })
         for (let data of this.productReferenceData) {
           this.productDataList.push({ label: data.productName, value: data.productId })
         }
@@ -188,7 +209,8 @@ export class ChargebackComponent implements OnInit {
   }
   getServiceType(event){
     this.serviceTypeDataList=[];
-    this.chargebackService.getServiceTypeData(event.value,this.chargeBackFilters.vendor).subscribe(
+    this.chargeBackFilters.suggestedCostCenter="";
+    this.chargebackService.getServiceTypeData(event.value,this.chargeBackFilters.vendorId).subscribe(
       refData => {
         let arr: any = [];
         this.serviceTypeReferenceData = refData;
@@ -210,7 +232,7 @@ export class ChargebackComponent implements OnInit {
         let arr: any = [];
         this.costCenterData = refData;
         for (let data of this.costCenterData) {
-          this.chargeBackFilters.suggestedCostCenter=data.suggestedCostCenterDefault;
+          this.chargeBackFilters.costCenter=data.suggestedCostCenterDefault;
           this.chargeBackFilters.vendorServiceCountryId=data.vendorServiceCountryId;
         }
       },
@@ -239,6 +261,8 @@ export class ChargebackComponent implements OnInit {
             this.errorMessage = this.saveMessage.statusMessage;
             this.msgs = [];
             this.msgs.push({ severity: 'error', summary: this.errorMessage, detail: '' });
+            this.popupErrorMessage =  this.saveMessage.statusMessage;
+            this.open(this.errorMessagePopUp);
             this.getChargeBackData();
           },
           error => {
@@ -246,6 +270,23 @@ export class ChargebackComponent implements OnInit {
      
     }
   }
+  open(content) {
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
+
   getChargeBackData(){
     this.chargebackService.getChargeBackData().subscribe(
       refData => {
@@ -257,6 +298,35 @@ export class ChargebackComponent implements OnInit {
   validation(){
     return true;
   }
+
+  showSelectedData(internalCbId) {       
+    this.productDataList=[];
+    this.chargeBackFilters.costCenter="";
+    this.serviceTypeDataList=[];
+    console.log("radio button click" + internalCbId);
+
+    this.editFlag = true;
+    this.chargeBackFilters = this.chargeBackData.filter(x => x.internalCbId == internalCbId)[0];
+
+    console.log(this.chargeBackFilters);
+
+    this.chargebackService.getProductData(this.chargeBackFilters.vendorId).subscribe(
+      refData => {
+        let arr: any = [];
+        this.productReferenceData = refData;
+        for (let data of this.productReferenceData) {
+          this.productDataList.push({ label: data.productName, value: data.productId })
+        }
+      },
+      error => {
+      });
+      
+     console.log(this.chargeBackFilters);
+
+    // this.vendorEntityDataList.push({ label:this.chargeBackFilters.vendorName, value: this.chargeBackFilters.vendorId })
+    //this.productDataList.push({ label:this.chargeBackFilters.productName, value: this.chargeBackFilters.productId })
+    //this.serviceTypeDataList.push({ label:this.chargeBackFilters.serviceType, value: this.chargeBackFilters.serviceType })
+}
 
 }
 

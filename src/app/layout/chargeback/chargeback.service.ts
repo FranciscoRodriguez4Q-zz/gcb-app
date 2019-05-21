@@ -48,8 +48,13 @@ export class ChargebackService {
   }
 
  public upsertChargeBack(chargeBackFilters): Observable<Object> {
-    return this.http.get("http://localhost:8081/gcbapi/upsertChargeBack",chargeBackFilters);
+    return this.http.post("http://localhost:8081/gcbapi/upsertChargeBack",chargeBackFilters);
   }
+
+  public getLegalEntityData(): Observable<Object> {
+    return this.http.get("http://localhost:8081/gcbapi/legalEntity");
+  }
+  
   
   
 }
