@@ -15,6 +15,7 @@ import { FileDownloadComponent } from '../file-download/file-download.component'
 import { LayoutModule } from '../layout.module';
 import { PrimeModule } from 'src/app/prime';
 import { NgbModule, NgbDropdownModule, NgbModalModule, NgbAlertModule, NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
+import {FieldsetModule} from 'primeng/fieldset';
 
 @NgModule ({
     declarations: [VendorServiceCountryComponent],
@@ -29,6 +30,7 @@ import { NgbModule, NgbDropdownModule, NgbModalModule, NgbAlertModule, NgbCarous
       ButtonModule,DropdownModule,TableModule,CheckboxModule,RadioButtonModule,MessagesModule,MessageModule,ToastModule,
       PrimeModule  ,
       ReactiveFormsModule,
+      FieldsetModule,
       
       NgbCarouselModule.forRoot(),
       NgbAlertModule.forRoot(),

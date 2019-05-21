@@ -1,12 +1,17 @@
 import { NgModule } from '@angular/core';
 import { ChargebackComponent } from './chargeback.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 import { ChargebackRoutingModule } from './chargeback-routing.module';
 import { CommonModule } from '@angular/common';
+import { LayoutModule } from '../layout.module';
+import { PrimeModule } from 'src/app/prime';
+
+
 
 @NgModule({
  declarations: [ChargebackComponent],
- imports : [FormsModule, CommonModule,ChargebackRoutingModule]
+ imports : [FormsModule, CommonModule,ChargebackRoutingModule,
+         LayoutModule,ReactiveFormsModule,PrimeModule]
 })
 export class ChargebackModule
 {

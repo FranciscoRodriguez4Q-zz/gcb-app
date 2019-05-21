@@ -23,9 +23,10 @@ export class FileDownloadComponent implements OnInit {
   public nameCheck: any;
 
   @Input() dwnData: any;
+  @Input() colsHeader: any;
   @Input() fileName: any;
   @Input() fileFormat: any;
-
+  @Output() dwnAction: EventEmitter<any> = new EventEmitter();
   constructor(private fileDownloadService: FileDownloadService, private datePipe: DatePipe) {
  }
 
@@ -38,7 +39,6 @@ export class FileDownloadComponent implements OnInit {
     this.fileNameCheck = this.fileName.split("_",2);
     this.nameCheck=this.fileNameCheck[0];
     this.fileName = this.fileName + "_" + date;
-
   }
 
   onOptionSelect(selectedItem: string) {
@@ -56,6 +56,7 @@ export class FileDownloadComponent implements OnInit {
         delete this.dwnData[i].serviceTypeMessage;
         delete this.dwnData[i].useSuggested;
       }
+      this.dwnAction.emit("download");
     }
     switch (this.defaultOption) {
       case AppConstants.CASE_DOWNLOAD_CSV:
@@ -76,15 +77,15 @@ export class FileDownloadComponent implements OnInit {
   }
 
   processExcelFile() {
-    this.fileDownloadService.exportAsExcelFile(this.dwnData, this.fileName,this.nameCheck);
+    this.fileDownloadService.exportAsExcelFile(this.dwnData, this.fileName,this.nameCheck,this.colsHeader);
   }
 
   procesTextFile(delimt: string) {
-    this.fileDownloadService.procesTextFile(delimt, this.dwnData, this.fileName,this.nameCheck);
+    this.fileDownloadService.procesTextFile(delimt, this.dwnData, this.fileName,this.nameCheck,this.colsHeader);
   }
 
   processCSVFile() {
-    this.fileDownloadService.processCSVFile(this.dwnData, this.fileName,this.nameCheck);
+    this.fileDownloadService.processCSVFile(this.dwnData, this.fileName,this.nameCheck,this.colsHeader);
   }
 
 }
