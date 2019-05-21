@@ -1,5 +1,8 @@
+import { Observable} from 'rxjs';
 import { Inject,Injectable } from '@angular/core';
 import * as XLSX from 'xlsx';
+import { HttpClient } from '@angular/common/http';
+
 //import { Angular5Csv } from 'angular5-csv/Angular5-csv';
  
 @Injectable({
@@ -7,7 +10,7 @@ import * as XLSX from 'xlsx';
 })
 export class FileDownloadService {
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
   public tempData: any = [];
   public delimitArray: any = [];
   public csvData: any = [];
@@ -20,7 +23,7 @@ export class FileDownloadService {
   public exportAsExcelFile(json: any[], excelFileName: string,fileNameCheck:string,colsHeader: any[]): void {
     const workbook: XLSX.WorkBook = { Sheets: {}, SheetNames: [] };
     let worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(json);
-    if(fileNameCheck==="ServiceType")
+    if(fileNameCheck==="VSC")
     { //Custom Headers for ESB download Report
       XLSX.utils.sheet_add_json(worksheet, [], { header:colsHeader} ); 
     }
@@ -39,8 +42,9 @@ export class FileDownloadService {
 
   public procesTextFile(delimt: string, dwnData: any, fileName: string,fileNameCheck:string,colsHeader: any[]) {
     this.delimitArray = dwnData;
+    this.tempData = [];
     var i = 0; var j = 0;
-    if(fileNameCheck==="ServiceType")
+    if(fileNameCheck==="VSC")
     { //Custom Headers for ServiceType download Report
       let colNm = [];
       debugger;
@@ -112,7 +116,7 @@ export class FileDownloadService {
    // new Angular5Csv(this.tempData, fileName, { headers: (header) });
    const replacer = (key, value) => value === null ? '' : value;
    let csv = dwnData.map(row => header.map(fieldName => JSON.stringify(row[fieldName], replacer)).join(','));
-   if(fileNameCheck==="ServiceType")
+   if(fileNameCheck==="VSC")
    { //Custom Headers for ESB download Report
     csv.unshift(colsHeader.join(','));
     }else{
@@ -130,5 +134,6 @@ export class FileDownloadService {
     window.URL.revokeObjectURL(url);
     a.remove();
   }
+
 
 }

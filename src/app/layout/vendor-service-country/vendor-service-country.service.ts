@@ -43,5 +43,8 @@ import { Injectable } from '@angular/core';
         return this.http.post("http://localhost:8081/gcbapi/serviceType", vscDtoObj);
     
       }
+      public getVSCountryDWData(colsHeader): Observable<Object> {
+        return this.http.post("http://localhost:8081/gcbapi/getVSCountryDWData", '');
     
+      }
   }

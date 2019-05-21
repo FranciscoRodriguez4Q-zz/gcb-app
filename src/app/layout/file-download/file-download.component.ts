@@ -39,6 +39,9 @@ export class FileDownloadComponent implements OnInit {
     this.fileNameCheck = this.fileName.split("_",2);
     this.nameCheck=this.fileNameCheck[0];
     this.fileName = this.fileName + "_" + date;
+   /*  if(this.nameCheck=='VSC'){
+      this.getVSCdwData();
+    } */
   }
 
   onOptionSelect(selectedItem: string) {
@@ -58,6 +61,9 @@ export class FileDownloadComponent implements OnInit {
       }
       this.dwnAction.emit("download");
     }
+    /* if(this.nameCheck=='VSC'){
+      setTimeout(() => {this.getVSCdwData()},3000);
+    } */
     switch (this.defaultOption) {
       case AppConstants.CASE_DOWNLOAD_CSV:
         this.processCSVFile();
@@ -88,4 +94,14 @@ export class FileDownloadComponent implements OnInit {
     this.fileDownloadService.processCSVFile(this.dwnData, this.fileName,this.nameCheck,this.colsHeader);
   }
 
+  /* getVSCdwData(){
+    
+      this.fileDownloadService.getVSCountryDWData(this.colsHeader).subscribe(
+        refData => {
+          this.dwnData = refData;
+        },
+        error => {
+        });
+  } */
+  
 }

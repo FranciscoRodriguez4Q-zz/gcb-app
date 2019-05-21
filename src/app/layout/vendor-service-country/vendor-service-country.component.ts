@@ -30,6 +30,9 @@ export class VendorServiceCountryComponent implements OnInit {
   public popupErrorMessage: any;
   closeResult: string;
   vendorSrCountryData: any = [];
+  vSCountryData: any = [];
+  public downloadCols = [];
+  public fileName : any ="VSC";
   public cols = [
     { field: 'vendorEntityName', header: 'Vendor Entity Name', width: '10%' },
     { field: 'productName', header: 'Product Name', width: '10%' },
@@ -48,7 +51,6 @@ export class VendorServiceCountryComponent implements OnInit {
 
   public editFlag = false;
   public expansionEventFlag = true;
-  public fileName: any = "VSC";
   public delimiter ="_";
   public vscDtoObj: any = {
     vendorServiceCountryId: "",
@@ -78,7 +80,10 @@ export class VendorServiceCountryComponent implements OnInit {
     this.getAllCountryData();
     //this.getAllServiceType();
     this.getBillingBasisData();
-
+    for (let i = 0; i < this.cols.length; i++) {
+      this.downloadCols.push(this.cols[i].header);
+      //this.downloadCols[this.cols[i].header] = "";
+    }
     this.vendorServiceCountryService.getAllVendorEntity().subscribe(
       refData => {
         let arr: any = [];
@@ -101,6 +106,7 @@ export class VendorServiceCountryComponent implements OnInit {
       },
       error => {
       });
+      this.getVSCdwData();
   }
   getAllCountryData(){
     this.vendorServiceCountryService.getAllCountryData().subscribe(
@@ -308,5 +314,15 @@ console.log(this.vscDtoObj.useSuggested);
       return `with: ${reason}`;
     }
   }
+
+  getVSCdwData(){
+    
+    this.vendorServiceCountryService.getVSCountryDWData(this.downloadCols).subscribe(
+      refData => {
+        this.vSCountryData = refData;
+      },
+      error => {
+      });
+}
 }
 
