@@ -1,6 +1,6 @@
-<div class="-font--serif">
-    <div class="-font--plus-2">Chargeback </div>
-    <p-messages  [(value)]="msgs"></p-messages>
+<div class="">
+        <div class="-font--plus-2 ui-g">Chargeback </div>
+        <p-messages [(value)]="msgs"></p-messages>
   <!--     <p-toast key="msgs1" position="center" (onClose)="onReject()" [modal]="true" [baseZIndex]="5000"></p-toast>
   -->
   <!-- <div class="card-header">
@@ -8,15 +8,34 @@
             <span class="fa fa-minus fa-fw pull-right" *ngIf="expansionEventFlag" (click)="expansionEventFlag = false"></span>
             <span class="fa fa-plus fa-fw pull-right" *ngIf="!expansionEventFlag" (click)="expansionEventFlag = true"></span>
   </div> -->
-  <p-panel>
+  <div class="ui-g  ui-fluid ">
+
+
+  <p-panel  class="ui-g-12">
       <p-header>       
-          <span class="ui-panel-title" style="font-size:14px;display:inline-block;margin-top:2px">Add ChargeBack</span>
-          <span *ngIf="panelExpansionFlag">
-            <button class="ge-button -fill--solid -size--small" style="margin-left:64rem" (click)="expandAllPanels()">Expand All<i class="fa fa-plus-square -size--large" aria-hidden="true"></i></button>
-        </span>
-        <span *ngIf="!panelExpansionFlag">
-            <button class="ge-button -fill--solid -size--small" style="margin-left:64rem" (click)="collapseAllPanels()">Collapse All<i class="fa fa-minus-square -size--large" aria-hidden="true"></i></button>
-       </span>
+            <div class="p-grid">
+                    <div class="p-col ">
+                        <div>
+                            <span class="ui-panel-title" style="font-size:14px;display:inline-block;margin-top:2px">Add ChargeBack</span>
+
+                        </div>
+                    </div>
+                    <div class="p-col  p-offset-8 ">
+                        <div>
+                            <span *ngIf="panelExpansionFlag">
+                                <button class="ge-button -fill--solid -size--small " (click)="expandAllPanels()">Expand All
+                                    <i class="fa fa-plus-square -size--large" aria-hidden="true"></i>
+                                </button>
+                            </span>   <!--   <i class="fa fa-plus fa-fw"></i> -->
+                            <span *ngIf="!panelExpansionFlag">
+                                <button class="ge-button -fill--solid -size--small" (click)="collapseAllPanels()">Collapse All
+                                    <i class="fa fa-minus-square -size--large" aria-hidden="true"></i>
+                                </button>
+                            </span>
+
+                        </div>
+                    </div>
+                </div>
       </p-header>
       <p-panel header="Chargeback Info" [collapsed]="collapsed" [toggleable]="true">
           <div class="ui-g">
@@ -28,7 +47,7 @@
             <div class="ui-g-12 ui-md-6 ui-lg-4">
                 <div class="ui-g-4"><label class="label">Vendor</label></div>
                 <div class="ui-g-6">
-                  <div class="ui-g-6">
+                  
                     <p-dropdown [options]="vendorEntityDataList" 
                     [disabled]="editFlag" placeholder="Select"
                     [(ngModel)]="chargeBackFilters.vendor"
@@ -36,19 +55,19 @@
                      [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
                     [filter]="true" scrollHeight="150px">
                     </p-dropdown>
-                </div>
+                
                 </div>
             </div>
             <div class="ui-g-12 ui-md-6 ui-lg-4">
               <div class="ui-g-4"><label class="label">Product</label></div>
               <div class="ui-g-6">
-                <div class="ui-g-6">
+             
                   <p-dropdown [options]="productDataList" [(ngModel)]="chargeBackFilters.product" 
                   (onChange)="getServiceType($event)"
                   [disabled]="editFlag" placeholder="Select" [autoWidth]="true" [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
                   [filter]="true" scrollHeight="150px">
                   </p-dropdown>
-              </div>
+               
               </div>
           </div>
           </div>                 
@@ -146,9 +165,16 @@
                 </div>
                 <div class="ui-g-12 ui-md-6 ui-lg-4">
                     <div class="ui-g-4"><label class="label">Mode</label></div>
-                    <div class="ui-g-6 radio">
-                        <p-radioButton name="modeRadio" value="testing" label="Testing" [(ngModel)]="chargeBackFilters.mode"></p-radioButton>
-                        <p-radioButton name="modeRadio" value="production" label="Production" [(ngModel)]="chargeBackFilters.mode"></p-radioButton>
+                    <div class="ui-g-8">
+                            <div class="p-grid">
+                                    <div class="p-col">
+                                        <p-radioButton name="modeRadio" value="testing" label="Testing" [(ngModel)]="chargeBackFilters.mode"></p-radioButton>
+                                    </div>
+                                    <div class="p-col ">
+                                        <p-radioButton name="modeRadio" value="production" label="Production" [(ngModel)]="chargeBackFilters.mode"></p-radioButton>
+                                    </div>
+                                </div>
+ 
                     </div>
                 </div>
               </div>

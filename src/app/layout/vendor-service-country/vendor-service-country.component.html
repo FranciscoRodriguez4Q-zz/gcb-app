@@ -1,14 +1,20 @@
-
-<br/>
+ 
 <div class="-font--serif">
-  <div class="-font--plus-2">Vendor Service Country : Add/Update </div>
-  <div class="card card-default mb-3">
+<!--   <div class="-font--plus-2">Vendor Service Country : Add/Update </div> -->
+<!--   <div class="card card-default mb-3">
     <div class="card-header">
       <div class="card-header">
         <span *ngIf="!editFlag">Vendor Service Country : Create</span> 
         <span *ngIf="editFlag">Vendor Service Country : Modify</span> 
        </div>
-    </div>
+    </div> -->
+    <p-panel header="Vendor Service Country : Add/Update" class="ui-g-12">
+    <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid">
+        <div class="">
+          <span *ngIf="!editFlag">Vendor Service Country : Create</span> 
+          <span *ngIf="editFlag">Vendor Service Country : Modify</span> 
+         </div>
+     
 <p-fieldset legend="Product Info">
     <div class="ui-g">
       <div class="ui-g-12 ui-md-6 ui-lg-3 productLabel">
@@ -20,7 +26,7 @@
           [(ngModel)]="vscDtoObj.productId"    
           placeholder="Select"   
           [autoWidth]="true"
-          [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"   
+          [style]="{'width': '100%' , 'position': 'relative' ,  'border-color':'#244364' ,'color': '#868e96'}"   
           [filter]="true" (click)="getServicetype()" 
           scrollHeight="150px">
         </p-dropdown>
@@ -186,8 +192,10 @@
     <div class="ui-g">
       <label class="errorMessage">{{errorMessage}}</label>
       </div> 
-  </div>
+ 
 
+
+ 
 <div class="ui-g">
     <div class="ui-g-12">
     <app-file-download [dwnData]="vendorSrCountryData" [fileName]="fileName"></app-file-download>
@@ -241,3 +249,5 @@
       <button type="button" class="btn btn-outline-dark" (click)="c('Save click'); ">Ok</button>
   </div>
 </ng-template>
+</p-panel>
+</div>

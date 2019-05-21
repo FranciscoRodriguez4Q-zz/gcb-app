@@ -1,7 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
-@import "spinner";
+/* @import "spinner";
 @import "utils";
-@import "rtl";
+@import "rtl"; */
 @import "responsive";
 @import '~primeicons/primeicons.css';
 @import '~core-design-css/core-design.css';
@@ -13,7 +13,8 @@
 body {
  
   font-family: "GE Inspira Serif" !important;
-
+  margin: 0px;
+  font-size: 1em !important;
 }
 .ui-card{
   font-family: 'GE Inspira Serif' !important;
