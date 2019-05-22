@@ -37,10 +37,10 @@ export class VendorServiceCountryComponent implements OnInit {
     { field: 'vendorEntityName', header: 'Vendor Entity Name', width: '10%' },
     { field: 'productName', header: 'Product Name', width: '10%' },
     { field: 'countryNm', header: 'Consumed In', width: '10%' },
-    { field: 'serviceTypeName', header: 'Service Type Name', width: '10%' },
-    { field: 'billedFromCountryCode', header: 'Billed From Country', width: '13%' },
-    { field: 'servicedFromCountryCode', header: 'Serviced From Country', width: '13%' },
-    { field: 'billedToCountryCode', header: 'Billed To Country', width: '13%' },
+    { field: 'serviceTypeName', header: 'Service Type Name', width: '15%' },
+    { field: 'billedFromCountryName', header: 'Billed From Country', width: '13%' },
+    { field: 'servicedFromCountryName', header: 'Serviced From Country', width: '13%' },
+    { field: 'billedToCountryName', header: 'Billed To Country', width: '13%' },
     { field: 'suggestedCostCenterDefault', header: 'Suggested Cost Center', width: '10%' },
     { field: 'createdDate', header: 'Created Date', width: '10%' },
     { field: 'createdBy', header: 'Created By', width: '7%' },
@@ -174,6 +174,11 @@ export class VendorServiceCountryComponent implements OnInit {
   showSelectedData(vendorSrCtryId) {
     this.editFlag = true;
     this.vscDtoObj = this.vendorSrCountryData.filter(x => x.vendorServiceCountryId == vendorSrCtryId)[0];
+    let productData = this.productReferenceData.filter(x => x.productId == this.vscDtoObj.productId)[0];
+    this.vscDtoObj.suggestedServiceType = productData.serviceTypePrefix +this.delimiter+ this.vscDtoObj.vProductPrefix+this.delimiter+ this.vscDtoObj.billedFromCountryCode+this.delimiter+ this.vscDtoObj.billedToCountryCode;
+    if(this.vscDtoObj.suggestedServiceType!=""){
+      this.vscDtoObj.suggestedServiceType = this.vscDtoObj.suggestedServiceType.toUpperCase();
+    }
   }
 
   upsertVendorServiceCountry()
@@ -285,10 +290,14 @@ export class VendorServiceCountryComponent implements OnInit {
   }
 
   checkValue(){
-console.log(this.vscDtoObj.useSuggested);
-  if(this.vscDtoObj.useSuggested==true){
-    this.vscDtoObj.serviceTypeName = this.vscDtoObj.suggestedServiceType;
-  }
+    if(this.vscDtoObj.useSuggested==true){
+      if(this.vscDtoObj.suggestedServiceType!=""){
+        this.vscDtoObj.serviceTypeName = this.vscDtoObj.suggestedServiceType;
+      }
+     /*  else{
+        this.errorMessage = "Suggested Service Type name is blank";
+      } */
+    }
   }
    /**
    * Method to open modal pop up.
