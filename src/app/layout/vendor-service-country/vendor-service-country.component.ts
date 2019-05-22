@@ -240,7 +240,7 @@ export class VendorServiceCountryComponent implements OnInit {
       return false;
     }
     if (this.vscDtoObj.unspscCode == null || this.vscDtoObj.unspscCode == "") {
-      this.errorMessage = "Please enter unspscCode";
+      this.errorMessage = "Please enter UNSPSC";
       return false;
     }
     return true;
