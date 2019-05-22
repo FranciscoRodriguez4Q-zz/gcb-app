@@ -60,9 +60,10 @@
             <div class="ui-g-12 ui-md-6 ui-lg-4">
               <div class="ui-g-4"><label class="label">Product</label></div>
               <div class="ui-g-6">             
-                  <p-dropdown [options]="productDataList" [(ngModel)]="chargeBackFilters.productId" 
+                  <p-dropdown [options]="productDataList"   placeholder="Select" 
+                   [(ngModel)]="chargeBackFilters.productId" 
                   (onChange)="getServiceType($event)"
-                  placeholder="Select" [autoWidth]="true" [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
+                [autoWidth]="true" [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
                   [filter]="true" scrollHeight="150px">
                   </p-dropdown>
                
@@ -82,13 +83,11 @@
                 </div>
                 </div>
                 <div class="ui-g-12 ui-md-6 ui-lg-4">
-                    <div class="ui-g-4"><label class="label">Suggested Cost Center</label></div>
-                    <!-- <div class="ui-g-6"> 
-                      <p-dropdown [disabled]="editFlag" placeholder="Select" [(ngModel)]="chargeBackFilters.suggestedCostCenter" [autoWidth]="true" [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
-                     [filter]="true" scrollHeight="150px">
-                     </p-dropdown>
-                     </div>                      -->
-                     <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.costCenter" [disabled]="!chargeBackFilters.overrideOffsetCostCenter"/></div>
+                    <div class="ui-g-4"><label class="label">Suggested Cost Center</label></div>                    
+                      <div class="ui-g-6">
+                        <span *ngIf="editFlag"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.suggestedCostCenter" [disabled]="!chargeBackFilters.overrideOffsetCostCenter"/></span>
+                        <span *ngIf="!editFlag"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.suggestedCostCenterDefault" [disabled]="!chargeBackFilters.overrideOffsetCostCenter"/></span>
+                      </div>
 
                 </div>
 
@@ -109,14 +108,14 @@
                 <div class="ui-g-4"><label class="label">Business ID</label></div>
                 <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="businessId"/></div>
               </div> -->
-              <div class="ui-g-12 ui-md-6 ui-lg-4">
+              <!-- <div class="ui-g-12 ui-md-6 ui-lg-4">
                   <div class="ui-g-4"><label class="label">GoldNet ID</label></div>
                   <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.goldnetId"/></div>
-              </div>
+              </div> -->
               <div class="ui-g-12 ui-md-6 ui-lg-4">
                   <div class="ui-g-4"><label class="label">Legal Entity Name</label></div>
                   <div class="ui-g-6">
-                      <p-dropdown [disabled]="editFlag" [(ngModel)]="chargeBackFilters.legalEntityId" 
+                      <p-dropdown  [(ngModel)]="chargeBackFilters.goldnetId" 
                       [options]="legalEntityDataList"
                       placeholder="Select" [autoWidth]="true" [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
                        [filter]="true" scrollHeight="150px">
@@ -138,14 +137,11 @@
 
                   </div>
                   </div>
-            </div>
-            <div class="ui-g">
-               
                   <div class="ui-g-12 ui-md-6 ui-lg-4">
-                      <div class="ui-g-4"><label class="label">Division</label></div>
-                      <div class="ui-g-6"><p-checkbox [(ngModel)]="chargeBackFilters.division" binary="true" label=""></p-checkbox>
-                      </div>
+                    <div class="ui-g-4"><label class="label">Division</label></div>
+                    <div class="ui-g-6"><p-checkbox [(ngModel)]="chargeBackFilters.division" binary="true" label=""></p-checkbox>
                     </div>
+                  </div>
             </div>
           </p-panel>
 
@@ -158,7 +154,9 @@
                 <div class="ui-g-12 ui-md-6 ui-lg-4">
                     <div class="ui-g-4"><label class="label">Billing Model</label></div>
                     <div class="ui-g-6"> 
-                      <p-dropdown [options]="billingModelDataList" [(ngModel)]="chargeBackFilters.billingModel" [disabled]="editFlag" placeholder="Select" [autoWidth]="true" [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
+                      <p-dropdown [options]="billingModelDataList" 
+                      [(ngModel)]="chargeBackFilters.billingModel" 
+                      placeholder="Select" [autoWidth]="true" [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
                       [filter]="true" scrollHeight="150px">
                       </p-dropdown>
                     </div>
@@ -182,7 +180,9 @@
                   <div class="ui-g-12 ui-md-6 ui-lg-4">
                     <div class="ui-g-4"><label class="label">Currency Code</label></div>
                     <div class="ui-g-6">
-                        <p-dropdown [options]="currencyDataList" [(ngModel)]="chargeBackFilters.currencyCode" [disabled]="editFlag" placeholder="Select" [autoWidth]="true" [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
+                        <p-dropdown [options]="currencyDataList" 
+                        [(ngModel)]="chargeBackFilters.currencyCode"
+                         placeholder="Select" [autoWidth]="true" [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
                          [filter]="true" scrollHeight="150px">
                          </p-dropdown>
                     </div>
@@ -222,7 +222,9 @@
                   <div class="ui-g-12 ui-md-6 ui-lg-4">
                       <div class="ui-g-4"><label class="label">Ship To Country</label></div>
                       <div class="ui-g-6">
-                        <p-dropdown [options]="countryDataList" [(ngModel)]="chargeBackFilters.shipToCountry" [disabled]="editFlag" placeholder="Select" [autoWidth]="true" [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
+                        <p-dropdown [options]="countryDataList" 
+                        [(ngModel)]="chargeBackFilters.shipToCountry" 
+                         placeholder="Select" [autoWidth]="true" [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
                         [filter]="true" scrollHeight="150px">
                         </p-dropdown>
                     </div>
@@ -309,6 +311,9 @@
                         <button class="ge-button -fill--solid -size--small" (click)="clearAllFilters()">Cancel</button>
                     </div>                 
                 </div>
+                <div class="ui-g">
+                  <label class="errorMessage">{{errorMessage}}</label>
+                  </div> 
     </p-panel>
     <div class="ui-g">
       <div class="ui-g-12">
@@ -336,7 +341,7 @@
           <ng-template pTemplate="body" let-rowData let-columns="columns">
               <tr>
                   <td>
-                      <p-tableRadioButton [value]="rowData" (click)="showSelectedData(rowData['internalCbId'])" ></p-tableRadioButton>
+                      <p-tableRadioButton [value]="rowData" (click)="showSelectedData(rowData['internalCbId'],rowData['vendorId'],rowData['productId'])" ></p-tableRadioButton>
                   </td>
                   <td *ngFor="let col of columns" >
                     <div> {{rowData[col.field]}}</div>

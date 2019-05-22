@@ -47,17 +47,16 @@ export class ChargebackComponent implements OnInit {
   chargeBackData: any = [];
   public chargeBackFilters: any = {
     vendorBanId:"",
-    vendorServiceCountryId:"",
+    vendorServiceCountryId:0,
     vendorName: "Select",
     productName: "Select",
-    productId:"",
-    vendorId:"",
+    productId:0,
+    vendorId:0,
     serviceType: "Select",
-    costCenter: "",
+    suggestedCostCenter: "",
     overrideOffsetCostCenter: false,
-   // serviceTypeName: "",
-   goldnetId: "",
-   legalEntityId:"",
+    // serviceTypeName: "",
+    goldnetId:0,
     focusGroup:"",
     division:false,
     billroutingId:"",
@@ -84,7 +83,8 @@ export class ChargebackComponent implements OnInit {
     awtGroupName:"",
     vatAwtGroupName:"",
     paymentTerms:"",
-    cloneOfId:""
+    cloneOfId:"",
+    suggestedCostCenterDefault:""
   };
 
 
@@ -96,11 +96,11 @@ export class ChargebackComponent implements OnInit {
     { field: 'vendorName', header: 'Vendor', width: '10%' },
     { field: 'productName', header: 'Product', width: '10%' },
     { field: 'serviceType', header: 'Service Type', width: '10%' },
-    { field: 'costCenter', header: 'Suggested Cost Center', width: '10%' },
+    { field: 'suggestedCostCenterDefault', header: 'Suggested Cost Center', width: '10%' },
     { field: 'createdBy', header: 'Created By', width: '10%' },
     { field: 'createdDate', header: 'Created Date', width: '10%' },
     { field: 'updatedBy', header: 'Updated By', width: '10%' },
-    { field: 'updatedDate', header: 'Updated Date', width: '10%' },
+    { field: 'lastUpdatedDate', header: 'Updated Date', width: '10%' },
 
   ];
 
@@ -138,9 +138,10 @@ export class ChargebackComponent implements OnInit {
         
                 this.legalEntityReferenceData = refData;
                 // this.focusGroupDataList.push({ label: "Select", value: "Select" })
-        
+                 
                 for (let data of this.legalEntityReferenceData) {
-                  this.legalEntityDataList.push({ label: data.legalEntityName, value: data.legalEntityId })
+                  let labelLegalEntity = data.goldnetId + " | " + data.legalEntityName;
+                  this.legalEntityDataList.push({ label: labelLegalEntity, value: data.goldnetId })
                 }
               },
               error => {
@@ -152,7 +153,8 @@ export class ChargebackComponent implements OnInit {
         
                 this.currencyReferenceData = refData;        
                 for (let data of this.currencyReferenceData) {
-                  this.currencyDataList.push({ label: data.currencyDescription, value: data.currencyCode })
+                  let labelCurrency = data.currencyCode + " | " + data.currencyDescription;
+                  this.currencyDataList.push({ label: labelCurrency, value: data.currencyCode })
                 }
               },
               error => {
@@ -194,8 +196,8 @@ export class ChargebackComponent implements OnInit {
 
   getProductLst(event){
     this.productDataList=[];
-    this.chargeBackFilters.costCenter="";
     this.serviceTypeDataList=[];
+
     this.chargebackService.getProductData(event.value).subscribe(
       refData => {
         let arr: any = [];
@@ -208,8 +210,7 @@ export class ChargebackComponent implements OnInit {
       });
   }
   getServiceType(event){
-    this.serviceTypeDataList=[];
-    this.chargeBackFilters.suggestedCostCenter="";
+   this.serviceTypeDataList=[];
     this.chargebackService.getServiceTypeData(event.value,this.chargeBackFilters.vendorId).subscribe(
       refData => {
         let arr: any = [];
@@ -232,7 +233,7 @@ export class ChargebackComponent implements OnInit {
         let arr: any = [];
         this.costCenterData = refData;
         for (let data of this.costCenterData) {
-          this.chargeBackFilters.costCenter=data.suggestedCostCenterDefault;
+          this.chargeBackFilters.suggestedCostCenterDefault=data.suggestedCostCenterDefault;
           this.chargeBackFilters.vendorServiceCountryId=data.vendorServiceCountryId;
         }
       },
@@ -296,36 +297,128 @@ export class ChargebackComponent implements OnInit {
       });
   }
   validation(){
+    if(this.chargeBackFilters.vendorBanId==""){
+      this.errorMessage = "Please Enter Vendor BAN ID";
+      return false;
+    }
+    if(this.chargeBackFilters.vendorId==0){
+      this.errorMessage = "Please Select Vendor";
+      return false;
+    }
+    if(this.chargeBackFilters.productId==0){
+      this.errorMessage = "Please Select Product";
+      return false;
+    }
+    if(this.chargeBackFilters.serviceType==""){
+      this.errorMessage = "Please Select Service Type";
+      return false;
+    }
+    if(this.chargeBackFilters.goldnetId==0){
+      this.errorMessage = "Please Select Legal Entity Name";
+      return false;
+    }
+    if(this.chargeBackFilters.focusGroup==""){
+      this.errorMessage = "Please Select Focus Group";
+      return false;
+    }
+    if(this.chargeBackFilters.billroutingId==""){
+      this.errorMessage = "Please Enter Bill Routing ID";
+      return false;
+    }
+    if(this.chargeBackFilters.billingModel==""){
+      this.errorMessage = "Please Select Billing Model";
+      return false;
+    }
+    if(this.chargeBackFilters.mode==""){
+      this.errorMessage = "Please Select Mode";
+      return false;
+    }
+    if(this.chargeBackFilters.currencyCode==""){
+      this.errorMessage = "Please Select Currency Code";
+      return false;
+    }
     return true;
   }
 
-  showSelectedData(internalCbId) {       
+  showSelectedData(internalCbId,vendorId,productId) {   
     this.productDataList=[];
-    this.chargeBackFilters.costCenter="";
     this.serviceTypeDataList=[];
-    console.log("radio button click" + internalCbId);
-
     this.editFlag = true;
-    this.chargeBackFilters = this.chargeBackData.filter(x => x.internalCbId == internalCbId)[0];
-
-    console.log(this.chargeBackFilters);
-
-    this.chargebackService.getProductData(this.chargeBackFilters.vendorId).subscribe(
+     var dataLoadFlag=false;
+    this.chargebackService.getProductData(vendorId).subscribe(
       refData => {
         let arr: any = [];
         this.productReferenceData = refData;
         for (let data of this.productReferenceData) {
-          this.productDataList.push({ label: data.productName, value: data.productId })
+          this.productDataList.push({ label:data.productName, value:data.productId })
         }
+        this.chargeBackFilters = this.chargeBackData.filter(x => x.internalCbId == internalCbId)[0];
       },
       error => {
       });
-      
-     console.log(this.chargeBackFilters);
+       
+      this.chargebackService.getServiceTypeData(productId,vendorId).subscribe(
+        refData => {
+          let arr: any = [];
+          this.serviceTypeReferenceData = refData;
+          for (let data of this.serviceTypeReferenceData) {
+            if(data.serviceTypeName!=null){
+            this.serviceTypeDataList.push({ label: data.serviceTypeName, value: data.serviceTypeName })
+            }
+          }  
+          this.chargeBackFilters = this.chargeBackData.filter(x => x.internalCbId == internalCbId)[0];
+  
+         },
+        error => {
+        });         
+}
 
-    // this.vendorEntityDataList.push({ label:this.chargeBackFilters.vendorName, value: this.chargeBackFilters.vendorId })
-    //this.productDataList.push({ label:this.chargeBackFilters.productName, value: this.chargeBackFilters.productId })
-    //this.serviceTypeDataList.push({ label:this.chargeBackFilters.serviceType, value: this.chargeBackFilters.serviceType })
+clearAllFilters(){
+  this.editFlag = false;
+  this.popupErrorMessage = "";
+  this.errorMessage = "";
+
+  this.chargeBackFilters= {
+    vendorBanId:"",
+    vendorServiceCountryId:0,
+    vendorName: "Select",
+    productName: "Select",
+    productId:0,
+    vendorId:0,
+    serviceType: "Select",
+    suggestedCostCenter: "",
+    overrideOffsetCostCenter: false,
+    // serviceTypeName: "",
+    goldnetId:0,
+    focusGroup:"",
+    division:false,
+    billroutingId:"",
+    billingModel:"",
+    mode:"testing",
+    currencyCode:"",
+    directOffsetBuc:"",
+    indirectOffsetBuc:"",
+    vendorCode:"",
+    shipFromAddress:"",
+    shipToCountry:"",
+    shipToProvince:"",
+    shipToCity:"",
+    shipToState:"",
+    shipToZip4:"",
+    shpToZip5:"",
+    vendorContact:"",
+    ouName:"",
+    custRegNumber:"",
+    globalSupplierNumber:"",
+    siteNumber:"",
+    sssProject:"",
+    sssTask:"",
+    awtGroupName:"",
+    vatAwtGroupName:"",
+    paymentTerms:"",
+    cloneOfId:""
+  };
+
 }
 
 }
