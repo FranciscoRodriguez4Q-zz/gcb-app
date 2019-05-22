@@ -26,6 +26,18 @@ body {
 .ui-table {
   font-family: "GE Inspira Serif" !important;
 }
+.ui-table .ui-table-thead> tr> th {
+     white-space: pre-line !important;
+  
+    text-overflow: ellipsis;
+    max-width: 150px;
+   }
+   .ui-table .ui-table-thead> tr> td {
+    white-space: pre-line !important;
+ 
+   text-overflow: ellipsis;
+   max-width: 150px;
+  }
 
 /* You can add global styles to this file, and also import other style files 
 body {
