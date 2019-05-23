@@ -2,7 +2,7 @@ import { Component, OnInit,  ViewChild } from '@angular/core';
 import { SelectItem, MessageService } from 'primeng/api';
 import { VendorServiceCountryService } from './vendor-service-country.service';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-
+import {Router} from "@angular/router";
 @Component({
   selector: 'app-vendor-service-country',
   templateUrl: './vendor-service-country.component.html',
@@ -34,18 +34,18 @@ export class VendorServiceCountryComponent implements OnInit {
   public downloadCols = [];
   public fileName : any ="VSC";
   public cols = [
-    { field: 'vendorEntityName', header: 'Vendor Entity Name', width: '10%' },
-    { field: 'productName', header: 'Product Name', width: '10%' },
-    { field: 'countryNm', header: 'Consumed In', width: '10%' },
-    { field: 'serviceTypeName', header: 'Service Type Name', width: '15%' },
-    { field: 'billedFromCountryName', header: 'Billed From Country', width: '13%' },
-    { field: 'servicedFromCountryName', header: 'Serviced From Country', width: '13%' },
-    { field: 'billedToCountryName', header: 'Billed To Country', width: '13%' },
-    { field: 'suggestedCostCenterDefault', header: 'Suggested Cost Center', width: '10%' },
-    { field: 'createdDate', header: 'Created Date', width: '10%' },
-    { field: 'createdBy', header: 'Created By', width: '7%' },
-    { field: 'lastUpdatedDate', header: 'Updated Date', width: '10%' },
-    { field: 'updatedBy', header: 'Updated By', width: '7%' }
+    { field: 'serviceTypeName', header: 'Service Type Name', width: '170px' },
+    { field: 'vendorEntityName', header: 'Vendor Entity Name', width: '170px' },
+    { field: 'productName', header: 'Product Name', width: '170px' },
+    { field: 'countryNm', header: 'Consumed In', width: '120px' },
+    { field: 'billedFromCountryName', header: 'Billed From Country', width: '150px' },
+    { field: 'servicedFromCountryName', header: 'Serviced From Country', width: '150px' },
+    { field: 'billedToCountryName', header: 'Billed To Country', width: '150px' },
+    { field: 'suggestedCostCenterDefault', header: 'Suggested Cost Center', width: '170px' },
+    { field: 'createdDate', header: 'Created Date', width: '120px' },
+    { field: 'createdBy', header: 'Created By', width: '100px' },
+    { field: 'lastUpdatedDate', header: 'Updated Date', width: '120px' },
+    { field: 'updatedBy', header: 'Updated By', width: '100px' }
   ];
 
 
@@ -67,10 +67,10 @@ export class VendorServiceCountryComponent implements OnInit {
     unspscCode:"",
     vInvoiceDesc:"",
     suggestedServiceType:"",
-    useSuggested: false
+    useSuggested: true
   };
 
-  constructor(
+  constructor(private router: Router,
     private vendorServiceCountryService: VendorServiceCountryService, private messageService: MessageService, private modalService: NgbModal) { }
 
   ngOnInit() {
@@ -174,11 +174,7 @@ export class VendorServiceCountryComponent implements OnInit {
   showSelectedData(vendorSrCtryId) {
     this.editFlag = true;
     this.vscDtoObj = this.vendorSrCountryData.filter(x => x.vendorServiceCountryId == vendorSrCtryId)[0];
-    let productData = this.productReferenceData.filter(x => x.productId == this.vscDtoObj.productId)[0];
-    this.vscDtoObj.suggestedServiceType = productData.serviceTypePrefix +this.delimiter+ this.vscDtoObj.vProductPrefix+this.delimiter+ this.vscDtoObj.billedFromCountryCode+this.delimiter+ this.vscDtoObj.billedToCountryCode;
-    if(this.vscDtoObj.suggestedServiceType!=""){
-      this.vscDtoObj.suggestedServiceType = this.vscDtoObj.suggestedServiceType.toUpperCase();
-    }
+    this.getSuggestedServiceType();
   }
 
   upsertVendorServiceCountry()
@@ -231,7 +227,7 @@ export class VendorServiceCountryComponent implements OnInit {
       this.errorMessage = "Please enter the Suggested Cost Center";
       return false;
     }
-    if (this.vscDtoObj.vProductPrefix == null || this.vscDtoObj.vProductPrefix == "") {
+   /*  if (this.vscDtoObj.vProductPrefix == null || this.vscDtoObj.vProductPrefix == "") {
       this.errorMessage = "Please enter Vendor Product Prefix";
       return false;
     }
@@ -242,7 +238,7 @@ export class VendorServiceCountryComponent implements OnInit {
     if (this.vscDtoObj.unspscCode == null || this.vscDtoObj.unspscCode == "") {
       this.errorMessage = "Please enter UNSPSC";
       return false;
-    }
+    } */
     return true;
   }
 
@@ -264,7 +260,7 @@ export class VendorServiceCountryComponent implements OnInit {
       unspscCode:"",
       vInvoiceDesc:"",
       suggestedServiceType:"",
-      useSuggested: false
+      useSuggested: true
     };
     this.popupErrorMessage = "";
     this.errorMessage = "";
@@ -272,13 +268,9 @@ export class VendorServiceCountryComponent implements OnInit {
 
   getServicetype() {
     this.errorMessage = "";
-    if (this.vscDtoObj.productId != "Select" && this.vscDtoObj.billedFromCountryCode != "Select" && this.vscDtoObj.billedToCountryCode != "Select" && this.vscDtoObj.vProductPrefix != "") {
+    if (this.vscDtoObj.productId != "Select" && this.vscDtoObj.billedFromCountryCode != "Select" && this.vscDtoObj.billedToCountryCode != "Select") {
       debugger;
-      let productData = this.productReferenceData.filter(x => x.productId == this.vscDtoObj.productId)[0];
-      this.vscDtoObj.suggestedServiceType = productData.serviceTypePrefix +this.delimiter+ this.vscDtoObj.vProductPrefix.toUpperCase()+this.delimiter+ this.vscDtoObj.billedFromCountryCode+this.delimiter+ this.vscDtoObj.billedToCountryCode;
-      if(this.vscDtoObj.useSuggested==true){
-        this.vscDtoObj.serviceTypeName = this.vscDtoObj.suggestedServiceType;
-      }
+      this.getSuggestedServiceType();
       this.vendorServiceCountryService.getServicetype(this.vscDtoObj).subscribe(
         refData => {
           this.vscDtoObj = refData;
@@ -332,6 +324,25 @@ export class VendorServiceCountryComponent implements OnInit {
       },
       error => {
       });
-}
+  }
+
+  getSuggestedServiceType(){
+    let productData = this.productReferenceData.filter(x => x.productId == this.vscDtoObj.productId)[0];
+    let vProductPrefix = "";
+    if(this.vscDtoObj.vProductPrefix!=null && this.vscDtoObj.vProductPrefix!=""){
+      vProductPrefix = this.vscDtoObj.vProductPrefix +this.delimiter;
+    }
+    this.vscDtoObj.suggestedServiceType = vProductPrefix+ productData.serviceTypePrefix+this.delimiter+ this.vscDtoObj.billedFromCountryCode+this.delimiter+ this.vscDtoObj.billedToCountryCode;
+    if(this.vscDtoObj.suggestedServiceType!=""){
+      this.vscDtoObj.suggestedServiceType = this.vscDtoObj.suggestedServiceType.toUpperCase();
+    }
+    if(this.vscDtoObj.useSuggested==true){
+      this.vscDtoObj.serviceTypeName = this.vscDtoObj.suggestedServiceType;
+    }
+  }
+
+  openChargeBack(){
+    this.router.navigate(['/layout/Chargeback']);
+  }
 }
 

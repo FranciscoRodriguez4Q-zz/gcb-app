@@ -17,8 +17,8 @@
      
 <p-fieldset legend="Product Info">
     <div class="ui-g">
-      <div class="ui-g-12 ui-md-6 ui-lg-3 productLabel">
-        <div class="ui-g-5"><label class="label">Product<span class="required">*</span></label></div>
+      <div class="ui-g-12 ui-md-6 ui-lg-4 productLabel">
+        <div class="ui-g-4"><label class="label">Product<span class="required">*</span></label></div>
         <div class="ui-g-7">
           <p-dropdown 
           [options]="productReferenceDataList" 
@@ -31,10 +31,10 @@
         </p-dropdown>
         </div>
       </div>
-      <div class="ui-g-12 ui-md-6 ui-lg-3">
-        <div class="ui-g-7" style="text-align:right">
+      <div class="ui-g-12 ui-md-6 ui-lg-4">
+        <div class="ui-g-4" style="text-align:right">
           <label class="label">Consumed In <span class="required">*</span></label></div>
-        <div class="ui-g-5">
+        <div class="ui-g-7">
           <p-dropdown 
           [options]="countryCodeReferenceDataList" 
           [(ngModel)]="vscDtoObj.consumedInCountryCode"    
@@ -66,75 +66,66 @@
             </div>
           </div>
           <div class="ui-g-12 ui-md-6 ui-lg-3">
-              <div class="ui-g-7" style="text-align:right">
-                <label class="label">Vendor Product Prefix<span class="required">*</span></label></div>
-              <div class="ui-g-5">
-                  <input class="form-control" [(ngModel)]="vscDtoObj.vProductPrefix" (input)="getServicetype()">
+              <div class="ui-g-5" style="text-align:right"><label class="label">Billing From<span class="required">*</span></label></div>
+              <div class="ui-g-7">
+                  <p-dropdown 
+                  [options]="countryCodeReferenceDataList" 
+                  [(ngModel)]="vscDtoObj.billedFromCountryCode"    
+                  placeholder="Select"   
+                  [autoWidth]="true"
+                  [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"   
+                  [filter]="true" (click)="getServicetype()" 
+                  scrollHeight="150px">
+                </p-dropdown>
               </div>
-          </div>
+            </div>
+            <div class="ui-g-12 ui-md-6 ui-lg-3">
+                <div class="ui-g-5"  style="text-align:right"><label class="label">Servicing From<span class="required">*</span></label></div>
+                <div class="ui-g-7">
+                    <p-dropdown 
+                    [options]="countryCodeReferenceDataList" 
+                    [(ngModel)]="vscDtoObj.servicedFromCountryCode"    
+                    placeholder="Select"   
+                    [autoWidth]="true"
+                    [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"   
+                    [filter]="true" 
+                    scrollHeight="150px">
+                  </p-dropdown>
+                </div>
+            </div>
+            <div class="ui-g-12 ui-md-6 ui-lg-3">
+                <div class="ui-g-5"  style="text-align:right"><label class="label">Billing To<span class="required">*</span></label></div>
+                <div class="ui-g-7">
+                    <p-dropdown 
+                    [options]="countryCodeReferenceDataList" 
+                    [(ngModel)]="vscDtoObj.billedToCountryCode"    
+                    placeholder="Select"   
+                    [autoWidth]="true"
+                    [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"   
+                    [filter]="true" (click)="getServicetype()" 
+                    scrollHeight="150px">
+                  </p-dropdown>
+                </div>
+            </div>
     </div>
     <div class="ui-g">
         <div class="ui-g-12 ui-md-6 ui-lg-3 productLabel">
-            <div class="ui-g-5"><label class="label">Billing From<span class="required">*</span></label></div>
+            <div class="ui-g-5">
+              <label class="label">Vendor Product Prefix</label></div>
             <div class="ui-g-7">
-                <p-dropdown 
-                [options]="countryCodeReferenceDataList" 
-                [(ngModel)]="vscDtoObj.billedFromCountryCode"    
-                placeholder="Select"   
-                [autoWidth]="true"
-                [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"   
-                [filter]="true" (click)="getServicetype()" 
-                scrollHeight="150px">
-              </p-dropdown>
+                <input class="form-control" [(ngModel)]="vscDtoObj.vProductPrefix" (input)="getServicetype()">
             </div>
-          </div>
+        </div>
           <div class="ui-g-12 ui-md-6 ui-lg-3">
-              <div class="ui-g-7" style="text-align:right">
-                <label class="label">Vendor Inv Desc<span class="required">*</span></label></div>
-              <div class="ui-g-5">
+              <div class="ui-g-5" style="text-align:right">
+                <label class="label">Vendor Inv Desc</label></div>
+              <div class="ui-g-7">
                   <input class="form-control"  [(ngModel)]="vscDtoObj.vInvoiceDesc">
               </div>
           </div>
+          
     </div>
-    <div class="ui-g">
-        <div class="ui-g-12 ui-md-6 ui-lg-3 productLabel">
-            <div class="ui-g-5"><label class="label">Servicing From<span class="required">*</span></label></div>
-            <div class="ui-g-7">
-                <p-dropdown 
-                [options]="countryCodeReferenceDataList" 
-                [(ngModel)]="vscDtoObj.servicedFromCountryCode"    
-                placeholder="Select"   
-                [autoWidth]="true"
-                [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"   
-                [filter]="true" 
-                scrollHeight="150px">
-              </p-dropdown>
-            </div>
-          </div>
-          <div class="ui-g-12 ui-md-6 ui-lg-3">
-              <div class="ui-g-7" style="text-align:right">
-                <label class="label">UNSPSC<span class="required">*</span></label></div>
-              <div class="ui-g-5">
-                  <input class="form-control" [(ngModel)]="vscDtoObj.unspscCode">
-              </div>
-          </div>
-    </div>
-    <div class="ui-g">
-        <div class="ui-g-12 ui-md-6 ui-lg-3 productLabel">
-            <div class="ui-g-5"><label class="label">Billing To<span class="required">*</span></label></div>
-            <div class="ui-g-7">
-                <p-dropdown 
-                [options]="countryCodeReferenceDataList" 
-                [(ngModel)]="vscDtoObj.billedToCountryCode"    
-                placeholder="Select"   
-                [autoWidth]="true"
-                [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"   
-                [filter]="true" (click)="getServicetype()" 
-                scrollHeight="150px">
-              </p-dropdown>
-            </div>
-          </div>
-    </div>
+    
   </p-fieldset>
   <p-fieldset legend="Service Type Info">
       <div class="ui-g">
@@ -150,13 +141,13 @@
             </div>
           </div>
           <div class="ui-g-12 ui-md-6 ui-lg-6">
-            <div class="ui-g-5">
+            <div class="ui-g-5"  style="text-align:right">
               <label class="label">Suggested Service Type Name<span class="required">*</span></label></div>
             <div class="ui-g-7">
               {{vscDtoObj.suggestedServiceType }}
             
               &nbsp;&nbsp;
-              {{vscDtoObj.serviceTypeMessage}}
+              <label class="serviceMessage">{{vscDtoObj.serviceTypeMessage}}</label>
             </div>
           </div>
       </div>
@@ -176,10 +167,17 @@
               </div>
             </div>
             <div class="ui-g-12 ui-md-6 ui-lg-3">
-                <div class="ui-g-7" style="text-align:right">
+                <div class="ui-g-5" style="text-align:right">
                   <label class="label">Suggested Cost Center<span class="required">*</span></label></div>
-                <div class="ui-g-5">
+                <div class="ui-g-7">
                     <input class="form-control"  [(ngModel)]="vscDtoObj.suggestedCostCenterDefault" >
+                </div>
+            </div>
+            <div class="ui-g-12 ui-md-6 ui-lg-3">
+                <div class="ui-g-5" style="text-align:right">
+                  <label class="label">UNSPSC</label></div>
+                <div class="ui-g-7">
+                    <input class="form-control" [(ngModel)]="vscDtoObj.unspscCode">
                 </div>
             </div>
       </div>
@@ -188,6 +186,8 @@
         <div class="ui-g-12" style="text-align:right">
             <button class="ge-button -fill--solid" (click)="upsertVendorServiceCountry()">Submit</button>
             <button class="ge-button -fill--solid" (click)="clearAll()">Cancel</button>
+            <app-file-download [dwnData]="vSCountryData" [colsHeader]="this.downloadCols" [fileName]="fileName"></app-file-download>
+
         </div>
     </div>
     <div class="ui-g">
@@ -197,18 +197,24 @@
 
 
  
-<div class="ui-g">
+<!-- <div class="ui-g">
     <div class="ui-g-12">
     <app-file-download [dwnData]="vSCountryData" [colsHeader]="this.downloadCols" [fileName]="fileName"></app-file-download>
     </div>
-</div>
+</div> -->
 <div class="ui-g">
 <div class="ui-g-12">
- <p-table #tt [columns]="cols" [value]="vendorSrCountryData" [scrollable]="true" [style]="{'margin-top':'2px','width':'100%'}" [rows]="10" [paginator]="true" [pageLinks]="3" [responsive]="true">
+ <p-table #tt [columns]="cols" [value]="vendorSrCountryData" [scrollable]="true" [style]="{'margin-top':'2px','width':'1200px'}" [rows]="10" [paginator]="true" [pageLinks]="3" [responsive]="true">
+    <ng-template pTemplate="colgroup" let-columns>
+        <colgroup>
+            <col style="width:50px">
+            <col *ngFor="let col of columns" [ngStyle]="{'width': col.width}">
+        </colgroup>
+    </ng-template>
     <ng-template pTemplate="header" let-columns>
         <tr>
-          <th [ngStyle]="{'width': '5%'}">Modify</th>
-            <th *ngFor="let col of columns" [pSortableColumn]="col.field" [ngStyle]="{'width': col.width}">
+          <th [ngStyle]="{'width': '40px'}">Modify</th>
+            <th *ngFor="let col of columns" [pSortableColumn]="col.field">
                 {{col.header}}
                 <p-sortIcon [field]="col.field"></p-sortIcon>
             </th>
@@ -222,14 +228,15 @@
     </ng-template>
     <ng-template pTemplate="body" let-rowData let-columns="columns">
         <tr>
-            <td [ngStyle]="{'width': '5%'}">
-                <!-- <div class="justify-content-center">
+            <td [ngStyle]="{'width': '40px'}">
+                 <div class="justify-content-center">
                     <a class="a-color" style="cursor:pointer;" (click)="showSelectedData(rowData['vendorServiceCountryId'])"><i class="fa fa-pencil-square-o fa-2x" ></i></a>
-                    </div> -->
-                <p-tableRadioButton [value]="rowData" (click)="showSelectedData(rowData['vendorServiceCountryId'])" ></p-tableRadioButton>
-              </td>
-            <td *ngFor="let col of columns"  [ngStyle]="{'width': col.width}">
-              <div> {{rowData[col.field]}}</div>
+                    </div> 
+<!--                 <p-tableRadioButton [value]="rowData" (click)="showSelectedData(rowData['vendorServiceCountryId'])" ></p-tableRadioButton>
+ -->              </td>
+            <td *ngFor="let col of columns" >
+              <div *ngIf="col.field!='serviceTypeName'"> {{rowData[col.field]}}</div>
+              <div *ngIf="col.field=='serviceTypeName'"> {{rowData[col.field]}} &nbsp;<a class="a-color" style="cursor:pointer;" (click)="openChargeBack()"><i class="fa fa-file-text" ></i></a></div>
             </td>
         </tr>
     </ng-template>

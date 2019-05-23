@@ -33,3 +33,17 @@ input {
 
     color: red !important;
 }
+
+.a-color {
+    text-decoration-color: #244364 !important;
+    color:  #244364 !important;
+}
+
+a:hover {
+    text-decoration: underline !important;
+    color:  #244364 !important; 
+    cursor: pointer !important;
+}
+.serviceMessage{
+    color: blueviolet !important;
+}
