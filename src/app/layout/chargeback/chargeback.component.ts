@@ -350,8 +350,9 @@ export class ChargebackComponent implements OnInit {
     }
     if(this.chargeBackFilters.billroutingId)
     {
-     return this.checkBillRefIDTokensAssociated();
-
+      if(this.checkBillRefIDTokensAssociated())
+      return true;
+      else return false;
     }
 
     return true;
@@ -470,28 +471,30 @@ clearAllFilters(){
 
 }
 
-checkBillRefIDTokensAssociated(){
+checkBillRefIDTokensAssociated() : boolean {
   this.chargebackService.getBillRefIDTokensAssociated(this.chargeBackFilters.billroutingId,
       this.regKey).subscribe(
     refData => {
       let response = refData;
       let respArray = [];
       respArray.push(response);
+      console.log(response);
       if (respArray[0].message === "No Tokens Associated") {
         this.errorMessage = respArray[0].message;
         this.popupErrorMessage = respArray[0].message;
         this.open(this.errorMessagePopUp);
         return false;
       }
-      else {
+      else   if (respArray[0].message === ""){
         return true;
       }
+      else return true;
     },
     (error) => {
       this.popupErrorMessage = error; return false;
       this.open(this.errorMessagePopUp);
     });
-
+    return true;
 
 }
 
