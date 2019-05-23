@@ -9,371 +9,384 @@
             <span class="fa fa-plus fa-fw pull-right" *ngIf="!expansionEventFlag" (click)="expansionEventFlag = true"></span>
   </div> -->
   <div class="ui-g  ui-fluid ">
-  <p-panel  class="ui-g-12">
-      <p-header>       
-            <div class="p-grid">
-                    <div class="p-col ">
-                        <div>
-                            <span class="ui-panel-title" style="font-size:14px;display:inline-block;margin-top:2px">ChargeBack Add/Update</span>
-                            <span *ngIf="!editFlag">ChargeBack : Create</span> <span *ngIf="editFlag">ChargeBack : Modify (Internal ChargeBack ID:{{chargeBackFilters.internalCbId}})</span> 
-
-                        </div>
-                    </div>
-                    <div class="p-col  p-offset-8 ">
-                        <div>
-                            <span *ngIf="panelExpansionFlag">
-                                <button class="ge-button -fill--solid -size--small " (click)="expandAllPanels()">Expand All
-                                    <i class="fa fa-plus-square -size--large" aria-hidden="true"></i>
-                                </button>
-                            </span>   <!--   <i class="fa fa-plus fa-fw"></i> -->
-                            <span *ngIf="!panelExpansionFlag">
-                                <button class="ge-button -fill--solid -size--small" (click)="collapseAllPanels()">Collapse All
-                                    <i class="fa fa-minus-square -size--large" aria-hidden="true"></i>
-                                </button>
-                            </span>
-
-                        </div>
-                    </div>
-                </div>
-      </p-header>
-      <p-panel header="Chargeback Info" [collapsed]="collapsed" [toggleable]="true">
-          <div class="ui-g">
-              <div class="ui-g-12 ui-md-6 ui-lg-4">
-                  <div class="ui-g-4"><label class="label">Product</label></div>
-                  <div class="ui-g-6">             
-                      <p-dropdown [options]="productDataList"   placeholder="Select" 
-                       [(ngModel)]="chargeBackFilters.productId" 
-                      (onChange)="getVendorLst($event)"
-                    [autoWidth]="true" [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
-                      [filter]="true" scrollHeight="150px">
-                      </p-dropdown>
-                  </div>
-              </div>
-            <div class="ui-g-12 ui-md-6 ui-lg-4">
-                <div class="ui-g-4"><label class="label">Vendor</label></div>
-                <div class="ui-g-6">
-                    <p-dropdown [options]="vendorEntityDataList" 
-                    placeholder="Select"
-                    [(ngModel)]="chargeBackFilters.vendorId"
-                     [autoWidth]="true" (onChange)="getServiceType($event)"
-                     [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
-                    [filter]="true" scrollHeight="150px">
-                    </p-dropdown>
-                </div>
-            </div>
-            <div class="ui-g-12 ui-md-6 ui-lg-4">
-                <div class="ui-g-4"><label class="label">Service Type</label></div>
-                <div class="ui-g-6">
-                    <p-dropdown [options]="serviceTypeDataList" 
-                    [(ngModel)]="chargeBackFilters.serviceType" 
-                    (onChange)="getCostCenter($event)"
-                    placeholder="Select" [autoWidth]="true" [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
-                    [filter]="true" scrollHeight="150px">
-                    </p-dropdown>
-                </div>
-            </div>
-          </div>                 
-          <div class="ui-g">              
-                <div class="ui-g-12 ui-md-6 ui-lg-4">
-                    <div class="ui-g-4"><label class="label">Suggested Cost Center</label></div>                    
-                      <div class="ui-g-6">
-                        <span *ngIf="editFlag"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.suggestedCostCenter" [disabled]="!chargeBackFilters.overrideOffsetCostCenter"/></span>
-                        <span *ngIf="!editFlag"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.suggestedCostCenterDefault" [disabled]="!chargeBackFilters.overrideOffsetCostCenter"/></span>
-                      </div>
-                </div>
-                <div class="ui-g-12 ui-md-6 ui-lg-4 ">
-                    <div class="ui-g-4"><label class="label">Override offset Cost Center</label></div>
-                    <div class="ui-g-6 chkBox"><p-checkbox [(ngModel)]="chargeBackFilters.overrideOffsetCostCenter" binary="true" label=""></p-checkbox>
-                    </div>
-                  </div>
-              <div class="ui-g-12 ui-md-4 ui-lg-4">
-                <div class="ui-g-4"><label class="label">Vendor BAN</label></div>
-                <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.vendorBanId"/></div>
-              </div>
-             
-                <!-- <div class="ui-g-12 ui-md-6 ui-lg-1 chkBox">
-                    <p-checkbox [(ngModel)]="useSuggested" binary="true" label=""></p-checkbox>
-                </div> -->
-          </div>
-        </p-panel>
-
-        <p-panel header="GE Legal Entity" [collapsed]="collapsed" [toggleable]="true">
-            <div class="ui-g">
-              <!-- <div class="ui-g-12 ui-md-6 ui-lg-4">
-                <div class="ui-g-4"><label class="label">Business ID</label></div>
-                <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="businessId"/></div>
-              </div> -->
-              <!-- <div class="ui-g-12 ui-md-6 ui-lg-4">
-                  <div class="ui-g-4"><label class="label">GoldNet ID</label></div>
-                  <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.goldnetId"/></div>
-              </div> -->
-              <div class="ui-g-12 ui-md-6 ui-lg-4">
-                  <div class="ui-g-4"><label class="label">Legal Entity Name</label></div>
-                  <div class="ui-g-6">
-                      <p-dropdown  [(ngModel)]="chargeBackFilters.goldnetId" 
-                      [options]="legalEntityDataList"
-                      placeholder="Select" [autoWidth]="true" [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
-                       [filter]="true" scrollHeight="150px">
-                       </p-dropdown>
-                  </div>
-              </div>
-              <div class="ui-g-12 ui-md-6 ui-lg-4">
-                  <div class="ui-g-4"><label class="label">Focus Group</label></div>
-                  <div class="ui-g-6">
-                      <!-- <p-dropdown [options]="focusGroupDataList" [disabled]="editFlag" placeholder="Select" [autoWidth]="true" [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
-                       [filter]="true" scrollHeight="150px">
-                       </p-dropdown> -->
-                       <p-multiSelect 
-                       [options]="focusGroupDataList" 
-                       [(ngModel)]="chargeBackFilters.focusGroup" 
-                       placeholder="Select" 
-                       [panelStyle]="{minWidth:'12em'}">
-                      </p-multiSelect>
-
-                  </div>
-                  </div>
-                  <div class="ui-g-12 ui-md-6 ui-lg-4">
-                    <div class="ui-g-4"><label class="label">Division</label></div>
-                    <div class="ui-g-6"><p-checkbox [(ngModel)]="chargeBackFilters.division" binary="true" label=""></p-checkbox>
-                    </div>
-                  </div>
-            </div>
-          </p-panel>
-
-          <p-panel header="Billing Details" [collapsed]="collapsed" [toggleable]="true">
-              <div class="ui-g">
-                <div class="ui-g-12 ui-md-6 ui-lg-4">
-                  <div class="ui-g-4"><label class="label">Bill Routing ID</label></div>
-                  <div class="ui-g-6">
-                   <!--    <input class="form-control" pInputText placeholder="" 
-                      [(ngModel)]="chargeBackFilters.billroutingId"/> -->
-                      <div *ngIf="chargeBackFilters.billroutingId">
-
-                            <span > {{chargeBackFilters.billroutingId}} </span>
-                            <a class="a-color" style="cursor:pointer;" (click)="editBillRef()"><i class="fa fa-pencil-square-o fa-2x" ></i></a>
-                      </div>
-                      <div *ngIf="!chargeBackFilters.billroutingId">
-    <!-- 
-                            <a onclick="generateBillRefId()"> Click to Generate </a> -->
-                            <button type="button" class="btn btn-link" (click)="generateBillRefId()">Click to Generate</button> 
-                            
-                          
-                        </div>
-                    </div>
-                </div>
-                <div class="ui-g-12 ui-md-6 ui-lg-4">
-                    <div class="ui-g-4"><label class="label">Billing Model</label></div>
-                    <div class="ui-g-6"> 
-                      <p-dropdown [options]="billingModelDataList" 
-                      [(ngModel)]="chargeBackFilters.billingModel" 
-                      placeholder="Select" [autoWidth]="true" [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
-                      [filter]="true" scrollHeight="150px">
-                      </p-dropdown>
-                    </div>
-                </div>
-                <div class="ui-g-12 ui-md-6 ui-lg-4">
-                    <div class="ui-g-4"><label class="label">Mode</label></div>
-                    <div class="ui-g-8">
-                            <div class="p-grid">
-                                    <div class="p-col">
-                                        <p-radioButton name="modeRadio" value="testing" label="Testing" [(ngModel)]="chargeBackFilters.mode"></p-radioButton>
-                                    </div>
-                                    <div class="p-col ">
-                                        <p-radioButton name="modeRadio" value="production" label="Production" [(ngModel)]="chargeBackFilters.mode"></p-radioButton>
-                                    </div>
-                                </div>
- 
-                    </div>
-                </div>
-              </div>
-              <div class="ui-g">
-                  <div class="ui-g-12 ui-md-6 ui-lg-4">
-                    <div class="ui-g-4"><label class="label">Currency Code</label></div>
-                    <div class="ui-g-6">
-                        <p-dropdown [options]="currencyDataList" 
-                        [(ngModel)]="chargeBackFilters.currencyCode"
-                         placeholder="Select" [autoWidth]="true" [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
-                         [filter]="true" scrollHeight="150px">
-                         </p-dropdown>
-                    </div>
-                    </div>
-                    <!-- <div class="ui-g-12 ui-md-6 ui-lg-4">
-                        <div class="ui-g-4"><label class="label">Override offset Cost Center</label></div>
-                        <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="ooCostCenter"/>
-                        </div>
-                      </div> -->
-                      <div class="ui-g-12 ui-md-6 ui-lg-4">
-                          <div class="ui-g-4"><label class="label">Direct Offset BUC</label></div>
-                          <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.directOffsetBuc"/>
+        <p-panel  class="ui-g-12">
+              <p-header>       
+                      <div class="p-grid">
+                              <div class="p-col ">
+                                  <div>
+                                      <span class="ui-panel-title" style="font-size:14px;display:inline-block;margin-top:2px">ChargeBack Add/Update</span>
+                                      <span *ngIf="!editFlag">ChargeBack : Create</span> <span *ngIf="editFlag">ChargeBack : Modify (Internal ChargeBack ID:{{chargeBackFilters.internalCbId}})</span> 
+          
+                                  </div>
+                              </div>
+                              <div class="p-col  p-offset-8 ">
+                                  <div>
+                                      <span *ngIf="panelExpansionFlag">
+                                          <button class="ge-button -fill--solid -size--small " (click)="expandAllPanels()">Expand All
+                                              <i class="fa fa-plus-square -size--large" aria-hidden="true"></i>
+                                          </button>
+                                      </span>   <!--   <i class="fa fa-plus fa-fw"></i> -->
+                                      <span *ngIf="!panelExpansionFlag">
+                                          <button class="ge-button -fill--solid -size--small" (click)="collapseAllPanels()">Collapse All
+                                              <i class="fa fa-minus-square -size--large" aria-hidden="true"></i>
+                                          </button>
+                                      </span>
+          
+                                  </div>
+                              </div>
                           </div>
-                        </div>
-                        <div class="ui-g-12 ui-md-6 ui-lg-4">
-                            <div class="ui-g-4"><label class="label">Indirect Offset BUC</label></div>
-                            <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.indirectOffsetBuc"/>
-                            </div>
-                      </div>
-              </div>
-              <div class="ui-g">
-                 
-                    <div class="ui-g-12 ui-md-6 ui-lg-4">
-                        <div class="ui-g-4"><label class="label">Vendor Code</label></div>
-                        <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.vendorCode"/>
-                        </div>
-                  </div>
-              </div>
-            </p-panel>
-
-            <p-panel header="Address" [collapsed]="collapsed" [toggleable]="true">
-                <div class="ui-g">
-                  <div class="ui-g-12 ui-md-6 ui-lg-4">
-                    <div class="ui-g-4"><label class="label">Ship From Address</label></div>
-                    <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.shipFromAddress"/></div>
-                  </div>
-                  <div class="ui-g-12 ui-md-6 ui-lg-4">
-                      <div class="ui-g-4"><label class="label">Ship To Country</label></div>
-                      <div class="ui-g-6">
-                        <p-dropdown [options]="countryDataList" 
-                        [(ngModel)]="chargeBackFilters.shipToCountry" 
-                         placeholder="Select" [autoWidth]="true" [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
+                </p-header>
+              
+    <p-accordion [multiple]="true" [activeIndex]="index" class="ui-g">
+     
+        <p-accordionTab header="Chargeback Info" >
+            <div class="ui-g">
+                <div class="ui-g-12 ui-md-6 ui-lg-4">
+                    <div class="ui-g-4"><label class="label">Product</label></div>
+                    <div class="ui-g-6">             
+                        <p-dropdown [options]="productDataList"   placeholder="Select" 
+                         [(ngModel)]="chargeBackFilters.productId" 
+                        (onChange)="getVendorLst($event)"
+                      [autoWidth]="true" [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
                         [filter]="true" scrollHeight="150px">
                         </p-dropdown>
                     </div>
+                </div>
+              <div class="ui-g-12 ui-md-6 ui-lg-4">
+                  <div class="ui-g-4"><label class="label">Vendor</label></div>
+                  <div class="ui-g-6">
+                      <p-dropdown [options]="vendorEntityDataList" 
+                      placeholder="Select"
+                      [(ngModel)]="chargeBackFilters.vendorId"
+                       [autoWidth]="true" (onChange)="getServiceType($event)"
+                       [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
+                      [filter]="true" scrollHeight="150px">
+                      </p-dropdown>
+                  </div>
+              </div>
+              <div class="ui-g-12 ui-md-6 ui-lg-4">
+                  <div class="ui-g-4"><label class="label">Service Type</label></div>
+                  <div class="ui-g-6">
+                      <p-dropdown [options]="serviceTypeDataList" 
+                      [(ngModel)]="chargeBackFilters.serviceType" 
+                      (onChange)="getCostCenter($event)"
+                      placeholder="Select" [autoWidth]="true" [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
+                      [filter]="true" scrollHeight="150px">
+                      </p-dropdown>
+                  </div>
+              </div>
+            </div>                 
+            <div class="ui-g">              
+                  <div class="ui-g-12 ui-md-6 ui-lg-4">
+                      <div class="ui-g-4"><label class="label">Suggested Cost Center</label></div>                    
+                        <div class="ui-g-6">
+                          <span *ngIf="editFlag"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.suggestedCostCenter" [disabled]="!chargeBackFilters.overrideOffsetCostCenter"/></span>
+                          <span *ngIf="!editFlag"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.suggestedCostCenterDefault" [disabled]="!chargeBackFilters.overrideOffsetCostCenter"/></span>
+                        </div>
+                  </div>
+                  <div class="ui-g-12 ui-md-6 ui-lg-4 ">
+                      <div class="ui-g-4"><label class="label">Override offset Cost Center</label></div>
+                      <div class="ui-g-6 chkBox"><p-checkbox [(ngModel)]="chargeBackFilters.overrideOffsetCostCenter" binary="true" label=""></p-checkbox>
+                      </div>
+                    </div>
+                <div class="ui-g-12 ui-md-4 ui-lg-4">
+                  <div class="ui-g-4"><label class="label">Vendor BAN</label></div>
+                  <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.vendorBanId"/></div>
+                </div>
+               
+                  <!-- <div class="ui-g-12 ui-md-6 ui-lg-1 chkBox">
+                      <p-checkbox [(ngModel)]="useSuggested" binary="true" label=""></p-checkbox>
+                  </div> -->
+            </div>
+          </p-accordionTab>
+  
+          <p-accordionTab header="GE Legal Entity" >
+              <div class="ui-g">
+                <!-- <div class="ui-g-12 ui-md-6 ui-lg-4">
+                  <div class="ui-g-4"><label class="label">Business ID</label></div>
+                  <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="businessId"/></div>
+                </div> -->
+                <!-- <div class="ui-g-12 ui-md-6 ui-lg-4">
+                    <div class="ui-g-4"><label class="label">GoldNet ID</label></div>
+                    <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.goldnetId"/></div>
+                </div> -->
+                <div class="ui-g-12 ui-md-6 ui-lg-4">
+                    <div class="ui-g-4"><label class="label">Legal Entity Name</label></div>
+                    <div class="ui-g-6">
+                        <p-dropdown  [(ngModel)]="chargeBackFilters.goldnetId" 
+                        [options]="legalEntityDataList"
+                        placeholder="Select" [autoWidth]="true" [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
+                         [filter]="true" scrollHeight="150px">
+                         </p-dropdown>
+                    </div>
+                </div>
+                <div class="ui-g-12 ui-md-6 ui-lg-4">
+                    <div class="ui-g-4"><label class="label">Focus Group</label></div>
+                    <div class="ui-g-6">
+                        <!-- <p-dropdown [options]="focusGroupDataList" [disabled]="editFlag" placeholder="Select" [autoWidth]="true" [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
+                         [filter]="true" scrollHeight="150px">
+                         </p-dropdown> -->
+                         <p-multiSelect 
+                         [options]="focusGroupDataList" 
+                         [(ngModel)]="chargeBackFilters.focusGroup" 
+                         placeholder="Select" 
+                         [panelStyle]="{minWidth:'12em'}">
+                        </p-multiSelect>
+  
+                    </div>
                     </div>
                     <div class="ui-g-12 ui-md-6 ui-lg-4">
-                        <div class="ui-g-4"><label class="label">Ship To Province</label></div>
-                        <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.shipToProvince"/></div>
-                      </div>                  
+                      <div class="ui-g-4"><label class="label">Division</label></div>
+                      <div class="ui-g-6"><p-checkbox [(ngModel)]="chargeBackFilters.division" binary="true" label=""></p-checkbox>
+                      </div>
+                    </div>
+              </div>
+            </p-accordionTab>
+  
+            <p-accordionTab header="Billing Details" >
+                <div class="ui-g">
+                  <div class="ui-g-12 ui-md-6 ui-lg-4">
+                    <div class="ui-g-4"><label class="label">Bill Routing ID</label></div>
+                    <div class="ui-g-6">
+                     <!--    <input class="form-control" pInputText placeholder="" 
+                        [(ngModel)]="chargeBackFilters.billroutingId"/> -->
+                        <div *ngIf="chargeBackFilters.billroutingId">
+  
+                          <span > {{chargeBackFilters.billroutingId}} </span>
+                          <a class="a-color" style="cursor:pointer;" (click)="editBillRef()"><i class="fa fa-pencil-square-o fa-2x" ></i></a>  
+                    </div>
+                    <div *ngIf="!chargeBackFilters.billroutingId">
+  <!-- 
+                          <a onclick="generateBillRefId()"> Click to Generate </a> -->
+                          <button class="button-link" (click)="generateBillRefId()">Generate BillRouting ID</button> 
+                
+   
+                        <!--   <a class="a-color" style="cursor:pointer; " (click)="generateBillRefId()">
+                               <font color="blue" >
+  
+                               Generate BillRouting ID </font> </a> -->
+  
+                        <!--   <button class="ge-button -fill--solid -size--small" (click)="generateBillRefId()">Generate BillRouting ID</button>
+                       -->
+                      </div>
+                      </div>
+                  </div>
+                  <div class="ui-g-12 ui-md-6 ui-lg-4">
+                      <div class="ui-g-4"><label class="label">Billing Model</label></div>
+                      <div class="ui-g-6"> 
+                        <p-dropdown [options]="billingModelDataList" 
+                        [(ngModel)]="chargeBackFilters.billingModel" 
+                        placeholder="Select" [autoWidth]="true" [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
+                        [filter]="true" scrollHeight="150px">
+                        </p-dropdown>
+                      </div>
+                  </div>
+                  <div class="ui-g-12 ui-md-6 ui-lg-4">
+                      <div class="ui-g-4"><label class="label">Mode</label></div>
+                      <div class="ui-g-8">
+                              <div class="p-grid">
+                                      <div class="p-col">
+                                          <p-radioButton name="modeRadio" value="testing" label="Testing" [(ngModel)]="chargeBackFilters.mode"></p-radioButton>
+                                      </div>
+                                      <div class="p-col ">
+                                          <p-radioButton name="modeRadio" value="production" label="Production" [(ngModel)]="chargeBackFilters.mode"></p-radioButton>
+                                      </div>
+                                  </div>
+   
+                      </div>
+                  </div>
                 </div>
                 <div class="ui-g">
                     <div class="ui-g-12 ui-md-6 ui-lg-4">
-                      <div class="ui-g-4"><label class="label">Ship To State</label></div>
-                      <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.shipToState"/></div>
+                      <div class="ui-g-4"><label class="label">Currency Code</label></div>
+                      <div class="ui-g-6">
+                          <p-dropdown [options]="currencyDataList" 
+                          [(ngModel)]="chargeBackFilters.currencyCode"
+                           placeholder="Select" [autoWidth]="true" [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
+                           [filter]="true" scrollHeight="150px">
+                           </p-dropdown>
+                      </div>
+                      </div>
+                      <!-- <div class="ui-g-12 ui-md-6 ui-lg-4">
+                          <div class="ui-g-4"><label class="label">Override offset Cost Center</label></div>
+                          <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="ooCostCenter"/>
+                          </div>
+                        </div> -->
+                        <div class="ui-g-12 ui-md-6 ui-lg-4">
+                            <div class="ui-g-4"><label class="label">Direct Offset BUC</label></div>
+                            <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.directOffsetBuc"/>
+                            </div>
+                          </div>
+                          <div class="ui-g-12 ui-md-6 ui-lg-4">
+                              <div class="ui-g-4"><label class="label">Indirect Offset BUC</label></div>
+                              <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.indirectOffsetBuc"/>
+                              </div>
+                        </div>
+                </div>
+                <div class="ui-g">
+                   
+                      <div class="ui-g-12 ui-md-6 ui-lg-4">
+                          <div class="ui-g-4"><label class="label">Vendor Code</label></div>
+                          <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.vendorCode"/>
+                          </div>
+                    </div>
+                </div>
+              </p-accordionTab>
+  
+              <p-accordionTab header="Address" >
+                  <div class="ui-g">
+                    <div class="ui-g-12 ui-md-6 ui-lg-4">
+                      <div class="ui-g-4"><label class="label">Ship From Address</label></div>
+                      <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.shipFromAddress"/></div>
                     </div>
                     <div class="ui-g-12 ui-md-6 ui-lg-4">
-                        <div class="ui-g-4"><label class="label">Ship To City</label></div>
-                        <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.shipToCity"/></div>
+                        <div class="ui-g-4"><label class="label">Ship To Country</label></div>
+                        <div class="ui-g-6">
+                          <p-dropdown [options]="countryDataList" 
+                          [(ngModel)]="chargeBackFilters.shipToCountry" 
+                           placeholder="Select" [autoWidth]="true" [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
+                          [filter]="true" scrollHeight="150px">
+                          </p-dropdown>
+                      </div>
                       </div>
                       <div class="ui-g-12 ui-md-6 ui-lg-4">
-                          <div class="ui-g-4"><label class="label">Ship To Zip4</label></div>
-                          <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.shipToZip4"/></div>
+                          <div class="ui-g-4"><label class="label">Ship To Province</label></div>
+                          <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.shipToProvince"/></div>
                         </div>                  
                   </div>
                   <div class="ui-g">
                       <div class="ui-g-12 ui-md-6 ui-lg-4">
-                        <div class="ui-g-4"><label class="label">Ship To Zip5</label></div>
-                        <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.shipToZip5"/></div>
+                        <div class="ui-g-4"><label class="label">Ship To State</label></div>
+                        <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.shipToState"/></div>
                       </div>
                       <div class="ui-g-12 ui-md-6 ui-lg-4">
-                          <div class="ui-g-4"><label class="label">Vendor Contact</label></div>
-                          <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.vendorContact"/></div>
-                        </div>                                      
-                    </div>
-               
-              </p-panel>
-
-              <p-panel header="SSS Details" [collapsed]="collapsed" [toggleable]="true">
-                  <div class="ui-g">
-                    <div class="ui-g-12 ui-md-6 ui-lg-4">
-                      <div class="ui-g-4"><label class="label">OU Name</label></div>
-                      <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.ouName"/></div>
-                    </div>
-                    <div class="ui-g-12 ui-md-6 ui-lg-4">
-                        <div class="ui-g-4"><label class="label">Cust Reg Number</label></div>
-                        <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.custRegNumber"/></div>
-                      </div>
-                      <div class="ui-g-12 ui-md-6 ui-lg-4">
-                          <div class="ui-g-4"><label class="label">Global Supplier Number</label></div>
-                          <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.globalSupplierNumber"/></div>
-                        </div>                  
-                  </div>
-                  <div class="ui-g">
-                      <div class="ui-g-12 ui-md-6 ui-lg-4">
-                        <div class="ui-g-4"><label class="label">Site Number</label></div>
-                        <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.siteNumber"/></div>
-                      </div>
-                      <div class="ui-g-12 ui-md-6 ui-lg-4">
-                          <div class="ui-g-4"><label class="label">Project</label></div>
-                          <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.sssProject"/></div>
+                          <div class="ui-g-4"><label class="label">Ship To City</label></div>
+                          <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.shipToCity"/></div>
                         </div>
                         <div class="ui-g-12 ui-md-6 ui-lg-4">
-                            <div class="ui-g-4"><label class="label">Task</label></div>
-                            <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.sssTask"/></div>
+                            <div class="ui-g-4"><label class="label">Ship To Zip4</label></div>
+                            <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.shipToZip4"/></div>
                           </div>                  
                     </div>
                     <div class="ui-g">
                         <div class="ui-g-12 ui-md-6 ui-lg-4">
-                          <div class="ui-g-4"><label class="label">AWT Group Name</label></div>
-                          <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.awtGroupName"/></div>
+                          <div class="ui-g-4"><label class="label">Ship To Zip5</label></div>
+                          <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.shipToZip5"/></div>
                         </div>
                         <div class="ui-g-12 ui-md-6 ui-lg-4">
-                            <div class="ui-g-4"><label class="label">VAT AWT Group Name</label></div>
-                            <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.vatAwtGroupName"/></div>
-                          </div>  
-                          <div class="ui-g-12 ui-md-6 ui-lg-4">
-                              <div class="ui-g-4"><label class="label">Payment Terms</label></div>
-                              <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.paymentTerms"/></div>
-                            </div>                                     
-                      </div>                 
-                </p-panel>
-                <div class="ui-g">
-                    <div class="ui-g-12" style="text-align:right">
-                        <button class="ge-button -fill--solid -size--small" (click)="upsertChargeBack()">Submit</button>
-                        <button class="ge-button -fill--solid -size--small" (click)="clearAllFilters()">Cancel</button>
-                    </div>                 
-                </div>
-                <div class="ui-g">
-                  <label class="errorMessage">{{errorMessage}}</label>
-                  </div> 
-    </p-panel>
-    <div class="ui-g">
-      <div class="ui-g-12">
-       <p-table #tt [columns]="cols" [value]="chargeBackData" [style]="{'margin-top':'2px','width':'100%'}" [rows]="10" [paginator]="true" [pageLinks]="3" [responsive]="true">
-          <ng-template pTemplate="header" let-columns>
-              <tr>
-                <th [ngStyle]="{'width': '5%'}">Modify</th>
-                  <th *ngFor="let col of columns" [pSortableColumn]="col.field" [ngStyle]="{'width': col.width}">
-                      {{col.header}}
-                      <p-sortIcon [field]="col.field"></p-sortIcon>
-                  </th>
-              </tr>
-               <!-- <tr>
-                 <th></th>
-                  <th *ngFor="let col of columns" [ngSwitch]="col.field">
-                      
-                      <input *ngSwitchCase="'productNm'" pInputText type="text" (input)="tt.filter($event.target.value, col.field, 'contains')">
-                      <input *ngSwitchCase="'countryNm'" pInputText type="text" (input)="tt.filter($event.target.value, col.field, 'contains')">
-                      <input *ngSwitchCase="'serviceType'" pInputText type="text" (input)="tt.filter($event.target.value, col.field,'contains')">
-                      <input *ngSwitchCase="'billingBasis'" pInputText type="text" (input)="tt.filter($event.target.value, col.field,'contains')">
-      
-                  </th>
-              </tr>  -->
-          </ng-template>
-          <ng-template pTemplate="body" let-rowData let-columns="columns">
-              <tr>
-                  <td>
-                      <p-tableRadioButton [value]="rowData" (click)="showSelectedData(rowData['internalCbId'],rowData['vendorId'],rowData['productId'])" ></p-tableRadioButton>
-                  </td>
-                  <td *ngFor="let col of columns" >
-                    <div> {{rowData[col.field]}}</div>
-                  </td>
-              </tr>
-          </ng-template>
-        </p-table>
-      </div>
-      </div>
-<ng-template #content1 let-c="close" let-d="dismiss">
-  <div class="modal-header">
-      <h4 class="modal-title" id="modal-basic-title">Message</h4>
-      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
-          <span aria-hidden="true">&times;</span>
-      </button>
-  </div>
-  <div class="modal-body">
-      <p class="text-center">{{popupErrorMessage}}</p>
-  </div>
-  <div class="modal-footer">
-      <button type="button" class="btn btn-outline-dark" (click)="c('Save click'); ">Ok</button>
-  </div>
-</ng-template>
+                            <div class="ui-g-4"><label class="label">Vendor Contact</label></div>
+                            <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.vendorContact"/></div>
+                          </div>                                      
+                      </div>
+                 
+                </p-accordionTab>
   
-   
+                <p-accordionTab header="SSS Details" >
+                    <div class="ui-g">
+                      <div class="ui-g-12 ui-md-6 ui-lg-4">
+                        <div class="ui-g-4"><label class="label">OU Name</label></div>
+                        <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.ouName"/></div>
+                      </div>
+                      <div class="ui-g-12 ui-md-6 ui-lg-4">
+                          <div class="ui-g-4"><label class="label">Cust Reg Number</label></div>
+                          <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.custRegNumber"/></div>
+                        </div>
+                        <div class="ui-g-12 ui-md-6 ui-lg-4">
+                            <div class="ui-g-4"><label class="label">Global Supplier Number</label></div>
+                            <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.globalSupplierNumber"/></div>
+                          </div>                  
+                    </div>
+                    <div class="ui-g">
+                        <div class="ui-g-12 ui-md-6 ui-lg-4">
+                          <div class="ui-g-4"><label class="label">Site Number</label></div>
+                          <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.siteNumber"/></div>
+                        </div>
+                        <div class="ui-g-12 ui-md-6 ui-lg-4">
+                            <div class="ui-g-4"><label class="label">Project</label></div>
+                            <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.sssProject"/></div>
+                          </div>
+                          <div class="ui-g-12 ui-md-6 ui-lg-4">
+                              <div class="ui-g-4"><label class="label">Task</label></div>
+                              <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.sssTask"/></div>
+                            </div>                  
+                      </div>
+                      <div class="ui-g">
+                          <div class="ui-g-12 ui-md-6 ui-lg-4">
+                            <div class="ui-g-4"><label class="label">AWT Group Name</label></div>
+                            <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.awtGroupName"/></div>
+                          </div>
+                          <div class="ui-g-12 ui-md-6 ui-lg-4">
+                              <div class="ui-g-4"><label class="label">VAT AWT Group Name</label></div>
+                              <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.vatAwtGroupName"/></div>
+                            </div>  
+                            <div class="ui-g-12 ui-md-6 ui-lg-4">
+                                <div class="ui-g-4"><label class="label">Payment Terms</label></div>
+                                <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.paymentTerms"/></div>
+                              </div>                                     
+                        </div>                 
+                  </p-accordionTab>
+  
+                  
+                  <div class="ui-g">
+                      <div class="ui-g-12" style="text-align:right">
+                          <button class="ge-button -fill--solid -size--small" (click)="upsertChargeBack()">Submit</button>
+                          <button class="ge-button -fill--solid -size--small" (click)="clearAllFilters()">Cancel</button>
+                      </div>                 
+                  </div>
+                  <div class="ui-g">
+                    <label class="errorMessage">{{errorMessage}}</label>
+                    </div> 
+      </p-accordion>
+  </p-panel>
+      <div class="ui-g">
+        <div class="ui-g-12">
+         <p-table #tt [columns]="cols" [value]="chargeBackData" [style]="{'margin-top':'2px','width':'100%'}" [rows]="10" [paginator]="true" [pageLinks]="3" [responsive]="true">
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+                  <th [ngStyle]="{'width': '5%'}">Modify</th>
+                    <th *ngFor="let col of columns" [pSortableColumn]="col.field" [ngStyle]="{'width': col.width}">
+                        {{col.header}}
+                        <p-sortIcon [field]="col.field"></p-sortIcon>
+                    </th>
+                </tr>
+                 <!-- <tr>
+                   <th></th>
+                    <th *ngFor="let col of columns" [ngSwitch]="col.field">
+                        
+                        <input *ngSwitchCase="'productNm'" pInputText type="text" (input)="tt.filter($event.target.value, col.field, 'contains')">
+                        <input *ngSwitchCase="'countryNm'" pInputText type="text" (input)="tt.filter($event.target.value, col.field, 'contains')">
+                        <input *ngSwitchCase="'serviceType'" pInputText type="text" (input)="tt.filter($event.target.value, col.field,'contains')">
+                        <input *ngSwitchCase="'billingBasis'" pInputText type="text" (input)="tt.filter($event.target.value, col.field,'contains')">
+        
+                    </th>
+                </tr>  -->
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                <tr>
+                    <td>
+                        <p-tableRadioButton [value]="rowData" (click)="showSelectedData(rowData['internalCbId'],rowData['vendorId'],rowData['productId'])" ></p-tableRadioButton>
+                    </td>
+                    <td *ngFor="let col of columns" >
+                      <div> {{rowData[col.field]}}</div>
+                    </td>
+                </tr>
+            </ng-template>
+          </p-table>
+        </div>
+        </div>
+  <ng-template #content1 let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Message</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <p class="text-center">{{popupErrorMessage}}</p>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="c('Save click'); ">Ok</button>
+    </div>
+  </ng-template>
+    
+     

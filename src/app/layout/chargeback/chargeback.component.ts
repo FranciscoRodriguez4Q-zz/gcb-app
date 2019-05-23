@@ -23,7 +23,7 @@ export class ChargebackComponent implements OnInit {
   closeResult: string;
 
   public editFlag = false;
-
+public index = [];
   public expansionEventFlag = true;
   serviceTypeDataList: SelectItem[] = [];
   public serviceTypeReferenceData: any;
@@ -246,11 +246,13 @@ export class ChargebackComponent implements OnInit {
   }
 
   expandAllPanels(){
+    this.index = [0,1,2,3,4];
     this.collapsed=false;
     this.panelExpansionFlag=false;
   }
 
   collapseAllPanels(){
+    this.index = [];
     this.collapsed=true;
     this.panelExpansionFlag=true;
   }
@@ -442,6 +444,7 @@ generateBillRefId() {
       }
      else if (respArray[0].BillRefID) {
         this.chargeBackFilters.billroutingId = respArray[0].BillRefID;
+        this.editBillRef();
       } 
     },
     error => {
