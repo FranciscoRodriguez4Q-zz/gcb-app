@@ -4,6 +4,7 @@ import { ChargebackService } from './chargeback.service';
 import { Message } from 'primeng/components/common/api';
 import { MessageService } from 'primeng/api';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { AppConstants, UrlConstants } from '../../shared/constants/app.constants';
 
 @Component({
   selector: 'app-chargeback',
@@ -87,7 +88,8 @@ export class ChargebackComponent implements OnInit {
     suggestedCostCenterDefault:""
   };
 
-
+public  foundInSystemId =  "";
+public regKey = "";
   constructor(private chargebackService: ChargebackService, private messageService: MessageService, private modalService: NgbModal) { }
 
   public cols = [
@@ -371,6 +373,65 @@ export class ChargebackComponent implements OnInit {
          },
         error => {
         });         
+}
+generateBillRefId() {
+ 
+  const requestorSSO =  "999999999"; //localStorage.getItem(AppConstants.LABEL_LOGGEDIN_SSO);
+
+  this.chargebackService.getBillHubRefID(this.regKey, requestorSSO, "12").subscribe(
+    refData => {
+      let response = refData;
+      let respArray = [];
+      respArray.push(response);
+      if (respArray[0].BillRefID) {
+        this.chargeBackFilters.billroutingId = respArray[0].BillRefID;
+      } else {
+        this.popupErrorMessage = AppConstants.ERROR_SOME_OTHER;
+        this.open(this.errorMessagePopUp);
+      }
+    },
+    error => {
+   this.popupErrorMessage = AppConstants.ERROR_INTERNAL_SERVER;
+   this.open(this.errorMessagePopUp);
+    });
+}
+
+associateBillRefToAsset(){
+
+  this.chargebackService.associateBillReftoAsset(this.chargeBackFilters.billroutingId,
+    this.chargeBackFilters.ID, this.regKey).subscribe(
+    refData => {
+      let response = refData;
+      let respArray = [];
+      respArray.push(response);
+      if (respArray[0].Successful_Count === 1) {
+
+      }
+      else {
+        if (!(respArray[0].RecordsArray[0].message === "Bill Ref Already Associated.")) {
+          this.popupErrorMessage = respArray[0].RecordsArray[0].message;
+          //this.open(this.errorMessagePopUp);
+        }
+      }
+    },
+    (error) => {
+      this.popupErrorMessage = error;
+      this.open(this.errorMessagePopUp);
+    });
+
+}
+deleteBillRefID()
+{
+ this.chargebackService.deleteBillRefbyId(this.chargeBackFilters.billroutingId ).subscribe(
+   refData => {
+     let arr: any = [];
+     //this.gridData = refData;
+    console.log(refData);
+
+   },
+   error => {
+    this.popupErrorMessage = AppConstants.ERROR_INTERNAL_SERVER;
+   });
 }
 
 clearAllFilters(){

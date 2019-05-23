@@ -3,7 +3,11 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+
+  APP_BASE_URL_ENDPOINT: "http://localhost:4200",
+  APP_BILLHUB_URL_SERVICE_ENDPOINT: "http://localhost:8080/esam",
+
 };
 
 /*

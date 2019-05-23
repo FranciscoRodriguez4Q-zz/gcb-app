@@ -4,6 +4,8 @@ import { Http } from '@angular/http';
 import { HttpClient } from '@angular/common/http';
 import { HttpErrorResponse } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -56,5 +58,26 @@ export class ChargebackService {
   }
   
   
-  
+public getBillHubRefID(regKey,requestorSSO,entityTypeID):Observable<Object> { 
+  return this.http.get(environment.APP_BILLHUB_URL_SERVICE_ENDPOINT+
+    "/GetBillHubRefID?regKey="+regKey+
+    "&requestorSSO="+requestorSSO+
+    "&entityTypeID="+entityTypeID
+  );
+}
+
+public associateBillReftoAsset(billRefId,assetID,regkey):Observable<Object> { 
+  return this.http.get(environment.APP_BILLHUB_URL_SERVICE_ENDPOINT+
+    "/AssociateBillReftoAsset?billRefAssetArray="+billRefId+","+
+    assetID+
+    "&regKey="+regkey
+  );
+}
+public deleteBillRefbyId(billRefId):Observable<Object> { 
+  //let gridDataStr = JSON.stringify(gridData);
+  return this.http.post(environment.APP_BILLHUB_URL_SERVICE_ENDPOINT+
+    "/v1/deleteBillRefbyId",billRefId);
+} 
+
+
 }
