@@ -260,25 +260,58 @@ export class ChargebackComponent implements OnInit {
     this.msgs = [];
     console.log("test button click",this.chargeBackFilters);
     if (this.validation()) {
-        this.chargebackService.upsertChargeBack(this.chargeBackFilters).subscribe(
-          refData => {
-            this.saveMessage = refData;
-            this.errorMessage = this.saveMessage.statusMessage;
-            this.msgs = [];
-            this.msgs.push({ severity: 'error', summary: this.errorMessage, detail: '' });
-            this.popupErrorMessage =  this.saveMessage.statusMessage;
-            this.open(this.errorMessagePopUp);
-            this.getChargeBackData();
 
-            if(!this.chargeBackFilters.internalCbId)
-            {
-              this.chargeBackFilters.internalCbId = this.saveMessage.internalCbId;
-              this.associateBillRefToAsset();
-            }
+      this.chargebackService.getBillRefIDTokensAssociated(this.chargeBackFilters.billroutingId,
+        this.regKey).subscribe(
+      refData => {
+        let response = refData;
+        let respArray = [];
+        respArray.push(response);
+        console.log(response);
+        if (respArray[0].message === "No Tokens Associated") {
+          this.errorMessage = respArray[0].message;
+          this.popupErrorMessage = respArray[0].message;
+          this.open(this.errorMessagePopUp);
+          
+        }
+        else   if (respArray[0].message === "BillRef does not exist"){
+          this.errorMessage = "BillRouting ID does not exist. Please generate a new one ";
+          this.popupErrorMessage = "BillRouting ID does not exist. Please generate a new one ";
+          this.chargeBackFilters.billroutingId = "";
+          this.chargeBackFilters.billroutingId = "";
+          this.open(this.errorMessagePopUp);
+         
+        }
+        else {
+          this.chargebackService.upsertChargeBack(this.chargeBackFilters).subscribe(
+            refData => {
+              this.saveMessage = refData;
+              this.errorMessage = this.saveMessage.statusMessage;
+              this.msgs = [];
+              this.msgs.push({ severity: 'error', summary: this.errorMessage, detail: '' });
+              this.popupErrorMessage =  this.saveMessage.statusMessage;
+              this.open(this.errorMessagePopUp);
+              this.getChargeBackData();
+  
+              if(!this.chargeBackFilters.internalCbId)
+              {
+                this.chargeBackFilters.internalCbId = this.saveMessage.internalCbId;
+                this.associateBillRefToAsset();
+              }
+  
+            },
+            error => {
+            });
 
-          },
-          error => {
-          });
+        }
+      },
+      (error) => {
+        this.popupErrorMessage = error;  
+        this.open(this.errorMessagePopUp);
+      });
+     
+  
+      
      
     }
   }
@@ -348,12 +381,11 @@ export class ChargebackComponent implements OnInit {
       this.errorMessage = "Please Select Currency Code";
       return false;
     }
-    if(this.chargeBackFilters.billroutingId)
+   /*  if(this.chargeBackFilters.billroutingId)
     {
-      if(this.checkBillRefIDTokensAssociated())
-      return true;
-      else return false;
-    }
+   
+      return this.checkBillRefIDTokensAssociated();
+    } */
 
     return true;
   }
@@ -487,6 +519,13 @@ checkBillRefIDTokensAssociated() : boolean {
       }
       else   if (respArray[0].message === ""){
         return true;
+      }
+      else   if (respArray[0].message === "BillRef does not exist"){
+        this.errorMessage = "BillRouting does not exist .Please generate a new one ";
+        this.popupErrorMessage = "BillRouting does not exist .Please generate a new one ";
+        this.chargeBackFilters.billroutingId = "";
+        this.open(this.errorMessagePopUp);
+        return false;
       }
       else return true;
     },
