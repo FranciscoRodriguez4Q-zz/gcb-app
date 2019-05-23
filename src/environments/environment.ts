@@ -6,7 +6,9 @@ export const environment = {
   production: false,
 
   APP_BASE_URL_ENDPOINT: "http://localhost:4200",
-  APP_BILLHUB_URL_SERVICE_ENDPOINT: "http://localhost:8080/esam",
+  //APP_BILLHUB_URL_SERVICE_ENDPOINT: "http://localhost:8080/esam",
+
+  APP_BILLHUB_URL_SERVICE_ENDPOINT: "http://stage-billhub.corporate.ge.com:8080/esam"
 
 };
 

@@ -144,7 +144,22 @@
               <div class="ui-g">
                 <div class="ui-g-12 ui-md-6 ui-lg-4">
                   <div class="ui-g-4"><label class="label">Bill Routing ID</label></div>
-                  <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.billroutingId"/></div>
+                  <div class="ui-g-6">
+                   <!--    <input class="form-control" pInputText placeholder="" 
+                      [(ngModel)]="chargeBackFilters.billroutingId"/> -->
+                      <div *ngIf="chargeBackFilters.billroutingId">
+
+                            <span > {{chargeBackFilters.billroutingId}} </span>
+                            <a class="a-color" style="cursor:pointer;" (click)="editBillRef()"><i class="fa fa-pencil-square-o fa-2x" ></i></a>
+                      </div>
+                      <div *ngIf="!chargeBackFilters.billroutingId">
+    <!-- 
+                            <a onclick="generateBillRefId()"> Click to Generate </a> -->
+                            <button type="button" class="btn btn-link" (click)="generateBillRefId()">Click to Generate</button> 
+                            
+                          
+                        </div>
+                    </div>
                 </div>
                 <div class="ui-g-12 ui-md-6 ui-lg-4">
                     <div class="ui-g-4"><label class="label">Billing Model</label></div>

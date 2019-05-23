@@ -88,8 +88,10 @@ export class ChargebackComponent implements OnInit {
     suggestedCostCenterDefault:""
   };
 
-public  foundInSystemId =  "";
-public regKey = "";
+
+  public  foundInSystemId =  "19";
+  public regKey = "587b99c1-7daf-4038-8ffb-de75dd165a0c";
+  public entityTypeID = "14";
   constructor(private chargebackService: ChargebackService, private messageService: MessageService, private modalService: NgbModal) { }
 
   public cols = [
@@ -267,6 +269,13 @@ public regKey = "";
             this.popupErrorMessage =  this.saveMessage.statusMessage;
             this.open(this.errorMessagePopUp);
             this.getChargeBackData();
+
+            if(!this.chargeBackFilters.internalCbId)
+            {
+              this.chargeBackFilters.internalCbId = this.saveMessage.internalCbId;
+              this.associateBillRefToAsset();
+            }
+
           },
           error => {
           });
@@ -324,7 +333,7 @@ public regKey = "";
       return false;
     }
     if(this.chargeBackFilters.billroutingId==""){
-      this.errorMessage = "Please Enter Bill Routing ID";
+      this.errorMessage = "Please Click on Generate Bill Routing ID";
       return false;
     }
     if(this.chargeBackFilters.billingModel==""){
@@ -339,6 +348,12 @@ public regKey = "";
       this.errorMessage = "Please Select Currency Code";
       return false;
     }
+    if(this.chargeBackFilters.billroutingId)
+    {
+     return this.checkBillRefIDTokensAssociated();
+
+    }
+
     return true;
   }
 
@@ -382,67 +397,36 @@ generateBillRefId() {
  
   const requestorSSO =  "999999999"; //localStorage.getItem(AppConstants.LABEL_LOGGEDIN_SSO);
 
-  this.chargebackService.getBillHubRefID(this.regKey, requestorSSO, "12").subscribe(
+  this.chargebackService.getBillHubRefID(this.regKey, requestorSSO, this.entityTypeID).subscribe(
     refData => {
       let response = refData;
       let respArray = [];
       respArray.push(response);
-      if (respArray[0].BillRefID) {
-        this.chargeBackFilters.billroutingId = respArray[0].BillRefID;
-      } else {
-        this.popupErrorMessage = AppConstants.ERROR_SOME_OTHER;
+      if (respArray[0].OUTPUT === 'FAIL')
+      {
+        this.popupErrorMessage = respArray[0].BillRefID;
         this.open(this.errorMessagePopUp);
       }
+     else if (respArray[0].BillRefID) {
+        this.chargeBackFilters.billroutingId = respArray[0].BillRefID;
+      } 
     },
     error => {
    this.popupErrorMessage = AppConstants.ERROR_INTERNAL_SERVER;
    this.open(this.errorMessagePopUp);
     });
 }
-
-associateBillRefToAsset(){
-
-  this.chargebackService.associateBillReftoAsset(this.chargeBackFilters.billroutingId,
-    this.chargeBackFilters.ID, this.regKey).subscribe(
-    refData => {
-      let response = refData;
-      let respArray = [];
-      respArray.push(response);
-      if (respArray[0].Successful_Count === 1) {
-
-      }
-      else {
-        if (!(respArray[0].RecordsArray[0].message === "Bill Ref Already Associated.")) {
-          this.popupErrorMessage = respArray[0].RecordsArray[0].message;
-          //this.open(this.errorMessagePopUp);
-        }
-      }
-    },
-    (error) => {
-      this.popupErrorMessage = error;
-      this.open(this.errorMessagePopUp);
-    });
-
-}
-deleteBillRefID()
-{
- this.chargebackService.deleteBillRefbyId(this.chargeBackFilters.billroutingId ).subscribe(
-   refData => {
-     let arr: any = [];
-     //this.gridData = refData;
-    console.log(refData);
-
-   },
-   error => {
-    this.popupErrorMessage = AppConstants.ERROR_INTERNAL_SERVER;
-   });
-}
-
+ 
+ 
 clearAllFilters(){
   this.editFlag = false;
   this.popupErrorMessage = "";
   this.errorMessage = "";
-
+  if(!this.chargeBackFilters.internalCbId)
+  {    
+    if(this.chargeBackFilters.billroutingId)
+    this.deleteBillRefIDWithNoTokens(this.chargeBackFilters.billroutingId);
+  }
   this.chargeBackFilters= {
     vendorBanId:"",
     vendorServiceCountryId:0,
@@ -485,6 +469,103 @@ clearAllFilters(){
   };
 
 }
+
+checkBillRefIDTokensAssociated(){
+  this.chargebackService.getBillRefIDTokensAssociated(this.chargeBackFilters.billroutingId,
+      this.regKey).subscribe(
+    refData => {
+      let response = refData;
+      let respArray = [];
+      respArray.push(response);
+      if (respArray[0].message === "No Tokens Associated") {
+        this.errorMessage = respArray[0].message;
+        this.popupErrorMessage = respArray[0].message;
+        this.open(this.errorMessagePopUp);
+        return false;
+      }
+      else {
+        return true;
+      }
+    },
+    (error) => {
+      this.popupErrorMessage = error; return false;
+      this.open(this.errorMessagePopUp);
+    });
+
+
+}
+
+
+
+associateBillRefToAsset(){
+
+  this.chargebackService.associateBillReftoAsset(this.chargeBackFilters.billroutingId,
+    this.chargeBackFilters.internalCbId, this.regKey).subscribe(
+    refData => {
+      let response = refData;
+      let respArray = [];
+      respArray.push(response);
+      if (respArray[0].Successful_Count === 1) {
+
+      }
+      else {
+        if (!(respArray[0].RecordsArray[0].message === "Bill Ref Already Associated.")) {
+          this.popupErrorMessage = respArray[0].RecordsArray[0].message;
+         //this.open(this.errorMessagePopUp);
+        }
+      }
+    },
+    (error) => {
+      this.popupErrorMessage = error;
+      this.open(this.errorMessagePopUp);
+    });
+
+}
+deleteBillRefIDWithNoTokens(billroutingId)
+{
+
+ //delete if no tokens associated
+  this.chargebackService.getBillRefIDTokensAssociated(billroutingId,
+    this.regKey).subscribe(
+  refData => {
+    let response = refData;
+    let respArray = [];
+    respArray.push(response);
+    if (respArray[0].message === "No Tokens Associated") {
+      this.deleteBillRefID(billroutingId);
+    }
+    else {
+     
+    }
+  },
+  (error) => {
+    this.popupErrorMessage = error;
+    this.open(this.errorMessagePopUp);
+  });
+
+}
+
+editBillRef(){
+
+  let sso =999999999;
+   window.open("http://stage-billhub.corporate.ge.com:8080/BillHub/index.html#/EditBillReference;billRefId="+
+   this.chargeBackFilters.billroutingId+";sso="+sso+";mode=edit");
+ 
+ }
+deleteBillRefID(billroutingId){
+ this.chargebackService.deleteBillRefbyId(billroutingId ).subscribe(
+   refData => {
+     let arr: any = [];
+     //this.gridData = refData;
+//    console.log(refData);
+
+   },
+   error => {
+    this.popupErrorMessage = AppConstants.ERROR_INTERNAL_SERVER;
+   });
+}
+
+
 
 }
 

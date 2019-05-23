@@ -79,5 +79,12 @@ public deleteBillRefbyId(billRefId):Observable<Object> {
     "/v1/deleteBillRefbyId",billRefId);
 } 
 
+public getBillRefIDTokensAssociated(billRefId, regKey) : Observable<Object>{
+
+  return this.http.get(environment.APP_BILLHUB_URL_SERVICE_ENDPOINT+
+  "/ValidateBillRefTokens?billRefId="+billRefId+"&regKey="+regKey
+
+  );
+}
 
 }
