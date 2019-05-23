@@ -411,25 +411,27 @@ public index = [];
         for (let data of this.vendorEntityReferenceData) {
           this.vendorEntityDataList.push({ label: data.vendorLegacyName, value: data.vendorEntityId })
         }
-         this.chargeBackFilters = this.chargeBackData.filter(x => x.internalCbId == internalCbId)[0];
-      },
+        // this.chargeBackFilters = this.chargeBackData.filter(x => x.internalCbId == internalCbId)[0];
+         this.chargebackService.getServiceTypeData(productId,vendorId).subscribe(
+          refData => {
+            let arr: any = [];
+            this.serviceTypeReferenceData = refData;
+            for (let data of this.serviceTypeReferenceData) {
+              if(data.serviceTypeName!=null){
+              this.serviceTypeDataList.push({ label: data.serviceTypeName, value: data.serviceTypeName })
+              }
+            }  
+            this.chargeBackFilters = this.chargeBackData.filter(x => x.internalCbId == internalCbId)[0];
+             },
+          error => {
+          });
+        
+        },
       error => {        
 
       });
        
-      this.chargebackService.getServiceTypeData(productId,vendorId).subscribe(
-        refData => {
-          let arr: any = [];
-          this.serviceTypeReferenceData = refData;
-          for (let data of this.serviceTypeReferenceData) {
-            if(data.serviceTypeName!=null){
-            this.serviceTypeDataList.push({ label: data.serviceTypeName, value: data.serviceTypeName })
-            }
-          }  
-          this.chargeBackFilters = this.chargeBackData.filter(x => x.internalCbId == internalCbId)[0];
-           },
-        error => {
-        });
+    
         
         //this.chargeBackFilters = this.chargeBackData.filter(x => x.internalCbId == internalCbId)[0];
 
