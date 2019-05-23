@@ -8,6 +8,8 @@
             <span class="fa fa-minus fa-fw pull-right" *ngIf="expansionEventFlag" (click)="expansionEventFlag = false"></span>
             <span class="fa fa-plus fa-fw pull-right" *ngIf="!expansionEventFlag" (click)="expansionEventFlag = true"></span>
   </div> -->
+
+ 
   <div class="ui-g  ui-fluid ">
         <p-panel  class="ui-g-12">
               <p-header>       
@@ -338,6 +340,11 @@
                     </div> 
       </p-accordion>
   </p-panel>
+  <div *ngIf="!gridLoadFlag">
+        Loading ChargeBack data
+        <p-progressSpinner></p-progressSpinner>
+        
+          </div>
       <div class="ui-g">
         <div class="ui-g-12">
          <p-table #tt [columns]="cols" [value]="chargeBackData" [style]="{'margin-top':'2px','width':'100%'}" [rows]="10" [paginator]="true" [pageLinks]="3" [responsive]="true">

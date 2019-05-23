@@ -44,6 +44,7 @@ public index = [];
   public collapsed=true;
   public panelExpansionFlag=true;
   public costCenterData:any;
+  gridLoadFlag = false;
 
   chargeBackData: any = [];
   public chargeBackFilters: any = {
@@ -191,6 +192,7 @@ public index = [];
                   this.chargebackService.getChargeBackData().subscribe(
                     refData => {
                       this.chargeBackData=refData;
+                      this.gridLoadFlag = true;
                     },
                     error => {
                     });
@@ -335,12 +337,16 @@ public index = [];
   }
 
   getChargeBackData(){
+
+    this.gridLoadFlag = false;
     this.chargebackService.getChargeBackData().subscribe(
       refData => {
         this.chargeBackData=refData;
+        this.gridLoadFlag = true;
       },
       error => {
       });
+
   }
   validation(){
     if(this.chargeBackFilters.vendorBanId==""){

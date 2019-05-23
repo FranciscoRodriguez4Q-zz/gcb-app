@@ -10,6 +10,9 @@ import {
   DataGridModule, TooltipModule, ConfirmationService, ConfirmDialogModule, GrowlModule, DragDropModule,
   GalleriaModule
 } from 'primeng/primeng';
+import {ProgressSpinnerModule} from 'primeng/progressspinner';
+
+
 import {AccordionModule} from 'primeng/accordion';
 import { TableModule } from 'primeng/table';
 import { CheckboxModule } from 'primeng/checkbox';
@@ -59,7 +62,7 @@ import { CardModule } from 'primeng/card';
     , ToastModule,
     MenubarModule,
     CardModule,
-    GalleriaModule,AccordionModule
+    GalleriaModule,AccordionModule,ProgressSpinnerModule
   ],
   exports: [ButtonModule, MenubarModule, CardModule
     , NgbModule,
@@ -99,7 +102,7 @@ import { CardModule } from 'primeng/card';
     , ToastModule,
     MenubarModule,
     CardModule,
-    GalleriaModule,AccordionModule
+    GalleriaModule,AccordionModule,ProgressSpinnerModule
   ],
 
 
