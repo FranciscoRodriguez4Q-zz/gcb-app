@@ -38,40 +38,30 @@
       </p-header>
       <p-panel header="Chargeback Info" [collapsed]="collapsed" [toggleable]="true">
           <div class="ui-g">
-            <div class="ui-g-12 ui-md-4 ui-lg-4">
-              <div class="ui-g-4"><label class="label">Vendor BAN</label></div>
-              <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.vendorBanId"/></div>
-            </div>
-           
+              <div class="ui-g-12 ui-md-6 ui-lg-4">
+                  <div class="ui-g-4"><label class="label">Product</label></div>
+                  <div class="ui-g-6">             
+                      <p-dropdown [options]="productDataList"   placeholder="Select" 
+                       [(ngModel)]="chargeBackFilters.productId" 
+                      (onChange)="getVendorLst($event)"
+                    [autoWidth]="true" [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
+                      [filter]="true" scrollHeight="150px">
+                      </p-dropdown>
+                  </div>
+              </div>
             <div class="ui-g-12 ui-md-6 ui-lg-4">
                 <div class="ui-g-4"><label class="label">Vendor</label></div>
                 <div class="ui-g-6">
-                  
                     <p-dropdown [options]="vendorEntityDataList" 
                     placeholder="Select"
                     [(ngModel)]="chargeBackFilters.vendorId"
-                     [autoWidth]="true" (onChange)="getProductLst($event)"
+                     [autoWidth]="true" (onChange)="getServiceType($event)"
                      [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
                     [filter]="true" scrollHeight="150px">
                     </p-dropdown>
-                
                 </div>
             </div>
             <div class="ui-g-12 ui-md-6 ui-lg-4">
-              <div class="ui-g-4"><label class="label">Product</label></div>
-              <div class="ui-g-6">             
-                  <p-dropdown [options]="productDataList"   placeholder="Select" 
-                   [(ngModel)]="chargeBackFilters.productId" 
-                  (onChange)="getServiceType($event)"
-                [autoWidth]="true" [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
-                  [filter]="true" scrollHeight="150px">
-                  </p-dropdown>
-               
-              </div>
-          </div>
-          </div>                 
-          <div class="ui-g">
-              <div class="ui-g-12 ui-md-6 ui-lg-4">
                 <div class="ui-g-4"><label class="label">Service Type</label></div>
                 <div class="ui-g-6">
                     <p-dropdown [options]="serviceTypeDataList" 
@@ -81,21 +71,26 @@
                     [filter]="true" scrollHeight="150px">
                     </p-dropdown>
                 </div>
-                </div>
+            </div>
+          </div>                 
+          <div class="ui-g">              
                 <div class="ui-g-12 ui-md-6 ui-lg-4">
                     <div class="ui-g-4"><label class="label">Suggested Cost Center</label></div>                    
                       <div class="ui-g-6">
                         <span *ngIf="editFlag"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.suggestedCostCenter" [disabled]="!chargeBackFilters.overrideOffsetCostCenter"/></span>
                         <span *ngIf="!editFlag"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.suggestedCostCenterDefault" [disabled]="!chargeBackFilters.overrideOffsetCostCenter"/></span>
                       </div>
-
                 </div>
-
                 <div class="ui-g-12 ui-md-6 ui-lg-4 ">
                     <div class="ui-g-4"><label class="label">Override offset Cost Center</label></div>
                     <div class="ui-g-6 chkBox"><p-checkbox [(ngModel)]="chargeBackFilters.overrideOffsetCostCenter" binary="true" label=""></p-checkbox>
                     </div>
                   </div>
+              <div class="ui-g-12 ui-md-4 ui-lg-4">
+                <div class="ui-g-4"><label class="label">Vendor BAN</label></div>
+                <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.vendorBanId"/></div>
+              </div>
+             
                 <!-- <div class="ui-g-12 ui-md-6 ui-lg-1 chkBox">
                     <p-checkbox [(ngModel)]="useSuggested" binary="true" label=""></p-checkbox>
                 </div> -->

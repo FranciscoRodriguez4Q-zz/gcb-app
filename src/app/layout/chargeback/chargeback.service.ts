@@ -18,12 +18,12 @@ export class ChargebackService {
     return this.http.get("http://localhost:8081/gcbapi/chargeBackServiceType?vendorId="+vendorId+"&productId="+productId);
   }
 
-  public getVendorEntityData(): Observable<Object> {
-    return this.http.get("http://localhost:8081/gcbapi/chargeBackVendor");
+  public getVendorEntityData(productId): Observable<Object> {
+    return this.http.get("http://localhost:8081/gcbapi/chargeBackVendor?productId="+productId);
   }
 
-  public getProductData(vendor): Observable<Object> {
-    return this.http.get("http://localhost:8081/gcbapi/chargeBackProduct?vendorId="+vendor);
+  public getProductData(): Observable<Object> {
+    return this.http.get("http://localhost:8081/gcbapi/chargeBackProduct");
   }
   public getCostCenter(serviceType): Observable<Object> {
     return this.http.get("http://localhost:8081/gcbapi/chargeBackCostCenter?serviceType="+serviceType);

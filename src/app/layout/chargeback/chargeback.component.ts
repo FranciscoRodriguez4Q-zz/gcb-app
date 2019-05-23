@@ -106,19 +106,18 @@ public regKey = "";
 
   ];
 
-  ngOnInit() {   
-
-      this.chargebackService.getVendorEntityData().subscribe(
-        refData => {
-          let arr: any = [];  
-          this.vendorEntityReferenceData = refData;  
-          for (let data of this.vendorEntityReferenceData) {
-            this.vendorEntityDataList.push({ label: data.vendorLegalEntityName, value: data.vendorEntityId })
-          }
-        },
-        error => {        
-
-        });    
+  ngOnInit() { 
+        
+    this.chargebackService.getProductData().subscribe(
+          refData => {
+            let arr: any = [];
+            this.productReferenceData = refData;
+            for (let data of this.productReferenceData) {
+              this.productDataList.push({ label: data.productName, value: data.productId })
+            }
+          },
+          error => {
+          });
       
           this.chargebackService.getFocusGroupData().subscribe(
             refData => {
@@ -196,24 +195,25 @@ public regKey = "";
                 
   }
 
-  getProductLst(event){
-    this.productDataList=[];
+  getVendorLst(event){
+    this.vendorEntityDataList=[];
     this.serviceTypeDataList=[];
-
-    this.chargebackService.getProductData(event.value).subscribe(
+    this.chargeBackFilters.suggestedCostCenterDefault="";
+    this.chargebackService.getVendorEntityData(event.value).subscribe(
       refData => {
-        let arr: any = [];
-        this.productReferenceData = refData;
-        for (let data of this.productReferenceData) {
-          this.productDataList.push({ label: data.productName, value: data.productId })
+        let arr: any = [];  
+        this.vendorEntityReferenceData = refData;  
+        for (let data of this.vendorEntityReferenceData) {
+          this.vendorEntityDataList.push({ label: data.vendorLegacyName, value: data.vendorEntityId })
         }
       },
-      error => {
-      });
+      error => {        
+
+      });   
   }
   getServiceType(event){
    this.serviceTypeDataList=[];
-    this.chargebackService.getServiceTypeData(event.value,this.chargeBackFilters.vendorId).subscribe(
+    this.chargebackService.getServiceTypeData(this.chargeBackFilters.productId,event.value).subscribe(
       refData => {
         let arr: any = [];
         this.serviceTypeReferenceData = refData;
@@ -343,20 +343,22 @@ public regKey = "";
   }
 
   showSelectedData(internalCbId,vendorId,productId) {   
-    this.productDataList=[];
+    this.vendorEntityDataList=[];
     this.serviceTypeDataList=[];
     this.editFlag = true;
      var dataLoadFlag=false;
-    this.chargebackService.getProductData(vendorId).subscribe(
+
+     this.chargebackService.getVendorEntityData(productId).subscribe(
       refData => {
-        let arr: any = [];
-        this.productReferenceData = refData;
-        for (let data of this.productReferenceData) {
-          this.productDataList.push({ label:data.productName, value:data.productId })
+        let arr: any = [];  
+        this.vendorEntityReferenceData = refData;  
+        for (let data of this.vendorEntityReferenceData) {
+          this.vendorEntityDataList.push({ label: data.vendorLegacyName, value: data.vendorEntityId })
         }
-        this.chargeBackFilters = this.chargeBackData.filter(x => x.internalCbId == internalCbId)[0];
+         this.chargeBackFilters = this.chargeBackData.filter(x => x.internalCbId == internalCbId)[0];
       },
-      error => {
+      error => {        
+
       });
        
       this.chargebackService.getServiceTypeData(productId,vendorId).subscribe(
@@ -369,10 +371,12 @@ public regKey = "";
             }
           }  
           this.chargeBackFilters = this.chargeBackData.filter(x => x.internalCbId == internalCbId)[0];
-  
-         },
+           },
         error => {
-        });         
+        });
+        
+        //this.chargeBackFilters = this.chargeBackData.filter(x => x.internalCbId == internalCbId)[0];
+
 }
 generateBillRefId() {
  
