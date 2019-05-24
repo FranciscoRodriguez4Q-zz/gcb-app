@@ -25,8 +25,8 @@ export class ChargebackService {
   public getProductData(): Observable<Object> {
     return this.http.get("http://localhost:8081/gcbapi/chargeBackProduct");
   }
-  public getCostCenter(serviceType): Observable<Object> {
-    return this.http.get("http://localhost:8081/gcbapi/chargeBackCostCenter?serviceType="+serviceType);
+  public getCostCenter(serviceType,productId,vendorId): Observable<Object> {
+    return this.http.get("http://localhost:8081/gcbapi/chargeBackCostCenter?serviceType="+serviceType+"&productId="+productId+"&vendorId="+vendorId);
   }
 
   public getFocusGroupData(): Observable<Object> {

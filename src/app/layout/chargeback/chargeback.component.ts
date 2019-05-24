@@ -45,6 +45,7 @@ public index = [];
   public panelExpansionFlag=true;
   public costCenterData:any;
   gridLoadFlag = false;
+  public costCenter:"";
 
   chargeBackData: any = [];
   public chargeBackFilters: any = {
@@ -116,7 +117,8 @@ public index = [];
             let arr: any = [];
             this.productReferenceData = refData;
             for (let data of this.productReferenceData) {
-              this.productDataList.push({ label: data.productName, value: data.productId })
+              let labelProd = data.serviceTypePrefix + " | " + data.productName
+              this.productDataList.push({ label: labelProd, value: data.productId })
             }
           },
           error => {
@@ -233,13 +235,15 @@ public index = [];
       error => {
       });
   }
-  getCostCenter(event){
-    this.chargebackService.getCostCenter(event.value).subscribe(
+  getCostCenter(event){    
+    this.chargebackService.getCostCenter(event.value,this.chargeBackFilters.productId,this.chargeBackFilters.vendorId).subscribe(
       refData => {
         let arr: any = [];
         this.costCenterData = refData;
         for (let data of this.costCenterData) {
+          this.chargeBackFilters.costCenter=data.suggestedCostCenterDefault;
           this.chargeBackFilters.suggestedCostCenterDefault=data.suggestedCostCenterDefault;
+          this.chargeBackFilters.suggestedCostCenter=data.suggestedCostCenterDefault;
           this.chargeBackFilters.vendorServiceCountryId=data.vendorServiceCountryId;
         }
       },
@@ -407,6 +411,8 @@ public index = [];
      this.chargebackService.getVendorEntityData(productId).subscribe(
       refData => {
         let arr: any = [];  
+        this.vendorEntityDataList=[];
+        this.serviceTypeDataList=[];
         this.vendorEntityReferenceData = refData;  
         for (let data of this.vendorEntityReferenceData) {
           this.vendorEntityDataList.push({ label: data.vendorLegacyName, value: data.vendorEntityId })
@@ -415,6 +421,7 @@ public index = [];
          this.chargebackService.getServiceTypeData(productId,vendorId).subscribe(
           refData => {
             let arr: any = [];
+            this.serviceTypeDataList=[];
             this.serviceTypeReferenceData = refData;
             for (let data of this.serviceTypeReferenceData) {
               if(data.serviceTypeName!=null){
@@ -422,6 +429,12 @@ public index = [];
               }
             }  
             this.chargeBackFilters = this.chargeBackData.filter(x => x.internalCbId == internalCbId)[0];
+            console.log(this.chargeBackFilters);
+            if(this.chargeBackFilters.overrideOffsetCostCenter==true){
+              this.chargeBackFilters.costCenter=this.chargeBackFilters.suggestedCostCenter
+            }else{
+              this.chargeBackFilters.costCenter=this.chargeBackFilters.suggestedCostCenterDefault
+            }
              },
           error => {
           });
@@ -430,8 +443,6 @@ public index = [];
       error => {        
 
       });
-       
-    
         
         //this.chargeBackFilters = this.chargeBackData.filter(x => x.internalCbId == internalCbId)[0];
 
@@ -617,7 +628,13 @@ deleteBillRefID(billroutingId){
     this.popupErrorMessage = AppConstants.ERROR_INTERNAL_SERVER;
    });
 }
-
+checkCostCenter(){
+  if(this.chargeBackFilters.overrideOffsetCostCenter==true){
+    this.chargeBackFilters.costCenter=this.chargeBackFilters.suggestedCostCenter
+  }else{
+    this.chargeBackFilters.costCenter=this.chargeBackFilters.suggestedCostCenterDefault
+  }
+}
 
 
 }
