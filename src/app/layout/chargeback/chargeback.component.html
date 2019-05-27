@@ -14,14 +14,29 @@
         <p-panel  class="ui-g-12">
               <p-header>       
                       <div class="p-grid">
+
+
                               <div class="p-col ">
-                                  <div>
-                                      <span class="ui-panel-title" style="font-size:14px;display:inline-block;margin-top:2px">ChargeBack Add/Update</span>
-                                      <span *ngIf="!editFlag">ChargeBack : Create</span> <span *ngIf="editFlag">ChargeBack : Modify (Internal ChargeBack ID:{{chargeBackFilters.internalCbId}})</span> 
-          
-                                  </div>
+                               
+                                    <div class="p-grid p-dir-col">
+                                            <div class="p-col"> 
+                                                 <span class="ui-panel-title" style="font-size:14px;display:inline-block;margin-top:2px">ChargeBack Add/Update</span>
+                                            </div>
+                                            <div class="p-col">
+                                                    <span   *ngIf="!editFlag">ChargeBack : Create</span> 
+                                                    <span 
+                                                   
+                                                    *ngIf="editFlag">ChargeBack : Modify (Internal ChargeBack ID: {{chargeBackFilters.internalCbId}})</span> 
+                                                  
+                                            </div>
+                                            
+                                        </div>
+
+                                     
+                                      
+                                
                               </div>
-                              <div class="p-col  p-offset-8 ">
+                              <div class="p-col  ">
                                   <div class="ui-rtl" dir="rtl"  style="text-align:right" >
                                       <span *ngIf="panelExpansionFlag">
                                           <button class="ge-button -fill--solid -size--small " (click)="expandAllPanels()">Expand All
