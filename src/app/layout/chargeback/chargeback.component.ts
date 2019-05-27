@@ -5,6 +5,7 @@ import { Message } from 'primeng/components/common/api';
 import { MessageService } from 'primeng/api';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { AppConstants, UrlConstants } from '../../shared/constants/app.constants';
+import { environment } from 'src/environments/environment.prod';
 
 @Component({
   selector: 'app-chargeback',
@@ -612,7 +613,8 @@ deleteBillRefIDWithNoTokens(billroutingId)
 editBillRef(){
 
   let sso =999999999;
-   window.open("http://stage-billhub.corporate.ge.com:8080/BillHub/index.html#/EditBillReference;billRefId="+
+   window.open( environment.APP_BILLHUB_URL_UI_ENDPOINT + 
+    "/EditBillReference;billRefId="+
    this.chargeBackFilters.billroutingId+";sso="+sso+";mode=edit");
  
  }
