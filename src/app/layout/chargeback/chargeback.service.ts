@@ -13,48 +13,50 @@ export class ChargebackService {
 
   constructor(private http: HttpClient) { }
 
-
+  
   public getServiceTypeData(productId,vendorId): Observable<Object> {
-    return this.http.get("http://localhost:8081/gcbapi/chargeBackServiceType?vendorId="+vendorId+"&productId="+productId);
+    return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/chargeBackServiceType?vendorId="+vendorId+"&productId="+productId);
   }
 
   public getVendorEntityData(productId): Observable<Object> {
-    return this.http.get("http://localhost:8081/gcbapi/chargeBackVendor?productId="+productId);
+    return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/chargeBackVendor?productId="+productId);
   }
 
   public getProductData(): Observable<Object> {
-    return this.http.get("http://localhost:8081/gcbapi/chargeBackProduct");
+    return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/chargeBackProduct");
   }
   public getCostCenter(serviceType,productId,vendorId): Observable<Object> {
-    return this.http.get("http://localhost:8081/gcbapi/chargeBackCostCenter?serviceType="+serviceType+"&productId="+productId+"&vendorId="+vendorId);
+    return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT + 
+      "/chargeBackCostCenter?serviceType="+serviceType+
+      "&productId="+productId+"&vendorId="+vendorId);
   }
 
   public getFocusGroupData(): Observable<Object> {
-    return this.http.get("http://localhost:8081/gcbapi/focusGroup");
+    return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/focusGroup");
   }
 
   public getCurrencyData(): Observable<Object> {
-    return this.http.get("http://localhost:8081/gcbapi/currency");
+    return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/currency");
   }
 
   public getBillingModelData(): Observable<Object> {
-    return this.http.get("http://localhost:8081/gcbapi/billingModel");
+    return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/billingModel");
   }
 
   public getCountryData(): Observable<Object> {
-    return this.http.get("http://localhost:8081/gcbapi/country");
+    return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/country");
   }
 
   public getChargeBackData(): Observable<Object> {
-    return this.http.get("http://localhost:8081/gcbapi/chargeBack");
+    return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/chargeBack");
   }
 
  public upsertChargeBack(chargeBackFilters): Observable<Object> {
-    return this.http.post("http://localhost:8081/gcbapi/upsertChargeBack",chargeBackFilters);
+    return this.http.post(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/upsertChargeBack",chargeBackFilters);
   }
 
   public getLegalEntityData(): Observable<Object> {
-    return this.http.get("http://localhost:8081/gcbapi/legalEntity");
+    return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/legalEntity");
   }
   
   
