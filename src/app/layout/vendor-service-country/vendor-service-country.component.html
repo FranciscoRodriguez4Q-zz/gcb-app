@@ -166,10 +166,10 @@
                 </p-dropdown>
               </div>
             </div>
-            <div class="ui-g-12 ui-md-6 ui-lg-3">
-                <div class="ui-g-5" style="text-align:right">
-                  <label class="label">Suggested Cost Center<span class="required">*</span></label></div>
-                <div class="ui-g-7">
+            <div class="ui-g-12 ui-md-6 ui-lg-4">
+                <div class="ui-g-6" style="text-align:right">
+                  <label class="label">Suggested Offset Cost Center<span class="required">*</span></label></div>
+                <div class="ui-g-6">
                     <input class="form-control"  [(ngModel)]="vscDtoObj.suggestedCostCenterDefault" >
                 </div>
             </div>
@@ -204,7 +204,7 @@
 </div> -->
 <div class="ui-g">
 <div class="ui-g-12">
- <p-table #tt [columns]="cols" [value]="vendorSrCountryData" [scrollable]="true" [style]="{'margin-top':'2px','width':'1200px'}" [rows]="10" [paginator]="true" [pageLinks]="3" [responsive]="true">
+ <p-table #tt [columns]="cols" [value]="vendorSrCountryData" [scrollable]="true" [style]="{'margin-top':'2px','width':'100%'}" [rows]="10" [paginator]="true" [pageLinks]="3" [responsive]="true">
     <ng-template pTemplate="colgroup" let-columns>
         <colgroup>
             <col style="width:50px">
@@ -236,7 +236,7 @@
  -->              </td>
             <td *ngFor="let col of columns" >
               <div *ngIf="col.field!='serviceTypeName'"> {{rowData[col.field]}}</div>
-              <div *ngIf="col.field=='serviceTypeName'"> {{rowData[col.field]}} &nbsp;<a class="a-color" style="cursor:pointer;" (click)="openChargeBack()"><i class="fa fa-file-text" ></i></a></div>
+              <div *ngIf="col.field=='serviceTypeName'"> {{rowData[col.field]}} &nbsp;<a class="a-color" style="cursor:pointer;" (click)="openChargeBack(rowData['vendorServiceCountryId'])"><i class="fa fa-file-text" ></i></a></div>
             </td>
         </tr>
     </ng-template>

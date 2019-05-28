@@ -6,6 +6,7 @@ import { MessageService } from 'primeng/api';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { AppConstants, UrlConstants } from '../../shared/constants/app.constants';
 import { environment } from 'src/environments/environment.prod';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-chargeback',
@@ -90,12 +91,29 @@ public index = [];
     cloneOfId:"",
     suggestedCostCenterDefault:""
   };
-
+  public vscDtoObj: any = {
+    vendorEntityId:"Select",
+    productId: 0
+  };
 
   public  foundInSystemId =  "19";
   public regKey = "587b99c1-7daf-4038-8ffb-de75dd165a0c";
   public entityTypeID = "14";
-  constructor(private chargebackService: ChargebackService, private messageService: MessageService, private modalService: NgbModal) { }
+  constructor(private chargebackService: ChargebackService, private messageService: MessageService, private modalService: NgbModal,private route: ActivatedRoute) {
+    if (this.route.snapshot.params['vendorSrCtryId']) {
+      let vendorSrCtryId = parseInt(this.route.snapshot.paramMap.get('vendorSrCtryId'));
+      console.log('vendorSrCtryId = '+vendorSrCtryId);
+      this.chargebackService.getVSCData(vendorSrCtryId).subscribe(
+        refData => {
+         this.vscDtoObj = refData;
+          debugger;
+          this.showSelectedData(null,this.vscDtoObj.vendorEntityId,this.vscDtoObj.productId);
+      },
+      error => {
+      });
+    }
+
+   }
 
   public cols = [
     { field: 'internalCbId', header: 'ChargeBack ID', width: '5%' },
@@ -429,7 +447,13 @@ public index = [];
               this.serviceTypeDataList.push({ label: data.serviceTypeName, value: data.serviceTypeName })
               }
             }  
+            if(internalCbId!=null){
             this.chargeBackFilters = this.chargeBackData.filter(x => x.internalCbId == internalCbId)[0];
+            }
+            else{
+              this.chargeBackFilters.productId = productId;
+              this.chargeBackFilters.vendorId = vendorId;
+            }
             console.log(this.chargeBackFilters);
             if(this.chargeBackFilters.overrideOffsetCostCenter==true){
               this.chargeBackFilters.costCenter=this.chargeBackFilters.suggestedCostCenter

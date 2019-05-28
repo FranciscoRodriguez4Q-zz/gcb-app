@@ -89,4 +89,9 @@ public getBillRefIDTokensAssociated(billRefId, regKey) : Observable<Object>{
   );
 }
 
+public getVSCData(vendorSrCtryId):Observable<Object> { 
+  //let gridDataStr = JSON.stringify(gridData);
+  return this.http.post(environment.APP_BASE_URL_SERVICE_ENDPOINT+
+    "/getVSCountryData",vendorSrCtryId);
+} 
 }

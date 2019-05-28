@@ -34,18 +34,19 @@ export class VendorServiceCountryComponent implements OnInit {
   public downloadCols = [];
   public fileName : any ="VSC";
   public cols = [
-    { field: 'serviceTypeName', header: 'Service Type Name', width: '170px' },
-    { field: 'vendorEntityName', header: 'Vendor Entity Name', width: '170px' },
-    { field: 'productName', header: 'Product Name', width: '170px' },
-    { field: 'countryNm', header: 'Consumed In', width: '120px' },
-    { field: 'billedFromCountryName', header: 'Billed From Country', width: '150px' },
-    { field: 'servicedFromCountryName', header: 'Serviced From Country', width: '150px' },
-    { field: 'billedToCountryName', header: 'Billed To Country', width: '150px' },
-    { field: 'suggestedCostCenterDefault', header: 'Suggested Cost Center', width: '170px' },
-    { field: 'createdDate', header: 'Created Date', width: '120px' },
-    { field: 'createdBy', header: 'Created By', width: '100px' },
-    { field: 'lastUpdatedDate', header: 'Updated Date', width: '120px' },
-    { field: 'updatedBy', header: 'Updated By', width: '100px' }
+    { field: 'serviceTypeName', header: 'Service Type Name', width: '20%' },
+    { field: 'vendorEntityName', header: 'Vendor Entity Name', width: '10%' },
+    { field: 'serviceTypePrefix', header: 'Product Code', width: '8%' },
+    { field: 'productName', header: 'Product Name', width: '10%' },
+    { field: 'countryNm', header: 'Consumed In', width: '8%' },
+    { field: 'billedFromCountryName', header: 'Billed From Country', width: '8%' },
+    { field: 'servicedFromCountryName', header: 'Serviced From Country', width: '8%' },
+    { field: 'billedToCountryName', header: 'Billed To Country', width: '8%' },
+    { field: 'suggestedCostCenterDefault', header: 'Suggested Cost Center', width: '11%' },
+    { field: 'createdDateStr', header: 'Created Date', width: '8%' },
+    { field: 'createdBy', header: 'Created By', width: '8%' },
+    { field: 'lastUpdatedDateStr', header: 'Updated Date', width: '8%' },
+    { field: 'updatedBy', header: 'Updated By', width: '8%' }
   ];
 
 
@@ -341,8 +342,8 @@ export class VendorServiceCountryComponent implements OnInit {
     }
   }
 
-  openChargeBack(){
-    this.router.navigate(['/layout/Chargeback']);
+  openChargeBack(vendorSrCtryId){
+    this.router.navigate(['/layout/Chargeback',vendorSrCtryId]);
   }
 }
 

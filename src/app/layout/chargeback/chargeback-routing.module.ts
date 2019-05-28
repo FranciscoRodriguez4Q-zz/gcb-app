@@ -5,6 +5,9 @@ import { ChargebackComponent } from './chargeback.component';
 const routes: Routes = [
     {
         path: '', component: ChargebackComponent
+    },
+    { 
+        path: ':vendorSrCtryId', component: ChargebackComponent 
     }];
 @NgModule({
     imports: [RouterModule.forChild(routes)],
