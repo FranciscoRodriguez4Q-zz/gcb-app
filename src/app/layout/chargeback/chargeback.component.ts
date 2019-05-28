@@ -96,9 +96,14 @@ public index = [];
     productId: 0
   };
 
-  public  foundInSystemId =  "19";
-  public regKey = "587b99c1-7daf-4038-8ffb-de75dd165a0c";
-  public entityTypeID = "14";
+ // public  foundInSystemId =  "19";
+  //public regKey = "587b99c1-7daf-4038-8ffb-de75dd165a0c";
+  //public entityTypeID = "14";
+  //chargeback external sys values
+  public  foundInSystemId =  "11";
+  public regKey = "8c8606d1-e591-435f-a435-d112ba4cd43c";
+  public entityTypeID = "5";
+  
   constructor(private chargebackService: ChargebackService, private messageService: MessageService, private modalService: NgbModal,private route: ActivatedRoute) {
     if (this.route.snapshot.params['vendorSrCtryId']) {
       let vendorSrCtryId = parseInt(this.route.snapshot.paramMap.get('vendorSrCtryId'));
