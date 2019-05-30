@@ -112,7 +112,7 @@ public index = [];
         refData => {
          this.vscDtoObj = refData;
           debugger;
-          this.showSelectedData(null,this.vscDtoObj.vendorEntityId,this.vscDtoObj.productId);
+          this.showSelectedData(null,this.vscDtoObj.vendorEntityId,this.vscDtoObj.productId,this.vscDtoObj.vscId);
       },
       error => {
       });
@@ -162,20 +162,20 @@ public index = [];
             error => {
             });
 
-            this.chargebackService.getLegalEntityData().subscribe(
-              refData => {
-                let arr: any = [];
+            // this.chargebackService.getLegalEntityData().subscribe(
+            //   refData => {
+            //     let arr: any = [];
         
-                this.legalEntityReferenceData = refData;
-                // this.focusGroupDataList.push({ label: "Select", value: "Select" })
+            //     this.legalEntityReferenceData = refData;
+            //     // this.focusGroupDataList.push({ label: "Select", value: "Select" })
                  
-                for (let data of this.legalEntityReferenceData) {
-                  let labelLegalEntity = data.goldnetId + " | " + data.legalEntityName;
-                  this.legalEntityDataList.push({ label: labelLegalEntity, value: data.goldnetId })
-                }
-              },
-              error => {
-              });
+            //     for (let data of this.legalEntityReferenceData) {
+            //       let labelLegalEntity = data.goldnetId + " | " + data.legalEntityName;
+            //       this.legalEntityDataList.push({ label: labelLegalEntity, value: data.goldnetId })
+            //     }
+            //   },
+            //   error => {
+            //   });
 
             this.chargebackService.getCurrencyData().subscribe(
               refData => {
@@ -268,11 +268,31 @@ public index = [];
           this.chargeBackFilters.costCenter=data.suggestedCostCenterDefault;
           this.chargeBackFilters.suggestedCostCenterDefault=data.suggestedCostCenterDefault;
           this.chargeBackFilters.suggestedCostCenter=data.suggestedCostCenterDefault;
-          this.chargeBackFilters.vendorServiceCountryId=data.vendorServiceCountryId;
+          this.chargeBackFilters.vendorServiceCountryId=data.vendorServiceCountryId;         
         }
+        this.getLegalEntities(this.chargeBackFilters.vendorServiceCountryId);
       },
       error => {
       });
+  }
+
+  getLegalEntities(vscId){
+    this.legalEntityReferenceData="";
+    this.legalEntityDataList=[];
+  this.chargebackService.getLegalEntityData(vscId).subscribe(
+    refData => {
+      let arr: any = [];
+
+      this.legalEntityReferenceData = refData;
+      // this.focusGroupDataList.push({ label: "Select", value: "Select" })
+       
+      for (let data of this.legalEntityReferenceData) {
+        let labelLegalEntity = data.goldnetId + " | " + data.legalEntityName;
+        this.legalEntityDataList.push({ label: labelLegalEntity, value: data.goldnetId })
+      }
+    },
+    error => {
+    });
   }
 
   expandAllPanels(){
@@ -426,7 +446,7 @@ public index = [];
     return true;
   }
 
-  showSelectedData(internalCbId,vendorId,productId) {   
+  showSelectedData(internalCbId,vendorId,productId,vscId) {   
     this.vendorEntityDataList=[];
     this.serviceTypeDataList=[];
     this.editFlag = true;
@@ -452,6 +472,21 @@ public index = [];
               this.serviceTypeDataList.push({ label: data.serviceTypeName, value: data.serviceTypeName })
               }
             }  
+            
+
+            this.legalEntityReferenceData="";
+            this.legalEntityDataList=[];
+            this.chargebackService.getLegalEntityData(vscId).subscribe(
+              refData => {
+                let arr: any = [];          
+                this.legalEntityReferenceData = refData;                 
+                for (let data of this.legalEntityReferenceData) {
+                  let labelLegalEntity = data.goldnetId + " | " + data.legalEntityName;
+                  this.legalEntityDataList.push({ label: labelLegalEntity, value: data.goldnetId })
+                }
+              
+
+
             if(internalCbId!=null){
             this.chargeBackFilters = this.chargeBackData.filter(x => x.internalCbId == internalCbId)[0];
             }
@@ -459,12 +494,14 @@ public index = [];
               this.chargeBackFilters.productId = productId;
               this.chargeBackFilters.vendorId = vendorId;
             }
-            console.log(this.chargeBackFilters);
             if(this.chargeBackFilters.overrideOffsetCostCenter==true){
               this.chargeBackFilters.costCenter=this.chargeBackFilters.suggestedCostCenter
             }else{
               this.chargeBackFilters.costCenter=this.chargeBackFilters.suggestedCostCenterDefault
             }
+          },
+          error => {
+          });
              },
           error => {
           });

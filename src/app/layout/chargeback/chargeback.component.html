@@ -24,17 +24,11 @@
                                             </div>
                                             <div class="p-col p-nogutter">
                                                     <span   *ngIf="!editFlag">ChargeBack : Create</span> 
-                                                    <span 
-                                                   
+                                                    <span                                                    
                                                     *ngIf="editFlag">ChargeBack : Modify (Internal ChargeBack ID: {{chargeBackFilters.internalCbId}})</span> 
                                                   
-                                            </div>
-                                            
+                                            </div>                                            
                                         </div>
-
-                                     
-                                      
-                                
                               </div>
                               <div class="p-col  ">
                                   <div class="ui-rtl" dir="rtl"  style="text-align:right" >
@@ -59,7 +53,7 @@
         <p-accordionTab header="Chargeback Info" >
             <div class="ui-g">
                 <div class="ui-g-12 ui-md-6 ui-lg-4">
-                    <div class="ui-g-4"><label class="label">Product</label></div>
+                    <div class="ui-g-4"><label class="label">Product</label><span class="required">*</span></div>
                     <div class="ui-g-6">             
                         <p-dropdown [options]="productDataList"   placeholder="Select" 
                          [(ngModel)]="chargeBackFilters.productId" 
@@ -70,7 +64,7 @@
                     </div>
                 </div>
               <div class="ui-g-12 ui-md-6 ui-lg-4">
-                  <div class="ui-g-4"><label class="label">Vendor</label></div>
+                  <div class="ui-g-4"><label class="label">Vendor</label><span class="required">*</span></div>
                   <div class="ui-g-6">
                       <p-dropdown [options]="vendorEntityDataList" 
                       placeholder="Select"
@@ -82,7 +76,7 @@
                   </div>
               </div>
               <div class="ui-g-12 ui-md-6 ui-lg-4">
-                  <div class="ui-g-4"><label class="label">Service Type</label></div>
+                  <div class="ui-g-4"><label class="label">Service Type</label><span class="required">*</span></div>
                   <div class="ui-g-6">
                       <p-dropdown [options]="serviceTypeDataList" 
                       [(ngModel)]="chargeBackFilters.serviceType" 
@@ -95,7 +89,7 @@
             </div>                 
             <div class="ui-g">              
                   <div class="ui-g-12 ui-md-6 ui-lg-4">
-                      <div class="ui-g-4"><label class="label">Suggested Cost Center</label></div>                    
+                      <div class="ui-g-4"><label class="label">Suggested Cost Center<span class="required">*</span></label></div>                    
                         <div class="ui-g-6">
                           <span><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.costCenter" [disabled]="!chargeBackFilters.overrideOffsetCostCenter"/></span>
                         </div>
@@ -106,8 +100,8 @@
                       </div>
                     </div>
                 <div class="ui-g-12 ui-md-4 ui-lg-4">
-                  <div class="ui-g-4"><label class="label">Vendor BAN</label></div>
-                  <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.vendorBanId"/></div>
+                  <div class="ui-g-4"><label class="label">Vendor BAN</label><span class="required">*</span></div>
+                  <div class="ui-g-6"><input class="form-control"  [(ngModel)]="chargeBackFilters.vendorBanId"/></div>
                 </div>
                
                   <!-- <div class="ui-g-12 ui-md-6 ui-lg-1 chkBox">
@@ -127,7 +121,7 @@
                     <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.goldnetId"/></div>
                 </div> -->
                 <div class="ui-g-12 ui-md-6 ui-lg-4">
-                    <div class="ui-g-4"><label class="label">Legal Entity Name</label></div>
+                    <div class="ui-g-4"><label class="label">Legal Entity Name<span class="required">*</span></label></div>
                     <div class="ui-g-6">
                         <p-dropdown  [(ngModel)]="chargeBackFilters.goldnetId" 
                         [options]="legalEntityDataList"
@@ -137,7 +131,7 @@
                     </div>
                 </div>
                 <div class="ui-g-12 ui-md-6 ui-lg-4">
-                    <div class="ui-g-4"><label class="label">Focus Group</label></div>
+                    <div class="ui-g-4"><label class="label">Focus Group</label><span class="required">*</span></div>
                     <div class="ui-g-6">
                         <!-- <p-dropdown [options]="focusGroupDataList" [disabled]="editFlag" placeholder="Select" [autoWidth]="true" [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
                          [filter]="true" scrollHeight="150px">
@@ -162,7 +156,7 @@
             <p-accordionTab header="Billing Details" >
                 <div class="ui-g">
                   <div class="ui-g-12 ui-md-6 ui-lg-4">
-                    <div class="ui-g-4"><label class="label">Bill Routing ID</label></div>
+                    <div class="ui-g-4"><label class="label">Bill Routing ID</label><span class="required">*</span></div>
                     <div class="ui-g-6">
                      <!--    <input class="form-control" pInputText placeholder="" 
                         [(ngModel)]="chargeBackFilters.billroutingId"/> -->
@@ -188,7 +182,7 @@
                       </div>
                   </div>
                   <div class="ui-g-12 ui-md-6 ui-lg-4">
-                      <div class="ui-g-4"><label class="label">Billing Model</label></div>
+                      <div class="ui-g-4"><label class="label">Billing Model</label><span class="required">*</span></div>
                       <div class="ui-g-6"> 
                         <p-dropdown [options]="billingModelDataList" 
                         [(ngModel)]="chargeBackFilters.billingModel" 
@@ -198,7 +192,7 @@
                       </div>
                   </div>
                   <div class="ui-g-12 ui-md-6 ui-lg-4">
-                      <div class="ui-g-4"><label class="label">Mode</label></div>
+                      <div class="ui-g-4"><label class="label">Mode</label><span class="required">*</span></div>
                       <div class="ui-g-8">
                               <div class="p-grid">
                                       <div class="p-col">
@@ -214,7 +208,7 @@
                 </div>
                 <div class="ui-g">
                     <div class="ui-g-12 ui-md-6 ui-lg-4">
-                      <div class="ui-g-4"><label class="label">Currency Code</label></div>
+                      <div class="ui-g-4"><label class="label">Currency Code</label><span class="required">*</span></div>
                       <div class="ui-g-6">
                           <p-dropdown [options]="currencyDataList" 
                           [(ngModel)]="chargeBackFilters.currencyCode"
@@ -395,7 +389,7 @@
             <ng-template pTemplate="body" let-rowData let-columns="columns">
                 <tr>
                     <td>
-                        <p-tableRadioButton [value]="rowData" (click)="showSelectedData(rowData['internalCbId'],rowData['vendorId'],rowData['productId'])" ></p-tableRadioButton>
+                        <p-tableRadioButton [value]="rowData" (click)="showSelectedData(rowData['internalCbId'],rowData['vendorId'],rowData['productId'],rowData['vendorServiceCountryId'])" ></p-tableRadioButton>
                     </td>
                     <td *ngFor="let col of columns" >
                       <div> {{rowData[col.field]}}</div>
