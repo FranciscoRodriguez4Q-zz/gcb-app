@@ -55,8 +55,8 @@ export class ChargebackService {
     return this.http.post(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/upsertChargeBack",chargeBackFilters);
   }
 
-  public getLegalEntityData(): Observable<Object> {
-    return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/legalEntity");
+  public getLegalEntityData(vscId): Observable<Object> {
+    return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/legalEntity?vscId="+vscId);
   }
   
   
@@ -89,4 +89,9 @@ public getBillRefIDTokensAssociated(billRefId, regKey) : Observable<Object>{
   );
 }
 
+public getVSCData(vendorSrCtryId):Observable<Object> { 
+  //let gridDataStr = JSON.stringify(gridData);
+  return this.http.post(environment.APP_BASE_URL_SERVICE_ENDPOINT+
+    "/getVSCountryData",vendorSrCtryId);
+} 
 }

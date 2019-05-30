@@ -6,6 +6,7 @@ import { MessageService } from 'primeng/api';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { AppConstants, UrlConstants } from '../../shared/constants/app.constants';
 import { environment } from 'src/environments/environment.prod';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-chargeback',
@@ -90,12 +91,34 @@ public index = [];
     cloneOfId:"",
     suggestedCostCenterDefault:""
   };
+  public vscDtoObj: any = {
+    vendorEntityId:"Select",
+    productId: 0
+  };
 
+ // public  foundInSystemId =  "19";
+  //public regKey = "587b99c1-7daf-4038-8ffb-de75dd165a0c";
+  //public entityTypeID = "14";
+  //chargeback external sys values
+  public  foundInSystemId =  "11";
+  public regKey = "8c8606d1-e591-435f-a435-d112ba4cd43c";
+  public entityTypeID = "5";
+  
+  constructor(private chargebackService: ChargebackService, private messageService: MessageService, private modalService: NgbModal,private route: ActivatedRoute) {
+    if (this.route.snapshot.params['vendorSrCtryId']) {
+      let vendorSrCtryId = parseInt(this.route.snapshot.paramMap.get('vendorSrCtryId'));
+      console.log('vendorSrCtryId = '+vendorSrCtryId);
+      this.chargebackService.getVSCData(vendorSrCtryId).subscribe(
+        refData => {
+         this.vscDtoObj = refData;
+          debugger;
+          this.showSelectedData(null,this.vscDtoObj.vendorEntityId,this.vscDtoObj.productId,this.vscDtoObj.vscId);
+      },
+      error => {
+      });
+    }
 
-  public  foundInSystemId =  "19";
-  public regKey = "587b99c1-7daf-4038-8ffb-de75dd165a0c";
-  public entityTypeID = "14";
-  constructor(private chargebackService: ChargebackService, private messageService: MessageService, private modalService: NgbModal) { }
+   }
 
   public cols = [
     { field: 'internalCbId', header: 'ChargeBack ID', width: '5%' },
@@ -139,20 +162,20 @@ public index = [];
             error => {
             });
 
-            this.chargebackService.getLegalEntityData().subscribe(
-              refData => {
-                let arr: any = [];
+            // this.chargebackService.getLegalEntityData().subscribe(
+            //   refData => {
+            //     let arr: any = [];
         
-                this.legalEntityReferenceData = refData;
-                // this.focusGroupDataList.push({ label: "Select", value: "Select" })
+            //     this.legalEntityReferenceData = refData;
+            //     // this.focusGroupDataList.push({ label: "Select", value: "Select" })
                  
-                for (let data of this.legalEntityReferenceData) {
-                  let labelLegalEntity = data.goldnetId + " | " + data.legalEntityName;
-                  this.legalEntityDataList.push({ label: labelLegalEntity, value: data.goldnetId })
-                }
-              },
-              error => {
-              });
+            //     for (let data of this.legalEntityReferenceData) {
+            //       let labelLegalEntity = data.goldnetId + " | " + data.legalEntityName;
+            //       this.legalEntityDataList.push({ label: labelLegalEntity, value: data.goldnetId })
+            //     }
+            //   },
+            //   error => {
+            //   });
 
             this.chargebackService.getCurrencyData().subscribe(
               refData => {
@@ -245,11 +268,31 @@ public index = [];
           this.chargeBackFilters.costCenter=data.suggestedCostCenterDefault;
           this.chargeBackFilters.suggestedCostCenterDefault=data.suggestedCostCenterDefault;
           this.chargeBackFilters.suggestedCostCenter=data.suggestedCostCenterDefault;
-          this.chargeBackFilters.vendorServiceCountryId=data.vendorServiceCountryId;
+          this.chargeBackFilters.vendorServiceCountryId=data.vendorServiceCountryId;         
         }
+        this.getLegalEntities(this.chargeBackFilters.vendorServiceCountryId);
       },
       error => {
       });
+  }
+
+  getLegalEntities(vscId){
+    this.legalEntityReferenceData="";
+    this.legalEntityDataList=[];
+  this.chargebackService.getLegalEntityData(vscId).subscribe(
+    refData => {
+      let arr: any = [];
+
+      this.legalEntityReferenceData = refData;
+      // this.focusGroupDataList.push({ label: "Select", value: "Select" })
+       
+      for (let data of this.legalEntityReferenceData) {
+        let labelLegalEntity = data.goldnetId + " | " + data.legalEntityName;
+        this.legalEntityDataList.push({ label: labelLegalEntity, value: data.goldnetId })
+      }
+    },
+    error => {
+    });
   }
 
   expandAllPanels(){
@@ -403,7 +446,7 @@ public index = [];
     return true;
   }
 
-  showSelectedData(internalCbId,vendorId,productId) {   
+  showSelectedData(internalCbId,vendorId,productId,vscId) {   
     this.vendorEntityDataList=[];
     this.serviceTypeDataList=[];
     this.editFlag = true;
@@ -429,13 +472,36 @@ public index = [];
               this.serviceTypeDataList.push({ label: data.serviceTypeName, value: data.serviceTypeName })
               }
             }  
+            
+
+            this.legalEntityReferenceData="";
+            this.legalEntityDataList=[];
+            this.chargebackService.getLegalEntityData(vscId).subscribe(
+              refData => {
+                let arr: any = [];          
+                this.legalEntityReferenceData = refData;                 
+                for (let data of this.legalEntityReferenceData) {
+                  let labelLegalEntity = data.goldnetId + " | " + data.legalEntityName;
+                  this.legalEntityDataList.push({ label: labelLegalEntity, value: data.goldnetId })
+                }
+              
+
+
+            if(internalCbId!=null){
             this.chargeBackFilters = this.chargeBackData.filter(x => x.internalCbId == internalCbId)[0];
-            console.log(this.chargeBackFilters);
+            }
+            else{
+              this.chargeBackFilters.productId = productId;
+              this.chargeBackFilters.vendorId = vendorId;
+            }
             if(this.chargeBackFilters.overrideOffsetCostCenter==true){
               this.chargeBackFilters.costCenter=this.chargeBackFilters.suggestedCostCenter
             }else{
               this.chargeBackFilters.costCenter=this.chargeBackFilters.suggestedCostCenterDefault
             }
+          },
+          error => {
+          });
              },
           error => {
           });
