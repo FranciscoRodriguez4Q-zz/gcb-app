@@ -98,5 +98,8 @@ public getVSCData(vendorSrCtryId):Observable<Object> {
 public getFocusGroupDataId(cbId): Observable<Object> {
   return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/focusGroupForId?cbId="+cbId);
 }
+public getCloneBillingModel(cbId): Observable<Object> {
+  return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/getCloneBillingModel?cbId="+cbId);
+}
 
 }

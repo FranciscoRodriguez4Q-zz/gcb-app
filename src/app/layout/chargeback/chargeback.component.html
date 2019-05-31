@@ -196,10 +196,10 @@
                       <div class="ui-g-8">
                               <div class="p-grid">
                                       <div class="p-col">
-                                          <p-radioButton name="modeRadio" value="testing" label="Testing" [(ngModel)]="chargeBackFilters.mode"></p-radioButton>
+                                          <p-radioButton name="modeRadio" value="TESTING" label="Testing" [(ngModel)]="chargeBackFilters.mode"></p-radioButton>
                                       </div>
                                       <div class="p-col ">
-                                          <p-radioButton name="modeRadio" value="production" label="Production" [(ngModel)]="chargeBackFilters.mode"></p-radioButton>
+                                          <p-radioButton name="modeRadio" value="PRODUCTION" label="Production" [(ngModel)]="chargeBackFilters.mode"></p-radioButton>
                                       </div>
                                   </div>
    
@@ -239,6 +239,12 @@
                           <div class="ui-g-4"><label class="label">Vendor Code</label></div>
                           <div class="ui-g-6"><input class="form-control" pInputText placeholder="" [(ngModel)]="chargeBackFilters.vendorCode"/>
                           </div>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-6 ui-lg-4" *ngIf="editFlag">
+                        <div class="ui-g-4"><label class="label">Clone Record</label></div>
+                        <div class="ui-g-6"><p-inputSwitch [(ngModel)]="chargeBackFilters.cloneFlag" (click)="cloneRecord()" ></p-inputSwitch>
+                        </div>
                     </div>
                 </div>
               </p-accordionTab>

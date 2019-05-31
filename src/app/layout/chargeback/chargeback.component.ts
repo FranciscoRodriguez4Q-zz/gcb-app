@@ -41,6 +41,7 @@ public index = [];
   currencyDataList: SelectItem[] = [];
   public billingModelReferenceData: any;
   billingModelDataList: SelectItem[] = [];
+  mainBillingModelDataList: SelectItem[] = [];
   countryDataList: SelectItem[] = [];
   public countryReferenceData:any;
   public collapsed=true;
@@ -48,7 +49,7 @@ public index = [];
   public costCenterData:any;
   gridLoadFlag = false;
   public costCenter:"";
-
+  //public cloneFlag : boolean = false;
   chargeBackData: any = [];
   public chargeBackFilters: any = {
     vendorBanId:"",
@@ -66,7 +67,7 @@ public index = [];
     division:false,
     billroutingId:"",
     billingModel:"",
-    mode:"testing",
+    mode:"TESTING",
     currencyCode:"",
     directOffsetBuc:"",
     indirectOffsetBuc:"",
@@ -89,7 +90,8 @@ public index = [];
     vatAwtGroupName:"",
     paymentTerms:"",
     cloneOfId:"",
-    suggestedCostCenterDefault:""
+    suggestedCostCenterDefault:"",
+    cloneFlag : false
   };
   public vscDtoObj: any = {
     vendorEntityId:"Select",
@@ -198,6 +200,7 @@ public index = [];
                   for (let data of this.billingModelReferenceData) {
                     this.billingModelDataList.push({ label: data.billingModelDesc, value: data.billingModelId })
                   }
+                  this.mainBillingModelDataList = this.billingModelDataList;
                 },
                 error => {
                 });
@@ -312,7 +315,10 @@ public index = [];
     this.msgs = [];
     console.log("test button click",this.chargeBackFilters);
     if (this.validation()) {
-
+      if (this.chargeBackFilters.cloneFlag && this.chargeBackFilters.cloneOfId==null){
+        this.chargeBackFilters.cloneOfId = this.chargeBackFilters.internalCbId;
+        this.chargeBackFilters.internalCbId = "";
+      }
       this.chargebackService.getBillRefIDTokensAssociated(this.chargeBackFilters.billroutingId,
         this.regKey).subscribe(
       refData => {
@@ -450,6 +456,8 @@ public index = [];
      var dataLoadFlag=false;
      var focusGroupForCB:any;
      var focusGroupForCBList=[];
+	 //this.cloneFlag = false;
+     this.billingModelDataList = this.mainBillingModelDataList;
 
      this.chargebackService.getVendorEntityData(productId).subscribe(
       refData => {
@@ -504,6 +512,11 @@ public index = [];
               this.chargeBackFilters.vendorId = vendorId;
             }
             //this.chargeBackFilters.focusGroup={"3","5"};
+            if(this.chargeBackFilters.cloneOfId!=null){
+              this.chargeBackFilters.cloneFlag = true;
+             }else{
+              this.chargeBackFilters.cloneFlag = false;
+             }
             if(this.chargeBackFilters.overrideOffsetCostCenter==true){
               this.chargeBackFilters.costCenter=this.chargeBackFilters.suggestedCostCenter
             }else{
@@ -579,7 +592,7 @@ clearAllFilters(){
     division:false,
     billroutingId:"",
     billingModel:"",
-    mode:"testing",
+    mode:"TESTING",
     currencyCode:"",
     directOffsetBuc:"",
     indirectOffsetBuc:"",
@@ -601,9 +614,10 @@ clearAllFilters(){
     awtGroupName:"",
     vatAwtGroupName:"",
     paymentTerms:"",
-    cloneOfId:""
+    cloneOfId:"",
+    cloneFlag : false
   };
-
+  //this.cloneFlag = false;
 }
 
 checkBillRefIDTokensAssociated() : boolean {
@@ -718,6 +732,28 @@ checkCostCenter(){
   }
 }
 
-
+cloneRecord(){
+  if(this.chargeBackFilters.cloneFlag){
+    console.log("Clone flag is "+this.chargeBackFilters.cloneFlag);
+     this.billingModelDataList =[];
+    let cbId = this.chargeBackFilters.internalCbId;
+    this.chargebackService.getCloneBillingModel(cbId).subscribe(
+      refData => {
+        debugger;
+        let arr: any = [];
+        debugger;
+        this.billingModelDataList =[];
+        this.billingModelReferenceData = refData;          
+        for (let data of this.billingModelReferenceData) {
+          this.billingModelDataList.push({ label: data.billingModelDesc, value: data.billingModelId })
+        }
+      },
+      error => {
+      });
+      this.chargeBackFilters.mode = "TESTING";
+  }else{
+    this.billingModelDataList = this.mainBillingModelDataList;
+  }
+}
 }
 
