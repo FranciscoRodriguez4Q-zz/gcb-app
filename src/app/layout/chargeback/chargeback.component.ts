@@ -350,7 +350,7 @@ public index = [];
                 this.chargeBackFilters.internalCbId = this.saveMessage.internalCbId;
                 this.associateBillRefToAsset();
               }
-  
+             // this.clearAllFilters();
             },
             error => {
             });
@@ -360,12 +360,9 @@ public index = [];
       (error) => {
         this.popupErrorMessage = error;  
         this.open(this.errorMessagePopUp);
-      });
-     
-  
-      
-     
+      });   
     }
+    
   }
   open(content) {
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
@@ -451,6 +448,8 @@ public index = [];
     this.serviceTypeDataList=[];
     this.editFlag = true;
      var dataLoadFlag=false;
+     var focusGroupForCB:any;
+     var focusGroupForCBList=[];
 
      this.chargebackService.getVendorEntityData(productId).subscribe(
       refData => {
@@ -485,15 +484,26 @@ public index = [];
                   this.legalEntityDataList.push({ label: labelLegalEntity, value: data.goldnetId })
                 }
               
-
+                this.chargebackService.getFocusGroupDataId(internalCbId).subscribe(
+                  refData => {
+                    let arr: any = [];          
+                    focusGroupForCB = refData;
+                    // this.focusGroupDataList.push({ label: "Select", value: "Select" })
+            
+                    for (let data of focusGroupForCB) {
+                      focusGroupForCBList.push(data.focusGroupId)
+                    }                 
+                    
 
             if(internalCbId!=null){
             this.chargeBackFilters = this.chargeBackData.filter(x => x.internalCbId == internalCbId)[0];
+            this.chargeBackFilters.focusGroup=focusGroupForCBList;
             }
             else{
               this.chargeBackFilters.productId = productId;
               this.chargeBackFilters.vendorId = vendorId;
             }
+            //this.chargeBackFilters.focusGroup={"3","5"};
             if(this.chargeBackFilters.overrideOffsetCostCenter==true){
               this.chargeBackFilters.costCenter=this.chargeBackFilters.suggestedCostCenter
             }else{
@@ -505,6 +515,10 @@ public index = [];
              },
           error => {
           });
+
+        },
+        error => {
+        });
         
         },
       error => {        

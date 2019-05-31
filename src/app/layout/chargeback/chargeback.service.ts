@@ -94,4 +94,9 @@ public getVSCData(vendorSrCtryId):Observable<Object> {
   return this.http.post(environment.APP_BASE_URL_SERVICE_ENDPOINT+
     "/getVSCountryData",vendorSrCtryId);
 } 
+
+public getFocusGroupDataId(cbId): Observable<Object> {
+  return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/focusGroupForId?cbId="+cbId);
+}
+
 }
