@@ -36,6 +36,8 @@ public index = [];
   focusGroupDataList: SelectItem[] = [];
   public focusGroupReferenceData: any;
   legalEntityDataList: SelectItem[] = [];
+  public focusGroupForCB: any;
+  public focusGroupForCBList=[];
   public legalEntityReferenceData: any;
   public currencyReferenceData: any;
   currencyDataList: SelectItem[] = [];
@@ -451,92 +453,143 @@ public index = [];
 
   showSelectedData(internalCbId,vendorId,productId,vscId) {   
     this.vendorEntityDataList=[];
+    this.vendorEntityReferenceData="";
     this.serviceTypeDataList=[];
+    this.serviceTypeReferenceData="";
     this.editFlag = true;
-     var dataLoadFlag=false;
-     var focusGroupForCB:any;
-     var focusGroupForCBList=[];
+    this.legalEntityReferenceData="";
+    this.legalEntityDataList=[];
+    this.focusGroupForCB="";
+    this.focusGroupForCBList=[];
+    
+     var dataLoadFlag=false; 
+   
 	 //this.cloneFlag = false;
      this.billingModelDataList = this.mainBillingModelDataList;
 
-     this.chargebackService.getVendorEntityData(productId).subscribe(
-      refData => {
-        let arr: any = [];  
-        this.vendorEntityDataList=[];
-        this.serviceTypeDataList=[];
-        this.vendorEntityReferenceData = refData;  
+      this.chargebackService.setDropdownData(internalCbId,vendorId,productId,vscId).subscribe(
+       refData => {
+        this.vendorEntityReferenceData=this.chargebackService.getVendorData();
+        this.serviceTypeReferenceData=this.chargebackService.getServiceTypeData1();
+        this.legalEntityReferenceData=this.chargebackService.getLegalEntityData1();
+        this.focusGroupForCB=this.chargebackService.getFocusGroupData1();
         for (let data of this.vendorEntityReferenceData) {
           this.vendorEntityDataList.push({ label: data.vendorLegacyName, value: data.vendorEntityId })
         }
-        // this.chargeBackFilters = this.chargeBackData.filter(x => x.internalCbId == internalCbId)[0];
-         this.chargebackService.getServiceTypeData(productId,vendorId).subscribe(
-          refData => {
-            let arr: any = [];
-            this.serviceTypeDataList=[];
-            this.serviceTypeReferenceData = refData;
-            for (let data of this.serviceTypeReferenceData) {
-              if(data.serviceTypeName!=null){
-              this.serviceTypeDataList.push({ label: data.serviceTypeName, value: data.serviceTypeName })
-              }
-            }  
+        for (let data of this.serviceTypeReferenceData) {
+          if(data.serviceTypeName!=null){
+          this.serviceTypeDataList.push({ label: data.serviceTypeName, value: data.serviceTypeName })
+          }
+        }  
+        for (let data of this.legalEntityReferenceData) {
+          let labelLegalEntity = data.goldnetId + " | " + data.legalEntityName;
+          this.legalEntityDataList.push({ label: labelLegalEntity, value: data.goldnetId })
+        }
+        for (let data of this.focusGroupForCB) {
+          this.focusGroupForCBList.push(data.focusGroupId)
+        } 
+
+        if(internalCbId!=null){
+          this.chargeBackFilters = this.chargeBackData.filter(x => x.internalCbId == internalCbId)[0];
+          this.chargeBackFilters.focusGroup=this.focusGroupForCBList;
+          }
+          else{
+            this.chargeBackFilters.productId = productId;
+            this.chargeBackFilters.vendorId = vendorId;
+          }
+
+          if(this.chargeBackFilters.cloneOfId!=null){
+            this.chargeBackFilters.cloneFlag = true;
+           }else{
+            this.chargeBackFilters.cloneFlag = false;
+           }
+          if(this.chargeBackFilters.overrideOffsetCostCenter==true){
+            this.chargeBackFilters.costCenter=this.chargeBackFilters.suggestedCostCenter
+          }else{
+            this.chargeBackFilters.costCenter=this.chargeBackFilters.suggestedCostCenterDefault
+          }
+
+       },
+       error => {
+       });
+
+    //  this.chargebackService.getVendorEntityData(productId).subscribe(
+    //   refData => {
+    //     let arr: any = [];  
+    //     this.vendorEntityDataList=[];
+    //     this.serviceTypeDataList=[];
+    //     this.vendorEntityReferenceData = refData;  
+    //     for (let data of this.vendorEntityReferenceData) {
+    //       this.vendorEntityDataList.push({ label: data.vendorLegacyName, value: data.vendorEntityId })
+    //     }
+    //     // this.chargeBackFilters = this.chargeBackData.filter(x => x.internalCbId == internalCbId)[0];
+    //      this.chargebackService.getServiceTypeData(productId,vendorId).subscribe(
+    //       refData => {
+    //         let arr: any = [];
+    //         this.serviceTypeDataList=[];
+    //         this.serviceTypeReferenceData = refData;
+    //         for (let data of this.serviceTypeReferenceData) {
+    //           if(data.serviceTypeName!=null){
+    //           this.serviceTypeDataList.push({ label: data.serviceTypeName, value: data.serviceTypeName })
+    //           }
+    //         }  
             
 
-            this.legalEntityReferenceData="";
-            this.legalEntityDataList=[];
-            this.chargebackService.getLegalEntityData(vscId).subscribe(
-              refData => {
-                let arr: any = [];          
-                this.legalEntityReferenceData = refData;                 
-                for (let data of this.legalEntityReferenceData) {
-                  let labelLegalEntity = data.goldnetId + " | " + data.legalEntityName;
-                  this.legalEntityDataList.push({ label: labelLegalEntity, value: data.goldnetId })
-                }
-              
-                this.chargebackService.getFocusGroupDataId(internalCbId).subscribe(
-                  refData => {
-                    let arr: any = [];          
-                    focusGroupForCB = refData;
-                    // this.focusGroupDataList.push({ label: "Select", value: "Select" })
-            
-                    for (let data of focusGroupForCB) {
-                      focusGroupForCBList.push(data.focusGroupId)
-                    }                 
+    //         this.legalEntityReferenceData="";
+    //         this.legalEntityDataList=[];
+    //         this.chargebackService.getLegalEntityData(vscId).subscribe(
+    //           refData => {
+    //             let arr: any = [];          
+    //             this.legalEntityReferenceData = refData;                 
+    //             for (let data of this.legalEntityReferenceData) {
+    //               let labelLegalEntity = data.goldnetId + " | " + data.legalEntityName;
+    //               this.legalEntityDataList.push({ label: labelLegalEntity, value: data.goldnetId })
+    //             }
+    //             this.focusGroupForCB="";
+    //             this.focusGroupForCBList=[];
+    //             this.chargebackService.getFocusGroupDataId(internalCbId).subscribe(
+    //               refData => {
+    //                 let arr: any = [];          
+    //                 this.focusGroupForCB = refData;
+    //                 for (let data of this.focusGroupForCB) {
+    //                   this.focusGroupForCBList.push(data.focusGroupId)
+    //                 }                 
                     
 
-            if(internalCbId!=null){
-            this.chargeBackFilters = this.chargeBackData.filter(x => x.internalCbId == internalCbId)[0];
-            this.chargeBackFilters.focusGroup=focusGroupForCBList;
-            }
-            else{
-              this.chargeBackFilters.productId = productId;
-              this.chargeBackFilters.vendorId = vendorId;
-            }
-            //this.chargeBackFilters.focusGroup={"3","5"};
-            if(this.chargeBackFilters.cloneOfId!=null){
-              this.chargeBackFilters.cloneFlag = true;
-             }else{
-              this.chargeBackFilters.cloneFlag = false;
-             }
-            if(this.chargeBackFilters.overrideOffsetCostCenter==true){
-              this.chargeBackFilters.costCenter=this.chargeBackFilters.suggestedCostCenter
-            }else{
-              this.chargeBackFilters.costCenter=this.chargeBackFilters.suggestedCostCenterDefault
-            }
-          },
-          error => {
-          });
-             },
-          error => {
-          });
+    //         if(internalCbId!=null){
+    //         this.chargeBackFilters = this.chargeBackData.filter(x => x.internalCbId == internalCbId)[0];
+    //         this.chargeBackFilters.focusGroup=this.focusGroupForCBList;
+    //         }
+    //         else{
+    //           this.chargeBackFilters.productId = productId;
+    //           this.chargeBackFilters.vendorId = vendorId;
+    //         }
+    //         //this.chargeBackFilters.focusGroup={"3","5"};
+    //         if(this.chargeBackFilters.cloneOfId!=null){
+    //           this.chargeBackFilters.cloneFlag = true;
+    //          }else{
+    //           this.chargeBackFilters.cloneFlag = false;
+    //          }
+    //         if(this.chargeBackFilters.overrideOffsetCostCenter==true){
+    //           this.chargeBackFilters.costCenter=this.chargeBackFilters.suggestedCostCenter
+    //         }else{
+    //           this.chargeBackFilters.costCenter=this.chargeBackFilters.suggestedCostCenterDefault
+    //         }
+    //       },
+    //       error => {
+    //       });
+    //          },
+    //       error => {
+    //       });
 
-        },
-        error => {
-        });
+    //     },
+    //     error => {
+    //     });
         
-        },
-      error => {        
+    //     },
+    //   error => {        
 
-      });
+    //   });
         
         //this.chargeBackFilters = this.chargeBackData.filter(x => x.internalCbId == internalCbId)[0];
 
