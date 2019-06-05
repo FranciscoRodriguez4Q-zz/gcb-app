@@ -394,9 +394,15 @@
         
             <ng-template pTemplate="body" let-rowData let-columns="columns">
                 <tr>
-                    <td>
+                    <!-- <td>
                         <p-tableRadioButton [value]="rowData" (click)="showSelectedData(rowData['internalCbId'],rowData['vendorId'],rowData['productId'],rowData['vendorServiceCountryId'])" ></p-tableRadioButton>
-                    </td>
+                    </td> -->
+                    <td [ngStyle]="{'width': '40px'}">
+                      <div class="justify-content-center">
+                         <a class="a-color" style="cursor:pointer;" (click)="showSelectedData(rowData['internalCbId'],rowData['vendorId'],rowData['productId'],rowData['vendorServiceCountryId'])"><i class="fa fa-pencil-square-o fa-2x" ></i></a>
+                         </div> 
+     <!--                 <p-tableRadioButton [value]="rowData" (click)="showSelectedData(rowData['vendorServiceCountryId'])" ></p-tableRadioButton>
+      -->              </td>
                     <td *ngFor="let col of columns" >
                       <div> {{rowData[col.field]}}</div>
                     </td>

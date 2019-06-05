@@ -1,15 +1,23 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, throwError } from 'rxjs';
+import { Observable, of, throwError,forkJoin } from 'rxjs';
 import { Http } from '@angular/http';
 import { HttpClient } from '@angular/common/http';
 import { HttpErrorResponse } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
+import { map,delay,catchError,tap} from 'rxjs/operators';
+
 
 @Injectable({
   providedIn: 'root'
 })
-export class ChargebackService {
+export class ChargebackService {  
+  
+  //This will store the reference data values.
+  private _vendorData:any;
+  private _serviceTypeData: any;
+  private _legalEntityData:any;
+  private _focusGroupData: any;
 
   constructor(private http: HttpClient) { }
 
@@ -101,5 +109,47 @@ public getFocusGroupDataId(cbId): Observable<Object> {
 public getCloneBillingModel(cbId): Observable<Object> {
   return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/getCloneBillingModel?cbId="+cbId);
 }
+public setDropdownData(internalCbId,vendorId,productId,vscId):Observable<any[]>{
+  let vendor= this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT+"/chargeBackVendor?productId="+productId);
+  let serviceType= this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT+ "/chargeBackServiceType?vendorId="+vendorId+"&productId="+productId);
+  let legalEntity = this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT+"/legalEntity?vscId="+vscId);
+  let focusGroup = this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT+ "/focusGroupForId?cbId="+internalCbId);
 
+  // Using forkjoin property of observable to get multiple service values based on array values.
+  return forkJoin([vendor,serviceType,legalEntity,focusGroup])
+        .pipe(
+          tap(results => this.setRefData(results)),
+          catchError(error => this.handleError(error))
+        ); 
+}
+
+private setRefData(refDataResponse:any){ 
+  this._vendorData = refDataResponse[0];
+  this._serviceTypeData = refDataResponse[1];
+  this._legalEntityData = refDataResponse[2];
+  this._focusGroupData = refDataResponse[3];
+}
+
+public getVendorData(){ 
+  return this._vendorData;
+}
+
+public getServiceTypeData1(){
+  return this._serviceTypeData;
+}
+public getLegalEntityData1(){
+ return this._legalEntityData
+}
+public getFocusGroupData1(){
+  return this._focusGroupData;
+}
+
+
+ /**
+    * Function For Error Handling.
+    */
+   private handleError(error){ 
+    console.log(error);
+   return throwError(error);
+  }
 }
