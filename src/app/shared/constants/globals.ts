@@ -11,6 +11,9 @@ export class Globals {
   public role: string = 'default';
 
   public sso: string = '999999999';
+  public firstName: string = 'Test';
+
+  public lastName: string = 'User';
   /*  constructor(@Optional() config: UserAttributes) {
      if (config) { this.role = config.role; }
    } */
