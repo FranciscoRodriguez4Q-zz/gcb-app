@@ -333,7 +333,7 @@ export class VendorServiceCountryComponent implements OnInit {
     if(this.vscDtoObj.vProductPrefix!=null && this.vscDtoObj.vProductPrefix!=""){
       vProductPrefix = this.vscDtoObj.vProductPrefix +this.delimiter;
     }
-    this.vscDtoObj.suggestedServiceType = vProductPrefix+ productData.serviceTypePrefix+this.delimiter+ this.vscDtoObj.billedFromCountryCode+this.delimiter+ this.vscDtoObj.billedToCountryCode;
+    this.vscDtoObj.suggestedServiceType = vProductPrefix+ productData.serviceTypePrefix+this.delimiter+ this.vscDtoObj.billedFromCountryCode+this.delimiter+'2'+this.delimiter+ this.vscDtoObj.billedToCountryCode;
     if(this.vscDtoObj.suggestedServiceType!=""){
       this.vscDtoObj.suggestedServiceType = this.vscDtoObj.suggestedServiceType.toUpperCase();
     }
