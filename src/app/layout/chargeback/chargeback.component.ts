@@ -458,7 +458,12 @@ export class ChargebackComponent implements OnInit {
     this.vendorEntityReferenceData="";
     this.serviceTypeDataList=[];
     this.serviceTypeReferenceData="";
+    if(internalCbId!=null && internalCbId!="0"){
     this.editFlag = true;
+    }
+    else{
+      this.editFlag = false;
+    }
     this.legalEntityReferenceData="";
     this.legalEntityDataList=[];
     this.focusGroupForCB="";
