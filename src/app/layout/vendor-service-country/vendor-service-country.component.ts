@@ -29,7 +29,7 @@ export class VendorServiceCountryComponent implements OnInit {
   @ViewChild('content1') errorMessagePopUp;
   public popupErrorMessage: any;
   closeResult: string;
-  vendorSrCountryData: any = [];
+  public vendorSrCountryData: any = [];
   vSCountryData: any = [];
   public downloadCols = [];
   public fileName : any ="VSC";
@@ -184,7 +184,10 @@ export class VendorServiceCountryComponent implements OnInit {
 
     console.log("test button click");
     if (this.validation()) {
-        this.vendorServiceCountryService.upsertVendorServiceCountry(this.vscDtoObj).subscribe(
+      this.vscDtoObj.vProductPrefix=this.vscDtoObj.vProductPrefix!=null?this.vscDtoObj.vProductPrefix.toUpperCase():null;
+      this.vscDtoObj.unspscCode=this.vscDtoObj.unspscCode!=null?this.vscDtoObj.unspscCode.toUpperCase():null;
+      this.vscDtoObj.vInvoiceDesc=this.vscDtoObj.vInvoiceDesc!=null?this.vscDtoObj.vInvoiceDesc.toUpperCase():null;
+      this.vendorServiceCountryService.upsertVendorServiceCountry(this.vscDtoObj).subscribe(
           refData => {
             this.saveMessage = refData;
             //this.errorMessage = this.saveMessage.statusMessage;
@@ -226,6 +229,12 @@ export class VendorServiceCountryComponent implements OnInit {
     }
     if (this.vscDtoObj.suggestedCostCenterDefault == "") {
       this.errorMessage = "Please enter the Suggested Cost Center";
+      return false;
+    }else{
+      this.vscDtoObj.suggestedCostCenterDefault = this.vscDtoObj.suggestedCostCenterDefault.toUpperCase();
+    }
+    if (this.vscDtoObj.billingBasis == "Select") {
+      this.errorMessage = "Please select Billing Basis";
       return false;
     }
    /*  if (this.vscDtoObj.vProductPrefix == null || this.vscDtoObj.vProductPrefix == "") {

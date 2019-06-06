@@ -25,7 +25,7 @@ export class ChargebackComponent implements OnInit {
   closeResult: string;
 
   public editFlag = false;
-public index = [];
+  public index = [];
   public expansionEventFlag = true;
   serviceTypeDataList: SelectItem[] = [];
   public serviceTypeReferenceData: any;
@@ -97,7 +97,10 @@ public index = [];
   };
   public vscDtoObj: any = {
     vendorEntityId:"Select",
-    productId: 0
+    productId: 0,
+    vendorServiceCountryId: 0,
+    serviceTypeName:"",
+    suggestedCostCenterDefault:"",
   };
 
  // public  foundInSystemId =  "19";
@@ -115,8 +118,7 @@ public index = [];
       this.chargebackService.getVSCData(vendorSrCtryId).subscribe(
         refData => {
          this.vscDtoObj = refData;
-          debugger;
-          this.showSelectedData(null,this.vscDtoObj.vendorEntityId,this.vscDtoObj.productId,this.vscDtoObj.vscId);
+         this.showSelectedData("0",this.vscDtoObj.vendorEntityId,this.vscDtoObj.productId,this.vscDtoObj.vendorServiceCountryId);
       },
       error => {
       });
@@ -489,13 +491,16 @@ public index = [];
           this.focusGroupForCBList.push(data.focusGroupId)
         } 
 
-        if(internalCbId!=null){
+        if(internalCbId!=null && internalCbId!="0"){
           this.chargeBackFilters = this.chargeBackData.filter(x => x.internalCbId == internalCbId)[0];
           this.chargeBackFilters.focusGroup=this.focusGroupForCBList;
           }
           else{
             this.chargeBackFilters.productId = productId;
             this.chargeBackFilters.vendorId = vendorId;
+            this.chargeBackFilters.suggestedCostCenterDefault = this.vscDtoObj.suggestedCostCenterDefault;
+            this.chargeBackFilters.serviceType = this.vscDtoObj.serviceTypeName;
+
           }
 
           if(this.chargeBackFilters.cloneOfId!=null){
