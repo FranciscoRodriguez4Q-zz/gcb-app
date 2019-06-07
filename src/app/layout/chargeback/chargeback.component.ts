@@ -687,6 +687,7 @@ clearAllFilters(){
     cloneOfId:"",
     cloneFlag : false
   };
+  this.legalEntityDataList=[];
   //this.cloneFlag = false;
 }
 
