@@ -218,6 +218,8 @@ export class VendorServiceCountryComponent implements OnInit {
     if (this.vscDtoObj.serviceTypeName == null || this.vscDtoObj.serviceTypeName == "") {
       this.errorMessage = "Please Enter the Service Type Name";
       return false;
+    }else{
+      this.vscDtoObj.serviceTypeName = this.vscDtoObj.serviceTypeName.toUpperCase();
     }
     if (this.vscDtoObj.billedFromCountryCode == "Select") {
       this.errorMessage = "Please select the Billed From Country";

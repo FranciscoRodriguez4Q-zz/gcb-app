@@ -360,8 +360,8 @@ export class ChargebackComponent implements OnInit {
   
               if(!this.chargeBackFilters.internalCbId)
               {
-                this.chargeBackFilters.internalCbId = this.saveMessage.internalCbId;
-                this.associateBillRefToAsset();
+                //this.chargeBackFilters.internalCbId = this.saveMessage.internalCbId;
+                this.associateBillRefToAsset(this.saveMessage.internalCbId);
               }
              // this.clearAllFilters();
             },
@@ -457,6 +457,9 @@ export class ChargebackComponent implements OnInit {
   }
 
   showSelectedData(internalCbId,vendorId,productId,vscId) {   
+    debugger;
+    this.expandAllPanels();
+    window.scrollTo(0, 0);
     this.vendorEntityDataList=[];
     this.vendorEntityReferenceData="";
     this.serviceTypeDataList=[];
@@ -503,7 +506,7 @@ export class ChargebackComponent implements OnInit {
         if(internalCbId!=null && internalCbId!="0"){
           this.chargeBackFilters = this.chargeBackData.filter(x => x.internalCbId == internalCbId)[0];
           this.chargeBackFilters.focusGroup=this.focusGroupForCBList;
-          this.getLegalEntities(vscId);
+          //this.getLegalEntities(vscId);
           }
           else{
             this.chargeBackFilters.productId = productId;
@@ -723,10 +726,10 @@ checkBillRefIDTokensAssociated() : boolean {
 
 
 
-associateBillRefToAsset(){
+associateBillRefToAsset(internalCbId){
 
   this.chargebackService.associateBillReftoAsset(this.chargeBackFilters.billroutingId,
-    this.chargeBackFilters.internalCbId, this.regKey).subscribe(
+    internalCbId, this.regKey).subscribe(
     refData => {
       let response = refData;
       let respArray = [];
