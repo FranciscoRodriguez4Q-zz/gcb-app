@@ -122,6 +122,9 @@ export class ChargebackComponent implements OnInit {
       },
       error => {
       });
+      this.expandAllPanels();
+      window.scrollTo(0, 0);
+
     }
 
    }
@@ -260,7 +263,7 @@ export class ChargebackComponent implements OnInit {
           }
         }
         if(this.serviceTypeDataList.length==0){
-          alert("Add Entry in VSC first");
+          alert("No Service Type availabe for this combination. Please add one using the Create Vendor-Service-Country feature.");
         }
       },
       error => {
@@ -458,6 +461,7 @@ export class ChargebackComponent implements OnInit {
     this.vendorEntityReferenceData="";
     this.serviceTypeDataList=[];
     this.serviceTypeReferenceData="";
+    this.chargeBackFilters.vendorServiceCountryId=vscId;
     if(internalCbId!=null && internalCbId!="0"){
     this.editFlag = true;
     }
@@ -499,13 +503,13 @@ export class ChargebackComponent implements OnInit {
         if(internalCbId!=null && internalCbId!="0"){
           this.chargeBackFilters = this.chargeBackData.filter(x => x.internalCbId == internalCbId)[0];
           this.chargeBackFilters.focusGroup=this.focusGroupForCBList;
+          this.getLegalEntities(vscId);
           }
           else{
             this.chargeBackFilters.productId = productId;
             this.chargeBackFilters.vendorId = vendorId;
             this.chargeBackFilters.suggestedCostCenterDefault = this.vscDtoObj.suggestedCostCenterDefault;
             this.chargeBackFilters.serviceType = this.vscDtoObj.serviceTypeName;
-
           }
 
           if(this.chargeBackFilters.cloneOfId!=null){
