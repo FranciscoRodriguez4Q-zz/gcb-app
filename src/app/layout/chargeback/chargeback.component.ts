@@ -25,7 +25,7 @@ export class ChargebackComponent implements OnInit {
   closeResult: string;
 
   public editFlag = false;
-public index = [];
+  public index = [];
   public expansionEventFlag = true;
   serviceTypeDataList: SelectItem[] = [];
   public serviceTypeReferenceData: any;
@@ -97,7 +97,10 @@ public index = [];
   };
   public vscDtoObj: any = {
     vendorEntityId:"Select",
-    productId: 0
+    productId: 0,
+    vendorServiceCountryId: 0,
+    serviceTypeName:"",
+    suggestedCostCenterDefault:"",
   };
 
  // public  foundInSystemId =  "19";
@@ -115,11 +118,13 @@ public index = [];
       this.chargebackService.getVSCData(vendorSrCtryId).subscribe(
         refData => {
          this.vscDtoObj = refData;
-          debugger;
-          this.showSelectedData(null,this.vscDtoObj.vendorEntityId,this.vscDtoObj.productId,this.vscDtoObj.vscId);
+         this.showSelectedData("0",this.vscDtoObj.vendorEntityId,this.vscDtoObj.productId,this.vscDtoObj.vendorServiceCountryId);
       },
       error => {
       });
+      this.expandAllPanels();
+      window.scrollTo(0, 0);
+
     }
 
    }
@@ -258,7 +263,7 @@ public index = [];
           }
         }
         if(this.serviceTypeDataList.length==0){
-          alert("Add Entry in VSC first");
+          alert("No Service Type availabe for this combination. Please add one using the Create Vendor-Service-Country feature.");
         }
       },
       error => {
@@ -355,8 +360,8 @@ public index = [];
   
               if(!this.chargeBackFilters.internalCbId)
               {
-                this.chargeBackFilters.internalCbId = this.saveMessage.internalCbId;
-                this.associateBillRefToAsset();
+                //this.chargeBackFilters.internalCbId = this.saveMessage.internalCbId;
+                this.associateBillRefToAsset(this.saveMessage.internalCbId);
               }
              // this.clearAllFilters();
             },
@@ -452,11 +457,20 @@ public index = [];
   }
 
   showSelectedData(internalCbId,vendorId,productId,vscId) {   
+    debugger;
+    this.expandAllPanels();
+    window.scrollTo(0, 0);
     this.vendorEntityDataList=[];
     this.vendorEntityReferenceData="";
     this.serviceTypeDataList=[];
     this.serviceTypeReferenceData="";
+    this.chargeBackFilters.vendorServiceCountryId=vscId;
+    if(internalCbId!=null && internalCbId!="0"){
     this.editFlag = true;
+    }
+    else{
+      this.editFlag = false;
+    }
     this.legalEntityReferenceData="";
     this.legalEntityDataList=[];
     this.focusGroupForCB="";
@@ -489,13 +503,16 @@ public index = [];
           this.focusGroupForCBList.push(data.focusGroupId)
         } 
 
-        if(internalCbId!=null){
+        if(internalCbId!=null && internalCbId!="0"){
           this.chargeBackFilters = this.chargeBackData.filter(x => x.internalCbId == internalCbId)[0];
           this.chargeBackFilters.focusGroup=this.focusGroupForCBList;
+          //this.getLegalEntities(vscId);
           }
           else{
             this.chargeBackFilters.productId = productId;
             this.chargeBackFilters.vendorId = vendorId;
+            this.chargeBackFilters.suggestedCostCenterDefault = this.vscDtoObj.suggestedCostCenterDefault;
+            this.chargeBackFilters.serviceType = this.vscDtoObj.serviceTypeName;
           }
 
           if(this.chargeBackFilters.cloneOfId!=null){
@@ -670,6 +687,7 @@ clearAllFilters(){
     cloneOfId:"",
     cloneFlag : false
   };
+  this.legalEntityDataList=[];
   //this.cloneFlag = false;
 }
 
@@ -709,10 +727,10 @@ checkBillRefIDTokensAssociated() : boolean {
 
 
 
-associateBillRefToAsset(){
+associateBillRefToAsset(internalCbId){
 
   this.chargebackService.associateBillReftoAsset(this.chargeBackFilters.billroutingId,
-    this.chargeBackFilters.internalCbId, this.regKey).subscribe(
+    internalCbId, this.regKey).subscribe(
     refData => {
       let response = refData;
       let respArray = [];
