@@ -16,7 +16,7 @@ export class AuthGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
 
-  const cookieExists: boolean = this.cookieService.check('mod_auth_openidc');
+  const cookieExists: boolean = this.cookieService.check('mod_auth_openidc_session');
 
 
         if ( cookieExists ) {
