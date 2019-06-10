@@ -50,11 +50,11 @@ rltAndLtr() {
 
 onLoggedout() {
  //   localStorage.removeItem('isLoggedin');
- this.cookieExists = this.cookieService.check('mod_auth_openidc');
+ this.cookieExists = this.cookieService.check('mod_auth_openidc_session');
 
  if( this.cookieExists )
   {
-       this.cookieService.delete('mod_auth_openidc');
+       this.cookieService.delete('mod_auth_openidc_session');
 
        //cookieService.deleteAll();
 }
