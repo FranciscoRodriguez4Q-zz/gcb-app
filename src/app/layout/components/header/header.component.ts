@@ -60,7 +60,7 @@ onLoggedout() {
 }
 
  console.log("calling this ");
-this.http.get("https://ssologin.ssogen2.corporate.ge.com/logoff/logoff.jsp?referrer=http://stage-gcb.corporate.ge.com")
+this.http.get("https://ssologin.ssogen2.corporate.ge.com/logoff/logoff.jsp")
 .subscribe(
     refData => {
     
