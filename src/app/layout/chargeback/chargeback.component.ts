@@ -53,6 +53,12 @@ export class ChargebackComponent implements OnInit {
   public costCenter:"";
   //public cloneFlag : boolean = false;
   chargeBackData: any = [];
+  public chargeBackList: any = {
+    vendorList : [],
+    serviceTypeList: [],
+	  legalEntityLst: [],
+	  focusGroupLst: []
+  }
   public chargeBackFilters: any = {
     vendorBanId:"",
     vendorServiceCountryId:0,
@@ -457,7 +463,7 @@ export class ChargebackComponent implements OnInit {
   }
 
   showSelectedData(internalCbId,vendorId,productId,vscId) {   
-    debugger;
+    //debugger;
     this.expandAllPanels();
     window.scrollTo(0, 0);
     this.vendorEntityDataList=[];
@@ -483,10 +489,11 @@ export class ChargebackComponent implements OnInit {
 
       this.chargebackService.setDropdownData(internalCbId,vendorId,productId,vscId).subscribe(
        refData => {
-        this.vendorEntityReferenceData=this.chargebackService.getVendorData();
-        this.serviceTypeReferenceData=this.chargebackService.getServiceTypeData1();
-        this.legalEntityReferenceData=this.chargebackService.getLegalEntityData1();
-        this.focusGroupForCB=this.chargebackService.getFocusGroupData1();
+        //this.chargeBackList = refData;
+        this.vendorEntityReferenceData = this.chargebackService.getVendorData();
+        this.serviceTypeReferenceData = this.chargebackService.getServiceTypeData1();
+        this.legalEntityReferenceData = this.chargebackService.getLegalEntityData1();
+        this.focusGroupForCB = this.chargebackService.getFocusGroupData1();
         for (let data of this.vendorEntityReferenceData) {
           this.vendorEntityDataList.push({ label: data.vendorLegacyName, value: data.vendorEntityId })
         }
@@ -826,5 +833,13 @@ cloneRecord(){
     this.billingModelDataList = this.mainBillingModelDataList;
   }
 }
+
+  checkServiceType(){
+    console.log("test");
+    if(this.chargeBackFilters.serviceType=="" || this.chargeBackFilters.serviceType=="Select"){
+      this.popupErrorMessage = "Please select the Service Type first.";
+      this.open(this.errorMessagePopUp);
+    }
+  }
 }
 

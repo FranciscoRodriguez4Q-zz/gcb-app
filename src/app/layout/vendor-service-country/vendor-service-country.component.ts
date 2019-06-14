@@ -107,7 +107,6 @@ export class VendorServiceCountryComponent implements OnInit {
       },
       error => {
       });
-      this.getVSCdwData();
   }
   getAllCountryData(){
     this.vendorServiceCountryService.getAllCountryData().subscribe(
@@ -176,6 +175,7 @@ export class VendorServiceCountryComponent implements OnInit {
     this.editFlag = true;
     this.vscDtoObj = this.vendorSrCountryData.filter(x => x.vendorServiceCountryId == vendorSrCtryId)[0];
     this.getSuggestedServiceType();
+    window.scrollTo(0, 0);
   }
 
   upsertVendorServiceCountry()
@@ -326,16 +326,6 @@ export class VendorServiceCountryComponent implements OnInit {
     } else {
       return `with: ${reason}`;
     }
-  }
-
-  getVSCdwData(){
-    
-    this.vendorServiceCountryService.getVSCountryDWData(this.downloadCols).subscribe(
-      refData => {
-        this.vSCountryData = refData;
-      },
-      error => {
-      });
   }
 
   getSuggestedServiceType(){

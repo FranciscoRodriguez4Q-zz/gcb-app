@@ -2,6 +2,7 @@ import { Observable} from 'rxjs';
 import { Inject,Injectable } from '@angular/core';
 import * as XLSX from 'xlsx';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 
 //import { Angular5Csv } from 'angular5-csv/Angular5-csv';
  
@@ -135,5 +136,8 @@ export class FileDownloadService {
     a.remove();
   }
 
+  public getVSCountryDWData(colsHeader): Observable<Object> {
+    return this.http.post(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/getVSCountryDWData", '');
 
+  }
 }

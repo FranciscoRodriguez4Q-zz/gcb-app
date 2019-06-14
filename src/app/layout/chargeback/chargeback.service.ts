@@ -123,6 +123,10 @@ public setDropdownData(internalCbId,vendorId,productId,vscId):Observable<any[]>{
         ); 
 }
 
+public getSelectedChargeBackData(internalCbId,vendorId,productId,vscId):Observable<Object>{
+  return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/getChargeBackData?cbId="+internalCbId+"&vendorId="+vendorId+"&productId="+productId+"&vscId="+vscId);
+}
+
 private setRefData(refDataResponse:any){ 
   this._vendorData = refDataResponse[0];
   this._serviceTypeData = refDataResponse[1];

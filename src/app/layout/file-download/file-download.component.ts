@@ -49,21 +49,38 @@ export class FileDownloadComponent implements OnInit {
   }
 
   downloadReport() {
-    
-    if(this.nameCheck=='ServiceType'){
-      for (let i = 0; i < this.dwnData.length; i++) {
-        delete this.dwnData[i].productId;
-        delete this.dwnData[i].serviceTypeId;
-        delete this.dwnData[i].countryCode;
-        delete this.dwnData[i].suggestedServiceType;
-        delete this.dwnData[i].serviceTypeMessage;
-        delete this.dwnData[i].useSuggested;
-      }
-      this.dwnAction.emit("download");
+    if(this.nameCheck=='VSC'){
+      this.getVSCdwData();
+    } 
+    else{
+      this.downloadFile();
     }
-    /* if(this.nameCheck=='VSC'){
-      setTimeout(() => {this.getVSCdwData()},3000);
-    } */
+  }
+
+  processExcelFile() {
+    this.fileDownloadService.exportAsExcelFile(this.dwnData, this.fileName,this.nameCheck,this.colsHeader);
+  }
+
+  procesTextFile(delimt: string) {
+    this.fileDownloadService.procesTextFile(delimt, this.dwnData, this.fileName,this.nameCheck,this.colsHeader);
+  }
+
+  processCSVFile() {
+    this.fileDownloadService.processCSVFile(this.dwnData, this.fileName,this.nameCheck,this.colsHeader);
+  }
+
+   getVSCdwData(){
+    
+      this.fileDownloadService.getVSCountryDWData(this.colsHeader).subscribe(
+        refData => {
+          this.dwnData = refData;
+          this.downloadFile();
+        },
+        error => {
+        });
+  } 
+  
+  downloadFile(){
     switch (this.defaultOption) {
       case AppConstants.CASE_DOWNLOAD_CSV:
         this.processCSVFile();
@@ -82,26 +99,4 @@ export class FileDownloadComponent implements OnInit {
     }
   }
 
-  processExcelFile() {
-    this.fileDownloadService.exportAsExcelFile(this.dwnData, this.fileName,this.nameCheck,this.colsHeader);
-  }
-
-  procesTextFile(delimt: string) {
-    this.fileDownloadService.procesTextFile(delimt, this.dwnData, this.fileName,this.nameCheck,this.colsHeader);
-  }
-
-  processCSVFile() {
-    this.fileDownloadService.processCSVFile(this.dwnData, this.fileName,this.nameCheck,this.colsHeader);
-  }
-
-  /* getVSCdwData(){
-    
-      this.fileDownloadService.getVSCountryDWData(this.colsHeader).subscribe(
-        refData => {
-          this.dwnData = refData;
-        },
-        error => {
-        });
-  } */
-  
 }
