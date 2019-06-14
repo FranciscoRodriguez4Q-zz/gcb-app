@@ -194,6 +194,7 @@ export class VendorServiceCountryComponent implements OnInit {
             this.popupErrorMessage =  this.saveMessage.statusMessage;
             this.open(this.errorMessagePopUp);
             this.getAllVendorServiceCountry();
+            this.clearAll();
           },
           error => {
           });
@@ -255,6 +256,29 @@ export class VendorServiceCountryComponent implements OnInit {
   }
 
   clearAll()
+  {
+    this.editFlag = false;
+    this.vscDtoObj = {
+      vendorServiceCountryId: "",
+      vendorEntityId:"Select",
+      serviceTypeId:0,
+      billedFromCountryCode: "Select",
+      servicedFromCountryCode: "Select",
+      billedToCountryCode: "Select",
+      suggestedCostCenterDefault: "",
+      productId: 0,
+      consumedInCountryCode: "Select",
+      billingBasis: "Select",
+      vProductPrefix:"",
+      unspscCode:"",
+      vInvoiceDesc:"",
+      suggestedServiceType:"",
+      useSuggested: true
+    };
+    //this.popupErrorMessage = "";
+    //this.errorMessage = "";
+  }
+  cancel()
   {
     this.editFlag = false;
     this.vscDtoObj = {

@@ -58,7 +58,7 @@
                         <p-dropdown [options]="productDataList"   placeholder="Select" 
                          [(ngModel)]="chargeBackFilters.productId" 
                         (onChange)="getVendorLst($event)"
-                      [autoWidth]="true" [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
+                      [autoWidth]="true" [style]="{'width': '130%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
                         [filter]="true" scrollHeight="150px">
                         </p-dropdown>
                     </div>
@@ -70,7 +70,7 @@
                       placeholder="Select"
                       [(ngModel)]="chargeBackFilters.vendorId"
                        [autoWidth]="true" (onChange)="getServiceType($event)"
-                       [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
+                       [style]="{'width': '130%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
                       [filter]="true" scrollHeight="150px">
                       </p-dropdown>
                   </div>
@@ -126,7 +126,7 @@
                         <p-dropdown (onClick)="checkServiceType()"
                         [options]="legalEntityDataList" 
                          [(ngModel)]="chargeBackFilters.goldnetId" 
-                        placeholder="Select" [autoWidth]="true" [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
+                        placeholder="Select" [autoWidth]="true" [style]="{'width': '130%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
                          [filter]="true" scrollHeight="150px">
                          </p-dropdown>
                     </div>
@@ -347,7 +347,7 @@
                   <div class="ui-g">
                       <div class="ui-g-12" style="text-align:right">
                           <button class="ge-button -fill--solid -size--small" (click)="upsertChargeBack()">Submit</button>
-                          <button class="ge-button -fill--solid -size--small" (click)="clearAllFilters()">Cancel</button>
+                          <button class="ge-button -fill--solid -size--small" (click)="cancel()">Cancel</button>
                       </div>                 
                   </div>
                   <div class="ui-g">

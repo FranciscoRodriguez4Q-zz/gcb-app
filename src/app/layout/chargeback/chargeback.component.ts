@@ -143,9 +143,9 @@ export class ChargebackComponent implements OnInit {
     { field: 'serviceType', header: 'Service Type', width: '10%' },
     { field: 'suggestedCostCenterDefault', header: 'Suggested Cost Center', width: '10%' },
     { field: 'createdBy', header: 'Created By', width: '10%' },
-    { field: 'createdDate', header: 'Created Date', width: '10%' },
+    { field: 'createdDateStr', header: 'Created Date', width: '10%' },
     { field: 'updatedBy', header: 'Updated By', width: '10%' },
-    { field: 'lastUpdatedDate', header: 'Updated Date', width: '10%' },
+    { field: 'lastUpdatedDateStr', header: 'Updated Date', width: '10%' },
 
   ];
 
@@ -369,7 +369,7 @@ export class ChargebackComponent implements OnInit {
                 //this.chargeBackFilters.internalCbId = this.saveMessage.internalCbId;
                 this.associateBillRefToAsset(this.saveMessage.internalCbId);
               }
-             // this.clearAllFilters();
+             this.clearAllFilters();
             },
             error => {
             });
@@ -644,7 +644,7 @@ generateBillRefId() {
 }
  
  
-clearAllFilters(){
+cancel(){
   this.editFlag = false;
   this.popupErrorMessage = "";
   this.errorMessage = "";
@@ -697,6 +697,61 @@ clearAllFilters(){
   this.legalEntityDataList=[];
   //this.cloneFlag = false;
 }
+
+clearAllFilters(){
+  this.editFlag = false;
+ // this.popupErrorMessage = "";
+ // this.errorMessage = "";
+  if(!this.chargeBackFilters.internalCbId)
+  {    
+    if(this.chargeBackFilters.billroutingId)
+    this.deleteBillRefIDWithNoTokens(this.chargeBackFilters.billroutingId);
+  }
+  this.chargeBackFilters= {
+    vendorBanId:"",
+    vendorServiceCountryId:0,
+    vendorName: "Select",
+    productName: "Select",
+    productId:0,
+    vendorId:0,
+    serviceType: "Select",
+    suggestedCostCenter: "",
+    overrideOffsetCostCenter: false,
+    // serviceTypeName: "",
+    goldnetId:0,
+    focusGroup:"",
+    division:false,
+    billroutingId:"",
+    billingModel:"",
+    mode:"TESTING",
+    currencyCode:"",
+    directOffsetBuc:"",
+    indirectOffsetBuc:"",
+    vendorCode:"",
+    shipFromAddress:"",
+    shipToCountry:"",
+    shipToProvince:"",
+    shipToCity:"",
+    shipToState:"",
+    shipToZip4:"",
+    shpToZip5:"",
+    vendorContact:"",
+    ouName:"",
+    custRegNumber:"",
+    globalSupplierNumber:"",
+    siteNumber:"",
+    sssProject:"",
+    sssTask:"",
+    awtGroupName:"",
+    vatAwtGroupName:"",
+    paymentTerms:"",
+    cloneOfId:"",
+    cloneFlag : false
+  };
+  this.legalEntityDataList=[];
+  //this.cloneFlag = false;
+}
+
 
 checkBillRefIDTokensAssociated() : boolean {
   this.chargebackService.getBillRefIDTokensAssociated(this.chargeBackFilters.billroutingId,
