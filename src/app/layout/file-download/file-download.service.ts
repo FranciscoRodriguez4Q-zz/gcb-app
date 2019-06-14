@@ -24,7 +24,7 @@ export class FileDownloadService {
   public exportAsExcelFile(json: any[], excelFileName: string,fileNameCheck:string,colsHeader: any[]): void {
     const workbook: XLSX.WorkBook = { Sheets: {}, SheetNames: [] };
     let worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(json);
-    if(fileNameCheck==="VSC")
+    if(fileNameCheck==="VSC" || fileNameCheck==="CB" )
     { //Custom Headers for ESB download Report
       XLSX.utils.sheet_add_json(worksheet, [], { header:colsHeader} ); 
     }
@@ -45,7 +45,7 @@ export class FileDownloadService {
     this.delimitArray = dwnData;
     this.tempData = [];
     var i = 0; var j = 0;
-    if(fileNameCheck==="VSC")
+    if(fileNameCheck==="VSC" || fileNameCheck==="CB" )
     { //Custom Headers for ServiceType download Report
       let colNm = [];
       debugger;
@@ -117,7 +117,7 @@ export class FileDownloadService {
    // new Angular5Csv(this.tempData, fileName, { headers: (header) });
    const replacer = (key, value) => value === null ? '' : value;
    let csv = dwnData.map(row => header.map(fieldName => JSON.stringify(row[fieldName], replacer)).join(','));
-   if(fileNameCheck==="VSC")
+   if(fileNameCheck==="VSC" || fileNameCheck==="CB")
    { //Custom Headers for ESB download Report
     csv.unshift(colsHeader.join(','));
     }else{
@@ -130,7 +130,7 @@ export class FileDownloadService {
     url = window.URL.createObjectURL(blob);
 
     a.href = url;
-    a.download = "myFile.csv";
+    a.download = fileName +".csv";
     a.click();
     window.URL.revokeObjectURL(url);
     a.remove();
@@ -140,4 +140,8 @@ export class FileDownloadService {
     return this.http.post(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/getVSCountryDWData", '');
 
   }
+  public getCBData(colsHeader): Observable<Object> {
+    return this.http.post(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/getCBData", '');
+  }
+
 }

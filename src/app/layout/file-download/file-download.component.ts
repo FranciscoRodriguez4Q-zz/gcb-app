@@ -52,6 +52,9 @@ export class FileDownloadComponent implements OnInit {
     if(this.nameCheck=='VSC'){
       this.getVSCdwData();
     } 
+    if(this.nameCheck=='CB'){
+      this.getCBData();
+    } 
     else{
       this.downloadFile();
     }
@@ -79,7 +82,15 @@ export class FileDownloadComponent implements OnInit {
         error => {
         });
   } 
-  
+  getCBData(){
+    this.fileDownloadService.getCBData(this.colsHeader).subscribe(
+      refData => {
+        this.dwnData = refData;
+        this.downloadFile();
+      },
+      error => {
+      });
+  }
   downloadFile(){
     switch (this.defaultOption) {
       case AppConstants.CASE_DOWNLOAD_CSV:

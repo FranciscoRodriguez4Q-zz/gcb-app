@@ -108,6 +108,8 @@ export class ChargebackComponent implements OnInit {
     serviceTypeName:"",
     suggestedCostCenterDefault:"",
   };
+  public fileName : any ="CB";
+  public downloadCols = [];
 
  // public  foundInSystemId =  "19";
   //public regKey = "587b99c1-7daf-4038-8ffb-de75dd165a0c";
@@ -150,7 +152,10 @@ export class ChargebackComponent implements OnInit {
   ];
 
   ngOnInit() { 
-        
+    for (let i = 0; i < this.cols.length; i++) {
+      this.downloadCols.push(this.cols[i].header);
+      //this.downloadCols[this.cols[i].header] = "";
+    }   
     this.chargebackService.getProductData().subscribe(
           refData => {
             let arr: any = [];
@@ -372,6 +377,8 @@ export class ChargebackComponent implements OnInit {
              this.clearAllFilters();
             },
             error => {
+              this.popupErrorMessage = AppConstants.ERROR_INTERNAL_SERVER;  
+              this.open(this.errorMessagePopUp);
             });
 
         }

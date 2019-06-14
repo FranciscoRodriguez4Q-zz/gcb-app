@@ -348,6 +348,7 @@
                       <div class="ui-g-12" style="text-align:right">
                           <button class="ge-button -fill--solid -size--small" (click)="upsertChargeBack()">Submit</button>
                           <button class="ge-button -fill--solid -size--small" (click)="cancel()">Cancel</button>
+                          <app-file-download [dwnData]="chargeBackData" [colsHeader]="this.downloadCols" [fileName]="fileName"></app-file-download>
                       </div>                 
                   </div>
                   <div class="ui-g">

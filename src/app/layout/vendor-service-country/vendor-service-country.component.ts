@@ -3,6 +3,8 @@ import { SelectItem, MessageService } from 'primeng/api';
 import { VendorServiceCountryService } from './vendor-service-country.service';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import {Router} from "@angular/router";
+import { AppConstants } from '../../shared/constants/app.constants';
+
 @Component({
   selector: 'app-vendor-service-country',
   templateUrl: './vendor-service-country.component.html',
@@ -197,6 +199,8 @@ export class VendorServiceCountryComponent implements OnInit {
             this.clearAll();
           },
           error => {
+            this.popupErrorMessage = AppConstants.ERROR_INTERNAL_SERVER;  
+            this.open(this.errorMessagePopUp);
           });
       
     }
