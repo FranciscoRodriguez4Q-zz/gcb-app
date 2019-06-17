@@ -196,7 +196,9 @@ export class VendorServiceCountryComponent implements OnInit {
             this.popupErrorMessage =  this.saveMessage.statusMessage;
             this.open(this.errorMessagePopUp);
             this.getAllVendorServiceCountry();
+            if(this.saveMessage.status){ 
             this.clearAll();
+            }
           },
           error => {
             this.popupErrorMessage = AppConstants.ERROR_INTERNAL_SERVER;  

@@ -369,12 +369,14 @@ export class ChargebackComponent implements OnInit {
               this.open(this.errorMessagePopUp);
               this.getChargeBackData();
   
-              if(!this.chargeBackFilters.internalCbId)
+              if(!this.chargeBackFilters.internalCbId && this.saveMessage.status)
               {
                 //this.chargeBackFilters.internalCbId = this.saveMessage.internalCbId;
                 this.associateBillRefToAsset(this.saveMessage.internalCbId);
               }
+              if(this.saveMessage.status){ 
              this.clearAllFilters();
+              }
             },
             error => {
               this.popupErrorMessage = AppConstants.ERROR_INTERNAL_SERVER;  
