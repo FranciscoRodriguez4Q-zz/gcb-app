@@ -351,8 +351,8 @@ export class ChargebackComponent implements OnInit {
           
         }
         else   if (respArray[0].message === "BillRef does not exist"){
-          this.errorMessage = "BillRouting ID does not exist. Please generate a new one ";
-          this.popupErrorMessage = "BillRouting ID does not exist. Please generate a new one ";
+          this.errorMessage = "Please Enter BUC/ADN details";
+          this.popupErrorMessage = "Please Enter BUC/ADN details";
           this.chargeBackFilters.billroutingId = "";
           this.chargeBackFilters.billroutingId = "";
           this.open(this.errorMessagePopUp);
@@ -447,7 +447,7 @@ export class ChargebackComponent implements OnInit {
       return false;
     }
     if(this.chargeBackFilters.billroutingId==""){
-      this.errorMessage = "Please Click on Generate Bill Routing ID";
+      this.errorMessage = "Please Click on Enter BUC/Adn";
       return false;
     }
     if(this.chargeBackFilters.billingModel==""){
@@ -780,8 +780,8 @@ checkBillRefIDTokensAssociated() : boolean {
         return true;
       }
       else   if (respArray[0].message === "BillRef does not exist"){
-        this.errorMessage = "BillRouting does not exist .Please generate a new one ";
-        this.popupErrorMessage = "BillRouting does not exist .Please generate a new one ";
+        this.errorMessage = "Please Enter BUC/ADN details";
+        this.popupErrorMessage = "Please Enter BUC/ADN details";
         this.chargeBackFilters.billroutingId = "";
         this.open(this.errorMessagePopUp);
         return false;
