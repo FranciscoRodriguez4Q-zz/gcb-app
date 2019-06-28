@@ -99,7 +99,10 @@ export class ChargebackComponent implements OnInit {
     paymentTerms:"",
     cloneOfId:"",
     suggestedCostCenterDefault:"",
-    cloneFlag : false
+    cloneFlag : false,
+    activeFlag:true,
+    comments:"",
+    updateFlag:false
   };
   public vscDtoObj: any = {
     vendorEntityId:"Select",
@@ -145,6 +148,8 @@ export class ChargebackComponent implements OnInit {
     { field: 'productName', header: 'Product', width: '10%' },
     { field: 'serviceType', header: 'Service Type', width: '10%' },
     { field: 'suggestedCostCenterDefault', header: 'Suggested Cost Center', width: '10%' },
+    { field: 'mode', header: 'Mode', width: '10%' },
+    { field: 'billimgModelDesc', header: 'Billing Model', width: '10%' },
     { field: 'createdBy', header: 'Created By', width: '10%' },
     { field: 'createdDateStr', header: 'Created Date', width: '10%' },
     { field: 'updatedBy', header: 'Updated By', width: '10%' },
@@ -317,8 +322,13 @@ export class ChargebackComponent implements OnInit {
     });
   }
 
+  display: boolean = false;
+  showDialog() {
+        this.display = true;
+    }
+
   expandAllPanels(){
-    this.index = [0,1,2,3,4];
+    this.index = [0,1,2,3,4,5];
     this.collapsed=false;
     this.panelExpansionFlag=false;
   }
@@ -464,6 +474,10 @@ export class ChargebackComponent implements OnInit {
       this.errorMessage = "Please Select Currency Code";
       return false;
     }
+    if(this.chargeBackFilters.comments==""){
+      this.errorMessage = "Please Enter Comments/Notes";
+      return false;
+  }
    /*  if(this.chargeBackFilters.billroutingId)
     {
    
@@ -706,7 +720,10 @@ cancel(){
     vatAwtGroupName:"",
     paymentTerms:"",
     cloneOfId:"",
-    cloneFlag : false
+    cloneFlag : false,
+    comments:"",
+    activeFlag:true,
+    updateFlag:false
   };
   this.legalEntityDataList=[];
   //this.cloneFlag = false;
@@ -760,7 +777,10 @@ clearAllFilters(){
     vatAwtGroupName:"",
     paymentTerms:"",
     cloneOfId:"",
-    cloneFlag : false
+    cloneFlag : false,
+    comments:"",
+    activeFlag:true,
+    updateFlag:false
   };
   this.legalEntityDataList=[];
   //this.cloneFlag = false;
@@ -877,6 +897,10 @@ checkCostCenter(){
   }else{
     this.chargeBackFilters.costCenter=this.chargeBackFilters.suggestedCostCenterDefault
   }
+}
+
+changeUpdateFlag(){
+  this.chargeBackFilters.updateFlag=true;
 }
 
 cloneRecord(){
