@@ -424,7 +424,9 @@
         <p class="text-center">{{popupErrorMessage}}</p>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-outline-dark" (click)="c('Save click'); ">Ok</button>
+        <button type="button" class="btn btn-outline-dark" (click)="c('Save click');cloneBillRefRec(false) " *ngIf="cloneBillRef">Yes</button>
+        <button type="button" class="btn btn-outline-dark" (click)="c('Save click');cloneBillRefRec(true) " *ngIf="cloneBillRef">No</button>
+        <button type="button" class="btn btn-outline-dark" (click)="c('Save click'); " *ngIf="!cloneBillRef">Ok</button>
     </div>
   </ng-template>
     

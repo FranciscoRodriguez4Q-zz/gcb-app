@@ -118,7 +118,8 @@ export class ChargebackComponent implements OnInit {
   public  foundInSystemId =  "11";
   public regKey = "8c8606d1-e591-435f-a435-d112ba4cd43c";
   public entityTypeID = "5";
-  
+  public cloneBillRef = false;
+
   constructor(private chargebackService: ChargebackService, private messageService: MessageService, private modalService: NgbModal,private route: ActivatedRoute) {
     if (this.route.snapshot.params['vendorSrCtryId']) {
       let vendorSrCtryId = parseInt(this.route.snapshot.paramMap.get('vendorSrCtryId'));
@@ -333,7 +334,8 @@ export class ChargebackComponent implements OnInit {
     this.msgs = [];
     console.log("test button click",this.chargeBackFilters);
     if (this.validation()) {
-      if (this.chargeBackFilters.cloneFlag && this.chargeBackFilters.cloneOfId==null){
+      debugger;
+      if (this.chargeBackFilters.cloneFlag){
         this.chargeBackFilters.cloneOfId = this.chargeBackFilters.internalCbId;
         this.chargeBackFilters.internalCbId = "";
       }
@@ -531,11 +533,11 @@ export class ChargebackComponent implements OnInit {
             this.chargeBackFilters.serviceType = this.vscDtoObj.serviceTypeName;
           }
 
-          if(this.chargeBackFilters.cloneOfId!=null){
+          /* if(this.chargeBackFilters.cloneOfId!=null){
             this.chargeBackFilters.cloneFlag = true;
            }else{
             this.chargeBackFilters.cloneFlag = false;
-           }
+           } */
           if(this.chargeBackFilters.overrideOffsetCostCenter==true){
             this.chargeBackFilters.costCenter=this.chargeBackFilters.suggestedCostCenter
           }else{
@@ -643,6 +645,9 @@ generateBillRefId() {
       }
      else if (respArray[0].BillRefID) {
         this.chargeBackFilters.billroutingId = respArray[0].BillRefID;
+        if(this.cloneBillRef){
+          this.cloneBillRef = false;
+        }
         this.editBillRef();
       } 
     },
@@ -879,6 +884,7 @@ cloneRecord(){
     console.log("Clone flag is "+this.chargeBackFilters.cloneFlag);
      this.billingModelDataList =[];
     let cbId = this.chargeBackFilters.internalCbId;
+    this.cloneBillRef = true;
     this.chargebackService.getCloneBillingModel(cbId).subscribe(
       refData => {
         debugger;
@@ -893,8 +899,11 @@ cloneRecord(){
       error => {
       });
       this.chargeBackFilters.mode = "TESTING";
+      this.popupErrorMessage = "Do you want to use the same buc/adn details for the Clone?";
+      this.open(this.errorMessagePopUp);
   }else{
     this.billingModelDataList = this.mainBillingModelDataList;
+    this.cloneBillRef = false;
   }
 }
 
@@ -904,6 +913,46 @@ cloneRecord(){
       this.popupErrorMessage = "Please select the Service Type first.";
       this.open(this.errorMessagePopUp);
     }
+  }
+
+  cloneBillRefRec(flag){
+    this.cloneBillRef = flag;
+    debugger;
+    if(flag){
+      this.chargeBackFilters.billroutingId="";
+      this.generateBillRefId();
+    }
+    else{
+      this.duplicateBillRef();
+      //this.upsertChargeBack();
+    }
+  }
+  
+  duplicateBillRef(){
+    let billRef = this.chargeBackFilters.billroutingId;
+    let sso = 999999999;
+    let process = "Chargeback : CBId-"+this.chargeBackFilters.internalCbId+" BillRef-"+billRef;
+    this.chargebackService.duplicateBillRefId(billRef, this.regKey, sso,process).subscribe(
+      refData => {
+        debugger;
+        let response = refData;
+        let respArray = [];
+        respArray.push(response);
+        if (respArray[0].OUTPUT=="SUCCESS") {
+          this.chargeBackFilters.billroutingId = respArray[0].BillRefID[0];
+          this.cloneBillRef = false;
+        }
+        else{
+          this.popupErrorMessage = respArray[0].message;
+          this.open(this.errorMessagePopUp);
+        }
+      },
+      (error) => {
+        this.popupErrorMessage = error;
+        this.open(this.errorMessagePopUp);
+      });
+  
+
   }
 }
 

@@ -97,6 +97,13 @@ public getBillRefIDTokensAssociated(billRefId, regKey) : Observable<Object>{
   );
 }
 
+public duplicateBillRefId(billRefId, regKey,sso,process){
+  return this.http.get(environment.APP_BILLHUB_URL_SERVICE_ENDPOINT+
+    "/DuplicateMyBillRef?billRefId="+billRefId+"&regKey="+regKey+"&count=1"+"&requestorSSO="+sso+"&process="+process
+  
+    );
+}
+
 public getVSCData(vendorSrCtryId):Observable<Object> { 
   //let gridDataStr = JSON.stringify(gridData);
   return this.http.post(environment.APP_BASE_URL_SERVICE_ENDPOINT+
