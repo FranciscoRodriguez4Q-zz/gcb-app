@@ -32,13 +32,24 @@ body {
     text-overflow: ellipsis;
     max-width: 150px;
    }
-   .ui-table .ui-table-thead> tr> td {
+
+   .ui-datatable-data> tr> td {
+    white-space: pre-line !important;
+ 
+   text-overflow: ellipsis;
+   max-width: 150px;
+  }
+   .ui-table .ui-table-tbody> tr>  td {
     white-space: pre-line !important;
  
    text-overflow: ellipsis;
    max-width: 150px;
   }
 
+  .ui-table-resizable .ui-table-thead>tr>th, .ui-table-resizable .ui-table-tfoot>tr>td, .ui-table-resizable .ui-table-tbody>tr>td {
+    overflow: visible !important;
+    word-break: break-word !important;
+}
 /* You can add global styles to this file, and also import other style files 
 body {
   background-color: #D9E0E7 !important;

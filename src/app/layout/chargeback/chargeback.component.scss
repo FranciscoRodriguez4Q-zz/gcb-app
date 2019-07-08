@@ -36,3 +36,8 @@ input {
 {
     padding: 0px 5px 4px 2px;
     }
+
+    .ui-table-resizable .ui-table-thead>tr>th, .ui-table-resizable .ui-table-tfoot>tr>td, .ui-table-resizable .ui-table-tbody>tr>td {
+        overflow: visible !important;
+        word-break: break-word !important;
+    }

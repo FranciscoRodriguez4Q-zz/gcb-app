@@ -377,18 +377,19 @@
       <div class="ui-g">
         <div class="ui-g-12">
          <p-table #tt [columns]="cols" [value]="chargeBackData"  
-         [style]="{'margin-top':'2px','width':'100%'}" [rows]="10" [paginator]="true"
+         [scrollable]="true" [resizableColumns]="true" [reorderableColumns]="true"
+         [style]="{'margin-top':'2px','width':'1300px'}" [rows]="10" [paginator]="true"
           [pageLinks]="3" [responsive]="true">
             <ng-template pTemplate="header" let-columns>
                 <tr>
-                  <th [ngStyle]="{'width': '5%'}">Modify</th>
-                    <th *ngFor="let col of columns" [pSortableColumn]="col.field" [ngStyle]="{'width': col.width}">
+                  <th [ngStyle]="{'width': '65px'}">Modify</th>
+                    <th *ngFor="let col of columns" [pSortableColumn]="col.field" [ngStyle]="{'width': '130px'}">
                         {{col.header}}
                         <p-sortIcon [field]="col.field"></p-sortIcon>
                     </th>
                 </tr>
                 <tr>
-                        <th></th>
+                        <th ></th>
                          <th *ngFor="let col of columns" [ngSwitch]="col.field">
                              <input [ngStyle]="{'width': '99%'}" *ngSwitchCase="col.field" pInputText type="text" (input)="tt.filter($event.target.value, col.field, 'contains')">
                          </th>
@@ -412,14 +413,14 @@
                     <!-- <td>
                         <p-tableRadioButton [value]="rowData" (click)="showSelectedData(rowData['internalCbId'],rowData['vendorId'],rowData['productId'],rowData['vendorServiceCountryId'])" ></p-tableRadioButton>
                     </td> -->
-                    <td [ngStyle]="{'width': '40px'}">
+                    <td [ngStyle]="{'width': '65px'}">
                       <div class="justify-content-center">
                          <a class="a-color" style="cursor:pointer;" (click)="showSelectedData(rowData['internalCbId'],rowData['vendorId'],rowData['productId'],rowData['vendorServiceCountryId'])"><i class="fa fa-pencil-square-o fa-2x" ></i></a>
                          </div> 
      <!--                 <p-tableRadioButton [value]="rowData" (click)="showSelectedData(rowData['vendorServiceCountryId'])" ></p-tableRadioButton>
       -->              </td>
-                    <td *ngFor="let col of columns" >
-                      <div> {{rowData[col.field]}}</div>
+                    <td *ngFor="let col of columns" [ngStyle]="{'width': '130px'}">
+                      <div > {{rowData[col.field]}}</div>
                     </td>
                 </tr>
             </ng-template>
