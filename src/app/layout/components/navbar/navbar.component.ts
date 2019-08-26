@@ -14,15 +14,16 @@ export class NavbarComponent implements OnInit {
   ngOnInit() {
     this.items = [
       {
-        label: 'Home',routerLink: ['dashboard']
-        },      
-      {
-          label: 'Create/Modify',
-          items:  [
-            {label: 'Chargeback',  routerLink: ['Chargeback']},
-/*             {label: 'Service Type', routerLink: ['ServiceType']}, 
- */            {label: 'Vendor Service Country',  routerLink: ['VendorServiceCountry']},
-       ]
-}
+        label: 'Home',routerLink: ['home']
+         }  
+,      
+//       {
+//           label: 'Create/Modify',
+//           items:  [
+//              {label: 'Chargeback',  routerLink: ['Chargeback']},
+//              {label: 'Service Type', routerLink: ['ServiceType']}, 
+//              {label: 'Vendor Service Country',  routerLink: ['VendorServiceCountry']}, 
+//        ] 
+// }
 ];
   }}
