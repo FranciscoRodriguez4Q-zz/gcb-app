@@ -18,20 +18,19 @@ export class HomeService {
 
     private _product:any;
     private _country: any;
+    private _vendor: any;
+    private _buyer:any;
 
   constructor(private http: HttpClient) { }
 
-  // public getTreeViewData(): Observable<Object> {
-  //  // return this.http.get("http://3.209.31.137:8081/gcbapi/getLocationTree");
-  //   return this.http.get("http://localhost:8080/gcbapi/billProcess");
-  // }
-
   public getTreeViewData():Observable<Object> { 
-    let product = this.http.get("http://localhost:8080/gcbapi/productTree");
-    let country = this.http.get("http://localhost:8080/gcbapi/locationTree");
+    let product = this.http.get("http://localhost:8080/productTree");
+    let country = this.http.get("http://localhost:8080/locationTree");
+    let vendor = this.http.get("http://localhost:8080/vendorTree");
+    let buyer = this.http.get("http://localhost:8080/buyerTree");
     
     // Using forkjoin property of observable to get multiple service values based on array values.
-    return forkJoin([product,country])
+    return forkJoin([product,country,vendor,buyer])
           .pipe(
             tap(results => this.setTreeViewData(results)),
             catchError(error => this.handleError(error))
@@ -41,6 +40,8 @@ export class HomeService {
 private setTreeViewData(getTreeViewData:any){ 
   this._product = getTreeViewData[0];
   this._country = getTreeViewData[1];
+  this._country = getTreeViewData[2];
+  this._buyer = getTreeViewData[3];
 }
 
 

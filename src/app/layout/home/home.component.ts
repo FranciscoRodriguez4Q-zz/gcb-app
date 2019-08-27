@@ -44,7 +44,26 @@ data:any;
             "collapsedIcon": "fa fa-folder",
             "children": this.data[1].children
         
-      }]
+      },
+      {
+            
+        "label": "Vendor",
+        "data": "Vendor",
+        "expandedIcon": "fa fa-folder-open",
+        "collapsedIcon": "fa fa-folder",
+        "children": this.data[2].children
+    
+     },
+     {
+           
+       "label": "Buyer",
+       "data": "Buyer",
+       "expandedIcon": "fa fa-folder-open",
+       "collapsedIcon": "fa fa-folder",
+       "children": this.data[3].children
+   
+    }
+    ]
    });
 }
 
