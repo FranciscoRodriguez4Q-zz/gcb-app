@@ -3,22 +3,6 @@
         <p-tree [value]="treeData" [filter]="true"></p-tree>
     </div>
       <div class="ui-g-8">
-  <p-tabView>
-  <p-tabPanel header="Product">
-     Content 1
-  </p-tabPanel>
-  <p-tabPanel header="Service Type">
-      Content 2
-  </p-tabPanel>
-  <p-tabPanel header="Vendor LE">
-      Content 3
-  </p-tabPanel>
-  <p-tabPanel header="Vendor Config">
-      Content 4
-  </p-tabPanel>
-  <p-tabPanel header="BAN">
-      Content 5
-  </p-tabPanel>
-  </p-tabView>
-       </div>
+            <p-tabMenu [model]="menuItems"></p-tabMenu>
+            <router-outlet   ></router-outlet></div>
     </div>

@@ -19,6 +19,7 @@ export class HomeComponent implements OnInit {
   files: any ={
 };
 data:any;
+menuItems:any;
 
   constructor(private homeService: HomeService) { }
 
@@ -65,6 +66,15 @@ data:any;
     }
     ]
    });
+
+   this.menuItems = [
+    {label: 'Product',routerLink: ['Product']},
+    {label: 'Service Type'},
+    {label: 'Vendor LE'},
+    {label: 'Vendor Config'},
+    {label: 'BAN'}
+];
+
 }
 
 

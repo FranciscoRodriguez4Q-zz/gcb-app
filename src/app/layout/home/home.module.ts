@@ -7,11 +7,13 @@ import { TreeModule } from 'primeng/primeng';
 import { HomeService } from './home.service';
 import { HttpClientModule } from '@angular/common/http';
 import {TabViewModule} from 'primeng/tabview';
+import {TabMenuModule} from 'primeng/tabmenu';
+
 
 
 @NgModule({
 declarations :[ HomeComponent],
-imports : [FormsModule, HomeRoutingModule,PrimeModule,TreeModule,TabViewModule ]
+imports : [FormsModule, HomeRoutingModule,PrimeModule,TreeModule,TabViewModule,TabMenuModule ]
 })
 export class HomeModule
 {}
