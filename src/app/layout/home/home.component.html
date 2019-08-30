@@ -1,8 +1,19 @@
-<div class="ui-g">
-  <div class="ui-g-4">
-        <p-tree [value]="treeData" [filter]="true"></p-tree>
+
+    <div class="p-grid">
+        <div class="p-col-2.5">
+            <div class="p-col" style="margin-top: 0.5rem">
+               <p-tree [value]="treeData" [filter]="true"></p-tree>
+            </div>
+        </div>
+        <div class="p-col-9">
+          <div class="p-col">
+              <p-tabMenu [model]="menuItems"></p-tabMenu>
+          </div>                
+          <div class="p-col">
+               <router-outlet ></router-outlet>
+           </div>
+               
+        </div>
+    
     </div>
-      <div class="ui-g-8">
-            <p-tabMenu [model]="menuItems"></p-tabMenu>
-            <router-outlet   ></router-outlet></div>
-    </div>
+    

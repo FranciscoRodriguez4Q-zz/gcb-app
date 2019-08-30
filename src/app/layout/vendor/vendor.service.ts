@@ -13,12 +13,21 @@ import { map,delay,catchError,tap} from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
-export class ProductService {
-  constructor(private http: HttpClient) { }
+export class VendorService {
 
-  public getBillProcessList(): Observable<Object> {
-    return this.http.get("http://localhost:8080/gcbapi/billProcess");
+  public getVendorDetails():Observable<Object> { 
+    return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT+"gcbapi/vendor/getVendor");
   }
+
+  public saveOrUpdateVendor(vendorInsertData): Observable<Object> {
+    return this.http.post(environment.APP_BASE_URL_SERVICE_ENDPOINT+"gcbapi/vendor/saveOrUpdateVendor", vendorInsertData);
+  }
+  private handleError(error){
+    return throwError(error + "UrlConstants.SERVER_ERROR");
+  }
+
+
+  constructor(private http: HttpClient) { }
 
  
 }

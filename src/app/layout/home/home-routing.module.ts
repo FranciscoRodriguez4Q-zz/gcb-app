@@ -7,7 +7,8 @@ const routes : Routes =[
         path: '', component: HomeComponent,
         children:[
             { path: '', redirectTo: 'home', pathMatch: 'full' },
-            { path: 'Product', loadChildren: '../product/product.module#ProductModule'}
+            { path: 'Product', loadChildren: '../product/product.module#ProductModule'},
+            { path: 'Vendor', loadChildren: '../vendor/vendor.module#VendorModule'} 
         ]
     }
 

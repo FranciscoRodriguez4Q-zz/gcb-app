@@ -1,0 +1,116 @@
+<!--<p>
+  Vendor works!
+</p>-->
+<div class="-font--serif">
+           <!-- <div class="card-body">
+              <div class="ui-g">
+                  <div class="ui-g-20 ui-md-6 ui-lg-8">
+                      <div class="ui-g-4">
+                           <span class="required">*</span><label class="label">Vendor Name</label>
+                      </div>
+                      <div class="ui-g-8">
+                          <input class="form-control"   placeholder="Vendor Name" [(ngModel)]="vendorInsertData.vendorLegalEntityName"/>
+                      </div>
+                  </div>
+                  <div class="ui-g-20 ui-md-6 ui-lg-8">
+                      <div class="ui-g-4">
+                        <span class="required">*</span><label class="label">Active</label>
+                      </div>
+                      <div class="ui-g-6">
+                          <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="vendorInsertData.active"></p-checkbox><label class="label"></label>
+                      </div>
+                  </div>
+            </div>
+       </div> -->
+
+       <div class="p-grid nested-grid">
+            <div class="p-col-8">
+                <div class="p-grid">
+                    <div class="p-col-3 p-align-end">
+                        <label class="label"><span class="required">*</span>Vendor Name :</label>
+                    </div>
+                    <div class="p-col-5">
+                            <input class="form-control" [(ngModel)]="vendorInsertData.vendorLegalEntityName" >
+                    </div>
+                </div>
+                <div class="p-grid">
+                    <div class="p-col-3 " >
+                        <label class="label"><span class="required">*</span>Active :</label>
+                    </div>
+                    <div class="p-col-5">
+                            <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="vendorInsertData.active"></p-checkbox><label class="label"></label>
+                    </div>
+                </div>                        
+            </div>
+        </div>
+
+  <div class="p-grid">
+    <div class="p-col-3" style="text-align:left">
+      <label class="errorMessage">{{errorMessage}}</label>
+    </div> 
+  </div>
+<div class="p-grid">
+    <div class="p-col-12" style="text-align:right">
+        <button class="ge-button -fill--solid -size--medium" (click)="upsertVendor()">Submit</button>
+        <button class="ge-button -fill--solid -size--medium" (click)="cancel()">Cancel</button>
+        <app-file-download [dwnData]="venDwnData" [colsHeader]="this.downloadCols" [fileName]="fileName"></app-file-download>
+    </div>
+  </div>
+<div *ngIf="!gridLoadFlag">
+  Loading data
+  <p-progressSpinner></p-progressSpinner>
+</div>
+
+<div class="p-grid">
+  <div class="p-col-12">
+      <p-table #tt [columns]="cols" [value]="vendorData" [scrollable]="true" [resizableColumns]="true" [reorderableColumns]="true"
+          [style]="{'margin-top':'2px','width':'1000px'}" [rows]="10" [paginator]="true" [pageLinks]="3" [responsive]="true">
+          <ng-template pTemplate="header" let-columns>
+              <tr>
+                  <th [ngStyle]="{'width': '40px'}">Modify</th>
+                  <th *ngFor="let col of columns" [pSortableColumn]="col.field" [ngStyle]="{'width': '130px'}">
+                      {{col.header}}
+                      <p-sortIcon [field]="col.field"></p-sortIcon>
+                  </th>
+              </tr>
+              <tr>
+                  <th></th>
+                  <th *ngFor="let col of columns" [ngSwitch]="col.field">
+                      <input [ngStyle]="{'width': '80%'}" *ngSwitchCase="col.field" pInputText type="text" (input)="tt.filter($event.target.value, col.field, 'contains')">
+                  </th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData let-columns="columns">
+              <tr>
+                  <td [ngStyle]="{'width': '31px'}">
+                      <div class="justify-content-center">
+                          <a class="a-color" style="cursor:pointer;" (click)="showSelectedData(rowData['vendorEntityId'],rowData['vendorLegalEntityName'],rowData['active'],rowData['updatedBy'])">
+                              <i class="fa fa-pencil-square-o fa-2x"></i>
+                          </a>
+                      </div>
+                  </td>
+                  <td *ngFor="let col of columns" [ngStyle]="{'width': '100px'}">
+                      <div> {{rowData[col.field]}}</div>
+                  </td>
+              </tr>
+          </ng-template>
+          </p-table>
+        </div>
+    </div>
+    <footer class="ge-footer"></footer>
+  </div>
+   
+  <ng-template #content1 let-c="close" let-d="dismiss">
+      <div class="modal-header">
+          <h4 class="modal-title" id="modal-basic-title">Message</h4>
+          <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+              <span aria-hidden="true">&times;</span>
+          </button>
+      </div>
+      <div class="modal-body">
+          <p class="text-center">{{errorMessage}}</p>
+      </div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-outline-dark" (click)="c('Save click'); ">Ok</button>
+      </div>
+    </ng-template>

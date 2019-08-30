@@ -8,7 +8,7 @@ const routes: Routes = [
     path: '', component: LayoutComponent,
    children: [
       { path: '', redirectTo: 'home', pathMatch: 'full' },
-      { path: 'VendorServiceCountry', loadChildren: './vendor-service-country/vendor-service-country.module#VendorServiceCountryModule'},
+      //{ path: 'VendorServiceCountry', loadChildren: './vendor-service-country/vendor-service-country.module#VendorServiceCountryModule'},
       { path: 'Chargeback', loadChildren: './chargeback/chargeback.module#ChargebackModule'},
       { path: 'dashboard', loadChildren: './dashboard/dashboard.module#DashboardModule' },
       { path: 'home', loadChildren: './home/home.module#HomeModule' },

@@ -1,15 +1,21 @@
    
-   <div style="position: fixed; top:0; z-index:500; width:100%;   -webkit-box-shadow: 0px 0px 5px 0px #000000; -moz-box-shadow: 0px 0px 5px 0px #000000; box-shadow: 0px 0px 5px 0px #000000;">
+   <!-- <div style="position: fixed; top:0; z-index:500; width:100%;   -webkit-box-shadow: 0px 0px 5px 0px #000000; -moz-box-shadow: 0px 0px 5px 0px #000000; box-shadow: 0px 0px 5px 0px #000000;"> -->
 
-   <app-header></app-header>
-  <app-navbar></app-navbar>
-</div>      
+   <!-- <app-header></app-header> -->
+  <!-- <app-navbar></app-navbar> -->
+<!-- </div>       -->
 
-<div class="p-grid"  id= "content-body"
- >
-  
-  <router-outlet   ></router-outlet>
-    
+<div class="p-grid" >  
+  <div class="p-col-12" style="z-index:1; width:100%;">
+      <app-header></app-header>
+      <!-- <app-navbar></app-navbar> -->
+  </div>
+    <div class="p-col-12" id="content-body">
+        <router-outlet ></router-outlet>  
+    </div>
+   <div>
+      <app-footer></app-footer>
+   </div>
 </div>
-   <app-footer></app-footer> 
+    
  
