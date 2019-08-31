@@ -24,10 +24,10 @@ export class HomeService {
   constructor(private http: HttpClient) { }
 
   public getTreeViewData():Observable<Object> { 
-    let product = this.http.get("http://localhost:8080/gcbapi/productTree");
-    let country = this.http.get("http://localhost:8080/gcbapi/locationTree");
-    let vendor = this.http.get("http://localhost:8080/gcbapi/vendorTree");
-    let buyer = this.http.get("http://localhost:8080/gcbapi/buyerTree");
+    let product = this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/productTree");
+    let country = this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/locationTree");
+    let vendor = this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/vendorTree");
+    let buyer = this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/buyerTree");
     
     // Using forkjoin property of observable to get multiple service values based on array values.
     return forkJoin([product,country,vendor,buyer])

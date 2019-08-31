@@ -69,7 +69,7 @@ menuItems:any;
 
    this.menuItems = [
     {label: 'Product',routerLink: ['Product']},
-    {label: 'Service Type'},
+    {label: 'Service Type',routerLink: ['ProductServiceType']},
     {label: 'Vendor LE',routerLink:['Vendor']},
     {label: 'Vendor Config'},
     {label: 'BAN'}

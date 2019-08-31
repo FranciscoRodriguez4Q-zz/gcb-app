@@ -24,7 +24,7 @@ export class FileDownloadService {
   public exportAsExcelFile(json: any[], excelFileName: string,fileNameCheck:string,colsHeader: any[]): void {
     const workbook: XLSX.WorkBook = { Sheets: {}, SheetNames: [] };
     let worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(json);
-    if(fileNameCheck==="VSC" || fileNameCheck==="CB" )
+    if(fileNameCheck==="VSC" || fileNameCheck==="CB" || fileNameCheck==="ServiceType")
     { //Custom Headers for ESB download Report
       XLSX.utils.sheet_add_json(worksheet, [], { header:colsHeader} ); 
     }
@@ -143,5 +143,8 @@ export class FileDownloadService {
   public getCBData(colsHeader): Observable<Object> {
     return this.http.post(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/getCBData", '');
   }
-
+  public getServiceTypeData(colsHeader): Observable<Object> {
+    return this.http.post(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/dwnServiceTypesData", '');
+  }
+  
 }

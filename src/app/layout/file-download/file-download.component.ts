@@ -52,8 +52,11 @@ export class FileDownloadComponent implements OnInit {
     if(this.nameCheck=='VSC'){
       this.getVSCdwData();
     } 
-    if(this.nameCheck=='CB'){
+    else if(this.nameCheck=='CB'){
       this.getCBData();
+    } 
+    else if(this.nameCheck=='ServiceType'){
+      this.getServiceTypeData();
     } 
     else{
       this.downloadFile();
@@ -84,6 +87,16 @@ export class FileDownloadComponent implements OnInit {
   } 
   getCBData(){
     this.fileDownloadService.getCBData(this.colsHeader).subscribe(
+      refData => {
+        this.dwnData = refData;
+        this.downloadFile();
+      },
+      error => {
+      });
+  }
+
+  getServiceTypeData() {
+    this.fileDownloadService.getServiceTypeData(this.colsHeader).subscribe(
       refData => {
         this.dwnData = refData;
         this.downloadFile();
