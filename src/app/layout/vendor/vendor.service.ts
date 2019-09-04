@@ -16,11 +16,11 @@ import { map,delay,catchError,tap} from 'rxjs/operators';
 export class VendorService {
 
   public getVendorDetails():Observable<Object> { 
-    return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT+"gcbapi/vendor/getVendor");
+    return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT+"/vendor/vendor-details");
   }
 
   public saveOrUpdateVendor(vendorInsertData): Observable<Object> {
-    return this.http.post(environment.APP_BASE_URL_SERVICE_ENDPOINT+"gcbapi/vendor/saveOrUpdateVendor", vendorInsertData);
+    return this.http.post(environment.APP_BASE_URL_SERVICE_ENDPOINT+"/vendor/vendors", vendorInsertData);
   }
   private handleError(error){
     return throwError(error + "UrlConstants.SERVER_ERROR");

@@ -1,12 +1,12 @@
-// .label {
-//     padding-top: 0.25rem;
-//     padding-bottom: 0.5rem;
-//     // display: block;
-//     word-wrap: break-word;
-//     color: #63666a;
-// }
-/*
-.chkLabel {
+.label {
+    padding-top: 0.25rem;
+    padding-bottom: 0.5rem;
+    display: block;
+    word-wrap: break-word;
+    color: #63666a;
+}
+
+ .chkLabel {
     padding-top: 0.25rem;
     margin-bottom:0.25rem !important; 
     display: block;
@@ -14,11 +14,6 @@
     color: #63666a;
 }
 
-.productLabel{
-    padding-left: 0.1rem !important;
-}
-
- */
  .nested-grid{
     margin-top: 1rem;
 }
@@ -30,4 +25,10 @@
 .errorMessage{
     display: block;
     color: red !important;
+}
+
+.gridInputSize{
+    padding: 0 4px;
+    min-height: auto;
+    border-color:  #63666a;
 }
