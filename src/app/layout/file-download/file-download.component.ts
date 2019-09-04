@@ -58,6 +58,9 @@ export class FileDownloadComponent implements OnInit {
     else if(this.nameCheck=='ServiceType'){
       this.getServiceTypeData();
     } 
+    else if(this.nameCheck=='Vendor'){
+      this.getVendorData();
+    } 
     else{
       this.downloadFile();
     }
@@ -104,6 +107,17 @@ export class FileDownloadComponent implements OnInit {
       error => {
       });
   }
+
+  getVendorData() {
+    this.fileDownloadService.getVendorData(this.colsHeader).subscribe(
+      refData => {
+        this.dwnData = refData;
+        this.downloadFile();
+      },
+      error => {
+      });
+  }
+  
   downloadFile(){
     switch (this.defaultOption) {
       case AppConstants.CASE_DOWNLOAD_CSV:

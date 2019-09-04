@@ -41,7 +41,7 @@ export class VendorComponent implements OnInit {
   vendorData:any = [];
   venDwnData:any = [];
   public downloadCols = [];
-  public fileName : any ="VSC";
+  public fileName : any ="Vendor";
   public saveMessage: any = [];
   public popupErrorMessage: any;
   public editFlag = false;

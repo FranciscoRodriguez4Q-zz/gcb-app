@@ -1,36 +1,12 @@
-<!--<p>
-  Vendor works!
-</p>-->
 <div class="-font--serif">
-           <!-- <div class="card-body">
-              <div class="ui-g">
-                  <div class="ui-g-20 ui-md-6 ui-lg-8">
-                      <div class="ui-g-4">
-                           <span class="required">*</span><label class="label">Vendor Name</label>
-                      </div>
-                      <div class="ui-g-8">
-                          <input class="form-control"   placeholder="Vendor Name" [(ngModel)]="vendorInsertData.vendorLegalEntityName"/>
-                      </div>
-                  </div>
-                  <div class="ui-g-20 ui-md-6 ui-lg-8">
-                      <div class="ui-g-4">
-                        <span class="required">*</span><label class="label">Active</label>
-                      </div>
-                      <div class="ui-g-6">
-                          <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="vendorInsertData.active"></p-checkbox><label class="label"></label>
-                      </div>
-                  </div>
-            </div>
-       </div> -->
-
-       <div class="p-grid nested-grid">
+        <div class="p-grid nested-grid">
             <div class="p-col-8">
                 <div class="p-grid">
                     <div class="p-col-3 p-align-end">
                         <label class="label"><span class="required">*</span>Vendor Name :</label>
                     </div>
                     <div class="p-col-5">
-                            <input class="form-control" [(ngModel)]="vendorInsertData.vendorLegalEntityName" >
+                            <input style="width: 130%" class="form-control" [(ngModel)]="vendorInsertData.vendorLegalEntityName" >
                     </div>
                 </div>
                 <div class="p-grid">
@@ -76,7 +52,7 @@
               <tr>
                   <th></th>
                   <th *ngFor="let col of columns" [ngSwitch]="col.field">
-                      <input [ngStyle]="{'width': '80%'}" *ngSwitchCase="col.field" pInputText type="text" (input)="tt.filter($event.target.value, col.field, 'contains')">
+                      <input class="gridInputSize" [ngStyle]="{'width': '100%'}" *ngSwitchCase="col.field" pInputText type="text" (input)="tt.filter($event.target.value, col.field, 'contains')">
                   </th>
               </tr>
             </ng-template>
