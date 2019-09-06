@@ -53,6 +53,7 @@ export class ProductServiceTypeComponent implements OnInit {
 
   ];
   public editFlag = false;
+  public formMode="New";
   public errorMessage = "";
   public saveMessage: any = [];
   @ViewChild('content1') errorMessagePopUp;
@@ -266,6 +267,7 @@ export class ProductServiceTypeComponent implements OnInit {
   showSelectedData(serviceTypeId) {
     console.log("radio button click" + serviceTypeId);
     this.editFlag = true;
+    this.formMode="Modify";
     this.gcbDetailFilters = this.serviceTypes.filter(x => x.serviceTypeId == serviceTypeId)[0];
   }
 } 

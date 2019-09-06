@@ -48,6 +48,7 @@ export class VendorComponent implements OnInit {
   @ViewChild('content1') errorMessagePopUp;
   closeResult: string;
   public vendor: any = [];
+  public formMode="New";
   
   constructor(private vendorService: VendorService,private modalService: NgbModal) { }
   
@@ -89,6 +90,7 @@ export class VendorComponent implements OnInit {
   showSelectedData(vendorEntityId,vendorLegalEntityName,active,updatedBy) {  
       console.log("radio button click" + vendorEntityId);
       this.editFlag = true;
+      this.formMode="Modify";
       this.vendorInsertData = this.vendorData.filter(x => x.vendorEntityId == vendorEntityId)[0];
       this.vendor = this.vendorInsertData;
   }

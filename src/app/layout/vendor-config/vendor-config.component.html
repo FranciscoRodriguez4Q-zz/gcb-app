@@ -132,7 +132,7 @@
                <th></th>
                 <th *ngFor="let col of columns" [ngSwitch]="col.field">
                     
-                    <input [ngStyle]="{'width': '99%'}" *ngSwitchCase="col.field" pInputText type="text" (input)="tt.filter($event.target.value, col.field, 'contains')">
+                    <input class="gridInputSize" [ngStyle]="{'width': '99%'}" *ngSwitchCase="col.field" pInputText type="text" (input)="tt.filter($event.target.value, col.field, 'contains')">
     
                 </th>
             </tr> 
