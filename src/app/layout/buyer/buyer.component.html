@@ -1,0 +1,143 @@
+ <div class="-font--serif">
+        <p-fieldset>
+            <p-header>Buyer: {{formMode}}</p-header>
+              <div class="p-grid ">
+                    <div class="p-col-2 item-right">
+                      <span class="required">*</span>ERP Buyer LE Name
+                    </div>
+                    <div class="p-col-4">
+                        <input class="form-control" style="width: 100%" [(ngModel)]="buyerInsertData.erpBuyerLeName">
+                    </div>
+                    <div class="p-col-2 item-right">
+                            <span class="required">*</span>Gold ID
+                    </div>
+                    <div class="p-col-4">
+                        <input class="form-control" style="width: 35%" [(ngModel)]="buyerInsertData.goldId">
+                    </div>
+              </div>
+              <div class="p-grid">
+                     <div class="p-col-2 item-right">
+                       <span class="required">*</span>ERP OU Entity Name
+                     </div>
+                     <div class="p-col-4 item-left">
+                            <input class="form-control" style="width: 100%" [(ngModel)]="buyerInsertData.erpOuEntityName">
+                     </div>
+                     <div class="p-col-2 item-right">
+                        GoldNet Name
+                      </div>
+                      <div class="p-col-4">
+                         <input class="form-control" style="width: 60%" [(ngModel)]="buyerInsertData.goldNetName">
+                      </div>
+              </div>
+              <div class="p-grid">
+                  <div class="p-col-2 item-right">
+                    <span class="required">*</span>ERP OU Number
+                  </div>
+                  <div class="p-col-4 item-left">
+                     <input class="form-control" style="width: 100%" [(ngModel)]="buyerInsertData.erpOuNumber">
+                  </div>
+                  <div class="p-col-2 item-right">
+                     
+                   </div>
+                   <div class="p-col-4">
+                      
+                   </div>
+              </div>
+              <div class="p-grid">
+                  <div class="p-col-2 item-right">
+                    <span class="required">*</span>Buyer Info
+                  </div>
+                  <div class="p-col-4 item-left">
+                        <input class="form-control" style="width: 100%" [(ngModel)]="buyerInsertData.buyerInfo">
+                  </div>
+                  <div class="p-col-2 item-right">
+                     
+                   </div>
+                   <div class="p-col-4">
+                      
+                   </div>
+              </div>
+              <div class="p-grid">
+                  <div class="p-col-2 item-right">
+                    <span class="required">*</span>Buyer Location
+                  </div>
+                  <div class="p-col-4 item-left">
+                      <p-dropdown [options]="countryCodeReferenceDataList" [style]="{'width': '100%'}" [(ngModel)]="buyerInsertData.buyerLocationId" [filter]="true" placeholder="Select"></p-dropdown>
+                  </div>
+                  <div class="p-col-2 item-right">
+                     
+                   </div>
+                   <div class="p-col-4">
+                     
+                   </div>
+              </div>
+              
+              <div class="p-grid">
+                  <label class="errorMessage">{{errorMessage}}</label>
+              </div>
+              <div class="p-grid">
+                  <div class="p-col-12" style="text-align:right">
+                      <button class="ge-button -fill--solid" (click)="upsertBuyer()">Submit</button>
+                      <button class="ge-button -fill--solid" (click)="clearAllFilters()">Cancel</button>
+                      <app-file-download [dwnData]="buyerDwnData" [colsHeader]="this.downloadCols" [fileName]="fileName"></app-file-download>
+                  </div>
+              </div>
+  </p-fieldset>
+<!-- <div *ngIf="!gridLoadFlag">
+  Loading data
+  <p-progressSpinner></p-progressSpinner>
+</div> -->
+
+<div class="p-grid">
+  <div class="p-col-12">
+      <p-table #tt [columns]="cols" [value]="buyerData" [scrollable]="true" [resizableColumns]="true" [reorderableColumns]="true"
+          [style]="{'margin-top':'2px','width':'100%'}" [rows]="10" [paginator]="true" [pageLinks]="3" [responsive]="true">
+          <ng-template pTemplate="header" let-columns>
+              <tr>
+                  <th [ngStyle]="{'width': '63px'}">Modify</th>
+                  <th *ngFor="let col of columns" [pSortableColumn]="col.field" [ngStyle]="{'width': '130px'}">
+                      {{col.header}}
+                      <p-sortIcon [field]="col.field"></p-sortIcon>
+                  </th>
+              </tr>
+              <tr>
+                  <th></th>
+                  <th *ngFor="let col of columns" [ngSwitch]="col.field">
+                      <input class="gridInputSize" [ngStyle]="{'width': '100%'}" *ngSwitchCase="col.field" pInputText type="text" (input)="tt.filter($event.target.value, col.field, 'contains')">
+                  </th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData let-columns="columns">
+              <tr>
+                  <td [ngStyle]="{'width': '48px'}">
+                      <div class="justify-content-center">
+                           <a class="a-color" style="cursor:pointer;" (click)="showSelectedData(rowData['buyerId'])">
+                              <i class="fa fa-pencil-square-o fa-2x"></i>
+                          </a> 
+                      </div>
+                  </td>
+                  <td *ngFor="let col of columns" [ngStyle]="{'width': '100px'}">
+                      <div> {{rowData[col.field]}}</div>
+                  </td>
+              </tr>
+          </ng-template>
+          </p-table>
+        </div>
+    </div>
+    <footer class="ge-footer"></footer>
+  </div>
+   
+  <ng-template #content1 let-c="close" let-d="dismiss">
+      <div class="modal-header">
+          <h4 class="modal-title" id="modal-basic-title">Message</h4>
+          <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+              <span aria-hidden="true">&times;</span>
+          </button>
+      </div>
+      <div class="modal-body">
+          <p class="text-center">{{errorMessage}}</p>
+      </div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-outline-dark" (click)="c('Save click'); ">Ok</button>
+      </div>
+    </ng-template>
