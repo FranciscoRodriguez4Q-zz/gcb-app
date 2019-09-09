@@ -1,7 +1,7 @@
 <div class="-font--serif">
-  <div class="-font--plus-2">Service Type : Add/Modify </div>
+  <!-- <div class="-font--plus-2">Service Type : Add/Modify </div> -->
 <p-fieldset>
-    <p-header>Service Type Name {{gcbDetailFilters.serviceTypeName}}</p-header>
+    <p-header>Service Type Name : {{formMode}}</p-header>
 <div class="p-grid nested-grid">
     <div class="p-col-6">
         <div class="p-grid">
@@ -143,7 +143,7 @@
            <th></th>
             <th *ngFor="let col of columns" [ngSwitch]="col.field">
                 
-                <input [ngStyle]="{'width': '99%'}" *ngSwitchCase="col.field" pInputText type="text" (input)="tt.filter($event.target.value, col.field, 'contains')">
+                <input class="gridInputSize" [ngStyle]="{'width': '99%'}" *ngSwitchCase="col.field" pInputText type="text" (input)="tt.filter($event.target.value, col.field, 'contains')">
 
             </th>
         </tr> 

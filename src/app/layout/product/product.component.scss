@@ -1,6 +1,25 @@
 .required{
     color:red;
 }
-.nested-grid{
-    margin-top: 1rem;
+// .nested-grid{
+//     margin-top: 1rem;
+// }
+.label {
+    padding-top: 0.25rem;
+    padding-bottom: 0.5rem;
+    display: block;
+    word-wrap: break-word;
+    color: #63666a;
+}
+
+.item-right{
+    text-align:right;
+  }
+  .item-left{
+    text-align:left;
+  }
+  .gridInputSize{
+    padding: 0 4px;
+    min-height: auto;
+    border-color:  #63666a;
 }

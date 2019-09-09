@@ -10,7 +10,8 @@ const routes : Routes =[
             { path: 'Product', loadChildren: '../product/product.module#ProductModule'},
             { path: 'ProductServiceType', loadChildren: '../product-service-type/product-service-type.module#ProductServiceTypeModule'},
             { path: 'Vendor', loadChildren: '../vendor/vendor.module#VendorModule'},
-            { path: 'VendorConfig', loadChildren: '../vendor-config/vendor-config.module#VendorConfigModule'}  
+            { path: 'VendorConfig', loadChildren: '../vendor-config/vendor-config.module#VendorConfigModule'},
+            { path: 'Buyer', loadChildren: '../buyer/buyer.module#BuyerModule'}  
         ]
     }
 

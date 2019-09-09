@@ -17,8 +17,19 @@ export class ProductService {
   constructor(private http: HttpClient) { }
 
   public getBillProcessList(): Observable<Object> {
-    return this.http.get("http://localhost:8080/gcbapi/billProcess");
+    return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/billProcess");
+
   }
 
+  public getProductDetails():Observable<Object>{
+    return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/product-details");
+  }
+
+  public getProductById(productId):Observable<Object>{
+    return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/product/{"+productId+"}");
+  }
+ public upsertProduct(gcbProductFilters):Observable<Object>{
+ return this.http.post(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/product", gcbProductFilters);
+ }
  
 }

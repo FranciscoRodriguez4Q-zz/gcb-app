@@ -61,6 +61,9 @@ export class FileDownloadComponent implements OnInit {
     else if(this.nameCheck=='Vendor'){
       this.getVendorData();
     } 
+    else if(this.nameCheck=='Buyer'){
+      this.getBuyerData();
+    } 
     else{
       this.downloadFile();
     }
@@ -110,6 +113,15 @@ export class FileDownloadComponent implements OnInit {
 
   getVendorData() {
     this.fileDownloadService.getVendorData(this.colsHeader).subscribe(
+      refData => {
+        this.dwnData = refData;
+        this.downloadFile();
+      },
+      error => {
+      });
+  }
+  getBuyerData(){
+    this.fileDownloadService.getBuyerData(this.colsHeader).subscribe(
       refData => {
         this.dwnData = refData;
         this.downloadFile();

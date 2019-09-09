@@ -6,7 +6,7 @@
     color: #63666a;
 }
 
-.chkLabel {
+ .chkLabel {
     padding-top: 0.25rem;
     margin-bottom:0.25rem !important; 
     display: block;
@@ -14,21 +14,32 @@
     color: #63666a;
 }
 
+ .nested-grid{
+    margin-top: 1rem;
+}
+
 .required{
     color:red;
 }
 
-.productLabel{
-    padding-left: 0.1rem !important;
+.errorMessage{
+    display: block;
+    color: red !important;
 }
 
-
-  .label-align{
-    text-align:right;
-  }
-
-  .gridInputSize{
+.gridInputSize{
     padding: 0 4px;
     min-height: auto;
     border-color:  #63666a;
 }
+
+.item-right{
+    text-align:right;
+  }
+  .item-left{
+    text-align:left;
+  }
+
+  .ge-text-input-date{
+    width: calc(65% - 2rem) !important;
+  }
