@@ -23,6 +23,9 @@ export class ProductServiceTypeComponent implements OnInit {
   public gcbDwnData: any = [];
   public downloadCols = [];
   public fileName : any ="ServiceType";
+
+  public billProcessReference: any;
+  public legacyServiceTypeEnableFlag:boolean=false;
   public gcbDetailFilters: any = {
     productId: "Select",
     productNm:"",
@@ -38,17 +41,19 @@ export class ProductServiceTypeComponent implements OnInit {
     tpPercent :"",
     unspscOverride :false,
     unspsc: "",
-    costCenter: ""
+    costCenter: "",
+    legacyServiceTypeName:"",
+    processName:""
   };
   public cols = [
     { field: 'productNm', header: 'Product Name', width: '15%' },
-    { field: 'billedFromLocation', header: 'Billed From Country', width: '15%' },
-    { field: 'billedToLocation', header: 'To Country', width: '15%' },
-    { field: 'serviceTypeName', header: 'Service Type', width: '8%' },
-    { field: 'billingBasis', header: 'Billing Basis', width: '8%' },
-    { field: 'createdBy', header: 'Created By', width: '7%' },
-    { field: 'createdDate', header: 'Created Date', width: '15%' },
-    { field: 'updatedBy', header: 'Updated By', width: '7%' },
+    { field: 'billedFromLocation', header: 'Billed From', width: '15%' },
+    { field: 'billedToLocation', header: 'Billed To', width: '15%' },
+    { field: 'serviceTypeName', header: 'Service Type', width: '15%' },
+    { field: 'billingBasis', header: 'Billing Basis', width: '15%' },
+     { field: 'legacyServiceTypeName', header: 'Legacy Service Type', width: '10%' },
+    // { field: 'createdDate', header: 'Created Date', width: '15%' },
+    { field: 'updatedBy', header: 'Updated By', width: '15%' },
     { field: 'updatedDate', header: 'Updated Date', width: '15%' },
 
   ];
@@ -70,6 +75,7 @@ export class ProductServiceTypeComponent implements OnInit {
     this.getAllProductData();
     this.getAllCountryData();
     this.getBillingBasisData();
+    this.getBillProcess()
   }
 
 
@@ -126,13 +132,25 @@ export class ProductServiceTypeComponent implements OnInit {
       this.billingReferenceDataList.push({ label: "ACCOUNT-BASED", value: "ACCOUNT-BASED" });
       this.billingReferenceDataList.push({ label: "SSO-BASED", value: "SSO-BASED" });
   }
-
+  getBillProcess(){
+    this.serviceTypeService.getBillProcessList().subscribe(
+      refData => {
+        this.billProcessReference = refData;       
+      },
+      error => {
+      });
+    }
 
   getServicetype() {
     this.errorMessage = "";
     if (this.gcbDetailFilters.productId != "Select") {
       let productData = this.productReferenceData.filter(x => x.productId == this.gcbDetailFilters.productId)[0];
-      this.gcbDetailFilters.unspsc = productData.unspsc;
+      let billProcessData=this.billProcessReference.filter(y => y.billProcessId == productData.billProcessId)[0];
+      this.gcbDetailFilters.unspsc = productData.unspsc; 
+      this.gcbDetailFilters.processName=billProcessData.processName;
+      if(this.gcbDetailFilters.processName=='GOTEMS'){
+        this.legacyServiceTypeEnableFlag=true;
+      }     
     }
     if (this.gcbDetailFilters.productId != "Select" && this.gcbDetailFilters.billedFromLocationId != "Select" && this.gcbDetailFilters.billedToLocationId != "Select") {
       let productData = this.productReferenceData.filter(x => x.productId == this.gcbDetailFilters.productId)[0];
@@ -142,19 +160,37 @@ export class ProductServiceTypeComponent implements OnInit {
       this.gcbDetailFilters.serviceTypeName = productData.serviceTypePrefixSuggestion +"_"+ fromCountry.countryCode+"_2"+toCountry.countryCode;
       console.log("Product this.gcbDetailFilters.suggestedServiceType : " + this.gcbDetailFilters.serviceType);
       this.gcbDetailFilters.suggestedServiceType = this.gcbDetailFilters.serviceTypeName;
-      this.serviceTypeService.getServicetype(this.gcbDetailFilters).subscribe(
-        refData => {
-          let arr: any = [];
-          arr = refData;
-         // this.gcbDetailFilters.serviceType = arr.serviceType;
-          this.errorMessage = arr.serviceTypeMessage;
-        },
-        error => {
-        });
+      if(this.gcbDetailFilters.processName=='TELECOM'){
+        this.legacyServiceTypeEnableFlag=false;
+        if(this.gcbDetailFilters.legacyServiceTypeName=="" || this.gcbDetailFilters.legacyServiceTypeName==null){
+        this.gcbDetailFilters.legacyServiceTypeName=this.gcbDetailFilters.serviceTypeName;
+        }
+      } else{
+        this.gcbDetailFilters.legacyServiceTypeName="";
+      }
+      
+      // this.serviceTypeService.getServicetype(this.gcbDetailFilters).subscribe(
+      //   refData => {
+      //     let arr: any = [];
+      //     arr = refData;
+      //    // this.gcbDetailFilters.serviceType = arr.serviceType;
+      //     this.errorMessage = arr.serviceTypeMessage;
+      //   },
+      //   error => {
+      //   });
     }
 
   }
 
+  updateLegacyServiceType(){
+    if(this.gcbDetailFilters.processName=='TELECOM'){
+      this.legacyServiceTypeEnableFlag=false;
+      this.gcbDetailFilters.legacyServiceTypeName=this.gcbDetailFilters.serviceTypeName;
+    } else{
+      this.gcbDetailFilters.legacyServiceTypeName="";
+    }
+  }
+ 
   getAllServiceType() {
     console.log("getAllServiceType");
     this.serviceTypeService.getServicetypeData().subscribe(
@@ -258,7 +294,8 @@ export class ProductServiceTypeComponent implements OnInit {
       tpPercent :"",
       unspscOver :"",
       unspscOverride :false,
-      costCenter: ""
+      costCenter: ""  ,
+      processName:""  
     };
     this.popupErrorMessage = "";
     this.getAllServiceType();
@@ -269,5 +306,15 @@ export class ProductServiceTypeComponent implements OnInit {
     this.editFlag = true;
     this.formMode="Modify";
     this.gcbDetailFilters = this.serviceTypes.filter(x => x.serviceTypeId == serviceTypeId)[0];
+
+    if(this.gcbDetailFilters.processName=='TELECOM'){
+      this.legacyServiceTypeEnableFlag=false;
+      if(this.gcbDetailFilters.legacyServiceTypeName=="" || this.gcbDetailFilters.legacyServiceTypeName==null){
+      this.gcbDetailFilters.legacyServiceTypeName=this.gcbDetailFilters.serviceTypeName;
+      }
+    } else{
+      this.gcbDetailFilters.legacyServiceTypeName="";
+    }
+    
   }
 } 
