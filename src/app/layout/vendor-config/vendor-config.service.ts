@@ -26,5 +26,9 @@ export class VendorConfigService
         return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT+"/vendorconfig-details");
       }
 
+      public upsertVendorConfig(vendorConfigDto): Observable<Object> {
+        return this.http.post(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/vendorconfig", vendorConfigDto);
+      }
+
       
 }
