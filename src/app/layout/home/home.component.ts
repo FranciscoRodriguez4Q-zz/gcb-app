@@ -73,7 +73,7 @@ menuItems:any;
     {label: 'Service Type',routerLink: ['ProductServiceType']},
     {label: 'Vendor LE',routerLink:['Vendor']},
     {label: 'Vendor Config',routerLink:['VendorConfig']},
-    {label: 'BAN'},
+    {label: 'BAN', routerLink:['Ban']},
     {label: 'Buyer', routerLink:['Buyer']}
 ];
 
