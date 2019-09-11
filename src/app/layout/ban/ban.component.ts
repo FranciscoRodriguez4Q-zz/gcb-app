@@ -14,18 +14,31 @@ export class BanComponent implements OnInit {
   data:any;
   files: any ={};
   public banFormData: any = {
-    
+    "banId": "",
+    "vendorBan": "",
+    "vendorConfigId": "",
+    "vendorCode":"",
+    "serviceTypeId":"",
+    "serviceTypeName": "",
+    "buyerId":"",
+    "erpBuyerLeName":"",
+    "liquidateBillRoutingId":"",
+    "updatedBy": "",
+    "lastUpdatedDate":"lastUpdatedDate",
   };
 
 
   public banId: any;
-  public erpBanLeName: any;
-  public erpOuNumber: any;
-  public erpOuEntityName: any;
-  public locationName: any;
-  public goldId: any;
+  public vendorBan: any;
+  public vendorConfigId: any;
+  public vendorCode: any;
+  public serviceTypeId: any;
+  public serviceTypeName: any;
+  public buyerId:any;
+  public erpBuyerLeName:any;
+  public liquidateBillRoutingId:any;
   public updatedBy: any;
-  public lastUpdatedDate: any;
+  public lastUpdated: any;
   public errorMessage = "";
   public gridLoadFlag:boolean=false;
   banData:any = [];
@@ -37,22 +50,19 @@ export class BanComponent implements OnInit {
   public editFlag = false;
   @ViewChild('content1') errorMessagePopUp;
   closeResult: string;
-  public vendor: any = [];
-  public countryCodeReferenceData: any;
-  countryCodeReferenceDataList: SelectItem[] = [];
   public formMode="New";
   
   constructor(private banService: BanService,private modalService: NgbModal) { }
   
 
   public cols = [
-    { field: 'erpBanLeName', header: 'ERP Ban Name', width: '20%' },
-    { field: 'erpOuEntityName', header: 'OU Name', width: '5%' },
-    { field: 'erpOuNumber', header: 'OU Number', width: '10%' },
-    { field: 'locationName', header: 'Ban Location', width: '20%' },
-    { field: 'goldId', header: 'Gold ID', width: '10%' },
+    { field: 'vendorBan', header: 'Ban ID', width: '20%' },
+    { field: 'vendorCode', header: 'Vendor Name', width: '5%' },
+    { field: 'serviceTypeName', header: 'Service Type Name', width: '10%' },
+    { field: 'erpBuyerLeName', header: 'Buyer Name', width: '20%' },
+    { field: 'liquidateBillRoutingId', header: 'Bill Routing ID', width: '10%' },
     { field: 'updatedBy', header: 'Updated By', width: '10%' },
-    { field: 'lastUpdatedDate', header: 'Updated Date', width: '10%' },
+    { field: 'lastUpdated', header: 'Updated Date', width: '10%' },
   ];
 
   public banInsertData: any = {
@@ -76,7 +86,13 @@ export class BanComponent implements OnInit {
 
         this.banData.map(item => {
           return {
-              
+            banId:this.banId,
+            vendorCode:this.vendorCode,
+            serviceTypeName:this.serviceTypeName,
+            erpBuyerLeName:this.erpBuyerLeName,
+            liquidateBillRoutingId:this.liquidateBillRoutingId,
+            updatedBy:this.updatedBy,
+            lastUpdated:this.lastUpdated,
           }
       }).forEach(item => this.banDwnData.push(item));
       },
@@ -117,14 +133,7 @@ export class BanComponent implements OnInit {
 
   clearAllFilters(){
     this.banInsertData={
-      erpBanLeName:"",
-      erpOuNumber: "",
-      erpOuEntityName:"",
-      banLocationId:"",
-      goldId: "",
-      updatedBy: "",
-      banInfo:"",
-      goldNetName:""
+      
     }
     this.errorMessage ="";
   }
@@ -132,26 +141,6 @@ export class BanComponent implements OnInit {
   validation(){
     if(this.banInsertData.erpBanLeName==""){
       this.errorMessage = "Please Enter Ban ERP Le Name";
-      return false;
-    }
-    if(this.banInsertData.erpOuEntityName==""){
-      this.errorMessage = "Please Enter ERP OU Entity Name";
-      return false;
-    }
-    if(this.banInsertData.erpOuNumber==""){
-      this.errorMessage = "Please Enter ERP OU Number";
-      return false;
-    }
-    if(this.banInsertData.banInfo==""){
-      this.errorMessage = "Please Enter Ban info";
-      return false;
-    }
-    if(this.banInsertData.banLocationId=="Select" || this.banInsertData.banLocationId==""){
-      this.errorMessage = "Please Enter Ban Location";
-      return false;
-    }
-    if(this.banInsertData.goldId==""){
-      this.errorMessage = "Please Enter Gold ID";
       return false;
     }
     else{
