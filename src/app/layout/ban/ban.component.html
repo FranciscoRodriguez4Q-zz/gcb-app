@@ -1,14 +1,131 @@
 <div class="-font--serif">
         <p-fieldset>
             <p-header>Ban: {{formMode}}</p-header>
-
+                <p-accordion>
+                    <div class="p-grid">
+                        <div class="p-col-6">
+                            <div class="box">
+                                
+                            </div>
+                        </div>
+                        <div class="p-col-4">
+                            <div class="box">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-grid">
+                        <div class="p-col-6">
+                            <div class="box">
+                                <p-fieldset legend="Focus Groups:" [toggleable]="true" >
+                                        30 odd focus groups will be shown here and available as a multi-select.
+                                </p-fieldset>
+                            </div>
+                       </div>
+                       <div class="p-col-4">
+                            <div class="box">
+                            </div>
+                       </div>
+                    </div>
+                    <div class="p-grid">
+                        <div class="p-col-6">
+                            <div class="box">
+                                <p-fieldset legend="Address Details:" [toggleable]="true" >
+                                    <div class="p-grid ">
+                                        <div class="p-col-4 item-right">
+                                            Ship From Address
+                                        </div>
+                                        <div class="p-col-8">
+                                            <input class="form-control" style="width: 100%" >
+                                        </div>
+                                    </div>
+                                    <div class="p-grid">
+                                        <div class="p-col-4 item-right">
+                                        Ship To Country
+                                        </div>
+                                        <div class="p-col-8 item-left">
+                                                <p-dropdown [options]="countryCodeReferenceDataList" [style]="{'width': '100%'}"  [filter]="true" placeholder="Select"></p-dropdown>
+                                        </div>
+                                    </div>
+                                    <div class="p-grid">
+                                        <div class="p-col-4 item-right">
+                                        Ship To Province
+                                        </div>
+                                        <div class="p-col-8 item-left">
+                                            <input class="form-control" style="width: 100%" >
+                                        </div>
+                                    </div>
+                                    <div class="p-grid">
+                                        <div class="p-col-4 item-right">
+                                        Ship To State
+                                        </div>
+                                        <div class="p-col-8 item-left">
+                                            <input class="form-control" style="width: 100%" >
+                                        </div>
+                                    </div>
+                                    <div class="p-grid">
+                                        <div class="p-col-4 item-right">
+                                        Ship To City
+                                        </div>
+                                        <div class="p-col-8 item-left">
+                                            <input class="form-control" style="width: 100%" >
+                                        </div>
+                                    </div>
+                                    <div class="p-grid">
+                                        <div class="p-col-4 item-right">
+                                        Ship To Zip 4
+                                        </div>
+                                        <div class="p-col-8 item-left">
+                                            <input class="form-control" style="width: 100%" >
+                                        </div>
+                                    </div>
+                                    <div class="p-grid">
+                                        <div class="p-col-4 item-right">
+                                        Ship To Zip 5
+                                        </div>
+                                        <div class="p-col-8 item-left">
+                                            <input class="form-control" style="width: 100%" >
+                                        </div>
+                                    </div>
+                                </p-fieldset>    
+                            </div>
+                        </div>
+                        <div class="p-col-4">
+                            <div class="box">
+                                    <div class="p-grid ">
+                                        <div class="p-col-10 item-right">
+                                        </div>
+                                        <div class="p-col-2">
+                                        </div>
+                                    </div>
+                                <div class="p-grid ">
+                                    <div class="p-col-10 item-right">
+                                        Add Country ISO to Vendor Name
+                                    </div>
+                                    <div class="p-col-2">
+                                            <p-checkbox  binary="true" labelStyleClass="chkLabel" ></p-checkbox><label class="label"></label>
+                                    </div>
+                                </div>
+                                <div class="p-grid ">
+                                    <div class="p-col-10 item-right">
+                                        Use Asset File Vendor Name
+                                    </div>
+                                    <div class="p-col-2">
+                                            <p-checkbox  binary="true" labelStyleClass="chkLabel" ></p-checkbox><label class="label"></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </p-accordion>
             <div class="p-grid">
                     <label class="errorMessage">{{errorMessage}}</label>
                 </div>
                 <div class="p-grid">
                     <div class="p-col-12" style="text-align:right">
+                        <!-- <button pButton type="button" label="Submit" class="ui-button-rounded ui-button-secondary" (click)="upsertBan()"></button>
+                        <button pButton type="button" label="Cancel" class="ui-button-rounded ui-button-secondary" (click)="clearAllFilters()"></button> -->
                         <button class="ge-button -fill--solid" (click)="upsertBan()">Submit</button>
-                        <button class="ge-button -fill--solid" (click)="clearAllFilters()">Cancel</button>
+                        <button class="ge-button -fill--solid" (click)="clearAllFilters()">Cancel</button> 
                         <app-file-download [dwnData]="banDwnData" [colsHeader]="this.downloadCols" [fileName]="fileName"></app-file-download>
                     </div>
                 </div>
