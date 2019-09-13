@@ -35,4 +35,9 @@ export class ProductServiceTypeService {
   public upsertServiceType(gcbDetailFilters): Observable<Object> {
     return this.http.post(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/serviceTypes", gcbDetailFilters);
   }
+
+  public getBillProcessList(): Observable<Object> {
+    return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/billProcess");
+
+  }
 }

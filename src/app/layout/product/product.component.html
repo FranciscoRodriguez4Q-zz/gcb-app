@@ -27,7 +27,7 @@
           </div>
           <div class="p-grid">
               <div class="p-col-4 item-right" >
-                  <label class="label"><span class="required">*</span>Service_Type_Prefix </label>
+                  <label class="label"><span class="required">*</span>Product Code</label>
               </div>
               <div class="p-col-7 item-left">
                   <input class="form-control" [(ngModel)]="gcbProductFilters.serviceTypePrefixSuggestion">
@@ -96,6 +96,11 @@
                 </div> 
       </div>
   </div>
+  <div class="p-grid">
+    <div class="p-col-3" style="text-align:left">
+      <label class="errorMessage">{{errorMessage}}</label>
+    </div> 
+  </div> 
   <div class="p-grid">
     <div class="p-col-12" style="text-align:right">
         <button class="ge-button -fill--solid" (click)="upsertProduct()">Submit</button>

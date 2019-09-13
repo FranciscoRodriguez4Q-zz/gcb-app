@@ -5,117 +5,143 @@
 <div class="p-grid nested-grid">
     <div class="p-col-6">
         <div class="p-grid">
-            <div class="p-col-4 p-align-end">
-                <label class="label"><span class="required">*</span>Product Name :</label>
+            <div class="p-col-4 item-right">
+                <label class="label"><span class="required">*</span>Product Name </label>
             </div>
-            <div class="p-col-5">
+            <div class="p-col-5 item-left">
                 <p-dropdown    
             [options]="productReferenceDataList"
             [(ngModel)]="gcbDetailFilters.productId"      placeholder="Select"   [autoWidth]="true"
-            [style]="{'width': '100%' ,'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"   
+            [style]="{'width': '130%'}"   
             [filter]="true"  (click)="getServicetype()"
             scrollHeight="150px"  [disabled]="editFlag">
             
             </p-dropdown>
             </div>
         </div>
-        <div class="p-grid">
-            <div class="p-col-4 " >
-                <label class="label"><span class="required">*</span>Billed From :</label>
-            </div>
-            <div class="p-col-5">
-                 <p-dropdown [options]="countryCodeReferenceDataList" [(ngModel)]="gcbDetailFilters.billedFromLocationId" placeholder="Select" [autoWidth]="true"
-                                    [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
-                                    [filter]="true" (click)="getServicetype()" scrollHeight="150px">
-                </p-dropdown>
-            </div>
-        </div>
-        <div class="p-grid">
-            <div class="p-col-4">
-                 <label class="label"><span class="required">*</span>Billed To :</label>
-            </div>
-            <div class="p-col-5">
-                <p-dropdown [options]="countryCodeReferenceDataList" [(ngModel)]="gcbDetailFilters.billedToLocationId" placeholder="Select" [autoWidth]="true"
-                                    [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
-                                    [filter]="true" (click)="getServicetype()" scrollHeight="150px">
-                </p-dropdown>
-            </div>
-        </div>
-        <div class="p-grid">
-            <div class="p-col-4">
-                 <label class="label"><span class="required">*</span>Service Type Name :</label>
-            </div>
-            <div class="p-col-5">
-                <input class="form-control" [(ngModel)]="gcbDetailFilters.serviceTypeName" tooltip="gcbDetailFilters.serviceTypeName" placeholder="Service Type" >
-            </div>
-        </div>
-        <div class="p-grid">
-            <div class="p-col-4 ">
-                  <label class="label"><span class="required">*</span>Billing Basis :</label>
-            </div>
-            <div class="p-col-5">
-                 <p-dropdown [options]="billingReferenceDataList" [(ngModel)]="gcbDetailFilters.billingBasis" placeholder="Select" [autoWidth]="true"
-                                    [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
-                                    [filter]="true" scrollHeight="150px">
-                                </p-dropdown>
-            </div>
-        </div>
-        <div class="p-grid">
-            <div class="p-col-4 ">
-                  <label class="label"><span class="required">*</span>Cost Center :</label>
-            </div>
-            <div class="p-col-5">
-                <input class="form-control" [(ngModel)]="gcbDetailFilters.costCenter" placeholder="Cost Center" >
 
+        <div class="p-grid">
+                <div class="p-col-4 item-right">
+                    <label class="label">Process  </label>
+                </div>
+                <div class="p-col-5 item-left">
+                        <input class="form-control" [(ngModel)]="gcbDetailFilters.processName" [disabled]="true" >
+                </div>
+            </div>
+
+
+        <div class="p-grid">
+            <div class="p-col-4 item-right" >
+                <label class="label"><span class="required">*</span>Billed From </label>
+            </div>
+            <div class="p-col-5 item-left">
+                 <!-- <p-dropdown [options]="countryCodeReferenceDataList" [(ngModel)]="gcbDetailFilters.billedFromLocationId" placeholder="Select" [autoWidth]="true"
+                                    [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
+                                    [filter]="true" (click)="getServicetype()" scrollHeight="150px">
+                </p-dropdown> -->
+                <p-dropdown [options]="countryCodeReferenceDataList" [style]="{'width': '130%'}" [(ngModel)]="gcbDetailFilters.billedFromLocationId" [filter]="true" ></p-dropdown>
             </div>
         </div>
+        <div class="p-grid">
+            <div class="p-col-4 item-right">
+                 <label class="label"><span class="required">*</span>Billed To </label>
+            </div>
+            <div class="p-col-5 item-left">
+                <p-dropdown [options]="countryCodeReferenceDataList" [(ngModel)]="gcbDetailFilters.billedToLocationId" placeholder="Select" [autoWidth]="true"
+                [style]="{'width': '130%'}"  [filter]="true" (click)="getServicetype()" scrollHeight="150px">
+                </p-dropdown>
+            </div>
+        </div>
+        <div class="p-grid">
+            <div class="p-col-4 item-right">
+                 <label class="label"><span class="required">*</span>Service Type Name </label>
+            </div>
+            <div class="p-col-5 item-left">
+                <input class="form-control"  (ngModelChange)="updateLegacyServiceType()"  [(ngModel)]="gcbDetailFilters.serviceTypeName" tooltip="gcbDetailFilters.serviceTypeName" >
+            </div>
+        </div>
+        <div class="p-grid">
+                <div class="p-col-4 item-right">
+                     <label class="label"><span class="required" *ngIf="!legacyServiceTypeEnableFlag">*</span>Legacy Service Type </label>
+                </div>
+                <div class="p-col-5 item-left">
+                    <input class="form-control" [(ngModel)]="gcbDetailFilters.legacyServiceTypeName" [disabled]="legacyServiceTypeEnableFlag">
+                </div>
+            </div>
+       
     </div>
     <div class="p-col-6">
             <p-fieldset>
-                    <p-header>Tax Info</p-header>
+                    <p-header>Billing Info</p-header>
                     <div class="p-grid">
-                            <div class="p-col-5">
-                                 <label class="label"><span class="required">*</span>VAT Percent:</label>
+                            <div class="p-col-3 item-right">
+                                  <label class="label"><span class="required">*</span>Billing Basis </label>
                             </div>
-                            <div class="p-col-5">
-                                <input class="form-control" [(ngModel)]="gcbDetailFilters.vatPercent" placeholder="VAT Percent" >
+                            <div class="p-col-5 item-left">
+                                 <p-dropdown [options]="billingReferenceDataList" [(ngModel)]="gcbDetailFilters.billingBasis" placeholder="Select" [autoWidth]="true"
+                                                    [style]="{'width': '130%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
+                                                    [filter]="true" scrollHeight="150px">
+                                                </p-dropdown>
+                            </div>
+                        </div>
+                        <div class="p-grid">
+                            <div class="p-col-3 item-right">
+                                  <label class="label"><span class="required">*</span>Cost Center </label>
+                            </div>
+                            <div class="p-col-5 item-left">
+                                <input class="form-control" [(ngModel)]="gcbDetailFilters.costCenter"  >
+                
+                            </div>
+                        </div>
+                    <div class="p-grid">
+                            <div class="p-col-3 item-right">
+                                 <label class="label"><span class="required">*</span>VAT Percent</label>
+                            </div>
+                            <div class="p-col-5 item-left">
+                                <input class="form-control" [(ngModel)]="gcbDetailFilters.vatPercent" >
                             </div>
                     </div>
                     <div class="p-grid">
-                            <div class="p-col-5">
-                                 <label class="label"><span class="required">*</span>WHT Percent:</label>
+                            <div class="p-col-3 item-right">
+                                 <label class="label"><span class="required">*</span>WHT Percent</label>
                             </div>
-                            <div class="p-col-5">
-                                <input class="form-control" [(ngModel)]="gcbDetailFilters.whtPercent" placeholder="WHT Percent" >
-                            </div>
-                    </div>
-                    <div class="p-grid">
-                            <div class="p-col-5">
-                                 <label class="label"><span class="required">*</span>TP Percent:</label>
-                            </div>
-                            <div class="p-col-5">
-                                <input class="form-control" [(ngModel)]="gcbDetailFilters.tpPercent" placeholder="TP Percent" >
+                            <div class="p-col-5 item-left">
+                                <input class="form-control" [(ngModel)]="gcbDetailFilters.whtPercent"  >
                             </div>
                     </div>
                     <div class="p-grid">
-                            <div class="p-col-5">
-                                 <label class="label"><span class="required">*</span>UNSPSC Override:</label>
+                            <div class="p-col-3 item-right">
+                                 <label class="label"><span class="required">*</span>TP Percent</label>
                             </div>
-                            <div class="p-col-5">
+                            <div class="p-col-5 item-left">
+                                <input class="form-control" [(ngModel)]="gcbDetailFilters.tpPercent"  >
+                            </div>
+                    </div>
+                    <!-- <div class="p-grid">
+                            <div class="p-col-4 item-right">
+                                 <label class="label"><span class="required">*</span>UNSPSC Override</label>
+                            </div>
+                            <div class="p-col-2 item-left">
                                     <p-checkbox [(ngModel)]="gcbDetailFilters.unspscOverride" binary="false" labelStyleClass="chkLabel"></p-checkbox><label class="label"></label>
                             </div>
-                    </div>
-                    <div class="p-grid">
-                            <div class="p-col-5">
-                                 <label class="label"><span class="required">*</span>UNSPSC Map:</label>
+                            <div class="p-col-4 item-left">
+                                    <input class="form-control" [(ngModel)]="gcbDetailFilters.unspsc" [disabled]="!gcbDetailFilters.unspscOverride" >
+                                </div>
+                    </div> -->
+                    <!-- <div class="p-grid">
+                            <div class="p-col-5 item-right">
+                                 <label class="label"><span class="required">*</span>UNSPSC Map</label>
                             </div>
-                            <div class="p-col-5">
-                                <input class="form-control" [(ngModel)]="gcbDetailFilters.unspsc" [disabled]="!gcbDetailFilters.unspscOverride" placeholder="UNSPSC Map" >
+                            <div class="p-col-5 item-left">
+                                <input class="form-control" [(ngModel)]="gcbDetailFilters.unspsc" [disabled]="!gcbDetailFilters.unspscOverride" >
                             </div>
-                    </div>                     
+                    </div>                      -->
             </p-fieldset>
     </div>
 </div>
+<div class="p-grid">
+    <label class="errorMessage">{{errorMessage}}</label>
+    </div>
 <div class="p-grid">
         <div class="p-col-12" style="text-align:right">
             <button class="ge-button -fill--solid" (click)="upsertServiceType()">Submit</button>
@@ -125,9 +151,7 @@
         </div>
     </div>
 </p-fieldset>
-<div class="p-grid">
-    <label class="errorMessage">{{errorMessage}}</label>
-    </div>
+
 <div class="p-grid">
 <div class="p-col-12">
  <p-table #tt [columns]="cols" [value]="serviceTypes" [style]="{'margin-top':'2px','width':'100%'}" [rows]="10" [paginator]="true" [pageLinks]="3" [responsive]="true">
@@ -150,8 +174,15 @@
     </ng-template>
     <ng-template pTemplate="body" let-rowData let-columns="columns">
         <tr>
-            <td>
+            <!-- <td>
                 <p-tableRadioButton [value]="rowData" (click)="showSelectedData(rowData['serviceTypeId'])" ></p-tableRadioButton>
+            </td> -->
+            <td [ngStyle]="{'width': '31px'}">
+                    <div class="justify-content-center">
+                        <a class="a-color" style="cursor:pointer;" (click)="showSelectedData(rowData['serviceTypeId'])">
+                            <i class="fa fa-pencil-square-o fa-2x"></i>
+                        </a>
+                    </div>
             </td>
             <td *ngFor="let col of columns" >
               <div> {{rowData[col.field]}}</div>
