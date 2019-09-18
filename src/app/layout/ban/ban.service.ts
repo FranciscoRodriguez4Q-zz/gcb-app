@@ -19,9 +19,9 @@ export class BanService {
     return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT+"/ban/ban-details");
   }
 
-  // public getAllCountryCode(): Observable<Object> {
-  //   return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT+"/country");
-  // }
+   public getAllCountryCode(): Observable<Object> {
+     return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT+"/country");
+   }
 
   public upsertBan(banInsertData): Observable<Object> {
      return this.http.post(environment.APP_BASE_URL_SERVICE_ENDPOINT+"/ban/bans", banInsertData);

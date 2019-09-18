@@ -2,6 +2,9 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { BanService } from './ban.service';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { SelectItem } from 'primeng/primeng';
+import {FieldsetModule} from 'primeng/fieldset';
+import {PickListModule} from 'primeng/picklist';
+import {AccordionModule} from 'primeng/accordion';
 
 @Component({
   selector: 'app-product',
@@ -51,6 +54,10 @@ export class BanComponent implements OnInit {
   @ViewChild('content1') errorMessagePopUp;
   closeResult: string;
   public formMode="New";
+  public sourceSystem:any = [{'entityName':'active','entityColumnNm':'Active'}];
+  public targetSystem:any = [];
+  public countryCodeReferenceData: any;
+  countryCodeReferenceDataList: SelectItem[] = [];
   
   constructor(private banService: BanService,private modalService: NgbModal) { }
   
@@ -60,7 +67,7 @@ export class BanComponent implements OnInit {
     { field: 'vendorCode', header: 'Vendor Name', width: '5%' },
     { field: 'serviceTypeName', header: 'Service Type Name', width: '10%' },
     { field: 'erpBuyerLeName', header: 'Buyer Name', width: '20%' },
-    { field: 'liquidateBillRoutingId', header: 'Bill Routing ID', width: '10%' },
+    { field: 'liquidateBillRoutingId', header: 'Bill Rote ID', width: '10%' },
     { field: 'updatedBy', header: 'Updated By', width: '10%' },
     { field: 'lastUpdated', header: 'Updated Date', width: '10%' },
   ];
@@ -75,7 +82,7 @@ export class BanComponent implements OnInit {
       // console.log("in Download method"+i);
       this.downloadCols.push(this.cols[i].header);
     }    
-    //this.getAllCountryData();
+    this.getAllCountryData();
   }
 
   getAllBanDetails() {
@@ -99,22 +106,6 @@ export class BanComponent implements OnInit {
       error => {
       });
   }
-
-  // getAllCountryData(){
-  //   this.banService.getAllCountryCode().subscribe(
-  //     refData => {
-  //       let arr: any = [];
-  //       this.countryCodeReferenceData = refData;
-  //       this.countryCodeReferenceDataList.push({ label: "Select", value: "Select" })
-  
-  //       for (let data of this.countryCodeReferenceData) {
-  //         let labelCountry = data.countryCode + " | " + data.countryName;
-  //         this.countryCodeReferenceDataList.push({ label: labelCountry, value: data.countryId })
-  //       }
-  //     },
-  //     error => {
-  //     });
-  // }
 
   showSelectedData(banId) {
     console.log("radio button click" + this.banId);
@@ -173,6 +164,22 @@ export class BanComponent implements OnInit {
     }else{
       //this.open(this.errorMessage);
     }
+  }
+
+  getAllCountryData(){
+    this.banService.getAllCountryCode().subscribe(
+      refData => {
+        let arr: any = [];
+        this.countryCodeReferenceData = refData;
+        this.countryCodeReferenceDataList.push({ label: "Select", value: "Select" })
+  
+        for (let data of this.countryCodeReferenceData) {
+          let labelCountry = data.countryCode + " | " + data.countryName;
+          this.countryCodeReferenceDataList.push({ label: labelCountry, value: data.countryId })
+        }
+      },
+      error => {
+      });
   }
 
   /**
