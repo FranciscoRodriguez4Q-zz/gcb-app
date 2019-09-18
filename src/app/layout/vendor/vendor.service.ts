@@ -22,6 +22,10 @@ export class VendorService {
   public saveOrUpdateVendor(vendorInsertData): Observable<Object> {
     return this.http.post(environment.APP_BASE_URL_SERVICE_ENDPOINT+"/vendor/vendors", vendorInsertData);
   }
+
+  public getAllHlVendorData(): Observable<Object> {
+    return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT+"/vendor/hlvendor-details");
+  }
   private handleError(error){
     return throwError(error + "UrlConstants.SERVER_ERROR");
   }

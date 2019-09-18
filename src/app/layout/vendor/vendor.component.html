@@ -5,6 +5,14 @@
             <div class="p-col-8">
                 <div class="p-grid">
                     <div class="p-col-3 item-right">
+                            <label class="label"><span class="required">*</span>HL Vendor Name</label>
+                    </div>
+                     <div class="p-col-5 item-left">
+                        <p-dropdown [options]="hlVendorDataList" [style]="{'width': '130%'}" [(ngModel)]="vendorInsertData.hlVendorId" [filter]="true" placeholder="Select"></p-dropdown>
+                    </div> 
+                </div>
+                <div class="p-grid">
+                    <div class="p-col-3 item-right">
                         <label class="label"><span class="required">*</span>Vendor Name </label>
                     </div>
                     <div class="p-col-5 item-left">

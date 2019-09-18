@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { VendorService } from './vendor.service';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { SelectItem } from 'primeng/primeng';
 
 @Component({
   selector: 'app-product',
@@ -23,6 +24,7 @@ export class VendorComponent implements OnInit {
   };
 
   public vendorInsertData: any = {
+    "hlVendorId":"",
     "vendorLegalEntityName":"",
     "active": true,
     // "createdBy":"503148032",
@@ -37,6 +39,7 @@ export class VendorComponent implements OnInit {
   public createdBy: any;
   public createdDate: any;
   public errorMessage = "";
+  public vendorHlName ="";
   public gridLoadFlag:boolean=false;
   vendorData:any = [];
   venDwnData:any = [];
@@ -49,6 +52,8 @@ export class VendorComponent implements OnInit {
   closeResult: string;
   public vendor: any = [];
   public formMode="New";
+  public hlvendorReferenceData: any;
+  hlVendorDataList: SelectItem[] = [];
   
   constructor(private vendorService: VendorService,private modalService: NgbModal) { }
   
@@ -65,7 +70,8 @@ export class VendorComponent implements OnInit {
     for (let i = 0; i < this.cols.length; i++) {
       // console.log("in Download method"+i);
       this.downloadCols.push(this.cols[i].header);
-    }       
+    } 
+    this.getAllHlVendorData();      
   }
 
   getAllVendorDetails() {
@@ -102,6 +108,10 @@ export class VendorComponent implements OnInit {
   validation(){
     if(this.vendorInsertData.vendorLegalEntityName==""){
       this.errorMessage = "Please Enter Vendor Name";
+      return false;
+    }
+    if(this.vendorInsertData.hlVendorId=="" || this.vendorInsertData.hlVendorId=="Select" ){
+      this.errorMessage = "Please Enter Vendor HL Name";
       return false;
     }else{
       return true;
@@ -163,6 +173,22 @@ export class VendorComponent implements OnInit {
     }else{
       //this.open(this.errorMessage);
     }
+  }
+
+  getAllHlVendorData(){
+    this.vendorService.getAllHlVendorData().subscribe(
+      refData => {
+        let arr: any = [];
+        this.hlvendorReferenceData = refData;
+        //this.hlVendorDataList.push({ label: "Select", value: "Select" })
+  
+        for (let data of this.hlvendorReferenceData) {
+          let labelVendor = data.hlVendorName;
+          this.hlVendorDataList.push({ label: labelVendor, value: data.hlvendorId })
+        }
+      },
+      error => {
+      });
   }
 
   clearAllFilters() {
