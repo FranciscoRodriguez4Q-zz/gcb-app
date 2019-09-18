@@ -110,8 +110,8 @@ export class VendorComponent implements OnInit {
       this.errorMessage = "Please Enter Vendor Name";
       return false;
     }
-    if(this.vendorInsertData.hlVendorId=="" || this.vendorInsertData.hlVendorId=="Select" ){
-      this.errorMessage = "Please Enter Vendor HL Name";
+    if(this.vendorInsertData.hlVendorId== null || this.vendorInsertData.hlVendorId=="" || this.vendorInsertData.hlVendorId=="Select" ){
+      this.errorMessage = "Please Select Vendor HL Name";
       return false;
     }else{
       return true;
