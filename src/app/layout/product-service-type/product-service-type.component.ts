@@ -47,14 +47,14 @@ export class ProductServiceTypeComponent implements OnInit {
   };
   public cols = [
     { field: 'productNm', header: 'Product Name', width: '15%' },
-    { field: 'billedFromLocation', header: 'Billed From', width: '15%' },
-    { field: 'billedToLocation', header: 'Billed To', width: '15%' },
-    { field: 'serviceTypeName', header: 'Service Type', width: '15%' },
-    { field: 'billingBasis', header: 'Billing Basis', width: '15%' },
-     { field: 'legacyServiceTypeName', header: 'Legacy Service Type', width: '10%' },
-    // { field: 'createdDate', header: 'Created Date', width: '15%' },
-    { field: 'updatedBy', header: 'Updated By', width: '15%' },
-    { field: 'updatedDate', header: 'Updated Date', width: '15%' },
+    { field: 'serviceTypeName', header: 'Service Type Name', width: '15%' },
+    { field: 'legacyServiceTypeName', header: 'Legacy ST Name', width: '15%' },
+    { field: 'billedFromLocation', header: 'Billed From Country', width: '15%' },
+    { field: 'billedToLocation', header: 'Billed To Country', width: '15%' },
+    { field: 'costCenter', header: 'Cost Center', width: '15%' },
+    { field: 'updatedBy', header: 'Updated By', width: '10%' },
+    { field: 'lastUpdated', header: 'Updated Date', width: '10%' },
+  
 
   ];
   public editFlag = false;
@@ -103,7 +103,7 @@ export class ProductServiceTypeComponent implements OnInit {
       this.productReferenceData = refData;
       this.productReferenceDataList.push({ label: "Select", value: "Select" })
       for (let data of this.productReferenceData) {
-        let labelProd = data.serviceTypePrefixSuggestion + " | " + data.productName
+        let labelProd = data.productCode + " | " + data.productName
         this.productReferenceDataList.push({ label: labelProd, value: data.productId })
 
       }
@@ -157,40 +157,18 @@ export class ProductServiceTypeComponent implements OnInit {
       console.log("Product Selected : " + productData);
       let fromCountry =  this.countryCodeReferenceData.filter(x => x.countryId == this.gcbDetailFilters.billedFromLocationId)[0];
       let toCountry =  this.countryCodeReferenceData.filter(x => x.countryId == this.gcbDetailFilters.billedToLocationId)[0];
-      this.gcbDetailFilters.serviceTypeName = productData.serviceTypePrefixSuggestion +"_"+ fromCountry.countryCode+"_2"+toCountry.countryCode;
+      this.gcbDetailFilters.serviceTypeName = productData.productCode +"_"+ fromCountry.countryCode+"_2"+toCountry.countryCode;
       console.log("Product this.gcbDetailFilters.suggestedServiceType : " + this.gcbDetailFilters.serviceType);
       this.gcbDetailFilters.suggestedServiceType = this.gcbDetailFilters.serviceTypeName;
+      this.gcbDetailFilters.legacyServiceTypeName=this.gcbDetailFilters.serviceTypeName;
       if(this.gcbDetailFilters.processName=='TELECOM'){
         this.legacyServiceTypeEnableFlag=false;
-        if(this.gcbDetailFilters.legacyServiceTypeName=="" || this.gcbDetailFilters.legacyServiceTypeName==null){
-        this.gcbDetailFilters.legacyServiceTypeName=this.gcbDetailFilters.serviceTypeName;
-        }
-      } else{
-        this.gcbDetailFilters.legacyServiceTypeName="";
-      }
-      
-      // this.serviceTypeService.getServicetype(this.gcbDetailFilters).subscribe(
-      //   refData => {
-      //     let arr: any = [];
-      //     arr = refData;
-      //    // this.gcbDetailFilters.serviceType = arr.serviceType;
-      //     this.errorMessage = arr.serviceTypeMessage;
-      //   },
-      //   error => {
-      //   });
+      }       
+    
     }
 
   }
 
-  updateLegacyServiceType(){
-    if(this.gcbDetailFilters.processName=='TELECOM'){
-      this.legacyServiceTypeEnableFlag=false;
-      this.gcbDetailFilters.legacyServiceTypeName=this.gcbDetailFilters.serviceTypeName;
-    } else{
-      this.gcbDetailFilters.legacyServiceTypeName="";
-    }
-  }
- 
   getAllServiceType() {
     console.log("getAllServiceType");
     this.serviceTypeService.getServicetypeData().subscribe(
@@ -309,12 +287,10 @@ export class ProductServiceTypeComponent implements OnInit {
 
     if(this.gcbDetailFilters.processName=='TELECOM'){
       this.legacyServiceTypeEnableFlag=false;
-      if(this.gcbDetailFilters.legacyServiceTypeName=="" || this.gcbDetailFilters.legacyServiceTypeName==null){
-      this.gcbDetailFilters.legacyServiceTypeName=this.gcbDetailFilters.serviceTypeName;
-      }
-    } else{
-      this.gcbDetailFilters.legacyServiceTypeName="";
-    }
+      // if(this.gcbDetailFilters.legacyServiceTypeName=="" || this.gcbDetailFilters.legacyServiceTypeName==null){
+      // this.gcbDetailFilters.legacyServiceTypeName=this.gcbDetailFilters.serviceTypeName;
+      // }
+    } 
     
   }
 } 
