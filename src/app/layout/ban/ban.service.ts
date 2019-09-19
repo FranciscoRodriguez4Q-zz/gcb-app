@@ -19,13 +19,30 @@ export class BanService {
     return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT+"/ban/ban-details");
   }
 
-   public getAllCountryCode(): Observable<Object> {
+  public getAllCountryCode(): Observable<Object> {
      return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT+"/country");
    }
 
   public upsertBan(banInsertData): Observable<Object> {
      return this.http.post(environment.APP_BASE_URL_SERVICE_ENDPOINT+"/ban/bans", banInsertData);
    }
+
+  public getAllFocusGroups(): Observable<Object> {
+    return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT+"/focusGroup");
+  }
+
+  public getServicetypeData(): Observable<Object> {
+    return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT+"/serviceTypesData");
+  }
+
+  public getVendorConfigDetails():Observable<Object> { 
+    return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT+"/vendorconfig-details");
+  }
+
+  public getBuyerDetails():Observable<Object> { 
+    return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT+"/buyer/buyer-details");
+  }
+
   private handleError(error){
     return throwError(error + "UrlConstants.SERVER_ERROR");
   }
