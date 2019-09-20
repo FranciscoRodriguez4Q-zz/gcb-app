@@ -6,6 +6,7 @@ import { PrimeModule } from 'src/app/prime';
 import {InputSwitchModule} from 'primeng/inputswitch';
 import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 import { LayoutModule } from '../layout.module';
+import {PickListModule} from 'primeng/picklist';
 
 @NgModule({
   declarations: [BanComponent],
@@ -16,7 +17,8 @@ import { LayoutModule } from '../layout.module';
     InputSwitchModule,
     FormsModule,
     ReactiveFormsModule,
-    LayoutModule
+    LayoutModule,
+    PickListModule
   ]
 })
 export class BanModule { }

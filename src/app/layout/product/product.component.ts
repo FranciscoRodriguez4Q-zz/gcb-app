@@ -20,7 +20,7 @@ export class ProductComponent implements OnInit {
   unspscReferenceList: SelectItem[] = [];
   public unspscReference: any;
   public downloadCols = [];
-  
+  productDwnData:any = [];
   public products: any = [];
   public gcbDwnData: any = [];
   public editFlag = false;
@@ -35,11 +35,12 @@ export class ProductComponent implements OnInit {
   public fileName : any ="Product";
   public cols = [
     { field: 'productName', header: 'Product Name', width: '15%' },
-    { field: 'serviceTypePrefixSuggestion', header: 'Service Type Prefix', width: '15%' },
+    { field: 'productCode', header: 'Product Code', width: '15%' },
     { field: 'billProcessName', header: 'Process Name', width: '15%' },
+    { field: 'productType', header: 'Product Type', width: '15%' },
     { field: 'unspsc', header: 'UNSPSC', width: '15%' },
-    { field: 'lastUpdated', header: 'Updated By', width: '15%' },
-    { field: 'updatedBy', header: 'Updated Date', width: '15%' },
+    { field: 'updatedBy', header: 'Updated By', width: '15%' },
+    { field: 'lastUpdated', header: 'Updated Date', width: '15%' },
   ];
 
   public gcbProductFilters:any={
@@ -47,7 +48,7 @@ export class ProductComponent implements OnInit {
     productName: "",
     billProcessName: "",
     billProcessId: "Select",
-    serviceTypePrefixSuggestion: "",
+    productCode: "",
     tDescriptionDesiredValue: "",
     productType: "",
     productTypeId: "Select",
@@ -58,12 +59,11 @@ export class ProductComponent implements OnInit {
   constructor(private router: Router,private productService:ProductService , private modalService: NgbModal) { }
 
   ngOnInit() { 
-
+    this.getProductDetails();
     for (let i = 0; i < this.cols.length; i++) {
       this.downloadCols.push(this.cols[i].header);
-      //this.downloadCols[this.cols[i].header] = "";
     }
-    this.getProductDetails();
+   
     this.getBillProcess();
     this.getProductType();
     this.getUnspsc();
@@ -75,7 +75,17 @@ export class ProductComponent implements OnInit {
       this.productService.getProductDetails().subscribe(
         refData =>{
           this.products=refData;
-          this.gcbDwnData = refData;
+          this.products.map(item => {
+            return {
+              productName: item.productName,
+              productCode: item.productCode,   
+              billProcessName: item.billProcessName,
+              productType: item.productType, 
+              unspsc: item.unspsc,
+              updatedBy: item.uupdatedBypdatedBy,
+              lastUpdated: item.lastUpdated
+            }
+        }).forEach(item => this.productDwnData.push(item));
         },
         error =>{
 
@@ -145,8 +155,8 @@ export class ProductComponent implements OnInit {
         this.errorMessage = "Please Enter Product Name ";
         return false;
       }
-      if (this.gcbProductFilters.serviceTypePrefixSuggestion == "") {
-        this.errorMessage = "Please Enter Service Type Prefix Suggestion ";
+      if (this.gcbProductFilters.productCode == "") {
+        this.errorMessage = "Please Enter Product Code ";
         return false;
       }
       if (this.gcbProductFilters.tDescriptionDesiredValue == "") {
@@ -157,10 +167,10 @@ export class ProductComponent implements OnInit {
         this.errorMessage = "Please select Product Type";
          return false;
       }
-      if (this.gcbProductFilters.unspsc == "Select") {
-        this.errorMessage = "Please select UNSPSC";
-         return false;
-      }
+      // if (this.gcbProductFilters.unspsc == "Select") {
+      //   this.errorMessage = "Please select UNSPSC";
+      //    return false;
+      // }
       return true;
     }
   
@@ -200,7 +210,7 @@ export class ProductComponent implements OnInit {
         productName: "",
         billProcessName: "",
         billProcessId: "Select",
-        serviceTypePrefixSuggestion: "",
+        productCode: "",
         tDescriptionDesiredValue: "",
         productType: "",
         productTypeId: "Select",

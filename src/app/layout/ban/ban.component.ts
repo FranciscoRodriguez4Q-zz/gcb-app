@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { BanService } from './ban.service';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { SelectItem } from 'primeng/primeng';
+import {ListboxModule} from 'primeng/listbox';
+import {PickListModule} from 'primeng/picklist';
 
 @Component({
   selector: 'app-product',
@@ -51,6 +53,25 @@ export class BanComponent implements OnInit {
   @ViewChild('content1') errorMessagePopUp;
   closeResult: string;
   public formMode="New";
+  public sourceSystem:any = [];
+  public targetSystem:any = [];
+  public countryCodeReferenceData: any;
+  countryCodeReferenceDataList: SelectItem[] = [];
+  public index = [];
+  public expansionEventFlag = true;
+  public collapsed=true;
+  public panelExpansionFlag=true;
+  public focusReferenceData: any;
+  focusReferenceDataList: SelectItem[] = [];
+  public serviceTypeReferenceData: any;
+  serviceTypeReferenceDataList: SelectItem[] = [];
+  public vendorReferenceData: any;
+  vendorReferenceDataList: SelectItem[] = [];
+  productReferenceDataList: SelectItem[] = [];
+  public buyerReferenceData: any;
+  buyerReferenceDataList: SelectItem[] = [];
+  billingReferenceDataList: SelectItem[] = [];
+  modeReferenceDataList: SelectItem[] = [];
   
   constructor(private banService: BanService,private modalService: NgbModal) { }
   
@@ -60,7 +81,7 @@ export class BanComponent implements OnInit {
     { field: 'vendorCode', header: 'Vendor Name', width: '5%' },
     { field: 'serviceTypeName', header: 'Service Type Name', width: '10%' },
     { field: 'erpBuyerLeName', header: 'Buyer Name', width: '20%' },
-    { field: 'liquidateBillRoutingId', header: 'Bill Routing ID', width: '10%' },
+    { field: 'liquidateBillRoutingId', header: 'Bill Rote ID', width: '10%' },
     { field: 'updatedBy', header: 'Updated By', width: '10%' },
     { field: 'lastUpdated', header: 'Updated Date', width: '10%' },
   ];
@@ -75,7 +96,14 @@ export class BanComponent implements OnInit {
       // console.log("in Download method"+i);
       this.downloadCols.push(this.cols[i].header);
     }    
-    //this.getAllCountryData();
+    this.getAllCountryData();
+    this.getAllFocusGroups();
+    this.getAllServiceType();
+    this.getAllVendorConfig();
+    this.getAllProcessDet();
+    this.getAllBuyers();
+    this.getAllBillingModel();
+    this.getAllModel();
   }
 
   getAllBanDetails() {
@@ -100,22 +128,6 @@ export class BanComponent implements OnInit {
       });
   }
 
-  // getAllCountryData(){
-  //   this.banService.getAllCountryCode().subscribe(
-  //     refData => {
-  //       let arr: any = [];
-  //       this.countryCodeReferenceData = refData;
-  //       this.countryCodeReferenceDataList.push({ label: "Select", value: "Select" })
-  
-  //       for (let data of this.countryCodeReferenceData) {
-  //         let labelCountry = data.countryCode + " | " + data.countryName;
-  //         this.countryCodeReferenceDataList.push({ label: labelCountry, value: data.countryId })
-  //       }
-  //     },
-  //     error => {
-  //     });
-  // }
-
   showSelectedData(banId) {
     console.log("radio button click" + this.banId);
     this.editFlag = true;
@@ -139,10 +151,31 @@ export class BanComponent implements OnInit {
   }
 
   validation(){
-    if(this.banInsertData.erpBanLeName==""){
-      this.errorMessage = "Please Enter Ban ERP Le Name";
+    if(this.banInsertData.processName==""){
+      this.errorMessage = "Please Enter Process Name";
       return false;
     }
+    if(this.banInsertData.vendorBan==""){
+      this.errorMessage = "Please Enter Vendor Ban";
+      return false;
+    }
+    if(this.banInsertData.vendorCode==""){
+      this.errorMessage = "Please Select vendor Code";
+      return false;
+    }
+    if(this.banInsertData.buyerId==""){
+      this.errorMessage = "Please Select Buyer Name";
+      return false;
+    }
+    if(this.banInsertData.billingModelR==""){
+      this.errorMessage = "Please Select Billing Model";
+      return false;
+    }
+    if(this.banInsertData.invoiceBuyerLeName==""){
+      this.errorMessage = "Please Enter Invoice Buyer Le Name";
+      return false;
+    }
+
     else{
       return true;
     }
@@ -175,6 +208,98 @@ export class BanComponent implements OnInit {
     }
   }
 
+  getAllCountryData(){
+    this.banService.getAllCountryCode().subscribe(
+      refData => {
+        let arr: any = [];
+        this.countryCodeReferenceData = refData;
+        //this.countryCodeReferenceDataList.push({ label: "Select", value: "Select" })
+  
+        for (let data of this.countryCodeReferenceData) {
+          let labelCountry = data.countryCode + " | " + data.countryName;
+          this.countryCodeReferenceDataList.push({ label: labelCountry, value: data.countryId })
+        }
+      },
+      error => {
+      });
+  }
+
+  getAllFocusGroups(){
+    this.banService.getAllFocusGroups().subscribe(
+      refData => {
+        let arr: any = [];
+        this.focusReferenceData = refData;
+        for (let data of this.focusReferenceData) {
+          let labelFocus = data.focusGroupName;
+          this.focusReferenceDataList.push({ label: labelFocus, value: data.focusGroupId })
+        }
+      },
+      error => {
+      });
+  }
+
+  getAllServiceType() {
+    this.banService.getServicetypeData().subscribe(
+      refData => {
+        let arr: any = [];
+        this.serviceTypeReferenceData = refData; 
+        this.sourceSystem=this.sourceSystem.concat(refData); 
+        for (let data of this.serviceTypeReferenceData) {
+          let labelService = data.serviceTypeName;
+          this.serviceTypeReferenceDataList.push({ label: labelService, value: data.serviceTypeId })
+        }
+      },
+      error => {
+      });      
+  }
+
+  getAllVendorConfig() {
+    this.banService.getVendorConfigDetails().subscribe(
+      refData => {
+        let arr: any = [];
+        this.vendorReferenceData = refData;  
+        for (let data of this.vendorReferenceData) {
+          let labelService = data.vendorCode+' | '+data.billedFromCountryCd+' | '+data.billedToCountryCd+' | '+data.currencyCode;
+          this.vendorReferenceDataList.push({ label: labelService, value: data.vendorConfigId })
+        }
+      },
+      error => {
+      });      
+  }
+
+  getAllProcessDet(){
+    //this.productReferenceDataList.push({ label: "Select", value: "Select" });
+    this.productReferenceDataList.push({ label: "TELECOM", value: "TELECOM" });
+    this.productReferenceDataList.push({ label: "GOTEMS", value: "GOTEMS" });
+  }
+
+  getAllBuyers(){
+    this.banService.getBuyerDetails().subscribe(
+      refData => {
+        let arr: any = [];
+        this.buyerReferenceData = refData;  
+        for (let data of this.buyerReferenceData) {
+          let labelService = data.erpBuyerLeName;
+          this.buyerReferenceDataList.push({ label: labelService, value: data.buyerId })
+        }
+      },
+      error => {
+      });
+  }
+
+  getAllBillingModel(){
+    //this.billingReferenceDataList.push({ label: "Select", value: "Select" });
+    this.billingReferenceDataList.push({ label: "Sabrix", value: "Sabrix" });
+    this.billingReferenceDataList.push({ label: "PayMaster", value: "PayMaster" });
+    this.billingReferenceDataList.push({ label: "CoE Liquidation", value: "CoE Liquidation" });
+  }
+
+  getAllModel(){
+    //this.modeReferenceDataList.push({ label: "Select", value: "Select" });
+    this.modeReferenceDataList.push({ label: "Production", value: "Production" });
+    this.modeReferenceDataList.push({ label: "Test", value: "Test" });
+  }
+
   /**
    * Private Method to get popup dismissed reason Can be removed if not needed.
    * @param: reason: $event.
@@ -187,5 +312,17 @@ export class BanComponent implements OnInit {
     } else {
       return `with: ${reason}`;
     }
+  }
+
+  expandAllPanels(){
+    this.index = [0,1,2,3,4,5,6];
+    this.collapsed=false;
+    this.panelExpansionFlag=false;
+  }
+
+  collapseAllPanels(){
+    this.index = [];
+    this.collapsed=true;
+    this.panelExpansionFlag=true;
   }
 }

@@ -5,7 +5,7 @@
 <div class="p-grid nested-grid">
     <div class="p-col-6">
         <div class="p-grid">
-            <div class="p-col-4 item-right">
+            <div class="p-col-5 item-right">
                 <label class="label"><span class="required">*</span>Product Name </label>
             </div>
             <div class="p-col-5 item-left">
@@ -21,17 +21,17 @@
         </div>
 
         <div class="p-grid">
-                <div class="p-col-4 item-right">
-                    <label class="label">Process  </label>
+                <div class="p-col-5 item-right">
+                    <label class="label">Process  Name</label>
                 </div>
                 <div class="p-col-5 item-left">
-                        <input class="form-control" [(ngModel)]="gcbDetailFilters.processName" [disabled]="true" >
+                        <input class="form-control widthAdjust" [(ngModel)]="gcbDetailFilters.processName" [disabled]="true" >
                 </div>
             </div>
 
 
         <div class="p-grid">
-            <div class="p-col-4 item-right" >
+            <div class="p-col-5 item-right" >
                 <label class="label"><span class="required">*</span>Billed From </label>
             </div>
             <div class="p-col-5 item-left">
@@ -43,7 +43,7 @@
             </div>
         </div>
         <div class="p-grid">
-            <div class="p-col-4 item-right">
+            <div class="p-col-5 item-right">
                  <label class="label"><span class="required">*</span>Billed To </label>
             </div>
             <div class="p-col-5 item-left">
@@ -53,19 +53,19 @@
             </div>
         </div>
         <div class="p-grid">
-            <div class="p-col-4 item-right">
+            <div class="p-col-5 item-right">
                  <label class="label"><span class="required">*</span>Service Type Name </label>
             </div>
             <div class="p-col-5 item-left">
-                <input class="form-control"  (ngModelChange)="updateLegacyServiceType()"  [(ngModel)]="gcbDetailFilters.serviceTypeName" tooltip="gcbDetailFilters.serviceTypeName" >
+                <input class="form-control widthAdjust"  [disabled]="true" [(ngModel)]="gcbDetailFilters.serviceTypeName" tooltip="gcbDetailFilters.serviceTypeName" >
             </div>
         </div>
         <div class="p-grid">
-                <div class="p-col-4 item-right">
-                     <label class="label"><span class="required" *ngIf="!legacyServiceTypeEnableFlag">*</span>Legacy Service Type </label>
+                <div class="p-col-5 item-right">
+                     <label class="label"><span class="required" *ngIf="!legacyServiceTypeEnableFlag">*</span>Legacy Service Type Name</label>
                 </div>
                 <div class="p-col-5 item-left">
-                    <input class="form-control" [(ngModel)]="gcbDetailFilters.legacyServiceTypeName" [disabled]="legacyServiceTypeEnableFlag">
+                    <input class="form-control widthAdjust"  [(ngModel)]="gcbDetailFilters.legacyServiceTypeName" [disabled]="legacyServiceTypeEnableFlag">
                 </div>
             </div>
        
@@ -89,11 +89,11 @@
                                   <label class="label"><span class="required">*</span>Cost Center </label>
                             </div>
                             <div class="p-col-5 item-left">
-                                <input class="form-control" [(ngModel)]="gcbDetailFilters.costCenter"  >
+                                <input class="form-control widthAdjust" [(ngModel)]="gcbDetailFilters.costCenter"  >
                 
                             </div>
                         </div>
-                    <div class="p-grid">
+                    <!-- <div class="p-grid">
                             <div class="p-col-3 item-right">
                                  <label class="label"><span class="required">*</span>VAT Percent</label>
                             </div>
@@ -116,7 +116,7 @@
                             <div class="p-col-5 item-left">
                                 <input class="form-control" [(ngModel)]="gcbDetailFilters.tpPercent"  >
                             </div>
-                    </div>
+                    </div> -->
                     <!-- <div class="p-grid">
                             <div class="p-col-4 item-right">
                                  <label class="label"><span class="required">*</span>UNSPSC Override</label>
