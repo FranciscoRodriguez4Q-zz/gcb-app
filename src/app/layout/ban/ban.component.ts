@@ -151,10 +151,31 @@ export class BanComponent implements OnInit {
   }
 
   validation(){
-    if(this.banInsertData.erpBanLeName==""){
-      this.errorMessage = "Please Enter Ban ERP Le Name";
+    if(this.banInsertData.processName==""){
+      this.errorMessage = "Please Enter Process Name";
       return false;
     }
+    if(this.banInsertData.vendorBan==""){
+      this.errorMessage = "Please Enter Vendor Ban";
+      return false;
+    }
+    if(this.banInsertData.vendorCode==""){
+      this.errorMessage = "Please Select vendor Code";
+      return false;
+    }
+    if(this.banInsertData.buyerId==""){
+      this.errorMessage = "Please Select Buyer Name";
+      return false;
+    }
+    if(this.banInsertData.billingModelR==""){
+      this.errorMessage = "Please Select Billing Model";
+      return false;
+    }
+    if(this.banInsertData.invoiceBuyerLeName==""){
+      this.errorMessage = "Please Enter Invoice Buyer Le Name";
+      return false;
+    }
+
     else{
       return true;
     }
