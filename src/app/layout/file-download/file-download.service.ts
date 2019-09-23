@@ -156,6 +156,10 @@ export class FileDownloadService {
     return this.http.post(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/buyer/dwnBuyerData",'');
   }
 
+  public getVendorConfigData(colsHeader): Observable<Object> {
+    return this.http.post(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/vendorconfig-details",'');
+  }
+
   public getBanData(colsHeader): Observable<Object> {
     return this.http.post(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/ban/dwnBanData",'');
   }

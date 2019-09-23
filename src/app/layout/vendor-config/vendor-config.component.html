@@ -17,7 +17,7 @@
         <span class="required">*</span>Vendor
       </div>
       <div class="p-col-4">
-        <p-dropdown [options]="vendorReferenceDataList" [style]="{'width': '100%'}" [(ngModel)]="vendorConfigDto.vendorEntityId" [filter]="true" ></p-dropdown>
+        <p-dropdown [options]="vendorReferenceDataList" [style]="{'width': '100%'}" [(ngModel)]="vendorConfigDto.vendorEntityId" [filter]="true" placeholder="Select"></p-dropdown>
       </div>
       <div class="p-col-2 item-right">
         <span class="required">*</span>Active
@@ -25,105 +25,101 @@
       <div class="p-col-1" >
          <p-checkbox [(ngModel)]="vendorConfigDto.active" binary="true"></p-checkbox>
       </div>
-      <div class="p-col-2 item-right">
+      <div class="p-col-1 item-right">
          <span class="required">*</span>LLD CoE
       </div>
-      <div class="p-col-1">
-         <p-checkbox [(ngModel)]="vendorConfigDto.lldCoeFlag" binary="true"></p-checkbox>
+      <div class="p-col-2">
+        <p-dropdown [options]="lldCoeList"  [style]="{'width': '8px'}"  [(ngModel)]="vendorConfigDto.lldCoeFlag" [filter]="true" placeholder="Select"></p-dropdown>
       </div>
 </div>
 <div class="p-grid">
        <div class="p-col-2 item-right">
          <span class="required">*</span>Vendor Code
        </div>
-       <div class="p-col-4 item-left">
+       <div class="p-col-4 item-left upper">
           <input class="form-control" [(ngModel)]="vendorConfigDto.vendorCode" style="width: 25%" >
        </div>
        <div class="p-col-2 item-right">
           <span class="required">*</span>Exchange Rate Type
         </div>
-        <div class="p-col-4">
+        <div class="p-col-4 upper">
            <input class="form-control" [(ngModel)]="vendorConfigDto.exchangeRateType"  style="width: 25%">
         </div>
 </div>
 <div class="p-grid">
     <div class="p-col-2 item-right">
-      <span class="required">*</span>Friendly Name
-    </div>
-    <div class="p-col-4 item-left">
-       <input class="form-control" [(ngModel)]="vendorConfigDto.vendorFriendlyName" style="width: 100%">
-    </div>
-    <div class="p-col-2 item-right">
        <span class="required">*</span>Vendor Contact Email
      </div>
-     <div class="p-col-4">
+     <div class="p-col-4 upper">
         <input class="form-control" [(ngModel)]="vendorConfigDto.vendorContactEmail" style="width: 100%">
      </div>
+     <div class="p-col-2 item-right upper">
+      <span class="required">*</span>Pay Approval Email
+    </div>
+    <div class="p-col-4">
+       <input class="form-control" [(ngModel)]="vendorConfigDto.paymentApprovalEmail" style="width: 100%">
+    </div>
 </div>
 <div class="p-grid">
     <div class="p-col-2 item-right">
       <span class="required">*</span>Currency Code
     </div>
     <div class="p-col-4 item-left">
-        <p-dropdown [options]="vendorLov" [(ngModel)]="vendorConfigDto.currencyCode" [filter]="true" ></p-dropdown>
+        <p-dropdown [options]="currencyReferenceDataList" [(ngModel)]="vendorConfigDto.currencyCode" [filter]="true"  placeholder="Select"></p-dropdown>
     </div>
     <div class="p-col-2 item-right">
-       <span class="required">*</span>Pay Approval Email
-     </div>
-     <div class="p-col-4">
-        <input class="form-control" [(ngModel)]="vendorConfigDto.paymentApprovalEmail" style="width: 100%">
-     </div>
+      <span class="required">*</span>Expected Feed Date
+    </div>
+    <div class="p-col-4">
+       <p-calendar [(ngModel)]="vendorConfigDto.expectedFeedDate"  [style]="{'width': '50%'}" ></p-calendar>
+    </div>
+
 </div>
 <div class="p-grid">
     <div class="p-col-2 item-right">
       <span class="required">*</span>Billed From
     </div>
     <div class="p-col-4 item-left">
-        <p-dropdown [options]="countryCodeReferenceDataList" [style]="{'width': '100%'}" [(ngModel)]="vendorConfigDto.billedFromLocationId" [filter]="true" ></p-dropdown>
+        <p-dropdown [options]="countryCodeReferenceDataList" [style]="{'width': '100%'}" [(ngModel)]="vendorConfigDto.billedFromLocationId" [filter]="true" placeholder="Select" ></p-dropdown>
     </div>
     <div class="p-col-2 item-right">
-       <span class="required">*</span>Expected Feed Date
-     </div>
-     <div class="p-col-4">
-        <p-calendar [(ngModel)]="vendorConfigDto.expectedFeedDate"  [style]="{'width': '50%'}" ></p-calendar>
-     </div>
+      <span class="required">*</span>Final Invoice Date
+    </div>
+    <div class="p-col-4">
+       <p-calendar [(ngModel)]="vendorConfigDto.finalInvoiceDate" [style]="{'width': '50%'}"></p-calendar>
+    </div>
 </div>
 <div class="p-grid">
     <div class="p-col-2 item-right">
       <span class="required">*</span>Billed To
     </div>
     <div class="p-col-4 item-left">
-        <p-dropdown [options]="countryCodeReferenceDataList" [style]="{'width': '100%'}" [(ngModel)]="vendorConfigDto.billedToLocationId" [filter]="true" ></p-dropdown>
+        <p-dropdown [options]="countryCodeReferenceDataList" [style]="{'width': '100%'}" [(ngModel)]="vendorConfigDto.billedToLocationId" [filter]="true" placeholder="Select" ></p-dropdown>
     </div>
     <div class="p-col-2 item-right">
-       <span class="required">*</span>Final Invoice Date
-     </div>
-     <div class="p-col-4">
-        <p-calendar [(ngModel)]="vendorConfigDto.finalInvoiceDate" [style]="{'width': '50%'}"></p-calendar>
-     </div>
+      <span class="required">*</span>Reporting Security DL
+    </div>
+    <div class="p-col-4 upper">
+       <input class="form-control" [(ngModel)]="vendorConfigDto.reportingSecurityDl" >
+    </div>
 </div>
 <div class="p-grid">
     <div class="p-col-2 item-right">
       <span class="required">*</span>Date Format
     </div>
-    <div class="p-col-4 item-left">
+    <div class="p-col-4 item-left upper">
        <input class="form-control" [(ngModel)]="vendorConfigDto.dateFormat" style="width:40%">
     </div>
-    <div class="p-col-2 item-right">
-       <span class="required">*</span>Reporting Security DL
-     </div>
-     <div class="p-col-4">
-        <input class="form-control" [(ngModel)]="vendorConfigDto.reportingSecurityDL" >
-     </div>
+
 </div>
 <div class="p-grid">
-    <label class="errorMessage">{{errorMessage}}</label>
+    <label class="errorMessage required">{{errorMessage}}</label>
 </div>
 <div class="p-grid">
     <div class="p-col-12" style="text-align:right">
         <button class="ge-button -fill--solid" (click)="upsertVendorConfig()">Submit</button>
         <button class="ge-button -fill--solid" (click)="clearAllFilters()">Cancel</button>
-        <app-file-download [dwnData]="gcbDwnData" [colsHeader]="this.downloadCols" [fileName]="fileName"  (dwnAction)="getAllVendor();"></app-file-download>
+        <app-file-download [dwnData]="dwnVendor" [colsHeader]="this.reportHeader" [fileName]="fileName"  (dwnAction)="getAllVendor();"></app-file-download>
 
     </div>
 </div>
@@ -149,15 +145,19 @@
             </tr> 
         </ng-template>
         <ng-template pTemplate="body" let-rowData let-columns="columns">
-            <tr>
-                <td>
-                    <p-tableRadioButton [value]="rowData" (click)="showSelectedData(rowData['vendorConfigId'])" ></p-tableRadioButton>
-                </td>
-                <td *ngFor="let col of columns" >
+          <tr>
+              <td [ngStyle]="{'width': '48px'}">
+                  <div class="justify-content-center">
+                       <a class="a-color" style="cursor:pointer;" (click)="showSelectedData(rowData['vendorConfigId'])">
+                          <i class="fa fa-pencil-square-o fa-2x"></i>
+                      </a> 
+                  </div>
+              </td>
+              <td *ngFor="let col of columns" [ngStyle]="{'width': '100px'}">
                   <div> {{rowData[col.field]}}</div>
-                </td>
-            </tr>
-        </ng-template>
+              </td>
+          </tr>
+      </ng-template>
       </p-table>
     </div>
     </div>

@@ -18,9 +18,22 @@ public countryCodeReferenceData: any;
 countryCodeReferenceDataList: SelectItem[] = [];
 public currencyCodeReferenceData: any;
 currencyCodeReferenceDataList: SelectItem[] = [];
-vendorGridDataList :SelectItem[] = [];
-vendorGridData : any;
-dwnVendor:any;
+public currencyReferenceData: any;
+currencyReferenceDataList:SelectItem[] = [];
+
+public vendorGridDataList :SelectItem[] = [];
+
+
+lldCoeList : SelectItem[] =[
+  { label: "Y", value: "Y" },
+  { label: "N", value: "N" },
+  { label: "L", value: "L" }  
+];
+
+public vendorGridData : any;
+public dwnVendor:any;
+public reportHeader : any =[];
+public fileName : string ="VendorConfig";
 
 public popupErrorMessage : any;
 public errorMessage :any;
@@ -30,20 +43,18 @@ closeResult: string;
 public editFlag: boolean;
 
 public vendorConfigDto : any ={vendorConfigId:0,
-vendorEntityId:"Select",
+vendorEntityId:"",
 vendorLegalEntityName:"",
 vendorCode:"",
-vendorFriendlyName:"",
-billedFromCountry:"Select",
-billedFromLocationId:0,
-billedToCountry:"Select",
-billedToLocationId:0,
+billedFromLocationId:"",
+billedToLocationId:"",
 currencyCode:"",
 active:true,
 dateFormat:"",
-lldCoeFlag:false,
+lldCoeFlag:"",
 exchangeRateType:"",
 vendorContactEmail:"",
+paymentApprovalEmail:"",
 expectedFeedDate:"",
 finalInvoiceDate:"",
 reportingSecurityDl:"",
@@ -54,7 +65,7 @@ lastUpdatedBy:""
 };
 
 public cols = [
-  { field: 'vendorFriendlyName', header: 'Friendly Name', width: '40%' },
+  { field: 'vendorLegalEntityName', header: 'Vendor Legal Entity Name', width: '40%' },
   { field: 'currencyCode', header: 'Currency Code', width: '12%' },
   { field: 'billedFromCountry', header: 'Billed From', width: '18%' },
   { field: 'billedToCountry', header: 'Billed To', width: '18%' },
@@ -63,16 +74,26 @@ public cols = [
   { field: 'lastUpdated', header: 'Updated Date', width: '16%' },
 
 ];
+
 constructor( private vendorConfigService: VendorConfigService, private serviceTypeService : ServiceTypeService,private modalService: NgbModal) {
     
    }
 
 ngOnInit() { 
-
+    this.setReportHeader();
     this.getAllVendorsData();
     this.getAllCountryData();
-    this.getAllCurrencyCodeData();
+    this.getAllCurrencyData();
     this.getVendorDetailGridData();
+}
+
+
+setReportHeader()
+{
+  for(let col of this.cols )
+  {
+    this.reportHeader.push(col.header);
+  }
 }
 
 getAllVendorsData() {
@@ -80,10 +101,20 @@ getAllVendorsData() {
     refData => {
       let arr: any = [];
       this.vendorReferenceData = refData;
-      this.vendorReferenceDataList.push({ label: "Select", value: "Select" })
-
       for (let data of this.vendorReferenceData) {
         this.vendorReferenceDataList.push({ label: data.vendorLegalEntityName, value: data.vendorEntityId })
+      }
+    },
+    error => {
+    });
+}
+
+getAllCurrencyData() {
+  this.vendorConfigService.getAllCurrency().subscribe(
+    refData => {
+      this.currencyReferenceData = refData;
+      for (let data of this.currencyReferenceData) {
+        this.currencyReferenceDataList.push({ label: data.currencyCode, value: data.currencyDescription })
       }
     },
     error => {
@@ -95,26 +126,10 @@ getAllCountryData(){
     refData => {
       let arr: any = [];
       this.countryCodeReferenceData = refData;
-      this.countryCodeReferenceDataList.push({ label: "Select", value: "Select" })
 
       for (let data of this.countryCodeReferenceData) {
         let labelCountry = data.countryCode + " | " + data.countryName;
         this.countryCodeReferenceDataList.push({ label: labelCountry, value: data.countryId })
-      }
-    },
-    error => {
-    });
-}
-
-getAllCurrencyCodeData() {
-  this.vendorConfigService.getAllCurrencyCode().subscribe(
-    refData => {
-      let arr: any = [];
-      this.currencyCodeReferenceData = refData;
-      this.currencyCodeReferenceDataList.push({ label: "Select", value: "Select" })
-
-      for (let data of this.currencyCodeReferenceData) {
-        this.currencyCodeReferenceDataList.push({ label: data.currencyCode, value: data.currencyCode })
       }
     },
     error => {
@@ -135,14 +150,11 @@ clearAllFilters() {
   this.errorMessage = "";
   this.editFlag = false;
   this.vendorConfigDto={vendorConfigId:0,
-    vendorEntityId:"Select",
+    vendorEntityId:"",
     vendorLegalEntityName:"",
     vendorCode:"",
-    vendorFriendlyName:"",
-    billedFromCountry:"Select",
-    billedFromLocationId:0,
-    billedToCountry:"Select",
-    billedToLocationId:0,
+    billedFromLocationId:"",
+    billedToLocationId:"",
     currencyCode:"",
     active:true,
     dateFormat:"",
@@ -163,7 +175,7 @@ clearAllFilters() {
 
 upsertVendorConfig(){
   this.errorMessage = "";
-  console.log("upsert vendor config");
+  console.log("upsert vendor config id selected :",this.vendorConfigDto.vendorEntityId);
   if (this.validation()) {
     if (this.vendorConfigDto.vendorEntityId != "Select" 
     && this.vendorConfigDto.billedFromLocationId!= "Select" 
@@ -175,7 +187,6 @@ upsertVendorConfig(){
           console.log("upsert vendorConfig return message :"+this.saveMessage.message);
           this.popupErrorMessage =  this.saveMessage.message;
           this.open(this.errorMessagePopUp);
-          this.getVendorDetailGridData();
         },
         error => {
         });
@@ -203,24 +214,66 @@ private getDismissReason(reason: any): string {
 }
 
 validation() {
-  if (this.vendorConfigDto.vendorEntityId == "Select") {
+  if (this.vendorConfigDto.vendorEntityId == null||
+    this.vendorConfigDto.vendorEntityId == "Select"||
+    this.vendorConfigDto.vendorEntityId == "") {
     this.errorMessage = "Please select the Vendor Name";
-    return false;
-  }
-  if (this.vendorConfigDto.billedFromLocationId == "Select") {
-    this.errorMessage = "Please select from Country ";
-    return false;
-  }
-  if (this.vendorConfigDto.billedToLocationId == "Select") {
-    this.errorMessage = "Please select to Country ";
     return false;
   }
   if (this.vendorConfigDto.vendorCode == "") {
     this.errorMessage = "Please select Vendor Code";
      return false;
   }
-  if (this.vendorConfigDto.vendorFriendlyName == "") {
-    this.errorMessage = "Please select Vendor Friendly Name";
+  if (this.vendorConfigDto.vendorContactEmail == "") {
+    this.errorMessage = "Please select Vendor Contact Email";
+     return false;
+  }
+  if (this.vendorConfigDto.currencyCode ==null||
+    this.vendorConfigDto.currencyCode == ""||
+    this.vendorConfigDto.currencyCode == "Select") {
+    this.errorMessage = "Please select Currency Code";
+     return false;
+  }
+  if (this.vendorConfigDto.billedFromLocationId == null || 
+    this.vendorConfigDto.billedFromLocationId == "" || 
+    this.vendorConfigDto.billedFromLocationId == "Select") {
+    this.errorMessage = "Please select From location ";
+    return false;
+  }
+  if (this.vendorConfigDto.billedToLocationId == null || 
+    this.vendorConfigDto.billedToLocationId == "" || 
+    this.vendorConfigDto.billedToLocationId == "Select") {
+    this.errorMessage = "Please select To location ";
+    return false;
+  }
+  if (this.vendorConfigDto.dateFormat == "") {
+    this.errorMessage = "Please select Date Format";
+     return false;
+  }
+  if (this.vendorConfigDto.lldCoeFlag == "Select"||
+      this.vendorConfigDto.lldCoeFlag == ""||
+      this.vendorConfigDto.lldCoeFlag == null) {
+    this.errorMessage = "Please select LLD Coe Flag";
+    return false;
+  }
+  if (this.vendorConfigDto.exchangeRateType == "") {
+    this.errorMessage = "Please select Exchange Rate Type";
+     return false;
+  }
+  if (this.vendorConfigDto.paymentApprovalEmail == "") {
+    this.errorMessage = "Please select Payment Approval Email";
+     return false;
+  }
+  if (this.vendorConfigDto.expectedFeedDate == "") {
+    this.errorMessage = "Please select Expected Feed Date";
+     return false;
+  }
+  if (this.vendorConfigDto.finalInvoiceDate == "") {
+    this.errorMessage = "Please select Final Invoice Date";
+     return false;
+  }
+  if (this.vendorConfigDto.reportingSecurityDl == "") {
+    this.errorMessage = "Please select Reporting Security DL";
      return false;
   }
   return true;

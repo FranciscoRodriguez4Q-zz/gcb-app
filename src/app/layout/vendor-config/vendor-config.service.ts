@@ -29,6 +29,8 @@ export class VendorConfigService
       public upsertVendorConfig(vendorConfigDto): Observable<Object> {
         return this.http.post(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/vendorconfig", vendorConfigDto);
       }
-
+      public getAllCurrency(): Observable<Object> {
+        return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/currency");
+      }
       
 }
