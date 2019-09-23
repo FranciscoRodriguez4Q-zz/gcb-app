@@ -315,7 +315,7 @@ export class BanComponent implements OnInit {
   }
 
   expandAllPanels(){
-    this.index = [0,1,2,3,4,5,6];
+    this.index = [0,1,2,3,4,5,6,7];
     this.collapsed=false;
     this.panelExpansionFlag=false;
   }
