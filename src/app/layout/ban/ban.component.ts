@@ -67,12 +67,14 @@ public vendorServiceType : any ={
       shipToZip4: "",
       shipTozip5: "",
       addCountryISOtoVendorName: "",
-      useAssetFileVendorName: ""
+      useAssetFileVendorName: "",
+
+      
     };
   
 
-    billProcessReferenceList: SelectItem[] = [];
-    public billProcessReference: any;
+  billProcessReferenceList: SelectItem[] = [];
+  public billProcessReference: any;
   public banId: any;
   public vendorBan: any;
   public vendorConfigId: any;
@@ -115,7 +117,11 @@ public vendorServiceType : any ={
   buyerReferenceDataList: SelectItem[] = [];
   billingReferenceDataList: SelectItem[] = [];
   modeReferenceDataList: SelectItem[] = [];
-  
+  public billingModelReferenceData: any;
+  public billProcessReferenceData:any;
+  otherServiceData:any = [];
+  public costCenter:any;
+  public unspsc:any;
   constructor(private banService: BanService,private modalService: NgbModal) { }
   
 
@@ -351,15 +357,26 @@ public vendorServiceType : any ={
 
   getAllBillingModel(){
     //this.billingReferenceDataList.push({ label: "Select", value: "Select" });
-    this.billingReferenceDataList.push({ label: "Sabrix", value: "Sabrix" });
-    this.billingReferenceDataList.push({ label: "PayMaster", value: "PayMaster" });
-    this.billingReferenceDataList.push({ label: "CoE Liquidation", value: "CoE Liquidation" });
+    // this.billingReferenceDataList.push({ label: "Sabrix", value: "SABRIX" });
+    // this.billingReferenceDataList.push({ label: "PayMaster", value: PAYMASTER" });
+    // this.billingReferenceDataList.push({ label: "CoE Liquidation", value: "COE LIQUIDATION" });
+    this.banService.getBillingModelDetails().subscribe(
+      refData => {
+        let arr: any = [];
+        this.billingModelReferenceData = refData;  
+        for (let data of this.billingModelReferenceData) {
+          let labelService = data.billingModelDesc;
+          this.billingReferenceDataList.push({ label: labelService, value: data.billingModelId })
+        }
+      },
+      error => {
+      });
   }
 
   getAllModel(){
     //this.modeReferenceDataList.push({ label: "Select", value: "Select" });
-    this.modeReferenceDataList.push({ label: "Production", value: "Production" });
-    this.modeReferenceDataList.push({ label: "Test", value: "Test" });
+    this.modeReferenceDataList.push({ label: "Production", value: "PRODUCTION" });
+    this.modeReferenceDataList.push({ label: "Test", value: "TEST" });
   }
 
   /**
@@ -386,5 +403,112 @@ public vendorServiceType : any ={
     this.index = [];
     this.collapsed=true;
     this.panelExpansionFlag=true;
+  }
+  getClearData(){
+    this.banInsertData={
+      billedFromLocationId:"",
+      billedToLocationId:"",
+    }
+  }
+  getServiceType(){
+    this.errorMessage = "";
+    if (this.banInsertData.vendorConfigId != "Select" && this.banInsertData.vendorConfigId != null) {
+      let vendorConfigData=this.vendorReferenceData.filter(x => x.vendorConfigId == this.banInsertData.vendorConfigId)[0];
+      this.banInsertData.billedFromLocationId=vendorConfigData.billedFromLocationId;
+      this.banInsertData.billedToLocationId=vendorConfigData.billedFromLocationId;
+      //console.log("Vendor Selected : " + vendorConfigData);
+      //console.log("process Id "+this.banInsertData.billProcessId);
+      this.banService.getServiceType(this.banInsertData).subscribe(
+        refData => {
+          let arr: any = [];
+          this.serviceTypeReferenceData = refData; 
+          this.sourceSystem=this.sourceSystem.concat(refData); 
+          for (let data of this.serviceTypeReferenceData) {
+            let labelService = data.serviceTypeName;
+            this.serviceTypeReferenceDataList.push({ label: labelService, value: data.serviceTypeId })
+          }
+        },
+        error => {
+        })
+    }
+  }
+
+  onSelectTarget(item:any){
+    //this.getClearData();
+    console.log("clicked"+item.items[0].serviceTypeId);
+    //console.log("clicked"+this.targetSystem[item[0]].serviceTypeId);
+    this.banInsertData.serviceTypeId = item.items[0].serviceTypeId;
+    this.errorMessage = "";
+    if (this.banInsertData.serviceTypeId != null) {
+      this.banService.getOtherServiceDet(this.banInsertData).subscribe(
+        refData => {
+          this.otherServiceData=refData;
+          this.banInsertData.overrideUnspsc=this.otherServiceData.unspsc;
+          this.banInsertData.overrideOffsetCostCenter=this.otherServiceData.costCenter;
+          if(this.formMode=="New"){
+            this.banInsertData.unspscOverrideFlag=false;
+            this.banInsertData.costCentreOverrideFlag=false;
+            this.banInsertData.erpPmtOverrideFlag=false;
+            this.banInsertData.erpAwtGroupNameOverrideFlag=false;
+            this.banInsertData.erpVatAwtGroupOverrideFlag=false;
+            this.banInsertData.directOffsetBucOverrideFlag=false;
+            this.banInsertData.indirectOffsetBucOverrideFlag=false;
+          }
+      },
+      error => {
+      });
+    }
+  }
+
+  isDisabledUnspsc = true;
+  isDisableCostCenter = true;
+  isDisableErpPmt = true;
+  isDisableErpAwtGrp = true;
+  isDisableErpVatAwt = true;
+  isDisableDirOSAwt = true;
+  isDisableIndirOSAwt = true;
+  triggerUnspscEvent() {
+    console.log("clicked");
+      this.isDisabledUnspsc = !this.isDisabledUnspsc;
+      //this.banInsertData.overrideUnspsc="";
+      return;
+  }
+  triggerCostCenterEvent(){
+    this.isDisableCostCenter = !this.isDisableCostCenter;
+      //this.banInsertData.overrideOffsetCostCenter="";
+      return;
+  }
+  triggerErpPmtEvent(){
+    this.isDisableErpPmt = !this.isDisableErpPmt;
+      //this.banInsertData.overrideErpPmtTerms="";
+      return;
+  } 
+  triggerErpAwtGrpEvent(){
+    this.isDisableErpAwtGrp = !this.isDisableErpAwtGrp;
+    //this.banInsertData.overrideErpAwtGroupName="";
+    return;
+  }
+  triggerErpVatAwtEvent(){
+    this.isDisableErpVatAwt = !this.isDisableErpVatAwt;
+    //this.banInsertData.overrideErpVatAwtGroupName="";
+    return;
+  }
+  triggerDirOffsetEvent(){
+    this.isDisableDirOSAwt = !this.isDisableDirOSAwt;
+    //this.banInsertData.overrideDirectOffsetBuc="";
+    return;
+  }
+  triggerindirectOffsetEvent(){
+    this.isDisableIndirOSAwt = !this.isDisableIndirOSAwt;
+    //this.banInsertData.overrideIndirectOffsetBuc="";
+    return;
+  }
+
+  tableValueChanged(erpAwtGroupName,erpVatAwtGroupName,erpPaymentTerms,directOffsetBuc,indirectOffsetBuc){
+    this.banInsertData.overrideErpPmtTerms=erpPaymentTerms;
+    this.banInsertData.overrideErpAwtGroupName=erpAwtGroupName;
+    this.banInsertData.overrideDirectOffsetBuc =directOffsetBuc;
+    this.banInsertData.overrideIndirectOffsetBuc =indirectOffsetBuc;
+    this.banInsertData.overrideErpVatAwtGroupName=erpVatAwtGroupName
   }
 }

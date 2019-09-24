@@ -48,7 +48,18 @@ export class BanService {
 
   public getBillProcessList(): Observable<Object> {
     return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/billProcess");
+  }
 
+  public getServiceType(banInsertData): Observable<Object> {
+    return this.http.post(environment.APP_BASE_URL_SERVICE_ENDPOINT+"/fetchServiceType", banInsertData);
+  }
+
+  public getBillingModelDetails(): Observable<Object> {
+    return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT+"/ban/billingModel-details");
+  }
+
+  public getOtherServiceDet(banInsertData): Observable<Object> {
+    return this.http.post(environment.APP_BASE_URL_SERVICE_ENDPOINT+"/getOtherServiceType", banInsertData);
   }
 
   private handleError(error){
