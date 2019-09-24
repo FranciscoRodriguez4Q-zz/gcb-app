@@ -42,6 +42,9 @@ export class BanService {
   public getBuyerDetails():Observable<Object> { 
     return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT+"/buyer/buyer-details");
   }
+  public getVendorServiceType(vendorServiceType):Observable<Object> { 
+    return this.http.post(environment.APP_BASE_URL_SERVICE_ENDPOINT+"/fetchServiceType",vendorServiceType);
+  }
 
   private handleError(error){
     return throwError(error + "UrlConstants.SERVER_ERROR");

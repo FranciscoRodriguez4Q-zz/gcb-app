@@ -15,6 +15,13 @@ export class BanComponent implements OnInit {
   public gridData: any = [];
   data:any;
   files: any ={};
+
+public vendorServiceType : any ={
+  "billedToLocationId":"",
+	"billedFromLocationId":"",
+	"billProcessId":""
+};
+
   public banFormData: any = {
     "banId": "",
     "vendorBan": "",
@@ -98,7 +105,6 @@ export class BanComponent implements OnInit {
     }    
     this.getAllCountryData();
     this.getAllFocusGroups();
-    this.getAllServiceType();
     this.getAllVendorConfig();
     this.getAllProcessDet();
     this.getAllBuyers();
@@ -238,19 +244,33 @@ export class BanComponent implements OnInit {
       });
   }
 
-  getAllServiceType() {
-    this.banService.getServicetypeData().subscribe(
-      refData => {
-        let arr: any = [];
-        this.serviceTypeReferenceData = refData; 
+  getVendorServiceType()
+  {
+    if(this.banInsertData.vendorConfigId!=null || this.banInsertData.vendorConfigId!="Select")
+    {
+      console.log("selected vendorConfig:",this.banInsertData.vendorConfigId);
+      let vendorConfigObj = this.vendorReferenceData.filter(x => x.vendorConfigId == this.banInsertData.vendorConfigId)[0];
+      
+      this.vendorServiceType.billedToLocationId=vendorConfigObj.billedToLocationId;
+      this.vendorServiceType.billedFromLocationId=vendorConfigObj.billedFromLocationId;
+      this.vendorServiceType.billProcessId=vendorConfigObj.billProcessId;
+
+      this.banService.getVendorServiceType(this.vendorServiceType).subscribe(
+          refData =>{
+            this.serviceTypeReferenceData = refData; 
         this.sourceSystem=this.sourceSystem.concat(refData); 
         for (let data of this.serviceTypeReferenceData) {
           let labelService = data.serviceTypeName;
           this.serviceTypeReferenceDataList.push({ label: labelService, value: data.serviceTypeId })
         }
-      },
-      error => {
-      });      
+          },
+          error=>
+          {
+
+          }
+);
+
+    }
   }
 
   getAllVendorConfig() {
@@ -259,7 +279,7 @@ export class BanComponent implements OnInit {
         let arr: any = [];
         this.vendorReferenceData = refData;  
         for (let data of this.vendorReferenceData) {
-          let labelService = data.vendorCode+' | '+data.billedFromCountryCd+' | '+data.billedToCountryCd+' | '+data.currencyCode;
+          let labelService = data.vendorCode+' | '+data.billedFromCountryCode+' | '+data.billedToCountryCode+' | '+data.currencyCode;
           this.vendorReferenceDataList.push({ label: labelService, value: data.vendorConfigId })
         }
       },

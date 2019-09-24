@@ -53,7 +53,7 @@
                         <div class="p-grid ">
                             <div class="p-col-4 item-right"><span class="required">*</span>Vendor Code :</div>
                             <div class="p-col-8 item-left">
-                                <p-dropdown [options]="vendorReferenceDataList" [style]="{'width': '100%'}"  [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.vendorCode"></p-dropdown>
+                                <p-dropdown [options]="vendorReferenceDataList" [style]="{'width': '100%'}" (click)="getVendorServiceType()" [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.vendorConfigId"></p-dropdown>
                             </div>
                         </div>
                         <div class="p-grid ">
