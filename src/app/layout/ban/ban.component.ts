@@ -22,21 +22,57 @@ public vendorServiceType : any ={
 	"billProcessId":""
 };
 
-  public banFormData: any = {
-    "banId": "",
-    "vendorBan": "",
-    "vendorConfigId": "",
-    "vendorCode":"",
-    "serviceTypeId":"",
-    "serviceTypeName": "",
-    "buyerId":"",
-    "erpBuyerLeName":"",
-    "liquidateBillRoutingId":"",
-    "updatedBy": "",
-    "lastUpdatedDate":"lastUpdatedDate",
-  };
+    public banInsertData: any = {
+      billProcessName: "",
+      billProcessId:"",
+      vendorBan: "",
+      vendorCode: "",
+      vendorConfigId:"",
+      vendorFriendlyName: "",
+      buyerId:"",
+      buyerName: "",
+      billingModel: "",
+      mode: "",
+      invoiceBuyerLeName: "",
+      active: "",
+      activeTo: "",
+  
+      goldIdOverrideFlag: "",
+      overrideGoldId: "",
+      billRoutingId: "",
+      directOffsetBuc: "",
+      indirectOffsetBuc: "",
+      isEquipment: "",
+  
+      erpName: "",
+      erpSystem: "",
+      erpProject: "",
+      erpTask: "",
+      erpAwtGroupName: "",
+      erpVatAwtGroupName: "",
+      erpPaymentTerms: "",
+      erpVendorGsl: "",
+      erpVendorSiteCode: "",
+      erpGuiDiff: "",
+      erpCustRegNumber: "",
+      vatUnspsc: "",
+      paymentApprovalEmail: "",
+      buyerContactSso: "",
+      focusGroup: "",
+      shipFromAddress: "",
+      shipToCountry: "",
+      shipToProvince: "",
+      shipToState: "",
+      shipToCity: "",
+      shipToZip4: "",
+      shipTozip5: "",
+      addCountryISOtoVendorName: "",
+      useAssetFileVendorName: ""
+    };
+  
 
-
+    billProcessReferenceList: SelectItem[] = [];
+    public billProcessReference: any;
   public banId: any;
   public vendorBan: any;
   public vendorConfigId: any;
@@ -93,9 +129,7 @@ public vendorServiceType : any ={
     { field: 'lastUpdated', header: 'Updated Date', width: '10%' },
   ];
 
-  public banInsertData: any = {
-    
-  };
+ 
 
   ngOnInit() {
     this.getAllBanDetails();
@@ -287,10 +321,18 @@ public vendorServiceType : any ={
       });      
   }
 
-  getAllProcessDet(){
-    //this.productReferenceDataList.push({ label: "Select", value: "Select" });
-    this.productReferenceDataList.push({ label: "TELECOM", value: "TELECOM" });
-    this.productReferenceDataList.push({ label: "GOTEMS", value: "GOTEMS" });
+  getAllProcessDet(){  
+
+    this.banService.getBillProcessList().subscribe(
+      refData => {
+        let arr: any = [];
+        this.billProcessReference = refData;
+        for (let data of this.billProcessReference) {
+          this.billProcessReferenceList.push({ label: data.processName, value: data.billProcessId })
+        }
+      },
+      error => {
+      });    
   }
 
   getAllBuyers(){

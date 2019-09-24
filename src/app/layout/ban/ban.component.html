@@ -1,602 +1,505 @@
 <div class="-font--serif">
 
-        <p-panel>
-                <p-header>
-                    <div class="p-grid">
-                                <div class="p-col ">
-                            
-                                    <div class="p-grid p-dir-col p-nogutter">
-                                        <div class="p-col p-nogutter">
-                                            <span class="ui-panel-title" style="font-size:14px;display:inline-block;margin-top:2px">BAN Add/Update</span>
-                                        </div>
-                                        <div class="p-col p-nogutter">
-                                            <span *ngIf="!editFlag">BAN : Create</span>
-                                            <span *ngIf="editFlag">BAN : Modify (Internal ChargeBack ID: {{chargeBackFilters.internalCbId}})</span>
-                            
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="p-col  ">
-                                    <div class="ui-rtl" dir="rtl" style="text-align:right">
-                                        <span *ngIf="panelExpansionFlag">
-                                            <button class="ge-button -fill--solid -size--small " (click)="expandAllPanels()">Expand All
-                                                <i class="fa fa-plus-square -size--large" aria-hidden="true"></i>
-                                            </button>
-                                        </span>
-                                        <!--   <i class="fa fa-plus fa-fw"></i> -->
-                                        <span *ngIf="!panelExpansionFlag">
-                                            <button class="ge-button -fill--solid -size--small" (click)="collapseAllPanels()">Collapse All
-                                                <i class="fa fa-minus-square -size--large" aria-hidden="true"></i>
-                                            </button>
-                                        </span>
-                            
-                                    </div>
-                                </div>
-                    </div>                
-            </p-header>
-            <p-accordion [multiple]="true" [activeIndex]="index">
+    <p-panel>
+            <p-header>
                 <div class="p-grid">
-                    <div class="p-col-6">
-                    <p-accordionTab header="BAN Details">
-                        <div class="p-grid ">
-                            <div class="p-col-4 item-right"><span class="required">*</span>Process Name :</div>
-                            <div class="p-col-8 item-left">
-                                <p-dropdown [options]="productReferenceDataList" [style]="{'width': '100%'}"  [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.processName"></p-dropdown>
-                            </div>
-                        </div>
-                        <div class="p-grid ">
-                            <div class="p-col-4 item-right"><span class="required">*</span>Vendor Ban :</div>
-                            <div class="p-col-8 item-left">
-                                    <input class="form-control" [(ngModel)]="banInsertData.vendorBan" />
-                            </div>
-                        </div>
-                        <div class="p-grid ">
-                            <div class="p-col-4 item-right"><span class="required">*</span>Vendor Code :</div>
-                            <div class="p-col-8 item-left">
-                                <p-dropdown [options]="vendorReferenceDataList" [style]="{'width': '100%'}" (click)="getVendorServiceType()" [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.vendorConfigId"></p-dropdown>
-                            </div>
-                        </div>
-                        <div class="p-grid ">
-                                <div class="p-col-4 item-right"><span class="required">*</span>Buyer Name :</div>
-                                <div class="p-col-8 item-left">
-                                    <p-dropdown [options]="buyerReferenceDataList" [style]="{'width': '100%'}"  [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.buyerId"></p-dropdown>
-                                </div>
-                        </div>
-                        <div class="p-grid ">
-                                <div class="p-col-4 item-right"><span class="required">*</span>Billing Model :</div>
-                                <div class="p-col-8 item-left">
-                                    <p-dropdown [options]="billingReferenceDataList" [style]="{'width': '100%'}"  [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.billingModelR"></p-dropdown>
-                                </div>
-                        </div>
-                        <div class="p-grid ">
-                                <div class="p-col-4 item-right">Mode :</div>
-                                <div class="p-col-8 item-left">
-                                    <p-dropdown [options]="modeReferenceDataList" [style]="{'width': '100%'}"  [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.mode"></p-dropdown>
-                                </div>
-                        </div>
-                        <div class="p-grid ">
-                                    <div class="p-col-4 item-right">Billing Model :</div>
-                                    <div class="p-col-8 item-left">
-                                        <p-dropdown [options]="countryCodeReferenceDataList" [style]="{'width': '100%'}"  [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.billingModel"></p-dropdown>
-                                    </div>
-                        </div>
-                        <div class="p-grid ">
-                                <div class="p-col-3 item-left">
-                                        <button type="button" (click)="clearAllFilters()" pButton label="Clone As"></button> 
-                                </div>
-                                <div class="p-col-2 item-right">Active :</div>
-                                <div class="p-col-1 item-left">
-                                        <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="banInsertData.active"></p-checkbox><label class="label"></label>
-                                </div>
-    
-                                <div class="p-col-2 item-right">Active To :</div>
-                                <div class="p-col-4 item-left">
-                                    <p-calendar [(ngModel)]="banInsertData.activeToDate" showButtonBar="true" [style]="{'width': '120%'}"></p-calendar>
-                                </div>
-                        </div>
-                        <div class="p-grid ">
-                                <div class="p-col-4 item-right"><span class="required">*</span>Invoice Buyer LE Name :</div>
-                                <div class="p-col-8 item-left">
-                                        <input class="form-control" [(ngModel)]="banInsertData.invoiceBuyerLeName" />
-                                </div>
-                        </div>
-                    </p-accordionTab>
-    
-                    <p-accordionTab header="Billing Details">
-                            <div class="p-grid ">
-                                    <div class="p-col-4 item-right">Gold Id override flag :</div>
-                                    <div class="p-col-1 item-left">
-                                            <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="banInsertData.goldIdOverrideFlag"></p-checkbox><label class="label"></label>
-                                    </div>
-                            </div>
-                            <div class="p-grid ">
-                                    <div class="p-col-4 item-right">Override Gold Id :</div>
-                                    <div class="p-col-6 item-left">
-                                            <input class="form-control" [(ngModel)]="banInsertData.overrideGoldId" />
-                                    </div>
-                            </div>
-                            <div class="p-grid ">
-                                    <div class="p-col-4 item-right">Liquidate to Bill Routing ID :</div>
-                                    <div class="p-col-7 item-left">
-                                        <input class="form-control" [(ngModel)]="banInsertData.liquidateBillRoutingId" />
-                                    </div>
-                                    <div class="p-col-1 item-left">
-                                        <a class="a-color" style="cursor:pointer;" (click)="clearAllFilters()">
-                                                <i class="fa fa-pencil-square-o fa-2x"></i>
-                                        </a>
-                                    </div>
-                            </div>
-                            <div class="p-grid ">
-                                    <div class="p-col-4 item-right">Direct Offset Buc:</div>
-                                    <div class="p-col-8 item-left">
-                                            <input class="form-control" [(ngModel)]="banInsertData.directOffsetBuc" />
-                                    </div>
-                            </div>
-                            <div class="p-grid ">
-                                    <div class="p-col-4 item-right">Indirect Offset Buc:</div>
-                                    <div class="p-col-8 item-left">
-                                            <input class="form-control" [(ngModel)]="banInsertData.indirectOffsettBuc" />
-                                    </div>
-                            </div>
-                            <div class="p-grid ">
-                                    <div class="p-col-4 item-right">Is Equipment:</div>
-                                    <div class="p-col-1 item-left">
-                                            <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="banInsertData.isEquipment"></p-checkbox><label class="label"></label>
-                                    </div>
-                            </div>
-                    </p-accordionTab>
-                    <p-accordionTab header="Focus Groups">
-                        <div class="p-grid">
-                            <div class="p-col-12">
-                                <p-listbox [options]="focusReferenceDataList" [(ngModel)]="focuslist" multiple="multiple" filter="filter" checkbox="checkbox" [listStyle]="{'max-height':'250px'}"
-                                [style]="{'width':'100%'}">
-                                    <p-header class="label">
-                                        <!-- <i class="fa fa-car"></i>  -->
-                                        Focus Groups
-                                    </p-header>
-                                </p-listbox> 
-                            </div>
-                        </div>
-                        <!-- <div class="p-grid">
-                            <div class="p-col-6">
-                                <button type="button" (click)="selectedFocus=null" pButton icon="pi pi-times" label="Clear Selected Focus group"></button> 
-                            </div>
-                        </div> -->
-                    </p-accordionTab>
-                                  
-                    </div>
-                    <div class="p-col-6">
-                        <p-accordionTab header="Payment System Details">
-                                <div class="p-grid ">
-                                        <div class="p-col-4 item-right">Erp Name:</div>
-                                        <div class="p-col-8 item-left">
-                                                <input class="form-control" [(ngModel)]="banInsertData.erpName" />
-                                        </div>
-                                </div>
-                                <div class="p-grid ">
-                                        <div class="p-col-4 item-right">Erp System:</div>
-                                        <div class="p-col-8 item-left">
-                                                <input class="form-control" [(ngModel)]="banInsertData.erpSystem" />
-                                        </div>
-                                </div>
-                                <div class="p-grid ">
-                                        <div class="p-col-4 item-right">Erp Project:</div>
-                                        <div class="p-col-8 item-left">
-                                                <input class="form-control" [(ngModel)]="banInsertData.erpProject" />
-                                        </div>
-                                </div>
-                                <div class="p-grid ">
-                                        <div class="p-col-4 item-right">Erp Task:</div>
-                                        <div class="p-col-8 item-left">
-                                                <input class="form-control" [(ngModel)]="banInsertData.erpTask" />
-                                        </div>
-                                </div>
-                                <div class="p-grid ">
-                                        <div class="p-col-4 item-right">Erp Awt Group Name:</div>
-                                        <div class="p-col-8 item-left">
-                                                <input class="form-control" [(ngModel)]="banInsertData.erpAwtGroupName" />
-                                        </div>
-                                </div>
-                                <div class="p-grid ">
-                                        <div class="p-col-4 item-right">Erp Vat Awt Group Name:</div>
-                                        <div class="p-col-8 item-left">
-                                                <input class="form-control" [(ngModel)]="banInsertData.erpvatAwtGroupName" />
-                                        </div>
-                                </div>
-                                <div class="p-grid ">
-                                        <div class="p-col-4 item-right">Erp Payment Terms:</div>
-                                        <div class="p-col-8 item-left">
-                                                <input class="form-control" [(ngModel)]="banInsertData.erpPaymentTerms" />
-                                        </div>
-                                </div>
-                                <div class="p-grid ">
-                                        <div class="p-col-4 item-right">Erp Vendor Gsl:</div>
-                                        <div class="p-col-8 item-left">
-                                                <input class="form-control" [(ngModel)]="banInsertData.erpVendorGsl" />
-                                        </div>
-                                </div>
-                                <div class="p-grid ">
-                                        <div class="p-col-4 item-right">Erp Vendor Site Code:</div>
-                                        <div class="p-col-8 item-left">
-                                                <input class="form-control" [(ngModel)]="banInsertData.erpVendorSiteCode" />
-                                        </div>
-                                </div>
-                                <div class="p-grid ">
-                                        <div class="p-col-4 item-right">Erp GUI DIFF:</div>
-                                        <div class="p-col-8 item-left">
-                                                <input class="form-control" [(ngModel)]="banInsertData.erpGuiDiff" />
-                                        </div>
-                                </div>
-                                <div class="p-grid ">
-                                        <div class="p-col-4 item-right">Erp Cust Reg Number:</div>
-                                        <div class="p-col-8 item-left">
-                                                <input class="form-control" [(ngModel)]="banInsertData.erpCustRegNumber" />
-                                        </div>
-                                </div>
-                                <div class="p-grid ">
-                                        <div class="p-col-4 item-right">Vat Unspsc:</div>
-                                        <div class="p-col-8 item-left">
-                                                <input class="form-control" [(ngModel)]="banInsertData.vatUnspsc" />
-                                        </div>
-                                </div>
-                                <div class="p-grid ">
-                                        <div class="p-col-4 item-right">Payment Approval Email:</div>
-                                        <div class="p-col-8 item-left">
-                                                <input class="form-control" [(ngModel)]="banInsertData.paymentApprovalEmail" />
-                                        </div>
-                                </div>
-                                <div class="p-grid ">
-                                        <div class="p-col-4 item-right">Buyer Contact SSO:</div>
-                                        <div class="p-col-8 item-left">
-                                                <input class="form-control" [(ngModel)]="banInsertData.buyerContactSSO" />
-                                        </div>
-                                </div>
-                        </p-accordionTab>
-                        <p-accordionTab header="Address Details">
-                                <div class="p-grid ">
-                                        <div class="p-col-4 item-right">
-                                            Ship From Address
-                                        </div>
-                                        <div class="p-col-8">
-                                            <input class="form-control" style="width: 100%" [(ngModel)]="banInsertData.shipFromAddress">
-                                        </div>
-                                    </div>
-                                    <div class="p-grid">
-                                        <div class="p-col-4 item-right">
-                                        Ship To Country
-                                        </div>
-                                        <div class="p-col-8 item-left">
-                                            <p-dropdown [options]="countryCodeReferenceDataList" [style]="{'width': '100%'}"  [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.countryCode"></p-dropdown>
-                                        </div>
-                                    </div>
-                                    <div class="p-grid">
-                                        <div class="p-col-4 item-right">
-                                        Ship To Province
-                                        </div>
-                                        <div class="p-col-8 item-left">
-                                            <input class="form-control" style="width: 100%" [(ngModel)]="banInsertData.shipToprovince">
-                                        </div>
-                                    </div>
-                                    <div class="p-grid">
-                                        <div class="p-col-4 item-right">
-                                        Ship To State
-                                        </div>
-                                        <div class="p-col-8 item-left">
-                                            <input class="form-control" style="width: 100%" [(ngModel)]="banInsertData.shipToState">
-                                        </div>
-                                    </div>
-                                    <div class="p-grid">
-                                        <div class="p-col-4 item-right">
-                                        Ship To City
-                                        </div>
-                                        <div class="p-col-8 item-left">
-                                            <input class="form-control" style="width: 100%" [(ngModel)]="banInsertData.shipToCity">
-                                        </div>
-                                    </div>
-                                    <div class="p-grid">
-                                        <div class="p-col-4 item-right">
-                                        Ship To Zip 4
-                                        </div>
-                                        <div class="p-col-8 item-left">
-                                            <input class="form-control" style="width: 100%" [(ngModel)]="banInsertData.shipToZip4">
-                                        </div>
-                                    </div>
-                                    <div class="p-grid">
-                                        <div class="p-col-4 item-right">
-                                        Ship To Zip 5
-                                        </div>
-                                        <div class="p-col-8 item-left">
-                                            <input class="form-control" style="width: 100%" [(ngModel)]="banInsertData.shipToZip5">
-                                        </div>
-                                    </div>
-                        </p-accordionTab>    
-                        <p-accordionTab header="Other Details">
-                                <div class="p-grid ">
-                                    <div class="p-col-8 item-right">
-                                        Add Country ISO to Vendor Name
-                                    </div>
-                                    <div class="p-col-2">
-                                            <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="banInsertData.addCountryIsoVendorName"></p-checkbox><label class="label"></label>
-                                    </div>
-                                </div>
-                                <div class="p-grid ">
-                                    <div class="p-col-8 item-right">
-                                        Use Asset File Vendor Name
-                                    </div>
-                                    <div class="p-col-2">
-                                            <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="banInsertData.useAssetFileVendorName"></p-checkbox><label class="label"></label>
-                                    </div>
-                                </div>
-                                </p-accordionTab>
-    
-                    </div>
-                </div>  
-                
-                
-
-                <div class="p-grid">
-                    <div class="p-col-6">
-                        <p-accordionTab header="Service Type">
-                            
-                                        <p-pickList [source]="sourceSystem" [target]="targetSystem" sourceHeader="Available" targetHeader="Selected" [responsive]="true" filterBy="serviceTypeName" 
-                                        dragdrop="true" sourceFilterPlaceholder="Search" targetFilterPlaceholder="Search" [sourceStyle]="{'height':'300px'}" [targetStyle]="{'height':'300px'}"
-                                        [showSourceControls]="false" [showTargetControls]="false" filterMatchMode="contains">
-                                            <ng-template let-sourceSystem pTemplate="item">
-                                                <div class="ui-helper-clearfix">
-                                                    <div>{{sourceSystem.serviceTypeName}}</div>
-                                                </div>
-                                            </ng-template>
-                                        </p-pickList>
-                                    </p-accordionTab>
-                                </div>
-                                <div class="p-col-6">
-                                        <p-accordionTab header="Service Type Details">
-                                                <div class="p-grid ">
-                                                        <div class="p-col-3 item-right">ERP PMT Override:</div>
-                                                        <div class="p-col-3 item-left">
-                                                            <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="banInsertData.erpPmtOverride"></p-checkbox><label class="label"></label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="p-grid ">
-                                                        <div class="p-col-5 item-right">Override ERP PMT Terms:</div>
-                                                        <div class="p-col-7 item-left">
-                                                            <input class="form-control" [(ngModel)]="banInsertData.overrideErpPmtTerms" />
-                                                        </div>
-                                                    </div>
-                                                    <div class="p-grid ">
-                                                        <div class="p-col-5 item-right">UNSPSC Override:</div>
-                                                        <div class="p-col-7 item-left">
-                                                            <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="banInsertData.unspscOverride"></p-checkbox><label class="label"></label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="p-grid ">
-                                                            <div class="p-col-5 item-right">Override UNSPSC:</div>
-                                                            <div class="p-col-7 item-left">
-                                                                <input class="form-control" [(ngModel)]="banInsertData.overrideUnspsc" />
-                                                            </div>
-                                                    </div>
-                                                    <div class="p-grid ">
-                                                            <div class="p-col-5 item-right">Cost Center Override:</div>
-                                                            <div class="p-col-7 item-left">
-                                                                <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="banInsertData.costCentreOverride"></p-checkbox><label class="label"></label>
-                                                            </div>
-                                                    </div>
-                                                    <div class="p-grid ">
-                                                            <div class="p-col-5 item-right">Override Offset Cost Center:</div>
-                                                            <div class="p-col-7 item-left">
-                                                                    <input class="form-control" [(ngModel)]="banInsertData.overrideOffsetCostCenter" />
-                                                            </div>
-                                                    </div>
-                                                    <div class="p-grid ">
-                                                            <div class="p-col-5 item-right">VAT Override:</div>
-                                                            <div class="p-col-7 item-left">
-                                                                <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="banInsertData.vatOverride"></p-checkbox><label class="label"></label>
-                                                            </div>
-                                                    </div>
-                                                    <div class="p-grid ">
-                                                            <div class="p-col-5 item-right">Override VAT Percent:</div>
-                                                            <div class="p-col-7 item-left">
-                                                                    <input class="form-control" [(ngModel)]="banInsertData.overrideVatPercent" />
-                                                            </div>
-                                                    </div>
-                                                    <div class="p-grid ">
-                                                            <div class="p-col-5 item-right">WHT Override:</div>
-                                                            <div class="p-col-7 item-left">
-                                                                <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="banInsertData.whtOverride"></p-checkbox><label class="label"></label>
-                                                            </div>
-                                                    </div>
-                                                    <div class="p-grid ">
-                                                            <div class="p-col-5 item-right">Override WHT Percent:</div>
-                                                            <div class="p-col-7 item-left">
-                                                                    <input class="form-control" [(ngModel)]="banInsertData.overrideWhtPercent" />
-                                                            </div>
-                                                    </div>
-                                                    <div class="p-grid ">
-                                                            <div class="p-col-5 item-right">TP Override:</div>
-                                                            <div class="p-col-7 item-left">
-                                                                <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="banInsertData.tpOverride"></p-checkbox><label class="label"></label>
-                                                            </div>
-                                                    </div>
-                                                    <div class="p-grid ">
-                                                            <div class="p-col-5 item-right">Override TP Percent:</div>
-                                                            <div class="p-col-7 item-left">
-                                                                    <input class="form-control" [(ngModel)]="banInsertData.overrideTpPercent" />
-                                                            </div>
-                                                    </div>
-                                                    <div class="p-grid ">
-                                                            <div class="p-col-5 item-right">Liquidate to Bill Routing ID:</div>
-                                                            <div class="p-col-6 item-left">
-                                                                <input class="form-control" [(ngModel)]="banInsertData.liquidateBillRoutingId" />
-                                                            </div>
-                                                            <div class="p-col-1 item-left">
-                                                                <a class="a-color" style="cursor:pointer;" (click)="clearAllFilters()">
-                                                                    <i class="fa fa-pencil-square-o fa-2x"></i>
-                                                                </a>
-                                                            </div>
-                                                    </div>  
-                                            </p-accordionTab>
-                                </div>
+                            <div class="p-col ">
                         
+                                <div class="p-grid p-dir-col p-nogutter">
+                                    <div class="p-col p-nogutter">
+                                        <span class="ui-panel-title" style="font-size:14px;display:inline-block;margin-top:2px">BAN Add/Update</span>
+                                    </div>
+                                    <div class="p-col p-nogutter">
+                                        <span *ngIf="!editFlag">BAN : Create</span>
+                                        <span *ngIf="editFlag">BAN : Modify (Internal ChargeBack ID: {{chargeBackFilters.internalCbId}})</span>
+                        
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-col  ">
+                                <div class="ui-rtl" dir="rtl" style="text-align:right">
+                                    <span *ngIf="panelExpansionFlag">
+                                        <button class="ge-button -fill--solid -size--small " (click)="expandAllPanels()">Expand All
+                                            <i class="fa fa-plus-square -size--large" aria-hidden="true"></i>
+                                        </button>
+                                    </span>
+                                    <!--   <i class="fa fa-plus fa-fw"></i> -->
+                                    <span *ngIf="!panelExpansionFlag">
+                                        <button class="ge-button -fill--solid -size--small" (click)="collapseAllPanels()">Collapse All
+                                            <i class="fa fa-minus-square -size--large" aria-hidden="true"></i>
+                                        </button>
+                                    </span>
+                        
+                                </div>
+                            </div>
+                </div>                
+        </p-header>
+        <p-accordion [multiple]="true" [activeIndex]="index">
+            <div class="p-grid">
+                <div class="p-col-6">
+                <p-accordionTab header="BAN Details">
+                    <div class="p-grid ">
+                        <div class="p-col-4 item-right"><span class="required">*</span>Process Name :</div>
+                        <div class="p-col-8 item-left">
+                            <p-dropdown [options]="billProcessReferenceList" [style]="{'width': '100%'}"  [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.billProcessId"></p-dropdown>
+                        </div>
                     </div>
+                    <div class="p-grid ">
+                        <div class="p-col-4 item-right"><span class="required">*</span>Vendor Ban :</div>
+                        <div class="p-col-8 item-left">
+                                <input class="form-control" [(ngModel)]="banInsertData.vendorBan" />
+                        </div>
+                    </div>
+                    <div class="p-grid ">
+                        <div class="p-col-4 item-right"><span class="required">*</span>Vendor Code :</div>
+                        <div class="p-col-8 item-left">
+                            <p-dropdown [options]="vendorReferenceDataList" [style]="{'width': '100%'}" (click)="getVendorServiceType()" [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.vendorConfigId"></p-dropdown>
+                        </div>
+                    </div>
+                    <div class="p-grid ">
+                            <div class="p-col-4 item-right"><span class="required">*</span>Buyer Name :</div>
+                            <div class="p-col-8 item-left">
+                                <p-dropdown [options]="buyerReferenceDataList" [style]="{'width': '100%'}"  [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.buyerId"></p-dropdown>
+                            </div>
+                    </div>
+                    <div class="p-grid ">
+                            <div class="p-col-4 item-right"><span class="required">*</span>Billing Model :</div>
+                            <div class="p-col-8 item-left">
+                                <p-dropdown [options]="billingReferenceDataList" [style]="{'width': '100%'}"  [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.billingModel"></p-dropdown>
+                            </div>
+                    </div>
+                    <div class="p-grid ">
+                            <div class="p-col-4 item-right">Mode :</div>
+                            <div class="p-col-8 item-left">
+                                <p-dropdown [options]="modeReferenceDataList" [style]="{'width': '100%'}"  [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.mode"></p-dropdown>
+                            </div>
+                    </div>
+                    <div class="p-grid ">
+                            <div class="p-col-3 item-left">
+                                    <button type="button" (click)="clearAllFilters()" pButton label="Clone As"></button> 
+                            </div>
+                            <div class="p-col-2 item-right">Active :</div>
+                            <div class="p-col-1 item-left">
+                                    <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="banInsertData.active"></p-checkbox><label class="label"></label>
+                            </div>
 
-                     
-                        <!-- <div class="p-col-5">
-                                <div class="p-grid ">
-                                        <div class="p-col-3 item-right">ERP PMT Override:</div>
-                                        <div class="p-col-3 item-left">
-                                            <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="banInsertData.erpPmtOverride"></p-checkbox><label class="label"></label>
-                                        </div>
-                                    </div>
-                                    <div class="p-grid ">
-                                        <div class="p-col-5 item-right">Override ERP PMT Terms:</div>
-                                        <div class="p-col-7 item-left">
-                                            <input class="form-control" [(ngModel)]="banInsertData.overrideErpPmtTerms" />
-                                        </div>
-                                    </div>
-                                    <div class="p-grid ">
-                                        <div class="p-col-5 item-right">UNSPSC Override:</div>
-                                        <div class="p-col-7 item-left">
-                                            <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="banInsertData.unspscOverride"></p-checkbox><label class="label"></label>
-                                        </div>
-                                    </div>
-                                    <div class="p-grid ">
-                                            <div class="p-col-5 item-right">Override UNSPSC:</div>
-                                            <div class="p-col-7 item-left">
-                                                <input class="form-control" [(ngModel)]="banInsertData.overrideUnspsc" />
-                                            </div>
-                                    </div>
-                                    <div class="p-grid ">
-                                            <div class="p-col-5 item-right">Cost Center Override:</div>
-                                            <div class="p-col-7 item-left">
-                                                <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="banInsertData.costCentreOverride"></p-checkbox><label class="label"></label>
-                                            </div>
-                                    </div>
-                                    <div class="p-grid ">
-                                            <div class="p-col-5 item-right">Override Offset Cost Center:</div>
-                                            <div class="p-col-7 item-left">
-                                                    <input class="form-control" [(ngModel)]="banInsertData.overrideOffsetCostCenter" />
-                                            </div>
-                                    </div>
-                                    <div class="p-grid ">
-                                            <div class="p-col-5 item-right">VAT Override:</div>
-                                            <div class="p-col-7 item-left">
-                                                <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="banInsertData.vatOverride"></p-checkbox><label class="label"></label>
-                                            </div>
-                                    </div>
-                                    <div class="p-grid ">
-                                            <div class="p-col-5 item-right">Override VAT Percent:</div>
-                                            <div class="p-col-7 item-left">
-                                                    <input class="form-control" [(ngModel)]="banInsertData.overrideVatPercent" />
-                                            </div>
-                                    </div>
-                                    <div class="p-grid ">
-                                            <div class="p-col-5 item-right">WHT Override:</div>
-                                            <div class="p-col-7 item-left">
-                                                <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="banInsertData.whtOverride"></p-checkbox><label class="label"></label>
-                                            </div>
-                                    </div>
-                                    <div class="p-grid ">
-                                            <div class="p-col-5 item-right">Override WHT Percent:</div>
-                                            <div class="p-col-7 item-left">
-                                                    <input class="form-control" [(ngModel)]="banInsertData.overrideWhtPercent" />
-                                            </div>
-                                    </div>
-                                    <div class="p-grid ">
-                                            <div class="p-col-5 item-right">TP Override:</div>
-                                            <div class="p-col-7 item-left">
-                                                <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="banInsertData.tpOverride"></p-checkbox><label class="label"></label>
-                                            </div>
-                                    </div>
-                                    <div class="p-grid ">
-                                            <div class="p-col-5 item-right">Override TP Percent:</div>
-                                            <div class="p-col-7 item-left">
-                                                    <input class="form-control" [(ngModel)]="banInsertData.overrideTpPercent" />
-                                            </div>
-                                    </div>
-                                    <div class="p-grid ">
-                                            <div class="p-col-5 item-right">Liquidate to Bill Routing ID:</div>
-                                            <div class="p-col-6 item-left">
-                                                <input class="form-control" [(ngModel)]="banInsertData.liquidateBillRoutingId" />
-                                            </div>
-                                            <div class="p-col-1 item-left">
-                                                <a class="a-color" style="cursor:pointer;" (click)="clearAllFilters()">
-                                                    <i class="fa fa-pencil-square-o fa-2x"></i>
-                                                </a>
-                                            </div>
-                                    </div>  
-    
+                            <div class="p-col-2 item-right">Active To :</div>
+                            <div class="p-col-4 item-left">
+                                <p-calendar [(ngModel)]="banInsertData.activeTo" showButtonBar="true" [style]="{'width': '120%'}"></p-calendar>
+                            </div>
+                    </div>
+                    <div class="p-grid ">
+                            <div class="p-col-4 item-right"><span class="required">*</span>Invoice Buyer LE Name :</div>
+                            <div class="p-col-8 item-left">
+                                    <input class="form-control" [(ngModel)]="banInsertData.invoiceBuyerLeName" />
+                            </div>
+                    </div>
+                </p-accordionTab>
+
+                <p-accordionTab header="Billing Details">
+                        <div class="p-grid ">
+                                <div class="p-col-4 item-right">Gold Id override flag :</div>
+                                <div class="p-col-1 item-left">
+                                        <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="banInsertData.goldIdOverrideFlag"></p-checkbox><label class="label"></label>
+                                </div>
                         </div>
-                     </p-accordionTab>
-                     </div>
-                    </div> -->
-                    
-               
-                <div class="p-grid">
-                        <label class="errorMessage">{{errorMessage}}</label>
-                </div>
-                <div class="p-grid">
-                        <div class="p-col-12" style="text-align:right">
-                            <!-- <button pButton type="button" label="Submit" class="ui-button-rounded ui-button-secondary" (click)="upsertBan()"></button>
-                            <button pButton type="button" label="Cancel" class="ui-button-rounded ui-button-secondary" (click)="clearAllFilters()"></button> -->
-                            <button class="ge-button -fill--solid" (click)="upsertBan()">Submit</button>
-                            <button class="ge-button -fill--solid" (click)="clearAllFilters()">Cancel</button> 
-                            <app-file-download [dwnData]="banDwnData" [colsHeader]="this.downloadCols" [fileName]="fileName"></app-file-download>
+                        <div class="p-grid ">
+                                <div class="p-col-4 item-right">Override Gold Id :</div>
+                                <div class="p-col-6 item-left">
+                                        <input class="form-control" [(ngModel)]="banInsertData.overrideGoldId" />
+                                </div>
                         </div>
-                </div>
-                    
-                <div class="p-grid">
+                        <div class="p-grid ">
+                                <div class="p-col-4 item-right">Liquidate to Bill Routing ID :</div>
+                                <div class="p-col-7 item-left">
+                                    <input class="form-control" [(ngModel)]="banInsertData.billRoutingId" />
+                                </div>
+                                <div class="p-col-1 item-left">
+                                    <a class="a-color" style="cursor:pointer;" (click)="clearAllFilters()">
+                                            <i class="fa fa-pencil-square-o fa-2x"></i>
+                                    </a>
+                                </div>
+                        </div>
+                        <div class="p-grid ">
+                                <div class="p-col-4 item-right">Direct Offset Buc:</div>
+                                <div class="p-col-8 item-left">
+                                        <input class="form-control" [(ngModel)]="banInsertData.directOffsetBuc" />
+                                </div>
+                        </div>
+                        <div class="p-grid ">
+                                <div class="p-col-4 item-right">Indirect Offset Buc:</div>
+                                <div class="p-col-8 item-left">
+                                        <input class="form-control" [(ngModel)]="banInsertData.indirectOffsetBuc" />
+                                </div>
+                        </div>
+                        <div class="p-grid ">
+                                <div class="p-col-4 item-right">Is Equipment:</div>
+                                <div class="p-col-1 item-left">
+                                        <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="banInsertData.isEquipment"></p-checkbox><label class="label"></label>
+                                </div>
+                        </div>
+                </p-accordionTab>
+                <p-accordionTab header="Focus Groups">
+                    <div class="p-grid">
                         <div class="p-col-12">
-                            <p-table #tt [columns]="cols" [value]="banData" [scrollable]="true" [resizableColumns]="true" [reorderableColumns]="true"
-                                [style]="{'margin-top':'2px','width':'100%'}" [rows]="10" [paginator]="true" [pageLinks]="3" [responsive]="true">
-                                <ng-template pTemplate="header" let-columns>
-                                    <tr>
-                                        <th [ngStyle]="{'width': '63px'}">Modify</th>
-                                        <th *ngFor="let col of columns" [pSortableColumn]="col.field" [ngStyle]="{'width': '130px'}">
-                                            {{col.header}}
-                                            <p-sortIcon [field]="col.field"></p-sortIcon>
-                                        </th>
-                                    </tr>
-                                    <tr>
-                                        <th></th>
-                                        <th *ngFor="let col of columns" [ngSwitch]="col.field">
-                                            <input class="gridInputSize" [ngStyle]="{'width': '100%'}" *ngSwitchCase="col.field" pInputText type="text" (input)="tt.filter($event.target.value, col.field, 'contains')">
-                                        </th>
-                                    </tr>
-                                  </ng-template>
-                                  <ng-template pTemplate="body" let-rowData let-columns="columns">
-                                    <tr>
-                                        <td [ngStyle]="{'width': '48px'}">
-                                            <div class="justify-content-center">
-                                                 <a class="a-color" style="cursor:pointer;" (click)="showSelectedData(rowData['buyerId'])">
-                                                    <i class="fa fa-pencil-square-o fa-2x"></i>
-                                                </a> 
-                                            </div>
-                                        </td>
-                                        <td *ngFor="let col of columns" [ngStyle]="{'width': '100px'}">
-                                            <div> {{rowData[col.field]}}</div>
-                                        </td>
-                                    </tr>
-                                </ng-template>
-                                </p-table>
-                              </div>
-                          </div>
-            </p-accordion>
+                            <p-listbox [options]="focusReferenceDataList" [(ngModel)]="focuslist" multiple="multiple" filter="filter" checkbox="checkbox" [listStyle]="{'max-height':'250px'}"
+                            [style]="{'width':'100%'}">
+                                <p-header class="label">
+                                    <!-- <i class="fa fa-car"></i>  -->
+                                    Focus Groups
+                                </p-header>
+                            </p-listbox> 
+                        </div>
+                    </div>
+                    <!-- <div class="p-grid">
+                        <div class="p-col-6">
+                            <button type="button" (click)="selectedFocus=null" pButton icon="pi pi-times" label="Clear Selected Focus group"></button> 
+                        </div>
+                    </div> -->
+                </p-accordionTab>
+                              
+                </div>
+                <div class="p-col-6">
+                    <p-accordionTab header="Payment System Details">
+                            <div class="p-grid ">
+                                    <div class="p-col-4 item-right">Erp Name:</div>
+                                    <div class="p-col-8 item-left">
+                                            <input class="form-control" [(ngModel)]="banInsertData.erpName" />
+                                    </div>
+                            </div>
+                            <div class="p-grid ">
+                                    <div class="p-col-4 item-right">Erp System:</div>
+                                    <div class="p-col-8 item-left">
+                                            <input class="form-control" [(ngModel)]="banInsertData.erpSystem" />
+                                    </div>
+                            </div>
+                            <div class="p-grid ">
+                                    <div class="p-col-4 item-right">Erp Project:</div>
+                                    <div class="p-col-8 item-left">
+                                            <input class="form-control" [(ngModel)]="banInsertData.erpProject" />
+                                    </div>
+                            </div>
+                            <div class="p-grid ">
+                                    <div class="p-col-4 item-right">Erp Task:</div>
+                                    <div class="p-col-8 item-left">
+                                            <input class="form-control" [(ngModel)]="banInsertData.erpTask" />
+                                    </div>
+                            </div>
+                            <div class="p-grid ">
+                                    <div class="p-col-4 item-right">Erp Awt Group Name:</div>
+                                    <div class="p-col-8 item-left">
+                                            <input class="form-control" [(ngModel)]="banInsertData.erpAwtGroupName" />
+                                    </div>
+                            </div>
+                            <div class="p-grid ">
+                                    <div class="p-col-4 item-right">Erp Vat Awt Group Name:</div>
+                                    <div class="p-col-8 item-left">
+                                            <input class="form-control" [(ngModel)]="banInsertData.erpVatAwtGroupName" />
+                                    </div>
+                            </div>
+                            <div class="p-grid ">
+                                    <div class="p-col-4 item-right">Erp Payment Terms:</div>
+                                    <div class="p-col-8 item-left">
+                                            <input class="form-control" [(ngModel)]="banInsertData.erpPaymentTerms" />
+                                    </div>
+                            </div>
+                            <div class="p-grid ">
+                                    <div class="p-col-4 item-right">Erp Vendor Gsl:</div>
+                                    <div class="p-col-8 item-left">
+                                            <input class="form-control" [(ngModel)]="banInsertData.erpVendorGsl" />
+                                    </div>
+                            </div>
+                            <div class="p-grid ">
+                                    <div class="p-col-4 item-right">Erp Vendor Site Code:</div>
+                                    <div class="p-col-8 item-left">
+                                            <input class="form-control" [(ngModel)]="banInsertData.erpVendorSiteCode" />
+                                    </div>
+                            </div>
+                            <div class="p-grid ">
+                                    <div class="p-col-4 item-right">Erp GUI DIFF:</div>
+                                    <div class="p-col-8 item-left">
+                                            <input class="form-control" [(ngModel)]="banInsertData.erpGuiDiff" />
+                                    </div>
+                            </div>
+                            <div class="p-grid ">
+                                    <div class="p-col-4 item-right">Erp Cust Reg Number:</div>
+                                    <div class="p-col-8 item-left">
+                                            <input class="form-control" [(ngModel)]="banInsertData.erpCustRegNumber" />
+                                    </div>
+                            </div>
+                            <div class="p-grid ">
+                                    <div class="p-col-4 item-right">Vat Unspsc:</div>
+                                    <div class="p-col-8 item-left">
+                                            <input class="form-control" [(ngModel)]="banInsertData.vatUnspsc" />
+                                    </div>
+                            </div>
+                            <div class="p-grid ">
+                                    <div class="p-col-4 item-right">Payment Approval Email:</div>
+                                    <div class="p-col-8 item-left">
+                                            <input class="form-control" [(ngModel)]="banInsertData.paymentApprovalEmail" />
+                                    </div>
+                            </div>
+                            <div class="p-grid ">
+                                    <div class="p-col-4 item-right">Buyer Contact SSO:</div>
+                                    <div class="p-col-8 item-left">
+                                            <input class="form-control" [(ngModel)]="banInsertData.buyerContactSso" />
+                                    </div>
+                            </div>
+                    </p-accordionTab>
+                    <p-accordionTab header="Address Details">
+                            <div class="p-grid ">
+                                    <div class="p-col-4 item-right">
+                                        Ship From Address
+                                    </div>
+                                    <div class="p-col-8">
+                                        <input class="form-control" style="width: 100%" [(ngModel)]="banInsertData.shipFromAddress">
+                                    </div>
+                                </div>
+                                <div class="p-grid">
+                                    <div class="p-col-4 item-right">
+                                    Ship To Country
+                                    </div>
+                                    <div class="p-col-8 item-left">
+                                        <p-dropdown [options]="countryCodeReferenceDataList" [style]="{'width': '100%'}"  [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.shipToCountry"></p-dropdown>
+                                    </div>
+                                </div>
+                                <div class="p-grid">
+                                    <div class="p-col-4 item-right">
+                                    Ship To Province
+                                    </div>
+                                    <div class="p-col-8 item-left">
+                                        <input class="form-control" style="width: 100%" [(ngModel)]="banInsertData.shipToProvince">
+                                    </div>
+                                </div>
+                                <div class="p-grid">
+                                    <div class="p-col-4 item-right">
+                                    Ship To State
+                                    </div>
+                                    <div class="p-col-8 item-left">
+                                        <input class="form-control" style="width: 100%" [(ngModel)]="banInsertData.shipToState">
+                                    </div>
+                                </div>
+                                <div class="p-grid">
+                                    <div class="p-col-4 item-right">
+                                    Ship To City
+                                    </div>
+                                    <div class="p-col-8 item-left">
+                                        <input class="form-control" style="width: 100%" [(ngModel)]="banInsertData.shipToCity">
+                                    </div>
+                                </div>
+                                <div class="p-grid">
+                                    <div class="p-col-4 item-right">
+                                    Ship To Zip 4
+                                    </div>
+                                    <div class="p-col-8 item-left">
+                                        <input class="form-control" style="width: 100%" [(ngModel)]="banInsertData.shipToZip4">
+                                    </div>
+                                </div>
+                                <div class="p-grid">
+                                    <div class="p-col-4 item-right">
+                                    Ship To Zip 5
+                                    </div>
+                                    <div class="p-col-8 item-left">
+                                        <input class="form-control" style="width: 100%" [(ngModel)]="banInsertData.shipToZip5">
+                                    </div>
+                                </div>
+                    </p-accordionTab>    
+                    <p-accordionTab header="Other Details">
+                            <div class="p-grid ">
+                                <div class="p-col-8 item-right">
+                                    Add Country ISO to Vendor Name
+                                </div>
+                                <div class="p-col-2">
+                                        <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="banInsertData.addCountryISOtoVendorName"></p-checkbox><label class="label"></label>
+                                </div>
+                            </div>
+                            <div class="p-grid ">
+                                <div class="p-col-8 item-right">
+                                    Use Asset File Vendor Name
+                                </div>
+                                <div class="p-col-2">
+                                        <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="banInsertData.useAssetFileVendorName"></p-checkbox><label class="label"></label>
+                                </div>
+                            </div>
+                            </p-accordionTab>
+
+                </div>
+            </div>  
             
-        </p-panel>
-              <footer class="ge-footer"></footer>
-        </div>
-             
-            <ng-template #content1 let-c="close" let-d="dismiss">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="modal-basic-title">Message</h4>
-                    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+            
+
+            <div class="p-grid">
+                <div class="p-col-6">
+                    <p-accordionTab header="Service Type">
+                        
+                                    <p-pickList [source]="sourceSystem" [target]="targetSystem" sourceHeader="Available" targetHeader="Selected" [responsive]="true" filterBy="serviceTypeName" 
+                                    dragdrop="true" sourceFilterPlaceholder="Search" targetFilterPlaceholder="Search" [sourceStyle]="{'height':'300px'}" [targetStyle]="{'height':'300px'}"
+                                    [showSourceControls]="false" [showTargetControls]="false" filterMatchMode="contains">
+                                        <ng-template let-sourceSystem pTemplate="item">
+                                            <div class="ui-helper-clearfix">
+                                                <div>{{sourceSystem.serviceTypeName}}</div>
+                                            </div>
+                                        </ng-template>
+                                    </p-pickList>
+                                </p-accordionTab>
+                            </div>
+                            <div class="p-col-6">
+                                    <p-accordionTab header="Service Type Details">
+                                            <div class="p-grid ">
+                                                    <div class="p-col-3 item-right">ERP PMT Override:</div>
+                                                    <div class="p-col-3 item-left">
+                                                        <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="banInsertData.erpPmtOverride"></p-checkbox><label class="label"></label>
+                                                    </div>
+                                                </div>
+                                                <div class="p-grid ">
+                                                    <div class="p-col-5 item-right">Override ERP PMT Terms:</div>
+                                                    <div class="p-col-7 item-left">
+                                                        <input class="form-control" [(ngModel)]="banInsertData.overrideErpPmtTerms" />
+                                                    </div>
+                                                </div>
+                                                <div class="p-grid ">
+                                                    <div class="p-col-5 item-right">UNSPSC Override:</div>
+                                                    <div class="p-col-7 item-left">
+                                                        <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="banInsertData.unspscOverride"></p-checkbox><label class="label"></label>
+                                                    </div>
+                                                </div>
+                                                <div class="p-grid ">
+                                                        <div class="p-col-5 item-right">Override UNSPSC:</div>
+                                                        <div class="p-col-7 item-left">
+                                                            <input class="form-control" [(ngModel)]="banInsertData.overrideUnspsc" />
+                                                        </div>
+                                                </div>
+                                                <div class="p-grid ">
+                                                        <div class="p-col-5 item-right">Cost Center Override:</div>
+                                                        <div class="p-col-7 item-left">
+                                                            <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="banInsertData.costCentreOverride"></p-checkbox><label class="label"></label>
+                                                        </div>
+                                                </div>
+                                                <div class="p-grid ">
+                                                        <div class="p-col-5 item-right">Override Offset Cost Center:</div>
+                                                        <div class="p-col-7 item-left">
+                                                                <input class="form-control" [(ngModel)]="banInsertData.overrideOffsetCostCenter" />
+                                                        </div>
+                                                </div>
+                                                <div class="p-grid ">
+                                                        <div class="p-col-5 item-right">VAT Override:</div>
+                                                        <div class="p-col-7 item-left">
+                                                            <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="banInsertData.vatOverride"></p-checkbox><label class="label"></label>
+                                                        </div>
+                                                </div>
+                                                <div class="p-grid ">
+                                                        <div class="p-col-5 item-right">Override VAT Percent:</div>
+                                                        <div class="p-col-7 item-left">
+                                                                <input class="form-control" [(ngModel)]="banInsertData.overrideVatPercent" />
+                                                        </div>
+                                                </div>
+                                                <div class="p-grid ">
+                                                        <div class="p-col-5 item-right">WHT Override:</div>
+                                                        <div class="p-col-7 item-left">
+                                                            <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="banInsertData.whtOverride"></p-checkbox><label class="label"></label>
+                                                        </div>
+                                                </div>
+                                                <div class="p-grid ">
+                                                        <div class="p-col-5 item-right">Override WHT Percent:</div>
+                                                        <div class="p-col-7 item-left">
+                                                                <input class="form-control" [(ngModel)]="banInsertData.overrideWhtPercent" />
+                                                        </div>
+                                                </div>
+                                                <div class="p-grid ">
+                                                        <div class="p-col-5 item-right">TP Override:</div>
+                                                        <div class="p-col-7 item-left">
+                                                            <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="banInsertData.tpOverride"></p-checkbox><label class="label"></label>
+                                                        </div>
+                                                </div>
+                                                <div class="p-grid ">
+                                                        <div class="p-col-5 item-right">Override TP Percent:</div>
+                                                        <div class="p-col-7 item-left">
+                                                                <input class="form-control" [(ngModel)]="banInsertData.overrideTpPercent" />
+                                                        </div>
+                                                </div>
+                                                <div class="p-grid ">
+                                                        <div class="p-col-5 item-right">Liquidate to Bill Routing ID:</div>
+                                                        <div class="p-col-6 item-left">
+                                                            <input class="form-control" [(ngModel)]="banInsertData.liquidateBillRoutingId" />
+                                                        </div>
+                                                        <div class="p-col-1 item-left">
+                                                            <a class="a-color" style="cursor:pointer;" (click)="clearAllFilters()">
+                                                                <i class="fa fa-pencil-square-o fa-2x"></i>
+                                                            </a>
+                                                        </div>
+                                                </div>  
+                                        </p-accordionTab>
+                            </div>
+                    
                 </div>
-                <div class="modal-body">
-                    <p class="text-center">{{errorMessage}}</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-dark" (click)="c('Save click'); ">Ok</button>
-                </div>
-              </ng-template>
+                
+           
+            <div class="p-grid">
+                    <label class="errorMessage">{{errorMessage}}</label>
+            </div>
+            <div class="p-grid">
+                    <div class="p-col-12" style="text-align:right">
+                        <!-- <button pButton type="button" label="Submit" class="ui-button-rounded ui-button-secondary" (click)="upsertBan()"></button>
+                        <button pButton type="button" label="Cancel" class="ui-button-rounded ui-button-secondary" (click)="clearAllFilters()"></button> -->
+                        <button class="ge-button -fill--solid" (click)="upsertBan()">Submit</button>
+                        <button class="ge-button -fill--solid" (click)="clearAllFilters()">Cancel</button> 
+                        <app-file-download [dwnData]="banDwnData" [colsHeader]="this.downloadCols" [fileName]="fileName"></app-file-download>
+                    </div>
+            </div>
+                
+            <div class="p-grid">
+                    <div class="p-col-12">
+                        <p-table #tt [columns]="cols" [value]="banData" [scrollable]="true" [resizableColumns]="true" [reorderableColumns]="true"
+                            [style]="{'margin-top':'2px','width':'100%'}" [rows]="10" [paginator]="true" [pageLinks]="3" [responsive]="true">
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th [ngStyle]="{'width': '63px'}">Modify</th>
+                                    <th *ngFor="let col of columns" [pSortableColumn]="col.field" [ngStyle]="{'width': '130px'}">
+                                        {{col.header}}
+                                        <p-sortIcon [field]="col.field"></p-sortIcon>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th></th>
+                                    <th *ngFor="let col of columns" [ngSwitch]="col.field">
+                                        <input class="gridInputSize" [ngStyle]="{'width': '100%'}" *ngSwitchCase="col.field" pInputText type="text" (input)="tt.filter($event.target.value, col.field, 'contains')">
+                                    </th>
+                                </tr>
+                              </ng-template>
+                              <ng-template pTemplate="body" let-rowData let-columns="columns">
+                                <tr>
+                                    <td [ngStyle]="{'width': '48px'}">
+                                        <div class="justify-content-center">
+                                             <a class="a-color" style="cursor:pointer;" (click)="showSelectedData(rowData['buyerId'])">
+                                                <i class="fa fa-pencil-square-o fa-2x"></i>
+                                            </a> 
+                                        </div>
+                                    </td>
+                                    <td *ngFor="let col of columns" [ngStyle]="{'width': '100px'}">
+                                        <div> {{rowData[col.field]}}</div>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            </p-table>
+                          </div>
+                      </div>
+        </p-accordion>
+        
+    </p-panel>
+          <footer class="ge-footer"></footer>
+    </div>
+         
+        <ng-template #content1 let-c="close" let-d="dismiss">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modal-basic-title">Message</h4>
+                <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="text-center">{{errorMessage}}</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-dark" (click)="c('Save click'); ">Ok</button>
+            </div>
+          </ng-template>

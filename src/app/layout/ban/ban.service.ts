@@ -46,6 +46,11 @@ export class BanService {
     return this.http.post(environment.APP_BASE_URL_SERVICE_ENDPOINT+"/fetchServiceType",vendorServiceType);
   }
 
+  public getBillProcessList(): Observable<Object> {
+    return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/billProcess");
+
+  }
+
   private handleError(error){
     return throwError(error + "UrlConstants.SERVER_ERROR");
   }
