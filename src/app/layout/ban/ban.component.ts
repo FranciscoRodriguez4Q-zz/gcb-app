@@ -122,6 +122,7 @@ public vendorServiceType : any ={
   otherServiceData:any = [];
   public costCenter:any;
   public unspsc:any;
+  serviceTypeInsertData:any=[];
   constructor(private banService: BanService,private modalService: NgbModal) { }
   
 
@@ -439,28 +440,17 @@ public vendorServiceType : any ={
   onSelectTarget(item:any){
     //this.getClearData();
     console.log("clicked"+item.items[0].serviceTypeId);
-    //console.log("clicked"+this.targetSystem[item[0]].serviceTypeId);
-    this.banInsertData.serviceTypeId = item.items[0].serviceTypeId;
-    this.errorMessage = "";
-    if (this.banInsertData.serviceTypeId != null) {
-      this.banService.getOtherServiceDet(this.banInsertData).subscribe(
-        refData => {
-          this.otherServiceData=refData;
-          this.banInsertData.overrideUnspsc=this.otherServiceData.unspsc;
-          this.banInsertData.overrideOffsetCostCenter=this.otherServiceData.costCenter;
-          if(this.formMode=="New"){
-            this.banInsertData.unspscOverrideFlag=false;
-            this.banInsertData.costCentreOverrideFlag=false;
-            this.banInsertData.erpPmtOverrideFlag=false;
-            this.banInsertData.erpAwtGroupNameOverrideFlag=false;
-            this.banInsertData.erpVatAwtGroupOverrideFlag=false;
-            this.banInsertData.directOffsetBucOverrideFlag=false;
-            this.banInsertData.indirectOffsetBucOverrideFlag=false;
-          }
-      },
-      error => {
-      });
-    }
+    this.systems = this.serviceList.filter(x => x.serviceTypeId == item.items[0].serviceTypeId)[0];
+    console.log(this.systems);
+    
+    //trigger events
+    this.triggerUnspscEvent(this.systems.unspscOverrideFlag);
+    this.triggerCostCenterEvent(this.systems.costCentreOverrideFlag);
+    this.triggerErpPmtEvent(this.systems.erpPmtOverrideFlag);
+    this.triggerErpAwtGrpEvent(this.systems.erpAwtGroupNameOverrideFlag);
+    this.triggerErpVatAwtEvent(this.systems.erpVatAwtGroupOverrideFlag);
+    this.triggerDirOffsetEvent(this.systems.directOffsetBucOverrideFlag);
+    this.triggerindirectOffsetEvent(this.systems.indirectOffsetBucOverrideFlag);
   }
 
   isDisabledUnspsc = true;
@@ -470,40 +460,53 @@ public vendorServiceType : any ={
   isDisableErpVatAwt = true;
   isDisableDirOSAwt = true;
   isDisableIndirOSAwt = true;
-  triggerUnspscEvent() {
-    console.log("clicked");
+  triggerUnspscEvent(unspscOverrideFlag) {
+    if(unspscOverrideFlag)
       this.isDisabledUnspsc = !this.isDisabledUnspsc;
-      //this.banInsertData.overrideUnspsc="";
+    else
+    this.isDisabledUnspsc = true;
       return;
   }
-  triggerCostCenterEvent(){
-    this.isDisableCostCenter = !this.isDisableCostCenter;
-      //this.banInsertData.overrideOffsetCostCenter="";
+  triggerCostCenterEvent(costCentreOverrideFlag){
+    if(costCentreOverrideFlag)
+      this.isDisableCostCenter = !this.isDisableCostCenter;
+    else
+     this.isDisableCostCenter = true;
       return;
   }
-  triggerErpPmtEvent(){
+  triggerErpPmtEvent(erpPmtOverrideFlag){
+    if(erpPmtOverrideFlag)
     this.isDisableErpPmt = !this.isDisableErpPmt;
-      //this.banInsertData.overrideErpPmtTerms="";
+    else
+    this.isDisableErpPmt =true;
       return;
   } 
-  triggerErpAwtGrpEvent(){
+  triggerErpAwtGrpEvent(erpAwtGroupNameOverrideFlag){
+    if(erpAwtGroupNameOverrideFlag)
     this.isDisableErpAwtGrp = !this.isDisableErpAwtGrp;
-    //this.banInsertData.overrideErpAwtGroupName="";
+    else
+    this.isDisableErpAwtGrp =true;
     return;
   }
-  triggerErpVatAwtEvent(){
+  triggerErpVatAwtEvent(erpVatAwtGroupOverrideFlag){
+    if(erpVatAwtGroupOverrideFlag)
     this.isDisableErpVatAwt = !this.isDisableErpVatAwt;
-    //this.banInsertData.overrideErpVatAwtGroupName="";
+    else
+    this.isDisableErpVatAwt = true;
     return;
   }
-  triggerDirOffsetEvent(){
+  triggerDirOffsetEvent(directOffsetBucOverrideFlag){
+    if(directOffsetBucOverrideFlag)
     this.isDisableDirOSAwt = !this.isDisableDirOSAwt;
-    //this.banInsertData.overrideDirectOffsetBuc="";
+    else
+    this.isDisableDirOSAwt = true;
     return;
   }
-  triggerindirectOffsetEvent(){
-    this.isDisableIndirOSAwt = !this.isDisableIndirOSAwt;
-    //this.banInsertData.overrideIndirectOffsetBuc="";
+  triggerindirectOffsetEvent(indirectOffsetBucOverrideFlag){
+    if(indirectOffsetBucOverrideFlag)
+      this.isDisableIndirOSAwt = !this.isDisableIndirOSAwt;
+    else
+      this.isDisableIndirOSAwt =true;
     return;
   }
 
@@ -514,4 +517,105 @@ public vendorServiceType : any ={
     this.banInsertData.overrideIndirectOffsetBuc =indirectOffsetBuc;
     this.banInsertData.overrideErpVatAwtGroupName=erpVatAwtGroupName
   }
+  public services: any=[{
+    "erpPaymentTerms":"",
+    "erpAwtGroupName":"",
+    "directOffsetBuc":"",
+    "indirectOffsetBuc":"",
+    "erpVatAwtGroupName":"",
+  }]
+  serviceList: Array<{
+    serviceTypeId: string, 
+    overrideErpPmtTerms: string,
+    overrideErpAwtGroupName: string,
+    overrideDirectOffsetBuc: string,
+    overrideIndirectOffsetBuc:string,
+    overrideErpVatAwtGroupName:string,
+    overrideUnspsc:string,
+    overrideOffsetCostCenter:string,
+    unspscOverrideFlag:boolean,
+    costCentreOverrideFlag:boolean,
+    erpPmtOverrideFlag:boolean,
+    erpAwtGroupNameOverrideFlag:boolean,
+    erpVatAwtGroupOverrideFlag:boolean,
+    directOffsetBucOverrideFlag:boolean,
+    indirectOffsetBucOverrideFlag:boolean,
+  }> = [];
+
+  public systems :any ={
+    serviceTypeId: "", 
+    overrideErpPmtTerms: "",
+    overrideErpAwtGroupName: "",
+    overrideDirectOffsetBuc: "",
+    overrideIndirectOffsetBuc:"",
+    overrideErpVatAwtGroupName:"",
+    overrideUnspsc:"",
+    overrideOffsetCostCenter:"",
+    unspscOverrideFlag:"",
+    costCentreOverrideFlag:"",
+    erpPmtOverrideFlag:"",
+    erpAwtGroupNameOverrideFlag:"",
+    erpVatAwtGroupOverrideFlag:"",
+    directOffsetBucOverrideFlag:"",
+    indirectOffsetBucOverrideFlag:"",
+  }; 
+
+
+  addTargetValueToArray(item:any){
+    console.log(item);
+    for (let system of item.items){
+      if (system.serviceTypeId != null) {
+        this.banInsertData.serviceTypeId = system.serviceTypeId;
+        this.banService.getOtherServiceDet(this.banInsertData).subscribe(
+          refData => {
+            this.otherServiceData=refData;
+            this.serviceList.push({ serviceTypeId: system.serviceTypeId, overrideErpPmtTerms: this.banInsertData.overrideErpPmtTerms,
+              overrideErpAwtGroupName:this.banInsertData.overrideErpAwtGroupName,overrideDirectOffsetBuc:this.banInsertData.overrideDirectOffsetBuc, 
+              overrideIndirectOffsetBuc:this.banInsertData.overrideIndirectOffsetBuc, overrideErpVatAwtGroupName:this.banInsertData.overrideErpVatAwtGroupName,
+              overrideUnspsc:this.otherServiceData.unspsc,overrideOffsetCostCenter:this.otherServiceData.costCenter,
+              unspscOverrideFlag:false,costCentreOverrideFlag:false,
+              erpPmtOverrideFlag:false,erpAwtGroupNameOverrideFlag:false,
+              erpVatAwtGroupOverrideFlag:false,directOffsetBucOverrideFlag:false,
+              indirectOffsetBucOverrideFlag:false})
+        },
+        error => {
+        }); 
+      }
+    }
+    console.log( this.serviceList);
+  }
+
+  removeTargetValueFromArray(item:any){
+    console.log("remove"+item);
+    this.systems = this.serviceList.filter(x => x.serviceTypeId == item.items[0].serviceTypeId)[0];
+    var index= this.serviceList.indexOf(this.systems);
+    this.serviceList.splice(index, 1);
+    console.log("remove new list"+this.serviceList.length);
+  }
+
+  upsertBanService() {
+    this.errorMessage = "";
+    //this.msgs = [];
+    console.log("test button click");
+    if (this.validation()) {
+      this.banService.upsertBan(this.serviceList).subscribe(
+        refData => {
+          this.saveMessage = refData;
+          if(!this.saveMessage.Error == undefined)
+            this.errorMessagePopUp = "Ban Already Exits";
+          if(this.saveMessage.Error == false)
+            this.errorMessagePopUp = "Ban Name "+this.serviceList+" Save Suceesfully.";
+          else
+            this.errorMessagePopUp =  "ban Name "+this.serviceList+" not Saved..";
+          this.open(this.errorMessagePopUp);
+          this.getAllBanDetails();
+          this.clearAllFilters();
+        },
+        error => {
+        });
+    }else{
+      //this.open(this.errorMessage);
+    }
+  }
+  
 }

@@ -331,13 +331,12 @@
             </div>  
             
             
-
             <div class="p-grid">
                 <div class="p-col-6">
                     <p-accordionTab header="Service Type">
                                 <p-pickList [source]="sourceSystem" [target]="targetSystem" sourceHeader="Available" targetHeader="Selected" [responsive]="true" filterBy="serviceTypeName" 
                                 dragdrop="true" sourceFilterPlaceholder="Search" targetFilterPlaceholder="Search" [sourceStyle]="{'height':'300px'}" [targetStyle]="{'height':'300px'}"
-                                [showSourceControls]="false" [showTargetControls]="false" filterMatchMode="contains" (onTargetSelect)="onSelectTarget($event)">
+                                [showSourceControls]="false" [showTargetControls]="false" filterMatchMode="contains" (onTargetSelect)="onSelectTarget($event)" (onMoveToTarget)="addTargetValueToArray($event)" (onMoveToSource)="removeTargetValueFromArray($event)">
                                     <ng-template let-sourceSystem pTemplate="item">
                                         <div class="ui-helper-clearfix">
                                             <div>{{sourceSystem.serviceTypeName}}</div>
@@ -351,127 +350,127 @@
                                         <div class="p-grid ">
                                             <div class="p-col-5 item-right">UNSPSC Override</div>
                                             <div class="p-col-7 item-left">
-                                                <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="banInsertData.unspscOverrideFlag" (onChange)="triggerUnspscEvent()"></p-checkbox><label class="label"></label>
+                                                <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="systems.unspscOverrideFlag" (onChange)="triggerUnspscEvent(systems.unspscOverrideFlag)"></p-checkbox><label class="label"></label>
                                             </div>
                                         </div>
                                         <div class="p-grid ">
                                                 <div class="p-col-5 item-right">Override UNSPSC</div>
                                                 <div class="p-col-7 item-left">
-                                                    <input class="form-control" [(ngModel)]="banInsertData.overrideUnspsc" [disabled]="isDisabledUnspsc"/>
+                                                    <input class="form-control" [(ngModel)]="systems.overrideUnspsc" [disabled]="isDisabledUnspsc"/>
                                                 </div>
                                         </div>
                                         <div class="p-grid ">
                                                 <div class="p-col-5 item-right">Cost Center Override</div>
                                                 <div class="p-col-7 item-left">
-                                                    <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="banInsertData.costCentreOverrideFlag" (onChange)="triggerCostCenterEvent()"></p-checkbox><label class="label"></label>
+                                                    <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="systems.costCentreOverrideFlag" (onChange)="triggerCostCenterEvent(systems.costCentreOverrideFlag)"></p-checkbox><label class="label"></label>
                                                 </div>
                                         </div>
                                         <div class="p-grid ">
                                                 <div class="p-col-5 item-right">Override Offset Cost Center</div>
                                                 <div class="p-col-7 item-left">
-                                                        <input class="form-control" [(ngModel)]="banInsertData.overrideOffsetCostCenter" [disabled]="isDisableCostCenter"/>
+                                                        <input class="form-control" [(ngModel)]="systems.overrideOffsetCostCenter" [disabled]="isDisableCostCenter"/>
                                                 </div>
                                         </div>
                                         <div class="p-grid ">
                                             <div class="p-col-5 item-right">ERP PMT Override</div>
                                             <div class="p-col-7 item-left">
-                                                <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="banInsertData.erpPmtOverrideFlag" (onChange)="triggerErpPmtEvent()"></p-checkbox><label class="label"></label>
+                                                <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="systems.erpPmtOverrideFlag" (onChange)="triggerErpPmtEvent(systems.erpPmtOverrideFlag)"></p-checkbox><label class="label"></label>
                                             </div>
                                         </div>
                                         <div class="p-grid ">
                                             <div class="p-col-5 item-right">Override ERP PMT Terms</div>
                                             <div class="p-col-7 item-left">
-                                                <input class="form-control" [(ngModel)]="banInsertData.overrideErpPmtTerms" [disabled]="isDisableErpPmt"/>
+                                                <input class="form-control" [(ngModel)]="systems.overrideErpPmtTerms" [disabled]="isDisableErpPmt"/>
                                             </div>
                                         </div>
                                         <div class="p-grid ">
                                                 <div class="p-col-5 item-right">ERP AWT Group Name Override</div>
                                                 <div class="p-col-7 item-left">
-                                                    <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="banInsertData.erpAwtGroupNameOverrideFlag" (onChange)="triggerErpAwtGrpEvent()"></p-checkbox><label class="label"></label>
+                                                    <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="systems.erpAwtGroupNameOverrideFlag" (onChange)="triggerErpAwtGrpEvent(systems.erpAwtGroupNameOverrideFlag)"></p-checkbox><label class="label"></label>
                                                 </div>
                                         </div>
                                         <div class="p-grid ">
                                                 <div class="p-col-5 item-right">Override ERP AWT Group Name</div>
                                                 <div class="p-col-7 item-left">
-                                                        <input class="form-control" [(ngModel)]="banInsertData.overrideErpAwtGroupName" [disabled]="isDisableErpAwtGrp"/>
+                                                        <input class="form-control" [(ngModel)]="systems.overrideErpAwtGroupName" [disabled]="isDisableErpAwtGrp"/>
                                                 </div>
                                         </div>
                                         <div class="p-grid ">
                                                 <div class="p-col-5 item-right">ERP VAT AWT Group Name Override</div>
                                                 <div class="p-col-7 item-left">
-                                                    <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="banInsertData.erpVatAwtGroupOverrideFlag" (onChange)="triggerErpVatAwtEvent()"></p-checkbox><label class="label"></label>
+                                                    <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="systems.erpVatAwtGroupOverrideFlag" (onChange)="triggerErpVatAwtEvent(systems.erpVatAwtGroupOverrideFlag)"></p-checkbox><label class="label"></label>
                                                 </div>
                                         </div>
                                         <div class="p-grid ">
                                                 <div class="p-col-5 item-right">Override ERP VAT AWT Group Name</div>
                                                 <div class="p-col-7 item-left">
-                                                        <input class="form-control" [(ngModel)]="banInsertData.overrideErpVatAwtGroupName" [disabled]="isDisableErpVatAwt"/>
+                                                        <input class="form-control" [(ngModel)]="systems.overrideErpVatAwtGroupName" [disabled]="isDisableErpVatAwt"/>
                                                 </div>
                                         </div>
                                         <div class="p-grid ">
                                                 <div class="p-col-5 item-right">Direct Offset BUC Override</div>
                                                 <div class="p-col-7 item-left">
-                                                    <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="banInsertData.directOffsetBucOverrideFlag" (onChange)="triggerDirOffsetEvent()"></p-checkbox><label class="label"></label>
+                                                    <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="systems.directOffsetBucOverrideFlag" (onChange)="triggerDirOffsetEvent(systems.directOffsetBucOverrideFlag)"></p-checkbox><label class="label"></label>
                                                 </div>
                                         </div>
                                         <div class="p-grid ">
                                                 <div class="p-col-5 item-right">Override Direct Offset BUC</div>
                                                 <div class="p-col-7 item-left">
-                                                        <input class="form-control" [(ngModel)]="banInsertData.overrideDirectOffsetBuc" [disabled]="isDisableDirOSAwt"/>
+                                                        <input class="form-control" [(ngModel)]="systems.overrideDirectOffsetBuc" [disabled]="isDisableDirOSAwt"/>
                                                 </div>
                                         </div>
                                         <div class="p-grid ">
                                                 <div class="p-col-5 item-right">Indirect Offset BUC Override</div>
                                                 <div class="p-col-7 item-left">
-                                                    <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="banInsertData.indirectOffsetBucOverrideFlag" (onChange)="triggerindirectOffsetEvent()"></p-checkbox><label class="label"></label>
+                                                    <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="systems.indirectOffsetBucOverrideFlag" (onChange)="triggerindirectOffsetEvent(systems.indirectOffsetBucOverrideFlag)"></p-checkbox><label class="label"></label>
                                                 </div>
                                         </div>
                                         <div class="p-grid ">
                                                 <div class="p-col-5 item-right">Override Indirect Offset BUC</div>
                                                 <div class="p-col-7 item-left">
-                                                        <input class="form-control" [(ngModel)]="banInsertData.overrideIndirectOffsetBuc" [disabled]="isDisableIndirOSAwt"/>
+                                                        <input class="form-control" [(ngModel)]="systems.overrideIndirectOffsetBuc" [disabled]="isDisableIndirOSAwt"/>
                                                 </div>
                                         </div>
                                         <div class="p-grid ">
                                                 <div class="p-col-5 item-right">QST Percent</div>
                                                 <div class="p-col-7 item-left">
-                                                        <input class="form-control" [(ngModel)]="banInsertData.qstPercent" />
+                                                        <input class="form-control" [(ngModel)]="systems.qstPercent" />
                                                 </div>
                                         </div>
                                         <div class="p-grid ">
                                                 <div class="p-col-5 item-right">HST Percent</div>
                                                 <div class="p-col-7 item-left">
-                                                        <input class="form-control" [(ngModel)]="banInsertData.hstPercent" />
+                                                        <input class="form-control" [(ngModel)]="systems.hstPercent" />
                                                 </div>
                                         </div>
                                         <div class="p-grid ">
                                                 <div class="p-col-5 item-right">PST Percent</div>
                                                 <div class="p-col-7 item-left">
-                                                        <input class="form-control" [(ngModel)]="banInsertData.pstPercent" />
+                                                        <input class="form-control" [(ngModel)]="systems.pstPercent" />
                                                 </div>
                                         </div>
                                         <div class="p-grid ">
                                                 <div class="p-col-5 item-right">GST Percent</div>
                                                 <div class="p-col-7 item-left">
-                                                        <input class="form-control" [(ngModel)]="banInsertData.gstPercent" />
+                                                        <input class="form-control" [(ngModel)]="systems.gstPercent" />
                                                 </div>
                                         </div>
                                         <div class="p-grid ">
                                                 <div class="p-col-5 item-right">VAT Percent</div>
                                                 <div class="p-col-7 item-left">
-                                                        <input class="form-control" [(ngModel)]="banInsertData.vatPercent" />
+                                                        <input class="form-control" [(ngModel)]="systems.vatPercent" />
                                                 </div>
                                         </div>
                                         <div class="p-grid ">
                                                 <div class="p-col-5 item-right">TP Percent</div>
                                                 <div class="p-col-7 item-left">
-                                                        <input class="form-control" [(ngModel)]="banInsertData.tpPercent" />
+                                                        <input class="form-control" [(ngModel)]="systems.tpPercent" />
                                                 </div>
                                         </div>
                                         <div class="p-grid ">
                                                 <div class="p-col-5 item-right">Liquidate to Bill Routing ID:</div>
                                                 <div class="p-col-6 item-left">
-                                                    <input class="form-control" [(ngModel)]="banInsertData.liquidateBillRoutingId" />
+                                                    <input class="form-control" [(ngModel)]="systems.liquidateBillRoutingId" />
                                                 </div>
                                                 <div class="p-col-1 item-left">
                                                     <a class="a-color" style="cursor:pointer;" (click)="clearAllFilters()">
