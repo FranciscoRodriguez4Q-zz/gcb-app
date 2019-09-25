@@ -62,6 +62,10 @@ export class BanService {
     return this.http.post(environment.APP_BASE_URL_SERVICE_ENDPOINT+"/getOtherServiceType", banInsertData);
   }
 
+  public getBanById(banId): Observable<Object> {
+    return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/ban/banById/"+banId);
+  }
+
   private handleError(error){
     return throwError(error + "UrlConstants.SERVER_ERROR");
   }

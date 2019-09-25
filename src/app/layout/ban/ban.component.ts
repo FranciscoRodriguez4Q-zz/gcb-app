@@ -39,7 +39,7 @@ public vendorServiceType : any ={
   
       goldIdOverrideFlag: "",
       overrideGoldId: "",
-      billRoutingId: "",
+      liquidateBillRoutingId: "",
       directOffsetBuc: "",
       indirectOffsetBuc: "",
       isEquipment: "",
@@ -56,7 +56,7 @@ public vendorServiceType : any ={
       erpGuiDiff: "",
       erpCustRegNumber: "",
       vatUnspsc: "",
-      paymentApprovalEmail: "",
+      buyerPaymentApprovalEmail: "",
       buyerContactSso: "",
       focusGroup: "",
       shipFromAddress: "",
@@ -68,7 +68,7 @@ public vendorServiceType : any ={
       shipTozip5: "",
       addCountryISOtoVendorName: "",
       useAssetFileVendorName: "",
-
+      liquidateBillRoutingIdServiceType: ""
       
     };
   
@@ -178,7 +178,12 @@ public vendorServiceType : any ={
     console.log("radio button click" + this.banId);
     this.editFlag = true;
     this.formMode="Modify";
-    this.banInsertData = this.banData.filter(x => x.banId == banId)[0];
+    this.banService.getBanById(banId).subscribe(
+      refData => {
+        this.banInsertData = refData;
+      },
+      error => {
+      });
   }
 
   open(content) {
@@ -197,34 +202,34 @@ public vendorServiceType : any ={
   }
 
   validation(){
-    if(this.banInsertData.processName==""){
-      this.errorMessage = "Please Enter Process Name";
-      return false;
-    }
-    if(this.banInsertData.vendorBan==""){
-      this.errorMessage = "Please Enter Vendor Ban";
-      return false;
-    }
-    if(this.banInsertData.vendorCode==""){
-      this.errorMessage = "Please Select vendor Code";
-      return false;
-    }
-    if(this.banInsertData.buyerId==""){
-      this.errorMessage = "Please Select Buyer Name";
-      return false;
-    }
-    if(this.banInsertData.billingModelR==""){
-      this.errorMessage = "Please Select Billing Model";
-      return false;
-    }
-    if(this.banInsertData.invoiceBuyerLeName==""){
-      this.errorMessage = "Please Enter Invoice Buyer Le Name";
-      return false;
-    }
+    // if(this.banInsertData.processName==""){
+    //   this.errorMessage = "Please Enter Process Name";
+    //   return false;
+    // }
+    // if(this.banInsertData.vendorBan==""){
+    //   this.errorMessage = "Please Enter Vendor Ban";
+    //   return false;
+    // }
+    // if(this.banInsertData.vendorCode==""){
+    //   this.errorMessage = "Please Select vendor Code";
+    //   return false;
+    // }
+    // if(this.banInsertData.buyerId==""){
+    //   this.errorMessage = "Please Select Buyer Name";
+    //   return false;
+    // }
+    // if(this.banInsertData.billingModelR==""){
+    //   this.errorMessage = "Please Select Billing Model";
+    //   return false;
+    // }
+    // if(this.banInsertData.invoiceBuyerLeName==""){
+    //   this.errorMessage = "Please Enter Invoice Buyer Le Name";
+    //   return false;
+    // }
 
-    else{
+    // else{
       return true;
-    }
+   // }
   }
 
   upsertBan() {
@@ -237,12 +242,10 @@ public vendorServiceType : any ={
       this.banService.upsertBan(this.banInsertData).subscribe(
         refData => {
           this.saveMessage = refData;
-          if(!this.saveMessage.Error == undefined)
-            this.errorMessagePopUp = "Ban Already Exits";
-          if(this.saveMessage.Error == false)
-            this.errorMessagePopUp = "Ban Name "+this.banInsertData.erpBanLeName+" Save Suceesfully.";
-          else
-            this.errorMessagePopUp =  "ban Name "+this.banInsertData.erpBanLeName+" not Saved..";
+          //this.errorMessage = this.saveMessage.statusMessage;
+         /*  this.msgs = [];
+          this.msgs.push({ severity: 'error', summary: this.errorMessage, detail: '' }); */
+          this.popupErrorMessage =  this.saveMessage.statusMessage;
           this.open(this.errorMessagePopUp);
           this.getAllBanDetails();
           this.clearAllFilters();
@@ -375,8 +378,8 @@ public vendorServiceType : any ={
 
   getAllModel(){
     //this.modeReferenceDataList.push({ label: "Select", value: "Select" });
-    this.modeReferenceDataList.push({ label: "Production", value: "PRODUCTION" });
-    this.modeReferenceDataList.push({ label: "Test", value: "TEST" });
+    this.modeReferenceDataList.push({ label: "PRODUCTION", value: "PRODUCTION" });
+    this.modeReferenceDataList.push({ label: "TEST", value: "TEST" });
   }
 
   /**

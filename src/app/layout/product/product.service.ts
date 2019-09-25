@@ -18,7 +18,10 @@ export class ProductService {
 
   public getBillProcessList(): Observable<Object> {
     return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/billProcess");
+  }
 
+  public getUnspsc(): Observable<Object> {
+    return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/unspsc");
   }
 
   public getProductDetails():Observable<Object>{

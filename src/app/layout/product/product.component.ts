@@ -37,7 +37,7 @@ export class ProductComponent implements OnInit {
     { field: 'productName', header: 'Product Name', width: '15%' },
     { field: 'productCode', header: 'Product Code', width: '15%' },
     { field: 'billProcessName', header: 'Process Name', width: '15%' },
-    { field: 'productType', header: 'Product Type', width: '15%' },
+   // { field: 'productType', header: 'Product Type', width: '15%' },
     { field: 'unspsc', header: 'UNSPSC', width: '15%' },
     { field: 'updatedBy', header: 'Updated By', width: '15%' },
     { field: 'lastUpdated', header: 'Updated Date', width: '15%' },
@@ -50,8 +50,8 @@ export class ProductComponent implements OnInit {
     billProcessId: "Select",
     productCode: "",
     tDescriptionDesiredValue: "",
-    productType: "",
-    productTypeId: "Select",
+   // productType: "",
+    //productTypeId: "Select",
     unspsc: "",
     upspscId: "Select"
   }
@@ -65,7 +65,7 @@ export class ProductComponent implements OnInit {
     }
    
     this.getBillProcess();
-    this.getProductType();
+    //this.getProductType();
     this.getUnspsc();
 
    
@@ -106,16 +106,29 @@ export class ProductComponent implements OnInit {
       });
     }
 
-      getProductType(){
-      this.productTypeReferenceList.push({ label: "Select", value: "Select" });
-      this.productTypeReferenceList.push({ label: "MASTER", value: "MASTER" });
-      this.productTypeReferenceList.push({ label: "INDIVIDUAL", value: "INDIVIDUAL" });
-      }
+      // getProductType(){
+      // this.productTypeReferenceList.push({ label: "Select", value: "Select" });
+      // this.productTypeReferenceList.push({ label: "MASTER", value: "MASTER" });
+      // this.productTypeReferenceList.push({ label: "INDIVIDUAL", value: "INDIVIDUAL" });
+      // }
 
       getUnspsc(){
-        this.unspscReferenceList.push({ label: "Select", value: "Select" });
-        this.unspscReferenceList.push({ label: "81.11.17.00.00", value: "81.11.17.00.00" });
-        this.unspscReferenceList.push({ label: "84.11.00.00.00", value: "84.11.00.00.00" });
+
+        this.productService.getUnspsc().subscribe(
+          refData => {
+            let arr: any = [];
+            this.unspscReference = refData;
+            this.unspscReferenceList.push({ label: "Select", value: "Select" });
+            for (let data of this.unspscReference) {
+              this.unspscReferenceList.push({ label: data.unspscCode, value: data.unspscCode })
+            }
+          },
+          error => {
+          });
+
+        //this.unspscReferenceList.push({ label: "Select", value: "Select" });
+        //this.unspscReferenceList.push({ label: "81.11.17.00.00", value: "81.11.17.00.00" });
+        //this.unspscReferenceList.push({ label: "84.11.00.00.00", value: "84.11.00.00.00" });
     }
 
     showSelectedData(productId) {
@@ -159,18 +172,18 @@ export class ProductComponent implements OnInit {
         this.errorMessage = "Please Enter Product Code ";
         return false;
       }
-      if (this.gcbProductFilters.tDescriptionDesiredValue == "") {
-        this.errorMessage = "Please Enter T Description Prefix Text";
-         return false;
-      }
-      if (this.gcbProductFilters.productType == "Select") {
-        this.errorMessage = "Please select Product Type";
-         return false;
-      }
-      // if (this.gcbProductFilters.unspsc == "Select") {
-      //   this.errorMessage = "Please select UNSPSC";
+      // if (this.gcbProductFilters.tDescriptionDesiredValue == "") {
+      //   this.errorMessage = "Please Enter T Description Prefix Text";
       //    return false;
       // }
+      // if (this.gcbProductFilters.productType == "Select") {
+      //   this.errorMessage = "Please select Product Type";
+      //    return false;
+      // }
+      if (this.gcbProductFilters.unspsc == "Select") {
+        this.errorMessage = "Please select UNSPSC";
+         return false;
+      }
       return true;
     }
   

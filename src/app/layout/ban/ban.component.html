@@ -11,8 +11,7 @@
                                     </div>
                                     <div class="p-col p-nogutter">
                                         <span *ngIf="!editFlag">BAN : Create</span>
-                                        <span *ngIf="editFlag">BAN : Modify (Internal ChargeBack ID: {{chargeBackFilters.internalCbId}})</span>
-                        
+                                        <span *ngIf="editFlag">BAN : Modify (Ban ID: {{banInsertData.banId}})</span>                        
                                     </div>
                                 </div>
                             </div>
@@ -62,12 +61,12 @@
                                 <p-dropdown [options]="buyerReferenceDataList" [style]="{'width': '100%'}"  [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.buyerId"></p-dropdown>
                             </div>
                     </div>
-                    <div class="p-grid ">
+                    <!-- <div class="p-grid ">
                             <div class="p-col-4 item-right"><span class="required">*</span>Billing Model :</div>
                             <div class="p-col-8 item-left">
                                 <p-dropdown [options]="billingReferenceDataList" [style]="{'width': '100%'}"  [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.billingModel"></p-dropdown>
                             </div>
-                    </div>
+                    </div> -->
                     <div class="p-grid ">
                             <div class="p-col-4 item-right">Mode :</div>
                             <div class="p-col-8 item-left">
@@ -112,7 +111,7 @@
                         <div class="p-grid ">
                                 <div class="p-col-4 item-right">Liquidate to Bill Routing ID :</div>
                                 <div class="p-col-7 item-left">
-                                    <input class="form-control" [(ngModel)]="banInsertData.billRoutingId" />
+                                    <input class="form-control" [(ngModel)]="banInsertData.liquidateBillRoutingId" />
                                 </div>
                                 <div class="p-col-1 item-left">
                                     <a class="a-color" style="cursor:pointer;" (click)="clearAllFilters()">
@@ -241,7 +240,7 @@
                             <div class="p-grid ">
                                     <div class="p-col-4 item-right">Payment Approval Email:</div>
                                     <div class="p-col-8 item-left">
-                                            <input class="form-control" [(ngModel)]="banInsertData.paymentApprovalEmail" />
+                                            <input class="form-control" [(ngModel)]="banInsertData.buyerPaymentApprovalEmail" />
                                     </div>
                             </div>
                             <div class="p-grid ">
@@ -522,7 +521,7 @@
                                 <tr>
                                     <td [ngStyle]="{'width': '48px'}">
                                         <div class="justify-content-center">
-                                             <a class="a-color" style="cursor:pointer;" (click)="showSelectedData(rowData['buyerId'])">
+                                             <a class="a-color" style="cursor:pointer;" (click)="showSelectedData(rowData['banId'])">
                                                 <i class="fa fa-pencil-square-o fa-2x"></i>
                                             </a> 
                                         </div>
@@ -541,17 +540,18 @@
           <footer class="ge-footer"></footer>
     </div>
          
-        <ng-template #content1 let-c="close" let-d="dismiss">
-            <div class="modal-header">
-                <h4 class="modal-title" id="modal-basic-title">Message</h4>
-                <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p class="text-center">{{errorMessage}}</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-outline-dark" (click)="c('Save click'); ">Ok</button>
-            </div>
-          </ng-template>
+        
+      <ng-template #content1 let-c="close" let-d="dismiss">
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">Message</h4>
+            <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <p class="text-center">{{popupErrorMessage}}</p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-outline-dark" (click)="c('Save click'); ">Ok</button>
+        </div>
+      </ng-template>
