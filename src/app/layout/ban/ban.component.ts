@@ -263,7 +263,7 @@ public vendorServiceType : any ={
           this.popupErrorMessage =  this.saveMessage.statusMessage;
           this.open(this.errorMessagePopUp);
           console.log(this.saveMessage);
-          if(!this.saveMessage.error)
+          if(!this.saveMessage.error && this.banInsertData.liquidateBillRoutingId)
               {
                 this.associateBillRefToAsset(this.saveMessage.banId);
               }
