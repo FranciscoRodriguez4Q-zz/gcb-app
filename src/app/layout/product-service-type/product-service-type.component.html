@@ -1,7 +1,7 @@
 <div class="-font--serif">
   <!-- <div class="-font--plus-2">Service Type : Add/Modify </div> -->
 <p-fieldset>
-    <p-header>Service Type Name : {{formMode}}</p-header>
+    <p-header>Service Type : {{formMode}}</p-header>
 <div class="p-grid nested-grid">
     <div class="p-col-6">
         <div class="p-grid">
@@ -54,7 +54,7 @@
         </div>
         <div class="p-grid">
             <div class="p-col-5 item-right">
-                 <label class="label">Service Type Name </label>
+                 <label class="label"><span class="required">*</span>Service Type Name </label>
             </div>
             <div class="p-col-5 item-left">
                 <input class="form-control widthAdjust"  [disabled]="true" [(ngModel)]="gcbDetailFilters.serviceTypeName" tooltip="gcbDetailFilters.serviceTypeName" >
@@ -62,7 +62,7 @@
         </div>
         <div class="p-grid">
                 <div class="p-col-5 item-right">
-                     <label class="label"><span class="required" *ngIf="!legacyServiceTypeEnableFlag">*</span>Legacy Service Type Name</label>
+                     <label class="label">Legacy Service Type Name</label>
                 </div>
                 <div class="p-col-5 item-left">
                     <input class="form-control widthAdjust"  [(ngModel)]="gcbDetailFilters.legacyServiceTypeName" [disabled]="legacyServiceTypeEnableFlag">

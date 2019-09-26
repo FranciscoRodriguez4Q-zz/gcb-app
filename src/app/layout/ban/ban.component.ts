@@ -262,6 +262,11 @@ public vendorServiceType : any ={
           this.saveMessage = refData;
           this.popupErrorMessage =  this.saveMessage.statusMessage;
           this.open(this.errorMessagePopUp);
+          console.log(this.saveMessage);
+          if(!this.saveMessage.error)
+              {
+                this.associateBillRefToAsset(this.saveMessage.banId);
+              }
           this.getAllBanDetails();
           this.clearAllFilters();
         },
@@ -277,7 +282,30 @@ public vendorServiceType : any ={
     }
   }
 
+  associateBillRefToAsset(internalCbId){
+
+    this.banService.associateBillReftoAsset(this.banInsertData.liquidateBillRoutingId,
+      internalCbId, this.regKey).subscribe(
+      refData => {
+        let response = refData;
+        let respArray = [];
+        respArray.push(response);
+        if (respArray[0].Successful_Count === 1) {
   
+        }
+        else {
+          if (!(respArray[0].RecordsArray[0].message === "Bill Ref Already Associated.")) {
+            this.popupErrorMessage = respArray[0].RecordsArray[0].message;
+           //this.open(this.errorMessagePopUp);
+          }
+        }
+      },
+      (error) => {
+        this.popupErrorMessage = error;
+        this.open(this.errorMessagePopUp);
+      });
+  
+  }
 
   getAllCountryData(){
     this.banService.getAllCountryCode().subscribe(

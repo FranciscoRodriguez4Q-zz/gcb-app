@@ -133,9 +133,9 @@ export class ProductComponent implements OnInit {
 
     showSelectedData(productId) {
       console.log("radio button click" + productId);
-      this.editFlag = true;
-      this.formMode="Modify";
+      this.editFlag = true;      
       this.gcbProductFilters = this.products.filter(x => x.productId == productId)[0];
+      this.formMode="Modify(Product ID: "+this.gcbProductFilters.productId+")";
     }
 
     upsertProduct() {

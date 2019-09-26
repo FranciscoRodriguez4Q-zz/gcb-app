@@ -79,6 +79,14 @@ export class BanService {
   
     );
   }
+
+  public associateBillReftoAsset(billRefId,assetID,regkey):Observable<Object> { 
+    return this.http.get(environment.APP_BILLHUB_URL_SERVICE_ENDPOINT+
+      "/AssociateBillReftoAsset?billRefAssetArray="+billRefId+","+
+      assetID+
+      "&regKey="+regkey
+    );
+  }
   private handleError(error){
     return throwError(error + "UrlConstants.SERVER_ERROR");
   }
