@@ -223,6 +223,10 @@ export class ProductServiceTypeComponent implements OnInit {
       this.errorMessage = "Please select Cost Center";
        return false;
     }
+    if (this.gcbDetailFilters.billingBasis == "Select") {
+      this.errorMessage = "Please select Cost Center";
+       return false;
+    }
     return true;
   }
 

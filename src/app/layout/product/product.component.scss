@@ -23,7 +23,11 @@
     min-height: auto;
     border-color:  #63666a;
 }
-
+input {
+  border-color:#244364;
+  text-transform: uppercase;  
+  
+}
 .errorMessage{
   display: block;
   color: red !important;

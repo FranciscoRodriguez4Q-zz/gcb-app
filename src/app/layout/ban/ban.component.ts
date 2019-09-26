@@ -4,6 +4,7 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { SelectItem } from 'primeng/primeng';
 import {ListboxModule} from 'primeng/listbox';
 import {PickListModule} from 'primeng/picklist';
+import { environment } from 'src/environments/environment.prod';	
 
 @Component({
   selector: 'app-product',
@@ -35,8 +36,7 @@ public vendorServiceType : any ={
       mode: "",
       invoiceBuyerLeName: "",
       active: "",
-      activeTo: "",
-  
+      activeTo: "",  
       goldIdOverrideFlag: "",
       overrideGoldId: "",
       liquidateBillRoutingId: "",
@@ -60,7 +60,7 @@ public vendorServiceType : any ={
       buyerContactSso: "",
       focusGroup: "",
       shipFromAddress: "",
-      shipToCountry: "",
+      shipToCountry: 0,
       shipToProvince: "",
       shipToState: "",
       shipToCity: "",
@@ -123,6 +123,10 @@ public vendorServiceType : any ={
   public costCenter:any;
   public unspsc:any;
   serviceTypeInsertData:any=[];
+
+  public regKey = "8c8606d1-e591-435f-a435-d112ba4cd43c";		
+  public entityTypeID = "5";
+
   constructor(private banService: BanService,private modalService: NgbModal) { }
   
 
@@ -202,50 +206,60 @@ public vendorServiceType : any ={
     this.errorMessage ="";
   }
 
-  validation(){
-    // if(this.banInsertData.processName==""){
-    //   this.errorMessage = "Please Enter Process Name";
-    //   return false;
-    // }
-    // if(this.banInsertData.vendorBan==""){
-    //   this.errorMessage = "Please Enter Vendor Ban";
-    //   return false;
-    // }
-    // if(this.banInsertData.vendorCode==""){
-    //   this.errorMessage = "Please Select vendor Code";
-    //   return false;
-    // }
-    // if(this.banInsertData.buyerId==""){
-    //   this.errorMessage = "Please Select Buyer Name";
-    //   return false;
-    // }
-    // if(this.banInsertData.billingModelR==""){
-    //   this.errorMessage = "Please Select Billing Model";
-    //   return false;
-    // }
-    // if(this.banInsertData.invoiceBuyerLeName==""){
-    //   this.errorMessage = "Please Enter Invoice Buyer Le Name";
-    //   return false;
-    // }
+  validation(){    
+    if(this.banInsertData.billProcessId==0){
+      this.errorMessage = "Please Select Bill Process";
+      return false;
+    }
+    if(this.banInsertData.vendorBan==""){
+      this.errorMessage = "Please Enter Vendor Ban";
+      return false;
+    }
+    if(this.banInsertData.vendorConfigId==0){
+      this.errorMessage = "Please Enter Vendor Code";
+      return false;
+    }
+    if(this.banInsertData.buyerId==0){
+      this.errorMessage = "Please Select Buyer Name";
+      return false;
+    }
+    if(this.banInsertData.mode==""){
+      this.errorMessage = "Please Select Mode";
+      return false;
+    } 
 
-    // else{
+     else{
       return true;
-   // }
+   }
   }
 
   upsertBan() {
     this.errorMessage = "";
-    //this.msgs = [];
-    console.log("test button click");
     if (this.validation()) {
-      this.banInsertData.createdBy="503148032";
-      this.banInsertData.updatedBy="503148032";
+      // this.banService.getBillRefIDTokensAssociated(this.banInsertData.liquidateBillRoutingId,
+      //   this.regKey).subscribe(
+      // refData => {
+      //   let response = refData;
+      //   let respArray = [];
+      //   respArray.push(response);
+      //   console.log(response);
+      //   if (respArray[0].message === "No Tokens Associated") {
+      //     this.errorMessage = respArray[0].message;
+      //     this.popupErrorMessage = respArray[0].message;
+      //     this.open(this.errorMessagePopUp);
+          
+      //   }
+      //   else   if (respArray[0].message === "BillRef does not exist"){
+      //     this.errorMessage = "Please Enter BUC/ADN details";
+      //     this.popupErrorMessage = "Please Enter BUC/ADN details";
+      //     this.banInsertData.liquidateBillRoutingId = "";
+      //     this.open(this.errorMessagePopUp);
+         
+      //   }
+      //   else {
       this.banService.upsertBan(this.banInsertData).subscribe(
         refData => {
           this.saveMessage = refData;
-          //this.errorMessage = this.saveMessage.statusMessage;
-         /*  this.msgs = [];
-          this.msgs.push({ severity: 'error', summary: this.errorMessage, detail: '' }); */
           this.popupErrorMessage =  this.saveMessage.statusMessage;
           this.open(this.errorMessagePopUp);
           this.getAllBanDetails();
@@ -253,18 +267,24 @@ public vendorServiceType : any ={
         },
         error => {
         });
-    }else{
+      }
+    // },
+    // error => {
+    // });
+    // }
+    else{
       //this.open(this.errorMessage);
     }
   }
+
+  
 
   getAllCountryData(){
     this.banService.getAllCountryCode().subscribe(
       refData => {
         let arr: any = [];
         this.countryCodeReferenceData = refData;
-        //this.countryCodeReferenceDataList.push({ label: "Select", value: "Select" })
-  
+        this.countryCodeReferenceDataList.push({ label: "Select", value: "Select" })  
         for (let data of this.countryCodeReferenceData) {
           let labelCountry = data.countryCode + " | " + data.countryName;
           this.countryCodeReferenceDataList.push({ label: labelCountry, value: data.countryId })
@@ -323,7 +343,8 @@ public vendorServiceType : any ={
         let arr: any = [];
         this.vendorReferenceData = refData;  
         for (let data of this.vendorReferenceData) {
-          let labelService = data.vendorCode+' | '+data.billedFromCountryCode+' | '+data.billedToCountryCode+' | '+data.currencyCode;
+          let labelService = data.vendorCode+' | '+data.billedFromCountryCode+' | '+data.billedToCountryCode+' | '
+          +data.currencyCode+' | '+data.vendorLegalEntityName;
           this.vendorReferenceDataList.push({ label: labelService, value: data.vendorConfigId })
         }
       },
@@ -617,5 +638,39 @@ public vendorServiceType : any ={
       //this.open(this.errorMessage);
     }
   }
+
+  generateBillRefId() {
+ 
+    const requestorSSO =  "999999999"; //localStorage.getItem(AppConstants.LABEL_LOGGEDIN_SSO);
+  
+    this.banService.getBillHubRefID(this.regKey, requestorSSO, this.entityTypeID).subscribe(
+      refData => {
+        let response = refData;
+        let respArray = [];
+        respArray.push(response);
+        if (respArray[0].OUTPUT === 'FAIL')
+        {
+          this.popupErrorMessage = respArray[0].BillRefID;
+          this.open(this.errorMessagePopUp);
+        }
+       else if (respArray[0].BillRefID) {
+          this.banInsertData.liquidateBillRoutingId = respArray[0].BillRefID;         
+          this.editBillRef();
+        } 
+      },
+      error => {
+     this.popupErrorMessage ="Internal Server Error!";
+     this.open(this.errorMessagePopUp);
+      });
+  }
+
+  editBillRef(){
+
+    let sso =999999999;
+     window.open( environment.APP_BILLHUB_URL_UI_ENDPOINT + 
+      "/EditBillReference;billRefId="+
+     this.banInsertData.liquidateBillRoutingId+";sso="+sso+";mode=edit");
+   
+   }
   
 }

@@ -152,6 +152,7 @@ export class ProductComponent implements OnInit {
               this.popupErrorMessage =  this.saveMessage.statusMessage;
               this.open(this.errorMessagePopUp);
               this.getProductDetails();
+              this.clearAllFilters();
             },
             error => {
             });
@@ -180,11 +181,12 @@ export class ProductComponent implements OnInit {
       //   this.errorMessage = "Please select Product Type";
       //    return false;
       // }
-      if (this.gcbProductFilters.unspsc == "Select") {
-        this.errorMessage = "Please select UNSPSC";
-         return false;
-      }
-      return true;
+      // if (this.gcbProductFilters.unspsc == "Select") {
+      //   this.errorMessage = "Please select UNSPSC";
+      //    return false;
+      // }
+           
+        return true;
     }
   
       /**
@@ -230,8 +232,6 @@ export class ProductComponent implements OnInit {
         unspsc: "",
         upspscId: "Select"
       };
-      this.popupErrorMessage = "";
-      this.getProductDetails();
     }
 
   }

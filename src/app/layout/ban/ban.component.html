@@ -38,25 +38,31 @@
                 <div class="p-col-6">
                 <p-accordionTab header="BAN Details">
                     <div class="p-grid ">
-                        <div class="p-col-4 item-right"><span class="required">*</span>Process Name :</div>
+                        <div class="p-col-4 item-right"><span class="required">*</span>Process Name</div>
                         <div class="p-col-8 item-left">
                             <p-dropdown [options]="billProcessReferenceList" [style]="{'width': '100%'}"  [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.billProcessId"></p-dropdown>
                         </div>
                     </div>
                     <div class="p-grid ">
-                        <div class="p-col-4 item-right"><span class="required">*</span>Vendor Ban :</div>
+                        <div class="p-col-4 item-right"><span class="required">*</span>Vendor Ban</div>
                         <div class="p-col-8 item-left">
                                 <input class="form-control" [(ngModel)]="banInsertData.vendorBan" />
                         </div>
                     </div>
                     <div class="p-grid ">
-                        <div class="p-col-4 item-right"><span class="required">*</span>Vendor Code :</div>
+                        <div class="p-col-4 item-right"><span class="required">*</span>Vendor Code</div>
                         <div class="p-col-8 item-left">
                             <p-dropdown [options]="vendorReferenceDataList" [style]="{'width': '100%'}" (click)="getServiceType()" [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.vendorConfigId"></p-dropdown>
                         </div>
                     </div>
                     <div class="p-grid ">
-                            <div class="p-col-4 item-right"><span class="required">*</span>Buyer Name :</div>
+                        <div class="p-col-4 item-right">Vendor Friendly Name</div>
+                        <div class="p-col-8 item-left">
+                                <input class="form-control" [(ngModel)]="banInsertData.vendorFriendlyName" />
+                        </div>
+                    </div>
+                    <div class="p-grid ">
+                            <div class="p-col-4 item-right"><span class="required">*</span>Buyer Name</div>
                             <div class="p-col-8 item-left">
                                 <p-dropdown [options]="buyerReferenceDataList" [style]="{'width': '100%'}"  [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.buyerId"></p-dropdown>
                             </div>
@@ -68,183 +74,186 @@
                             </div>
                     </div> -->
                     <div class="p-grid ">
-                            <div class="p-col-4 item-right">Mode :</div>
+                            <div class="p-col-4 item-right"><span class="required">*</span>Mode</div>
                             <div class="p-col-8 item-left">
                                 <p-dropdown [options]="modeReferenceDataList" [style]="{'width': '100%'}"  [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.mode"></p-dropdown>
                             </div>
                     </div>
                     <div class="p-grid ">
+                        <div class="p-col-4 item-right">Invoice Buyer LE Name </div>
+                        <div class="p-col-8 item-left">
+                                <input class="form-control" [(ngModel)]="banInsertData.invoiceBuyerLeName" />
+                        </div>
+                    </div>
+                    <div class="p-grid ">
                             <div class="p-col-3 item-left">
                                     <button type="button" (click)="clearAllFilters()" pButton label="Clone As"></button> 
                             </div>
-                            <div class="p-col-2 item-right">Active :</div>
+                            <div class="p-col-2 item-right">Active </div>
                             <div class="p-col-1 item-left">
                                     <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="banInsertData.active"></p-checkbox><label class="label"></label>
                             </div>
 
-                            <div class="p-col-2 item-right">Active To :</div>
+                            <div class="p-col-2 item-right">Active To </div>
                             <div class="p-col-4 item-left">
                                 <p-calendar [(ngModel)]="banInsertData.activeTo" showButtonBar="true" [style]="{'width': '120%'}"></p-calendar>
                             </div>
                     </div>
-                    <div class="p-grid ">
-                            <div class="p-col-4 item-right"><span class="required">*</span>Invoice Buyer LE Name :</div>
-                            <div class="p-col-8 item-left">
-                                    <input class="form-control" [(ngModel)]="banInsertData.invoiceBuyerLeName" />
-                            </div>
-                    </div>
+                    
                 </p-accordionTab>
 
                 <p-accordionTab header="Billing Details">
                         <div class="p-grid ">
-                                <div class="p-col-4 item-right">Gold Id override flag :</div>
+                                <div class="p-col-4 item-right">Gold Id override flag </div>
                                 <div class="p-col-1 item-left">
                                         <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="banInsertData.goldIdOverrideFlag"></p-checkbox><label class="label"></label>
                                 </div>
                         </div>
                         <div class="p-grid ">
-                                <div class="p-col-4 item-right">Override Gold Id :</div>
+                                <div class="p-col-4 item-right">Override Gold Id </div>
                                 <div class="p-col-6 item-left">
                                         <input class="form-control" [(ngModel)]="banInsertData.overrideGoldId" />
                                 </div>
                         </div>
                         <div class="p-grid ">
-                                <div class="p-col-4 item-right">Liquidate to Bill Routing ID :</div>
-                                <div class="p-col-7 item-left">
-                                    <input class="form-control" [(ngModel)]="banInsertData.liquidateBillRoutingId" />
-                                </div>
-                                <div class="p-col-1 item-left">
-                                    <a class="a-color" style="cursor:pointer;" (click)="clearAllFilters()">
-                                            <i class="fa fa-pencil-square-o fa-2x"></i>
-                                    </a>
+                                <div class="p-col-4 item-right">Liquidate to Bill Routing ID </div>
+                                  <div class="p-col-8 item-left">
+                                                <div *ngIf="banInsertData.liquidateBillRoutingId">
+
+                                                                <span> {{banInsertData.liquidateBillRoutingId}} </span>
+                                                                <a class="a-color" style="cursor:pointer;" (click)="editBillRef()">
+                                                                    <i class="fa fa-pencil-square-o fa-2x"></i>
+                                                                </a>
+                                                </div>
+                                                <div *ngIf="!banInsertData.liquidateBillRoutingId">                                
+                                                        <button class="button-link" (click)="generateBillRefId()">Enter BUC/ADN details</button>
+                                                </div>
                                 </div>
                         </div>
                         <div class="p-grid ">
-                                <div class="p-col-4 item-right">Direct Offset Buc:</div>
+                                <div class="p-col-4 item-right">Direct Offset Buc</div>
                                 <div class="p-col-8 item-left">
                                         <input class="form-control" [(ngModel)]="banInsertData.directOffsetBuc" 
                                         (ngModelChange)="tableValueChanged(banInsertData.erpAwtGroupName,banInsertData.erpVatAwtGroupName,banInsertData.erpPaymentTerms,banInsertData.directOffsetBuc,banInsertData.indirectOffsetBuc)"/>
                                 </div>
                         </div>
                         <div class="p-grid ">
-                                <div class="p-col-4 item-right">Indirect Offset Buc:</div>
+                                <div class="p-col-4 item-right">Indirect Offset Buc</div>
                                 <div class="p-col-8 item-left">
                                         <input class="form-control" [(ngModel)]="banInsertData.indirectOffsetBuc" 
                                         (ngModelChange)="tableValueChanged(banInsertData.erpAwtGroupName,banInsertData.erpVatAwtGroupName,banInsertData.erpPaymentTerms,banInsertData.directOffsetBuc,banInsertData.indirectOffsetBuc)"/>
                                 </div>
                         </div>
                         <div class="p-grid ">
-                                <div class="p-col-4 item-right">Is Equipment:</div>
+                                <div class="p-col-4 item-right">Is Equipment</div>
                                 <div class="p-col-1 item-left">
                                         <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="banInsertData.isEquipment"></p-checkbox><label class="label"></label>
                                 </div>
                         </div>
                 </p-accordionTab>
                 <p-accordionTab header="Focus Groups">
-                    <div class="p-grid">
-                        <div class="p-col-12">
-                            <p-listbox [options]="focusReferenceDataList" [(ngModel)]="focuslist" multiple="multiple" filter="filter" checkbox="checkbox" [listStyle]="{'max-height':'250px'}"
-                            [style]="{'width':'100%'}">
-                                <p-header class="label">
-                                    <!-- <i class="fa fa-car"></i>  -->
-                                    Focus Groups
-                                </p-header>
-                            </p-listbox> 
+                        <div class="p-grid">
+                            <div class="p-col-12">
+                                <p-listbox [options]="focusReferenceDataList" [(ngModel)]="banInsertData.focusGroup" multiple="multiple" filter="filter" checkbox="checkbox" [listStyle]="{'max-height':'250px'}"
+                                [style]="{'width':'100%'}">
+                                </p-listbox>   
+                                <!-- <p-multiSelect [options]="focusReferenceDataList" [(ngModel)]="banInsertData.focusGroup" placeholder="Select" [panelStyle]="{minWidth:'12em'}">
+                                </p-multiSelect>                           -->
+                            </div>
                         </div>
-                    </div>
-                    <!-- <div class="p-grid">
-                        <div class="p-col-6">
-                            <button type="button" (click)="selectedFocus=null" pButton icon="pi pi-times" label="Clear Selected Focus group"></button> 
-                        </div>
-                    </div> -->
-                </p-accordionTab>
+                        <!-- <div class="p-grid">
+                            <div class="p-col-6">
+                                <button type="button" (click)="selectedFocus=null" pButton icon="pi pi-times" label="Clear Selected Focus group"></button> 
+                            </div>
+                        </div> -->
+                    </p-accordionTab>
                               
                 </div>
                 <div class="p-col-6">
                     <p-accordionTab header="Payment System Details">
                             <div class="p-grid ">
-                                    <div class="p-col-4 item-right">Erp Name:</div>
+                                    <div class="p-col-4 item-right">Erp Name</div>
                                     <div class="p-col-8 item-left">
                                             <input class="form-control" [(ngModel)]="banInsertData.erpName" />
                                     </div>
                             </div>
                             <div class="p-grid ">
-                                    <div class="p-col-4 item-right">Erp System:</div>
+                                    <div class="p-col-4 item-right">Erp System</div>
                                     <div class="p-col-8 item-left">
                                             <input class="form-control" [(ngModel)]="banInsertData.erpSystem" />
                                     </div>
                             </div>
                             <div class="p-grid ">
-                                    <div class="p-col-4 item-right">Erp Project:</div>
+                                    <div class="p-col-4 item-right">Erp Project</div>
                                     <div class="p-col-8 item-left">
                                             <input class="form-control" [(ngModel)]="banInsertData.erpProject" />
                                     </div>
                             </div>
                             <div class="p-grid ">
-                                    <div class="p-col-4 item-right">Erp Task:</div>
+                                    <div class="p-col-4 item-right">Erp Task</div>
                                     <div class="p-col-8 item-left">
                                             <input class="form-control" [(ngModel)]="banInsertData.erpTask" />
                                     </div>
                             </div>
                             <div class="p-grid ">
-                                    <div class="p-col-4 item-right">Erp Awt Group Name:</div>
+                                    <div class="p-col-4 item-right">Erp Awt Group Name</div>
                                     <div class="p-col-8 item-left">
                                             <input class="form-control" [(ngModel)]="banInsertData.erpAwtGroupName" 
                                             (ngModelChange)="tableValueChanged(banInsertData.erpAwtGroupName,banInsertData.erpVatAwtGroupName,banInsertData.erpPaymentTerms,banInsertData.directOffsetBuc,banInsertData.indirectOffsetBuc)"/>
                                     </div>
                             </div>
                             <div class="p-grid ">
-                                    <div class="p-col-4 item-right">Erp Vat Awt Group Name:</div>
+                                    <div class="p-col-4 item-right">Erp Vat Awt Group Name</div>
                                     <div class="p-col-8 item-left">
                                             <input class="form-control" [(ngModel)]="banInsertData.erpVatAwtGroupName" 
                                             (ngModelChange)="tableValueChanged(banInsertData.erpAwtGroupName,banInsertData.erpVatAwtGroupName,banInsertData.erpPaymentTerms,banInsertData.directOffsetBuc,banInsertData.indirectOffsetBuc)"/>
                                     </div>
                             </div>
                             <div class="p-grid ">
-                                    <div class="p-col-4 item-right">Erp Payment Terms:</div>
+                                    <div class="p-col-4 item-right">Erp Payment Terms</div>
                                     <div class="p-col-8 item-left">
                                             <input class="form-control" [(ngModel)]="banInsertData.erpPaymentTerms" 
                                             (ngModelChange)="tableValueChanged(banInsertData.erpAwtGroupName,banInsertData.erpVatAwtGroupName,banInsertData.erpPaymentTerms,banInsertData.directOffsetBuc,banInsertData.indirectOffsetBuc)"/>
                                     </div>
                             </div>
                             <div class="p-grid ">
-                                    <div class="p-col-4 item-right">Erp Vendor Gsl:</div>
+                                    <div class="p-col-4 item-right">Erp Vendor Gsl</div>
                                     <div class="p-col-8 item-left">
                                             <input class="form-control" [(ngModel)]="banInsertData.erpVendorGsl" />
                                     </div>
                             </div>
                             <div class="p-grid ">
-                                    <div class="p-col-4 item-right">Erp Vendor Site Code:</div>
+                                    <div class="p-col-4 item-right">Erp Vendor Site Code</div>
                                     <div class="p-col-8 item-left">
                                             <input class="form-control" [(ngModel)]="banInsertData.erpVendorSiteCode" />
                                     </div>
                             </div>
                             <div class="p-grid ">
-                                    <div class="p-col-4 item-right">Erp GUI DIFF:</div>
+                                    <div class="p-col-4 item-right">Erp GUI DIFF</div>
                                     <div class="p-col-8 item-left">
                                             <input class="form-control" [(ngModel)]="banInsertData.erpGuiDiff" />
                                     </div>
                             </div>
                             <div class="p-grid ">
-                                    <div class="p-col-4 item-right">Erp Cust Reg Number:</div>
+                                    <div class="p-col-4 item-right">Erp Cust Reg Number</div>
                                     <div class="p-col-8 item-left">
                                             <input class="form-control" [(ngModel)]="banInsertData.erpCustRegNumber" />
                                     </div>
                             </div>
                             <div class="p-grid ">
-                                    <div class="p-col-4 item-right">Vat Unspsc:</div>
+                                    <div class="p-col-4 item-right">Vat Unspsc</div>
                                     <div class="p-col-8 item-left">
                                             <input class="form-control" [(ngModel)]="banInsertData.vatUnspsc" />
                                     </div>
                             </div>
                             <div class="p-grid ">
-                                    <div class="p-col-4 item-right">Payment Approval Email:</div>
+                                    <div class="p-col-4 item-right">Payment Approval Email</div>
                                     <div class="p-col-8 item-left">
                                             <input class="form-control" [(ngModel)]="banInsertData.buyerPaymentApprovalEmail" />
                                     </div>
                             </div>
                             <div class="p-grid ">
-                                    <div class="p-col-4 item-right">Buyer Contact SSO:</div>
+                                    <div class="p-col-4 item-right">Buyer Contact SSO</div>
                                     <div class="p-col-8 item-left">
                                             <input class="form-control" [(ngModel)]="banInsertData.buyerContactSso" />
                                     </div>
@@ -308,7 +317,7 @@
                                     </div>
                                 </div>
                     </p-accordionTab>    
-                    <p-accordionTab header="Other Details">
+                    <p-accordionTab header="Asset file configuration">
                             <div class="p-grid ">
                                 <div class="p-col-8 item-right">
                                     Add Country ISO to Vendor Name
@@ -468,7 +477,7 @@
                                                 </div>
                                         </div>
                                         <div class="p-grid ">
-                                                <div class="p-col-5 item-right">Liquidate to Bill Routing ID:</div>
+                                                <div class="p-col-5 item-right">Liquidate to Bill Routing ID</div>
                                                 <div class="p-col-6 item-left">
                                                     <input class="form-control" [(ngModel)]="systems.liquidateBillRoutingId" />
                                                 </div>
