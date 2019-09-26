@@ -65,6 +65,19 @@ export class BanService {
   public getBanById(banId): Observable<Object> {
     return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/ban/banById/"+banId);
   }
+
+  public getbanProductById(banId): Observable<Object> {
+    return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/ban/banProductById/"+banId);
+  }
+
+  public upsertBanProduct(serviceList,banId): Observable<Object> {
+    return this.http.post(environment.APP_BASE_URL_SERVICE_ENDPOINT+"/ban/banProducts/"+banId, serviceList);
+  }
+
+  public getTaregtServiceType(banId): Observable<Object> {
+    return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/getTargetServiceType/"+banId);
+  }
+  
   public getBillHubRefID(regKey,requestorSSO,entityTypeID):Observable<Object> { 
     return this.http.get(environment.APP_BILLHUB_URL_SERVICE_ENDPOINT+
       "/GetBillHubRefID?regKey="+regKey+

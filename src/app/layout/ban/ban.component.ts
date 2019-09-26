@@ -123,6 +123,7 @@ public vendorServiceType : any ={
   public costCenter:any;
   public unspsc:any;
   serviceTypeInsertData:any=[];
+  public productBanId:any;
 
   public regKey = "8c8606d1-e591-435f-a435-d112ba4cd43c";		
   public entityTypeID = "5";
@@ -189,6 +190,12 @@ public vendorServiceType : any ={
       },
       error => {
       });
+
+      this.banService.getTaregtServiceType(banId).subscribe(
+        refData => {
+        this.targetSystem=this.targetSystem.concat(refData); 
+        }
+      )
   }
 
   open(content) {
@@ -701,4 +708,24 @@ public vendorServiceType : any ={
    
    }
   
+   upsertBanProduct() {
+    console.log("test button click");
+    if (this.validation()) {
+      //this.productBanId=68;
+      this.banService.upsertBanProduct(this.serviceList,this.productBanId).subscribe(
+        refData => {
+          this.saveMessage = refData;
+          if(!this.saveMessage.Error == undefined)
+            this.errorMessagePopUp = "Ban Already Exits";
+          if(this.saveMessage.Error == false)
+            this.errorMessagePopUp = "Ban Name Save Suceesfully.";
+          else
+            this.errorMessagePopUp =  "ban Name not Saved..";
+        },
+        error => {
+        });
+    }else{
+      //this.open(this.errorMessage);
+    }
+  }
 }
