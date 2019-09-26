@@ -20,13 +20,13 @@
         <p-dropdown [options]="vendorReferenceDataList" [style]="{'width': '100%'}" [(ngModel)]="vendorConfigDto.vendorEntityId" [filter]="true" placeholder="Select"></p-dropdown>
       </div>
       <div class="p-col-2 item-right">
-        <span class="required">*</span>Active
+        Active
       </div>
       <div class="p-col-1" >
          <p-checkbox [(ngModel)]="vendorConfigDto.active" binary="true"></p-checkbox>
       </div>
       <div class="p-col-1 item-right">
-         <span class="required">*</span>LLD CoE
+         LLD CoE
       </div>
       <div class="p-col-2">
         <p-dropdown [options]="lldCoeList"  [style]="{'width': '8px'}"  [(ngModel)]="vendorConfigDto.lldCoeFlag" [filter]="true" placeholder="Select"></p-dropdown>
@@ -40,7 +40,7 @@
           <input class="form-control" [(ngModel)]="vendorConfigDto.vendorCode" style="width: 25%" >
        </div>
        <div class="p-col-2 item-right">
-          <span class="required">*</span>Exchange Rate Type
+          Exchange Rate Type
         </div>
         <div class="p-col-4 upper">
            <input class="form-control" [(ngModel)]="vendorConfigDto.exchangeRateType"  style="width: 25%">
@@ -48,13 +48,13 @@
 </div>
 <div class="p-grid">
     <div class="p-col-2 item-right">
-       <span class="required">*</span>Vendor Contact Email
+       Vendor Contact Email
      </div>
      <div class="p-col-4 upper">
         <input class="form-control" [(ngModel)]="vendorConfigDto.vendorContactEmail" style="width: 100%">
      </div>
-     <div class="p-col-2 item-right upper">
-      <span class="required">*</span>Pay Approval Email
+     <div class="p-col-2 item-right">
+      Payment Approval Email
     </div>
     <div class="p-col-4">
        <input class="form-control" [(ngModel)]="vendorConfigDto.paymentApprovalEmail" style="width: 100%">
@@ -68,7 +68,7 @@
         <p-dropdown [options]="currencyReferenceDataList" [(ngModel)]="vendorConfigDto.currencyCode" [filter]="true"  placeholder="Select"></p-dropdown>
     </div>
     <div class="p-col-2 item-right">
-      <span class="required">*</span>Expected Feed Date
+      Expected Feed Date
     </div>
     <div class="p-col-4">
        <p-calendar [(ngModel)]="vendorConfigDto.expectedFeedDate"  [style]="{'width': '50%'}" ></p-calendar>
@@ -83,7 +83,7 @@
         <p-dropdown [options]="countryCodeReferenceDataList" [style]="{'width': '100%'}" [(ngModel)]="vendorConfigDto.billedFromLocationId" [filter]="true" placeholder="Select" ></p-dropdown>
     </div>
     <div class="p-col-2 item-right">
-      <span class="required">*</span>Final Invoice Date
+      Final Invoice Date
     </div>
     <div class="p-col-4">
        <p-calendar [(ngModel)]="vendorConfigDto.finalInvoiceDate" [style]="{'width': '50%'}"></p-calendar>

@@ -175,7 +175,6 @@ clearAllFilters() {
 
 upsertVendorConfig(){
   this.errorMessage = "";
-  console.log("upsert vendor config id selected :",this.vendorConfigDto.vendorEntityId);
   if (this.validation()) {
     if (this.vendorConfigDto.vendorEntityId != "Select" 
     && this.vendorConfigDto.billedFromLocationId!= "Select" 
@@ -183,15 +182,16 @@ upsertVendorConfig(){
       this.vendorConfigService.upsertVendorConfig(this.vendorConfigDto).subscribe(
         refData => {
           this.saveMessage = refData;
-          console.log("upsert vendorConfig return outmap :"+this.saveMessage);
-          console.log("upsert vendorConfig return message :"+this.saveMessage.message);
           this.popupErrorMessage =  this.saveMessage.message;
           this.open(this.errorMessagePopUp);
         },
         error => {
+          this.open("An system error occured");
         });
     }
 }
+//this.clearAllFilters();
+
 }
 
 open(content) {
@@ -224,10 +224,10 @@ validation() {
     this.errorMessage = "Please select Vendor Code";
      return false;
   }
-  if (this.vendorConfigDto.vendorContactEmail == "") {
-    this.errorMessage = "Please select Vendor Contact Email";
-     return false;
-  }
+  // if (this.vendorConfigDto.vendorContactEmail == "") {
+  //   this.errorMessage = "Please select Vendor Contact Email";
+  //    return false;
+  // }
   if (this.vendorConfigDto.currencyCode ==null||
     this.vendorConfigDto.currencyCode == ""||
     this.vendorConfigDto.currencyCode == "Select") {
@@ -250,28 +250,28 @@ validation() {
     this.errorMessage = "Please select Date Format";
      return false;
   }
-  if (this.vendorConfigDto.lldCoeFlag == "Select"||
-      this.vendorConfigDto.lldCoeFlag == ""||
-      this.vendorConfigDto.lldCoeFlag == null) {
-    this.errorMessage = "Please select LLD Coe Flag";
-    return false;
-  }
-  if (this.vendorConfigDto.exchangeRateType == "") {
-    this.errorMessage = "Please select Exchange Rate Type";
-     return false;
-  }
-  if (this.vendorConfigDto.paymentApprovalEmail == "") {
-    this.errorMessage = "Please select Payment Approval Email";
-     return false;
-  }
-  if (this.vendorConfigDto.expectedFeedDate == "") {
-    this.errorMessage = "Please select Expected Feed Date";
-     return false;
-  }
-  if (this.vendorConfigDto.finalInvoiceDate == "") {
-    this.errorMessage = "Please select Final Invoice Date";
-     return false;
-  }
+  // if (this.vendorConfigDto.lldCoeFlag == "Select"||
+  //     this.vendorConfigDto.lldCoeFlag == ""||
+  //     this.vendorConfigDto.lldCoeFlag == null) {
+  //   this.errorMessage = "Please select LLD Coe Flag";
+  //   return false;
+  // }
+  // if (this.vendorConfigDto.exchangeRateType == "") {
+  //   this.errorMessage = "Please select Exchange Rate Type";
+  //    return false;
+  // }
+  // if (this.vendorConfigDto.paymentApprovalEmail == "") {
+  //   this.errorMessage = "Please select Payment Approval Email";
+  //    return false;
+  // }
+  // if (this.vendorConfigDto.expectedFeedDate == "") {
+  //   this.errorMessage = "Please select Expected Feed Date";
+  //    return false;
+  // }
+  // if (this.vendorConfigDto.finalInvoiceDate == "") {
+  //   this.errorMessage = "Please select Final Invoice Date";
+  //    return false;
+  // }
   if (this.vendorConfigDto.reportingSecurityDl == "") {
     this.errorMessage = "Please select Reporting Security DL";
      return false;
