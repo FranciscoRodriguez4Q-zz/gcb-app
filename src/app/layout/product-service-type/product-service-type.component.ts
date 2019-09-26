@@ -223,6 +223,10 @@ export class ProductServiceTypeComponent implements OnInit {
       this.errorMessage = "Please select Cost Center";
        return false;
     }
+    if (this.gcbDetailFilters.billingBasis == "Select") {
+      this.errorMessage = "Please select Cost Center";
+       return false;
+    }
     return true;
   }
 
@@ -282,8 +286,8 @@ export class ProductServiceTypeComponent implements OnInit {
   showSelectedData(serviceTypeId) {
     console.log("radio button click" + serviceTypeId);
     this.editFlag = true;
-    this.formMode="Modify";
     this.gcbDetailFilters = this.serviceTypes.filter(x => x.serviceTypeId == serviceTypeId)[0];
+    this.formMode="Modify(Service Type ID: "+this.gcbDetailFilters.serviceTypeId+")";
 
     if(this.gcbDetailFilters.processName=='TELECOM'){
       this.legacyServiceTypeEnableFlag=false;

@@ -65,7 +65,28 @@ export class BanService {
   public getBanById(banId): Observable<Object> {
     return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/ban/banById/"+banId);
   }
+  public getBillHubRefID(regKey,requestorSSO,entityTypeID):Observable<Object> { 
+    return this.http.get(environment.APP_BILLHUB_URL_SERVICE_ENDPOINT+
+      "/GetBillHubRefID?regKey="+regKey+
+      "&requestorSSO="+requestorSSO+
+      "&entityTypeID="+entityTypeID
+    );
+  }
+  public getBillRefIDTokensAssociated(billRefId, regKey) : Observable<Object>{
 
+    return this.http.get(environment.APP_BILLHUB_URL_SERVICE_ENDPOINT+
+    "/ValidateBillRefTokens?billRefId="+billRefId+"&regKey="+regKey
+  
+    );
+  }
+
+  public associateBillReftoAsset(billRefId,assetID,regkey):Observable<Object> { 
+    return this.http.get(environment.APP_BILLHUB_URL_SERVICE_ENDPOINT+
+      "/AssociateBillReftoAsset?billRefAssetArray="+billRefId+","+
+      assetID+
+      "&regKey="+regkey
+    );
+  }
   private handleError(error){
     return throwError(error + "UrlConstants.SERVER_ERROR");
   }

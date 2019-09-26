@@ -46,13 +46,14 @@
             </div>         -->
             <div class="p-grid">
                 <div class="p-col-4 item-right">
-                      <label class="label"><span class="required">*</span>UNSPSC </label>
+                      <label class="label">UNSPSC </label>
                 </div>
                 <div class="p-col-7 item-left">
-                     <p-dropdown [options]="unspscReferenceList" [(ngModel)]="gcbProductFilters.unspsc" placeholder="Select" [autoWidth]="true"
+                     <!-- <p-dropdown [options]="unspscReferenceList" [(ngModel)]="gcbProductFilters.unspsc" placeholder="Select" [autoWidth]="true"
                                         [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
                                         [filter]="true" scrollHeight="150px">
-                                    </p-dropdown>
+                     </p-dropdown> -->
+                     <input class="form-control" [(ngModel)]="gcbProductFilters.unspsc">
                 </div>
             </div> 
            

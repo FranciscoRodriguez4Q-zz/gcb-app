@@ -1,7 +1,7 @@
 <div class="-font--serif">
   <!-- <div class="-font--plus-2">Service Type : Add/Modify </div> -->
 <p-fieldset>
-    <p-header>Service Type Name : {{formMode}}</p-header>
+    <p-header>Service Type : {{formMode}}</p-header>
 <div class="p-grid nested-grid">
     <div class="p-col-6">
         <div class="p-grid">
@@ -39,7 +39,7 @@
                                     [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
                                     [filter]="true" (click)="getServicetype()" scrollHeight="150px">
                 </p-dropdown> -->
-                <p-dropdown [options]="countryCodeReferenceDataList" [style]="{'width': '130%'}" [(ngModel)]="gcbDetailFilters.billedFromLocationId" [filter]="true" ></p-dropdown>
+                <p-dropdown [options]="countryCodeReferenceDataList" (click)="getServicetype()"  [style]="{'width': '130%'}" placeholder="Select" [(ngModel)]="gcbDetailFilters.billedFromLocationId" [filter]="true" ></p-dropdown>
             </div>
         </div>
         <div class="p-grid">
@@ -62,7 +62,7 @@
         </div>
         <div class="p-grid">
                 <div class="p-col-5 item-right">
-                     <label class="label"><span class="required" *ngIf="!legacyServiceTypeEnableFlag">*</span>Legacy Service Type Name</label>
+                     <label class="label">Legacy Service Type Name</label>
                 </div>
                 <div class="p-col-5 item-left">
                     <input class="form-control widthAdjust"  [(ngModel)]="gcbDetailFilters.legacyServiceTypeName" [disabled]="legacyServiceTypeEnableFlag">

@@ -133,9 +133,9 @@ export class ProductComponent implements OnInit {
 
     showSelectedData(productId) {
       console.log("radio button click" + productId);
-      this.editFlag = true;
-      this.formMode="Modify";
+      this.editFlag = true;      
       this.gcbProductFilters = this.products.filter(x => x.productId == productId)[0];
+      this.formMode="Modify(Product ID: "+this.gcbProductFilters.productId+")";
     }
 
     upsertProduct() {
@@ -152,6 +152,7 @@ export class ProductComponent implements OnInit {
               this.popupErrorMessage =  this.saveMessage.statusMessage;
               this.open(this.errorMessagePopUp);
               this.getProductDetails();
+              this.clearAllFilters();
             },
             error => {
             });
@@ -180,11 +181,12 @@ export class ProductComponent implements OnInit {
       //   this.errorMessage = "Please select Product Type";
       //    return false;
       // }
-      if (this.gcbProductFilters.unspsc == "Select") {
-        this.errorMessage = "Please select UNSPSC";
-         return false;
-      }
-      return true;
+      // if (this.gcbProductFilters.unspsc == "Select") {
+      //   this.errorMessage = "Please select UNSPSC";
+      //    return false;
+      // }
+           
+        return true;
     }
   
       /**
@@ -230,8 +232,6 @@ export class ProductComponent implements OnInit {
         unspsc: "",
         upspscId: "Select"
       };
-      this.popupErrorMessage = "";
-      this.getProductDetails();
     }
 
   }
