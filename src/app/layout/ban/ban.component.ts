@@ -378,8 +378,8 @@ public vendorServiceType : any ={
         let arr: any = [];
         this.vendorReferenceData = refData;  
         for (let data of this.vendorReferenceData) {
-          let labelService = data.vendorCode+' | '+data.billedFromCountryCode+' | '+data.billedToCountryCode+' | '
-          +data.currencyCode+' | '+data.vendorLegalEntityName;
+          let labelService = data.vendorLegalEntityName+' | '+data.vendorCode+' | '+data.billedFromCountryCode+' | '+data.billedToCountryCode+' | '
+          +data.currencyCode;
           this.vendorReferenceDataList.push({ label: labelService, value: data.vendorConfigId })
         }
       },
