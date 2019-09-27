@@ -195,6 +195,9 @@ export class ProductServiceTypeComponent implements OnInit {
             this.popupErrorMessage =  this.saveMessage.statusMessage;
             this.open(this.errorMessagePopUp);
             this.getAllServiceType();
+            if(this.saveMessage.status){
+              this.clearAllFilters();
+            }
           },
           error => {
           });
@@ -279,15 +282,13 @@ export class ProductServiceTypeComponent implements OnInit {
       costCenter: ""  ,
       processName:""  
     };
-    this.popupErrorMessage = "";
-    this.getAllServiceType();
   }
 
   showSelectedData(serviceTypeId) {
     console.log("radio button click" + serviceTypeId);
     this.editFlag = true;
     this.gcbDetailFilters = this.serviceTypes.filter(x => x.serviceTypeId == serviceTypeId)[0];
-    this.formMode="Modify(Service Type ID: "+this.gcbDetailFilters.serviceTypeId+")";
+    this.formMode="Modify";
 
     if(this.gcbDetailFilters.processName=='TELECOM'){
       this.legacyServiceTypeEnableFlag=false;
