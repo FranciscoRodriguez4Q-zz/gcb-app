@@ -87,7 +87,7 @@
                     </div>
                     <div class="p-grid ">
                             <div class="p-col-3 item-left">
-                                    <button type="button" (click)="clearAllFilters()" pButton label="Clone As"></button> 
+                                    <button type="button" (click)="cloneRec(true)" pButton label="Clone As" *ngIf="editFlag"></button> 
                             </div>
                             <div class="p-col-2 item-right">Active </div>
                             <div class="p-col-1 item-left">
@@ -99,9 +99,73 @@
                                 <p-calendar [(ngModel)]="banInsertData.activeTo" showButtonBar="true" [style]="{'width': '120%'}"></p-calendar>
                             </div>
                     </div>
-                    
+                    <div class="p-grid">
+                                <div class="p-col-4 item-right">
+                                    Invoice Name
+                                </div>
+                                <div class="p-col-8 item-left">
+                                    <p-dropdown [options]="invoiceNmReferenceDataList" [style]="{'width': '100%'}"  [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.invoiceName"></p-dropdown>
+                                </div>
+                            </div>
+                            <div class="p-grid">
+                                    <div class="p-col-4 item-right">
+                                            Paid By
+                                    </div>
+                                    <div class="p-col-8 item-left">
+                                        <p-dropdown [options]="paidByReferenceDataList" [style]="{'width': '100%'}"  [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.vendorPaidBy"></p-dropdown>
+                                    </div>
+                            </div>
+                            <div class="p-grid">
+                                        <div class="p-col-4 item-right">
+                                                Liquidated Via
+                                        </div>
+                                        <div class="p-col-8 item-left">
+                                            <p-dropdown [options]="liquidateViaReferenceDataList" [style]="{'width': '100%'}"  [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.liquidatedVia"></p-dropdown>
+                                        </div>
+                            </div>
+                            <div class="p-grid">
+                                    <div class="p-col-4 item-right">
+                                            Tax Engine
+                                    </div>
+                                    <div class="p-col-8 item-left">
+                                        <p-dropdown [options]="taxEngineReferenceDataList" [style]="{'width': '100%'}"  [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.taxEngine"></p-dropdown>
+                                    </div>
+                                </div>
                 </p-accordionTab>
-
+                <p-accordionTab header="Clone" *ngIf="banInsertData.cloneFlag">
+                                <div class="p-grid">
+                                        <div class="p-col-4 item-right">
+                                            Invoice Name
+                                        </div>
+                                        <div class="p-col-8 item-left">
+                                            <p-dropdown [options]="invoiceNmCloneDataList" [style]="{'width': '100%'}"  [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.cloneInvoiceName"></p-dropdown>
+                                        </div>
+                                    </div>
+                                    <div class="p-grid">
+                                            <div class="p-col-4 item-right">
+                                                    Paid By
+                                            </div>
+                                            <div class="p-col-8 item-left">
+                                                <p-dropdown [options]="paidByCloneDataList" [style]="{'width': '100%'}"  [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.cloneVendorPaidBy"></p-dropdown>
+                                            </div>
+                                    </div>
+                                    <div class="p-grid">
+                                                <div class="p-col-4 item-right">
+                                                        Liquidated Via
+                                                </div>
+                                                <div class="p-col-8 item-left">
+                                                    <p-dropdown [options]="liquidateViaCloneDataList" [style]="{'width': '100%'}"  [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.cloneLiquidatedVia"></p-dropdown>
+                                                </div>
+                                    </div>
+                                    <div class="p-grid">
+                                            <div class="p-col-4 item-right">
+                                                    Tax Engine
+                                            </div>
+                                            <div class="p-col-8 item-left">
+                                                <p-dropdown [options]="taxEngineCloneDataList" [style]="{'width': '100%'}"  [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.cloneTaxEngine"></p-dropdown>
+                                            </div>
+                                        </div>
+                        </p-accordionTab>
                 <p-accordionTab header="Billing Details">
                         <div class="p-grid ">
                                 <div class="p-col-4 item-right">Gold Id override flag </div>
@@ -500,7 +564,8 @@
                     <div class="p-col-12" style="text-align:right">
                         <!-- <button pButton type="button" label="Submit" class="ui-button-rounded ui-button-secondary" (click)="upsertBan()"></button>
                         <button pButton type="button" label="Cancel" class="ui-button-rounded ui-button-secondary" (click)="clearAllFilters()"></button> -->
-                        <button class="ge-button -fill--solid" (click)="upsertBan()">Submit</button>
+                        <button class="ge-button -fill--solid" (click)="upsertBan()" *ngIf="this.banInsertData.cloneFlag">Clone</button>
+                        <button class="ge-button -fill--solid" (click)="upsertBan()" *ngIf="!this.banInsertData.cloneFlag">Submit</button>
                         <button class="ge-button -fill--solid" (click)="clearAllFilters()">Cancel</button> 
                         <app-file-download [dwnData]="banDwnData" [colsHeader]="this.downloadCols" [fileName]="fileName"></app-file-download>
                     </div>
@@ -560,6 +625,8 @@
             <p class="text-center">{{popupErrorMessage}}</p>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-outline-dark" (click)="c('Save click'); ">Ok</button>
+                <button type="button" class="btn btn-outline-dark" (click)="c('Save click');cloneRecord() " *ngIf="cloneFlag">Yes</button>
+                <button type="button" class="btn btn-outline-dark" (click)="c('Save click');cloneRec(false) " *ngIf="cloneFlag">No</button>            
+                <button type="button" class="btn btn-outline-dark" (click)="c('Save click'); " *ngIf="!cloneFlag">Ok</button>
         </div>
       </ng-template>

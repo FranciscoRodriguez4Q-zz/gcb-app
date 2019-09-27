@@ -22,8 +22,10 @@ public vendorServiceType : any ={
 	"billedFromLocationId":"",
 	"billProcessId":""
 };
+public cloneFlag = false;
 
-    public banInsertData: any = {
+  public banInsertData: any = {
+      banId:"",
       billProcessName: "",
       billProcessId:"",
       vendorBan: "",
@@ -68,8 +70,17 @@ public vendorServiceType : any ={
       shipTozip5: "",
       addCountryISOtoVendorName: "",
       useAssetFileVendorName: "",
-      liquidateBillRoutingIdServiceType: ""
+      liquidateBillRoutingIdServiceType: "",
       
+      invoiceName: "",
+      vendorPaidBy: "",
+      liquidatedVia: "",
+      taxEngine: "",
+      cloneInvoiceName: "",
+      cloneVendorPaidBy: "",
+      cloneLiquidatedVia: "",
+      cloneTaxEngine: "",
+      cloneOfId:""
     };
   
 
@@ -125,7 +136,18 @@ public vendorServiceType : any ={
   serviceTypeInsertData:any=[];
   public productBanId:any;
   public system:any=[];
-
+  public invoiceNmReferenceData: any;
+  invoiceNmReferenceDataList: SelectItem[] = [];
+  invoiceNmCloneDataList: SelectItem[] = [];
+  public paidByReferenceData: any;
+  paidByReferenceDataList: SelectItem[] = [];
+  paidByCloneDataList: SelectItem[] = [];
+  public liquidateViaReferenceData: any;
+  liquidateViaReferenceDataList: SelectItem[] = [];
+  liquidateViaCloneDataList: SelectItem[] = [];
+  public taxEngineReferenceData: any;
+  taxEngineReferenceDataList: SelectItem[] = [];
+  taxEngineCloneDataList: SelectItem[] = [];
   public regKey = "8c8606d1-e591-435f-a435-d112ba4cd43c";		
   public entityTypeID = "5";
 
@@ -157,6 +179,7 @@ public vendorServiceType : any ={
     this.getAllBuyers();
     this.getAllBillingModel();
     this.getAllModel();
+    this.getBillingModelTypes();
   }
 
   getAllBanDetails() {
@@ -182,6 +205,9 @@ public vendorServiceType : any ={
   }
 
   showSelectedData(banId) {
+    this.cloneFlag = false;
+    this.expandAllPanels();
+    window.scrollTo(0, 0);
     console.log("radio button click" + this.banId);
     this.editFlag = true;
     this.formMode="Modify";
@@ -254,6 +280,13 @@ public vendorServiceType : any ={
   upsertBan() {
     this.errorMessage = "";
     if (this.validation()) {
+
+      if (this.banInsertData.cloneFlag){
+        this.banInsertData.cloneOfId = this.banInsertData.banId;
+        this.banInsertData.bandId = "";
+      }
+      this.cloneFlag = false;
+
       // this.banService.getBillRefIDTokensAssociated(this.banInsertData.liquidateBillRoutingId,
       //   this.regKey).subscribe(
       // refData => {
@@ -286,7 +319,10 @@ public vendorServiceType : any ={
                 this.associateBillRefToAsset(this.saveMessage.banId);
               }
           this.getAllBanDetails();
-          this.clearAllFilters();
+          if (!this.saveMessage.Error) {
+            this.clearAllFilters();
+            this.editFlag = false;
+          }
         },
         error => {
         });
@@ -465,7 +501,7 @@ public vendorServiceType : any ={
   }
 
   expandAllPanels(){
-    this.index = [0,1,2,3,4,5,6,7];
+    this.index = [0,1,2,3,4,5,6,7,8];
     this.collapsed=false;
     this.panelExpansionFlag=false;
   }
@@ -775,5 +811,67 @@ public vendorServiceType : any ={
     this.triggerErpVatAwtEvent(this.systems.erpVatAwtGroupOverrideFlag);
     this.triggerDirOffsetEvent(this.systems.directOffsetBucOverrideFlag);
     this.triggerindirectOffsetEvent(this.systems.indirectOffsetBucOverrideFlag);
+  }
+      
+  cloneRecord() {
+    this.cloneFlag = true;
+    this.banInsertData.cloneFlag = true;
+  //  this.index = [0,1];
+  //  this.collapsed=true;
+  //  this.panelExpansionFlag = true;
+  this.banInsertData.mode = "TESTING";
+
+    this.banService.getCloneBillingModelTypes(this.banInsertData.banId).subscribe(
+      refData => {
+        let arr: any = [];
+        this.billingModelType = refData;
+        for (let data in this.billingModelType.response) {
+          if (data.toUpperCase()==="LIQUIDATED_VIA") {
+            this.liquidateViaCloneDataList = this.billingModelType.response[data];
+          } else if (data.toUpperCase()==="PAID_BY") {
+            this.paidByCloneDataList = this.billingModelType.response[data];
+          }else if (data.toUpperCase()==="INVOICE_NAME_VALUES") {
+            this.invoiceNmCloneDataList = this.billingModelType.response[data];
+          } else {
+            this.taxEngineCloneDataList = this.billingModelType.response[data];
+          }
+        }
+      },
+      error => {
+      });   
+
+  }
+   getBillingModelTypes() {
+    
+    this.banService.getBillingModelTypes().subscribe(
+      refData => {
+        let arr: any = [];
+        this.billingModelType = refData;
+        for (let data in this.billingModelType.response) {
+          if (data.toUpperCase()==="LIQUIDATED_VIA") {
+            this.liquidateViaReferenceDataList = this.billingModelType.response[data];
+          } else if (data.toUpperCase()==="PAID_BY") {
+            this.paidByReferenceDataList = this.billingModelType.response[data];
+          }else if (data.toUpperCase()==="INVOICE_NAME_VALUES") {
+            this.invoiceNmReferenceDataList = this.billingModelType.response[data];
+          } else {
+            this.taxEngineReferenceDataList = this.billingModelType.response[data];
+          }
+        }
+      },
+      error => {
+      });    
+  }
+
+  cloneRec(flag) {
+    if (flag) {
+      this.cloneFlag = true;
+      this.popupErrorMessage = "Do you want to Clone the record?";
+      this.open(this.errorMessagePopUp);
+    }
+    else {
+      this.banInsertData.cloneFlag = false;
+      this.cloneFlag = false;
+    }
   }
 }

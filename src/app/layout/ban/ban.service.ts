@@ -116,4 +116,11 @@ export class BanService {
   constructor(private http: HttpClient) { }
 
  
+  public getBillingModelTypes(): Observable<Object> {
+    return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/ban/billingModelTypes");
+  }
+ 
+  public getCloneBillingModelTypes(banId): Observable<Object> {
+    return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/ban/billingModelTypes/"+banId);
+  }
 }
