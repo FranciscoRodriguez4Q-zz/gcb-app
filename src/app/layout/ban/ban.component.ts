@@ -23,6 +23,7 @@ public vendorServiceType : any ={
 	"billProcessId":""
 };
 public cloneFlag = false;
+  public billingModelType: any = [];
 
   public banInsertData: any = {
       banId:"",
