@@ -135,7 +135,7 @@ export class ProductComponent implements OnInit {
       console.log("radio button click" + productId);
       this.editFlag = true;      
       this.gcbProductFilters = this.products.filter(x => x.productId == productId)[0];
-      this.formMode="Modify(Product ID: "+this.gcbProductFilters.productId+")";
+      this.formMode="Modify";
     }
 
     upsertProduct() {
@@ -145,14 +145,14 @@ export class ProductComponent implements OnInit {
         if (this.validation) {
           this.productService.upsertProduct(this.gcbProductFilters).subscribe(
             refData => {
-              this.saveMessage = refData;
-              //this.errorMessage = this.saveMessage.statusMessage;
-             /*  this.msgs = [];
-              this.msgs.push({ severity: 'error', summary: this.errorMessage, detail: '' }); */
+              this.saveMessage = refData;             
               this.popupErrorMessage =  this.saveMessage.statusMessage;
+              console.log(this.saveMessage);
               this.open(this.errorMessagePopUp);
               this.getProductDetails();
+              if(!this.saveMessage.Error){
               this.clearAllFilters();
+              }
             },
             error => {
             });
