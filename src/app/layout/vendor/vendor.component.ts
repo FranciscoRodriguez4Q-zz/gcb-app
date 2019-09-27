@@ -159,11 +159,12 @@ export class VendorComponent implements OnInit {
         refData => {
           this.saveMessage = refData;
           if(!this.saveMessage.Error == undefined)
-            this.errorMessagePopUp = "Vendor Already Exits";
+            this.errorMessage = "The "+this.vendorInsertData.vendorLegalEntityName+" was already exits.";
           if(this.saveMessage.Error == false)
-            this.errorMessagePopUp = "Vendor Name "+this.vendorInsertData.vendorLegalEntityName+" Save Suceesfully.";
+            this.errorMessage = "The "+this.vendorInsertData.vendorLegalEntityName+" was suceesfully created.";
           else
-            this.errorMessagePopUp =  "Vendor Name "+this.vendorInsertData.vendorLegalEntityName+" not Saved, Reason: Vendor Already Exits";
+            this.errorMessage =  "The "+this.vendorInsertData.vendorLegalEntityName+" not saved successfully.";
+          this.popupErrorMessage =  this.errorMessage;
           this.open(this.errorMessagePopUp);
           this.getAllVendorDetails();
           this.cancel();
