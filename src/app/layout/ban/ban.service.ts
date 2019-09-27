@@ -77,7 +77,15 @@ export class BanService {
   public getTaregtServiceType(banId): Observable<Object> {
     return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/getTargetServiceType/"+banId);
   }
+
+  public getTaregtServiceBanProductDetails(system,banId): Observable<Object> {
+    return this.http.post(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/ban/TargetServiceType-details/"+banId,system);
+  }
   
+  public getSourceServiceType(banInsertData,banId): Observable<Object> {
+    return this.http.post(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/getSourceServiceType/"+banId,banInsertData);
+  }
+
   public getBillHubRefID(regKey,requestorSSO,entityTypeID):Observable<Object> { 
     return this.http.get(environment.APP_BILLHUB_URL_SERVICE_ENDPOINT+
       "/GetBillHubRefID?regKey="+regKey+

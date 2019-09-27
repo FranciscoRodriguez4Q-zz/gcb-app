@@ -124,6 +124,7 @@ public vendorServiceType : any ={
   public unspsc:any;
   serviceTypeInsertData:any=[];
   public productBanId:any;
+  public system:any=[];
 
   public regKey = "8c8606d1-e591-435f-a435-d112ba4cd43c";		
   public entityTypeID = "5";
@@ -187,15 +188,25 @@ public vendorServiceType : any ={
     this.banService.getBanById(banId).subscribe(
       refData => {
         this.banInsertData = refData;
+        this.getSourceServiceType(banId);
       },
       error => {
       });
 
       this.banService.getTaregtServiceType(banId).subscribe(
         refData => {
-        this.targetSystem=this.targetSystem.concat(refData); 
+          this.targetSystem=refData; 
+          for(let sysData of this.targetSystem){
+            this.banService.getTaregtServiceBanProductDetails(sysData,banId).subscribe(
+              refData => {
+                this.system=refData;
+                this.serviceList.push(this.system);
+                this.onSelectTargetFetch(this.system);
+              }
+            )
+          }
         }
-      )
+      )   
   }
 
   open(content) {
@@ -727,5 +738,42 @@ public vendorServiceType : any ={
     }else{
       //this.open(this.errorMessage);
     }
+  }
+
+  getSourceServiceType(banId:any){
+    this.errorMessage = "";
+    if (this.banInsertData.vendorConfigId != "Select" && this.banInsertData.vendorConfigId != null) {
+      let vendorConfigData=this.vendorReferenceData.filter(x => x.vendorConfigId == this.banInsertData.vendorConfigId)[0];
+      this.banInsertData.billedFromLocationId=vendorConfigData.billedFromLocationId;
+      this.banInsertData.billedToLocationId=vendorConfigData.billedFromLocationId;
+      this.banService.getSourceServiceType(this.banInsertData,banId).subscribe(
+        refData => {
+          let arr: any = [];
+          this.serviceTypeReferenceData = refData; 
+          this.sourceSystem=refData; 
+          for (let data of this.serviceTypeReferenceData) {
+            let labelService = data.serviceTypeName;
+            this.serviceTypeReferenceDataList.push({ label: labelService, value: data.serviceTypeId })
+          }
+        },
+        error => {
+        })
+    }
+  }
+
+
+  onSelectTargetFetch(item:any){
+    //console.log("clicked"+item.serviceTypeId);
+    this.systems = this.serviceList.filter(x => x.serviceTypeId == item.serviceTypeId)[0];
+    //console.log(this.systems);
+    
+    //trigger events
+    this.triggerUnspscEvent(this.systems.unspscOverrideFlag);
+    this.triggerCostCenterEvent(this.systems.costCentreOverrideFlag);
+    this.triggerErpPmtEvent(this.systems.erpPmtOverrideFlag);
+    this.triggerErpAwtGrpEvent(this.systems.erpAwtGroupNameOverrideFlag);
+    this.triggerErpVatAwtEvent(this.systems.erpVatAwtGroupOverrideFlag);
+    this.triggerDirOffsetEvent(this.systems.directOffsetBucOverrideFlag);
+    this.triggerindirectOffsetEvent(this.systems.indirectOffsetBucOverrideFlag);
   }
 }
