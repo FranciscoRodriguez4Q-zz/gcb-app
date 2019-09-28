@@ -40,7 +40,7 @@
                     <div class="p-grid ">
                         <div class="p-col-4 item-right"><span class="required">*</span>Process Name</div>
                         <div class="p-col-8 item-left">
-                            <p-dropdown [options]="billProcessReferenceList" [style]="{'width': '100%'}"  [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.billProcessId"></p-dropdown>
+                                <p-dropdown [options]="billProcessReferenceList" [style]="{'width': '100%'}"  [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.billProcessId" (onFocus)="getServiceType()"></p-dropdown>
                         </div>
                     </div>
                     <div class="p-grid ">
@@ -429,7 +429,7 @@
                                         <div class="p-grid ">
                                                 <div class="p-col-5 item-right">Override UNSPSC</div>
                                                 <div class="p-col-7 item-left">
-                                                    <input class="form-control" [(ngModel)]="systems.overrideUnspsc" [disabled]="isDisabledUnspsc"/>
+                                                    <input class="form-control" [(ngModel)]="systems.overrideUnspsc" [disabled]="isDisabledUnspsc" (ngModelChange)="systems.overrideUnspsc = $event.toUpperCase()"/>
                                                 </div>
                                         </div>
                                         <div class="p-grid ">
@@ -441,7 +441,7 @@
                                         <div class="p-grid ">
                                                 <div class="p-col-5 item-right">Override Offset Cost Center</div>
                                                 <div class="p-col-7 item-left">
-                                                        <input class="form-control" [(ngModel)]="systems.overrideOffsetCostCenter" [disabled]="isDisableCostCenter"/>
+                                                        <input class="form-control" [(ngModel)]="systems.overrideOffsetCostCenter" [disabled]="isDisableCostCenter" (ngModelChange)="systems.overrideOffsetCostCenter = $event.toUpperCase()"/>
                                                 </div>
                                         </div>
                                         <div class="p-grid ">
@@ -453,7 +453,7 @@
                                         <div class="p-grid ">
                                             <div class="p-col-5 item-right">Override ERP PMT Terms</div>
                                             <div class="p-col-7 item-left">
-                                                <input class="form-control" [(ngModel)]="systems.overrideErpPmtTerms" [disabled]="isDisableErpPmt"/>
+                                                <input class="form-control" [(ngModel)]="systems.overrideErpPmtTerms" [disabled]="isDisableErpPmt" (ngModelChange)="systems.overrideErpPmtTerms = $event.toUpperCase()"/>
                                             </div>
                                         </div>
                                         <div class="p-grid ">
@@ -465,7 +465,7 @@
                                         <div class="p-grid ">
                                                 <div class="p-col-5 item-right">Override ERP AWT Group Name</div>
                                                 <div class="p-col-7 item-left">
-                                                        <input class="form-control" [(ngModel)]="systems.overrideErpAwtGroupName" [disabled]="isDisableErpAwtGrp"/>
+                                                        <input class="form-control" [(ngModel)]="systems.overrideErpAwtGroupName" [disabled]="isDisableErpAwtGrp" (ngModelChange)="systems.overrideErpAwtGroupName = $event.toUpperCase()"/>
                                                 </div>
                                         </div>
                                         <div class="p-grid ">
@@ -477,7 +477,7 @@
                                         <div class="p-grid ">
                                                 <div class="p-col-5 item-right">Override ERP VAT AWT Group Name</div>
                                                 <div class="p-col-7 item-left">
-                                                        <input class="form-control" [(ngModel)]="systems.overrideErpVatAwtGroupName" [disabled]="isDisableErpVatAwt"/>
+                                                        <input class="form-control" [(ngModel)]="systems.overrideErpVatAwtGroupName" [disabled]="isDisableErpVatAwt" (ngModelChange)="systems.overrideErpVatAwtGroupName = $event.toUpperCase()"/>
                                                 </div>
                                         </div>
                                         <div class="p-grid ">
@@ -489,7 +489,7 @@
                                         <div class="p-grid ">
                                                 <div class="p-col-5 item-right">Override Direct Offset BUC</div>
                                                 <div class="p-col-7 item-left">
-                                                        <input class="form-control" [(ngModel)]="systems.overrideDirectOffsetBuc" [disabled]="isDisableDirOSAwt"/>
+                                                        <input class="form-control" [(ngModel)]="systems.overrideDirectOffsetBuc" [disabled]="isDisableDirOSAwt" (ngModelChange)="systems.overrideDirectOffsetBuc = $event.toUpperCase()"/>
                                                 </div>
                                         </div>
                                         <div class="p-grid ">
@@ -501,49 +501,49 @@
                                         <div class="p-grid ">
                                                 <div class="p-col-5 item-right">Override Indirect Offset BUC</div>
                                                 <div class="p-col-7 item-left">
-                                                        <input class="form-control" [(ngModel)]="systems.overrideIndirectOffsetBuc" [disabled]="isDisableIndirOSAwt"/>
+                                                        <input class="form-control" [(ngModel)]="systems.overrideIndirectOffsetBuc" [disabled]="isDisableIndirOSAwt" (ngModelChange)="systems.overrideIndirectOffsetBuc = $event.toUpperCase()"/>
                                                 </div>
                                         </div>
                                         <div class="p-grid ">
                                                 <div class="p-col-5 item-right">QST Percent</div>
                                                 <div class="p-col-7 item-left">
-                                                        <input class="form-control" [(ngModel)]="systems.qstPercent" />
+                                                        <input class="form-control" [(ngModel)]="systems.qstPercent" (ngModelChange)="systems.qstPercent = $event.toUpperCase()"/>
                                                 </div>
                                         </div>
                                         <div class="p-grid ">
                                                 <div class="p-col-5 item-right">HST Percent</div>
                                                 <div class="p-col-7 item-left">
-                                                        <input class="form-control" [(ngModel)]="systems.hstPercent" />
+                                                        <input class="form-control" [(ngModel)]="systems.hstPercent" (ngModelChange)="systems.hstPercent = $event.toUpperCase()"/>
                                                 </div>
                                         </div>
                                         <div class="p-grid ">
                                                 <div class="p-col-5 item-right">PST Percent</div>
                                                 <div class="p-col-7 item-left">
-                                                        <input class="form-control" [(ngModel)]="systems.pstPercent" />
+                                                        <input class="form-control" [(ngModel)]="systems.pstPercent" (ngModelChange)="systems.pstPercent = $event.toUpperCase()"/>
                                                 </div>
                                         </div>
                                         <div class="p-grid ">
                                                 <div class="p-col-5 item-right">GST Percent</div>
                                                 <div class="p-col-7 item-left">
-                                                        <input class="form-control" [(ngModel)]="systems.gstPercent" />
+                                                        <input class="form-control" [(ngModel)]="systems.gstPercent" (ngModelChange)="systems.gstPercent = $event.toUpperCase()"/>
                                                 </div>
                                         </div>
                                         <div class="p-grid ">
                                                 <div class="p-col-5 item-right">VAT Percent</div>
                                                 <div class="p-col-7 item-left">
-                                                        <input class="form-control" [(ngModel)]="systems.vatPercent" />
+                                                        <input class="form-control" [(ngModel)]="systems.vatPercent" (ngModelChange)="systems.vatPercent = $event.toUpperCase()"/>
                                                 </div>
                                         </div>
                                         <div class="p-grid ">
                                                 <div class="p-col-5 item-right">TP Percent</div>
                                                 <div class="p-col-7 item-left">
-                                                        <input class="form-control" [(ngModel)]="systems.tpPercent" />
+                                                        <input class="form-control" [(ngModel)]="systems.tpPercent" (ngModelChange)="systems.tpPercent = $event.toUpperCase()"/>
                                                 </div>
                                         </div>
                                         <div class="p-grid ">
                                                 <div class="p-col-5 item-right">Liquidate to Bill Routing ID</div>
                                                 <div class="p-col-6 item-left">
-                                                    <input class="form-control" [(ngModel)]="systems.liquidateBillRoutingId" />
+                                                    <input class="form-control" [(ngModel)]="systems.liquidateBillRoutingId" (ngModelChange)="systems.liquidateBillRoutingId = $event.toUpperCase()"/>
                                                 </div>
                                                 <div class="p-col-1 item-left">
                                                     <a class="a-color" style="cursor:pointer;" (click)="clearAllFilters()">

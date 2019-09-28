@@ -6,13 +6,13 @@
                       <span class="required">*</span>ERP Buyer LE Name
                     </div>
                     <div class="p-col-4">
-                        <input class="form-control" style="width: 100%" [(ngModel)]="buyerInsertData.erpBuyerLeName">
+                        <input class="form-control" style="width: 100%" [(ngModel)]="buyerInsertData.erpBuyerLeName" (ngModelChange)="buyerInsertData.erpBuyerLeName = $event.toUpperCase()">
                     </div>
                     <div class="p-col-2 item-right">
                             <span class="required">*</span>Gold ID
                     </div>
                     <div class="p-col-4">
-                        <input class="form-control" style="width: 35%" [(ngModel)]="buyerInsertData.goldId">
+                        <input class="form-control" style="width: 35%" [(ngModel)]="buyerInsertData.goldId" (ngModelChange)="buyerInsertData.goldId = $event.toUpperCase()">
                     </div>
               </div>
               <div class="p-grid">
@@ -20,13 +20,13 @@
                        <span class="required">*</span>ERP OU Entity Name
                      </div>
                      <div class="p-col-4 item-left">
-                            <input class="form-control" style="width: 100%" [(ngModel)]="buyerInsertData.erpOuEntityName">
+                            <input class="form-control" style="width: 100%" [(ngModel)]="buyerInsertData.erpOuEntityName" (ngModelChange)="buyerInsertData.erpOuEntityName = $event.toUpperCase()">
                      </div>
                      <div class="p-col-2 item-right">
                         GoldNet Name
                       </div>
                       <div class="p-col-4">
-                         <input class="form-control" style="width: 100%" [(ngModel)]="buyerInsertData.goldNetName">
+                         <input class="form-control" style="width: 100%" [(ngModel)]="buyerInsertData.goldNetName" (ngModelChange)="buyerInsertData.goldNetName = $event.toUpperCase()">
                       </div>
               </div>
               <div class="p-grid">
@@ -34,7 +34,7 @@
                     <span class="required">*</span>ERP OU Number
                   </div>
                   <div class="p-col-4 item-left">
-                     <input class="form-control" style="width: 100%" [(ngModel)]="buyerInsertData.erpOuNumber">
+                     <input class="form-control" style="width: 100%" [(ngModel)]="buyerInsertData.erpOuNumber" (ngModelChange)="buyerInsertData.erpOuNumber = $event.toUpperCase()">
                   </div>
                   <div class="p-col-2 item-right">
                      
@@ -48,7 +48,7 @@
                     <span class="required">*</span>Buyer Info
                   </div>
                   <div class="p-col-4 item-left">
-                        <input class="form-control" style="width: 100%" [(ngModel)]="buyerInsertData.buyerInfo">
+                        <input class="form-control" style="width: 100%" [(ngModel)]="buyerInsertData.buyerInfo" (ngModelChange)="buyerInsertData.buyerInfo = $event.toUpperCase()">
                   </div>
                   <div class="p-col-2 item-right">
                      

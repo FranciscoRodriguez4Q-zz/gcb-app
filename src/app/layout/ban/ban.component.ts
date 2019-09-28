@@ -320,6 +320,9 @@ public cloneFlag = false;
                 this.associateBillRefToAsset(this.saveMessage.banId);
               }
           this.getAllBanDetails();
+          if(null != this.saveMessage.banId){
+            this.upsertBanProduct(this.saveMessage.banId);
+          }
           if (!this.saveMessage.Error) {
             this.clearAllFilters();
             this.editFlag = false;
@@ -520,7 +523,8 @@ public cloneFlag = false;
   }
   getServiceType(){
     this.errorMessage = "";
-    if (this.banInsertData.vendorConfigId != "Select" && this.banInsertData.vendorConfigId != null) {
+    if (this.banInsertData.vendorConfigId != "Select" && this.banInsertData.vendorConfigId != "" && 
+    this.banInsertData.billProcessId!= null && this.banInsertData.billProcessId!= "") {
       let vendorConfigData=this.vendorReferenceData.filter(x => x.vendorConfigId == this.banInsertData.vendorConfigId)[0];
       this.banInsertData.billedFromLocationId=vendorConfigData.billedFromLocationId;
       this.banInsertData.billedToLocationId=vendorConfigData.billedFromLocationId;
@@ -539,6 +543,14 @@ public cloneFlag = false;
         error => {
         })
     }
+    if(this.banInsertData.billProcessId== ""){
+      this.errorMessage = "You must select a Bill process";
+      return false;
+    }
+    // if(this.banInsertData.vendorConfigId != ""){
+    //   this.errorMessage = "You must select a Vebndor Code";
+    //   return false;
+    // }
   }
 
   onSelectTarget(item:any){
@@ -756,11 +768,11 @@ public cloneFlag = false;
    
    }
   
-   upsertBanProduct() {
-    console.log("test button click");
+   upsertBanProduct(productBanId) {
+    console.log("Upsert Ban Product");
     if (this.validation()) {
       //this.productBanId=68;
-      this.banService.upsertBanProduct(this.serviceList,this.productBanId).subscribe(
+      this.banService.upsertBanProduct(this.serviceList,productBanId).subscribe(
         refData => {
           this.saveMessage = refData;
           if(!this.saveMessage.Error == undefined)

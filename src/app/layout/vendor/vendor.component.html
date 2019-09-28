@@ -16,7 +16,7 @@
                         <label class="label"><span class="required">*</span>Vendor LE Name </label>
                     </div>
                     <div class="p-col-5 item-left">
-                            <input style="width: 130%" class="form-control" [(ngModel)]="vendorInsertData.vendorLegalEntityName" >
+                            <input style="width: 130%" class="form-control" [(ngModel)]="vendorInsertData.vendorLegalEntityName" (ngModelChange)="vendorInsertData.vendorLegalEntityName = $event.toUpperCase()">
                     </div>
                 </div>
                 <div class="p-grid">
