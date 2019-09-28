@@ -77,11 +77,7 @@ public cloneFlag = false;
       vendorPaidBy: "",
       liquidatedVia: "",
       taxEngine: "",
-      cloneInvoiceName: "",
-      cloneVendorPaidBy: "",
-      cloneLiquidatedVia: "",
-      cloneTaxEngine: "",
-      cloneOfId:""
+      cloneFlag : false
     };
   
 
@@ -245,10 +241,67 @@ public cloneFlag = false;
   }
 
   clearAllFilters(){
-    this.banInsertData={
+   this.banInsertData = {
+      banId:"",
+      billProcessName: "",
+      billProcessId:"",
+      vendorBan: "",
+      vendorCode: "",
+      vendorConfigId:"",
+      vendorFriendlyName: "",
+      buyerId:"",
+      buyerName: "",
+      billingModel: "",
+      mode: "",
+      invoiceBuyerLeName: "",
+      active: "",
+      activeTo: "",  
+      goldIdOverrideFlag: "",
+      overrideGoldId: "",
+      liquidateBillRoutingId: "",
+      directOffsetBuc: "",
+      indirectOffsetBuc: "",
+      isEquipment: "",
+  
+      erpName: "",
+      erpSystem: "",
+      erpProject: "",
+      erpTask: "",
+      erpAwtGroupName: "",
+      erpVatAwtGroupName: "",
+      erpPaymentTerms: "",
+      erpVendorGsl: "",
+      erpVendorSiteCode: "",
+      erpGuiDiff: "",
+      erpCustRegNumber: "",
+      vatUnspsc: "",
+      buyerPaymentApprovalEmail: "",
+      buyerContactSso: "",
+      focusGroup: "",
+      shipFromAddress: "",
+      shipToCountry: 0,
+      shipToProvince: "",
+      shipToState: "",
+      shipToCity: "",
+      shipToZip4: "",
+      shipTozip5: "",
+      addCountryISOtoVendorName: "",
+      useAssetFileVendorName: "",
+      liquidateBillRoutingIdServiceType: "",
       
-    }
-    this.errorMessage ="";
+      invoiceName: "",
+      vendorPaidBy: "",
+      liquidatedVia: "",
+      taxEngine: "",
+      cloneFlag : false
+    };
+    this.editFlag = false;
+    this.cloneFlag = false;
+    this.errorMessage = "";
+    this.popupErrorMessage = "";
+    this.expandAllPanels();
+    window.scrollTo(0, 0);
+    this.getBillingModelTypes();
   }
 
   validation(){    
@@ -272,7 +325,29 @@ public cloneFlag = false;
       this.errorMessage = "Please Select Mode";
       return false;
     } 
-
+    if (this.banInsertData.cloneFlag) {
+      if(this.banInsertData.invoiceName==undefined || this.banInsertData.invoiceName=="undefined"  || this.banInsertData.invoiceName==""){
+        this.errorMessage = "Please select Invoice Name for Clone record";
+        return false;
+      }
+      if(this.banInsertData.vendorPaidBy==undefined || this.banInsertData.vendorPaidBy=="undefined"  || this.banInsertData.vendorPaidBy==""){
+        this.errorMessage = "Please select Vendor Paid By for Clone record";
+        return false;
+      }
+      if(this.banInsertData.liquidatedVia==undefined || this.banInsertData.liquidatedVia=="undefined"  || this.banInsertData.liquidatedVia==""){
+        this.errorMessage = "Please select Liquidated Via for Clone record";
+        return false;
+      }
+      if(this.banInsertData.taxEngine==undefined || this.banInsertData.taxEngine=="undefined"  || this.banInsertData.taxEngine==""){
+        this.errorMessage = "Please select Tax Engine for Clone record";
+        return false;
+      }
+      else 
+      {
+        return true;
+        }
+      
+    }
      else{
       return true;
    }
@@ -281,11 +356,15 @@ public cloneFlag = false;
   upsertBan() {
     this.errorMessage = "";
     if (this.validation()) {
-
-      if (this.banInsertData.cloneFlag){
+      debugger;
+      /* if (this.banInsertData.cloneFlag){
         this.banInsertData.cloneOfId = this.banInsertData.banId;
-        this.banInsertData.bandId = "";
-      }
+        this.banInsertData.banId = 0;
+      this.banInsertData.invoiceName = this.banInsertData.cloneInvoiceName;
+        this.banInsertData.vendorPaidBy = this.banInsertData.cloneVendorPaidBy;
+        this.banInsertData.liquidatedVia = this.banInsertData.cloneLiquidatedVia;
+        this.banInsertData.taxEngine = this.banInsertData.cloneTaxEngine; 
+      } */
       this.cloneFlag = false;
 
       // this.banService.getBillRefIDTokensAssociated(this.banInsertData.liquidateBillRoutingId,
@@ -718,11 +797,11 @@ public cloneFlag = false;
         refData => {
           this.saveMessage = refData;
           if(!this.saveMessage.Error == undefined)
-            this.errorMessagePopUp = "Ban Already Exits";
+            this.popupErrorMessage = "Ban Already Exits";
           if(this.saveMessage.Error == false)
-            this.errorMessagePopUp = "Ban Name "+this.serviceList+" Save Suceesfully.";
+            this.popupErrorMessage = "Ban Name "+this.serviceList+" Save Suceesfully.";
           else
-            this.errorMessagePopUp =  "ban Name "+this.serviceList+" not Saved..";
+            this.popupErrorMessage =  "ban Name "+this.serviceList+" not Saved..";
           this.open(this.errorMessagePopUp);
           this.getAllBanDetails();
           this.clearAllFilters();
@@ -776,11 +855,12 @@ public cloneFlag = false;
         refData => {
           this.saveMessage = refData;
           if(!this.saveMessage.Error == undefined)
-            this.errorMessagePopUp = "Ban Already Exits";
+            this.popupErrorMessage = "Ban Already Exits";
           if(this.saveMessage.Error == false)
-            this.errorMessagePopUp = "Ban Name Save Suceesfully.";
+            this.popupErrorMessage = "Ban Name Save Suceesfully.";
           else
-            this.errorMessagePopUp =  "ban Name not Saved..";
+            this.popupErrorMessage = "ban Name not Saved..";
+            this.open(this.errorMessagePopUp);
         },
         error => {
         });
@@ -829,26 +909,32 @@ public cloneFlag = false;
   cloneRecord() {
     this.cloneFlag = true;
     this.banInsertData.cloneFlag = true;
+    this.banInsertData.cloneOfId = this.banInsertData.banId;
   //  this.index = [0,1];
   //  this.collapsed=true;
   //  this.panelExpansionFlag = true;
-  this.banInsertData.mode = "TESTING";
-
+  this.banInsertData.mode = "TEST";
+  this.banInsertData.invoiceName = "";
+  this.banInsertData.vendorPaidBy = "";
+  this.banInsertData.liquidatedVia = "";
+    this.banInsertData.taxEngine = "";
     this.banService.getCloneBillingModelTypes(this.banInsertData.banId).subscribe(
       refData => {
         let arr: any = [];
         this.billingModelType = refData;
         for (let data in this.billingModelType.response) {
           if (data.toUpperCase()==="LIQUIDATED_VIA") {
-            this.liquidateViaCloneDataList = this.billingModelType.response[data];
+            this.liquidateViaReferenceDataList = this.billingModelType.response[data];
           } else if (data.toUpperCase()==="PAID_BY") {
-            this.paidByCloneDataList = this.billingModelType.response[data];
+            this.paidByReferenceDataList = this.billingModelType.response[data];
           }else if (data.toUpperCase()==="INVOICE_NAME_VALUES") {
-            this.invoiceNmCloneDataList = this.billingModelType.response[data];
+            this.invoiceNmReferenceDataList = this.billingModelType.response[data];
           } else {
-            this.taxEngineCloneDataList = this.billingModelType.response[data];
+            this.taxEngineReferenceDataList = this.billingModelType.response[data];
           }
         }
+        this.banInsertData.banId = 0;
+
       },
       error => {
       });   
@@ -877,6 +963,7 @@ public cloneFlag = false;
   }
 
   cloneRec(flag) {
+    this.popupErrorMessage = "";
     if (flag) {
       this.cloneFlag = true;
       this.popupErrorMessage = "Do you want to Clone the record?";
