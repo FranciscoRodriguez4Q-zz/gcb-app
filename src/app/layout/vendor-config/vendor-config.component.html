@@ -43,7 +43,7 @@
           Exchange Rate Type
         </div>
         <div class="p-col-4 upper">
-           <input class="form-control" [(ngModel)]="vendorConfigDto.exchangeRateType"  style="width: 25%">
+            <p-dropdown [options]="exRateType" [(ngModel)]="vendorConfigDto.exchangeRateType" [filter]="true"  [style]="{'width': '25%'}" placeholder="Select"></p-dropdown>
         </div>
 </div>
 <div class="p-grid">
@@ -96,20 +96,21 @@
     <div class="p-col-4 item-left">
         <p-dropdown [options]="countryCodeReferenceDataList" [style]="{'width': '100%'}" [(ngModel)]="vendorConfigDto.billedToLocationId" [filter]="true" placeholder="Select" ></p-dropdown>
     </div>
-    <div class="p-col-2 item-right">
+    <!-- <div class="p-col-2 item-right">
       <span class="required">*</span>Reporting Security DL
     </div>
     <div class="p-col-4 upper">
        <input class="form-control" [(ngModel)]="vendorConfigDto.reportingSecurityDl" >
-    </div>
+    </div> -->
+    <div class="p-col-2 item-right">
+        <span class="required">*</span>Date Format
+      </div>
+      <div class="p-col-4 item-left upper">
+         <input class="form-control" [(ngModel)]="vendorConfigDto.dateFormat" style="width:40%">
+      </div>
 </div>
 <div class="p-grid">
-    <div class="p-col-2 item-right">
-      <span class="required">*</span>Date Format
-    </div>
-    <div class="p-col-4 item-left upper">
-       <input class="form-control" [(ngModel)]="vendorConfigDto.dateFormat" style="width:40%">
-    </div>
+
 
 </div>
 <div class="p-grid">

@@ -36,7 +36,7 @@ public cloneFlag = false;
       buyerId:"",
       buyerName: "",
       billingModel: "",
-      mode: "",
+      mode: "TEST",
       invoiceBuyerLeName: "",
       active: "",
       activeTo: "",  
@@ -73,10 +73,10 @@ public cloneFlag = false;
       useAssetFileVendorName: "",
       liquidateBillRoutingIdServiceType: "",
       
-      invoiceName: "",
-      vendorPaidBy: "",
-      liquidatedVia: "",
-      taxEngine: "",
+      invoiceName: "UNSPECIFIED",
+      vendorPaidBy: "UNSPECIFIED",
+      liquidatedVia: "UNSPECIFIED",
+      taxEngine: "UNSPECIFIED",
       cloneFlag : false
     };
   
@@ -606,7 +606,7 @@ public cloneFlag = false;
     this.banInsertData.billProcessId!= null && this.banInsertData.billProcessId!= "") {
       let vendorConfigData=this.vendorReferenceData.filter(x => x.vendorConfigId == this.banInsertData.vendorConfigId)[0];
       this.banInsertData.billedFromLocationId=vendorConfigData.billedFromLocationId;
-      this.banInsertData.billedToLocationId=vendorConfigData.billedFromLocationId;
+      this.banInsertData.billedToLocationId=vendorConfigData.billedToLocationId;
       //console.log("Vendor Selected : " + vendorConfigData);
       //console.log("process Id "+this.banInsertData.billProcessId);
       this.banService.getServiceType(this.banInsertData).subscribe(
@@ -874,7 +874,7 @@ public cloneFlag = false;
     if (this.banInsertData.vendorConfigId != "Select" && this.banInsertData.vendorConfigId != null) {
       let vendorConfigData=this.vendorReferenceData.filter(x => x.vendorConfigId == this.banInsertData.vendorConfigId)[0];
       this.banInsertData.billedFromLocationId=vendorConfigData.billedFromLocationId;
-      this.banInsertData.billedToLocationId=vendorConfigData.billedFromLocationId;
+      this.banInsertData.billedToLocationId=vendorConfigData.billedToLocationId;
       this.banService.getSourceServiceType(this.banInsertData,banId).subscribe(
         refData => {
           let arr: any = [];

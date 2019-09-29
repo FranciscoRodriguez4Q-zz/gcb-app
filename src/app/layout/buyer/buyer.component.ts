@@ -21,7 +21,7 @@ export class BuyerComponent implements OnInit {
     "locationName":"",
     "goldId": "",
     "updatedBy": "",
-    "lastUpdatedDate":"lastUpdatedDate",
+    "lastUpdatedDate":"",
   };
 
 
@@ -154,26 +154,26 @@ export class BuyerComponent implements OnInit {
       this.errorMessage = "Please Enter Buyer ERP Le Name";
       return false;
     }
-    if(this.buyerInsertData.erpOuEntityName==""){
-      this.errorMessage = "Please Enter ERP OU Entity Name";
-      return false;
-    }
-    if(this.buyerInsertData.erpOuNumber==""){
-      this.errorMessage = "Please Enter ERP OU Number";
-      return false;
-    }
-    if(this.buyerInsertData.buyerInfo==""){
-      this.errorMessage = "Please Enter Buyer info";
-      return false;
-    }
+    // if(this.buyerInsertData.erpOuEntityName==""){
+    //   this.errorMessage = "Please Enter ERP OU Entity Name";
+    //   return false;
+    // }
+    // if(this.buyerInsertData.erpOuNumber==""){
+    //   this.errorMessage = "Please Enter ERP OU Number";
+    //   return false;
+    // }
+    // if(this.buyerInsertData.buyerInfo==""){
+    //   this.errorMessage = "Please Enter Buyer info";
+    //   return false;
+    // }
     if(this.buyerInsertData.buyerLocationId=="Select" || this.buyerInsertData.buyerLocationId==""){
       this.errorMessage = "Please Enter Buyer Location";
       return false;
     }
-    if(this.buyerInsertData.goldId==""){
-      this.errorMessage = "Please Enter Gold ID";
-      return false;
-    }
+    // if(this.buyerInsertData.goldId==""){
+    //   this.errorMessage = "Please Enter Gold ID";
+    //   return false;
+    // }
     else{
       return true;
     }
@@ -184,8 +184,8 @@ export class BuyerComponent implements OnInit {
     //this.msgs = [];
     console.log("test button click");
     if (this.validation()) {
-      this.buyerInsertData.createdBy="503148032";
-      this.buyerInsertData.updatedBy="503148032";
+      // this.buyerInsertData.createdBy="503148032";
+      // this.buyerInsertData.updatedBy="503148032";
       this.buyerService.upsertBuyer(this.buyerInsertData).subscribe(
         refData => {
           this.saveMessage = refData;

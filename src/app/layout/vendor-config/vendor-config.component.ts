@@ -30,6 +30,11 @@ lldCoeList : SelectItem[] =[
   { label: "L", value: "L" }  
 ];
 
+exRateType : SelectItem[] =[
+  { label: "MOR", value: "MOR" },
+  { label: "SPOT", value: "SPOT" }
+];
+
 public vendorGridData : any;
 public dwnVendor:any;
 public reportHeader : any =[];
@@ -114,7 +119,7 @@ getAllCurrencyData() {
     refData => {
       this.currencyReferenceData = refData;
       for (let data of this.currencyReferenceData) {
-        this.currencyReferenceDataList.push({ label: data.currencyCode, value: data.currencyDescription })
+        this.currencyReferenceDataList.push({ label: data.currencyCode, value: data.currencyCode })
       }
     },
     error => {
@@ -185,6 +190,10 @@ upsertVendorConfig(){
           this.saveMessage = refData;
           this.popupErrorMessage =  this.saveMessage.message;
           this.open(this.errorMessagePopUp);
+          this.getVendorDetailGridData();
+              if(!this.saveMessage.Error){
+              this.clearAllFilters();
+              }
         },
         error => {
           this.open("An system error occured");
@@ -273,10 +282,10 @@ validation() {
   //   this.errorMessage = "Please select Final Invoice Date";
   //    return false;
   // }
-  if (this.vendorConfigDto.reportingSecurityDl == "") {
-    this.errorMessage = "Please select Reporting Security DL";
-     return false;
-  }
+  // if (this.vendorConfigDto.reportingSecurityDl == "") {
+  //   this.errorMessage = "Please select Reporting Security DL";
+  //    return false;
+  // }
   return true;
 }
 

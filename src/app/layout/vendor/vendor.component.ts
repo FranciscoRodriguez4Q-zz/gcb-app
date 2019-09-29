@@ -153,8 +153,8 @@ export class VendorComponent implements OnInit {
     //this.msgs = [];
     console.log("test button click");
     if (this.validation()) {
-      this.vendorInsertData.createdBy="503148032";
-      this.vendorInsertData.updatedBy="503148032";
+      // this.vendorInsertData.createdBy="503148032";
+      // this.vendorInsertData.updatedBy="503148032";
       this.vendorService.saveOrUpdateVendor(this.vendorInsertData).subscribe(
         refData => {
           this.saveMessage = refData;
@@ -203,7 +203,7 @@ export class VendorComponent implements OnInit {
       lastUpdatedDate: "",
       createdDate: "",
       createdBy: "",
-      updatedBy: true
+      updatedBy: ""
     };
     this.popupErrorMessage = "";
   }
