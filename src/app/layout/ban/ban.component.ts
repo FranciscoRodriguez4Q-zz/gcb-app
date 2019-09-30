@@ -147,18 +147,21 @@ public cloneFlag = false;
   taxEngineCloneDataList: SelectItem[] = [];
   public regKey = "8c8606d1-e591-435f-a435-d112ba4cd43c";		
   public entityTypeID = "5";
+  goldIdDisable : boolean =true;
 
   constructor(private banService: BanService,private modalService: NgbModal) { }
   
 
   public cols = [
-    { field: 'vendorBan', header: 'Ban ID', width: '20%' },
-    { field: 'vendorCode', header: 'Vendor Name', width: '5%' },
-    { field: 'serviceTypeName', header: 'Service Type Name', width: '10%' },
-    { field: 'erpBuyerLeName', header: 'Buyer Name', width: '20%' },
-    { field: 'liquidateBillRoutingId', header: 'Bill Rote ID', width: '10%' },
-    { field: 'updatedBy', header: 'Updated By', width: '10%' },
-    { field: 'lastUpdated', header: 'Updated Date', width: '10%' },
+    { field: 'vendorBan', header: 'Vendor Ban', width: '7%' },
+    { field: 'vendorLegalEntityName', header: 'Vendor LE', width: '20%' },
+    { field: 'locationFromCtry', header: 'Billed From', width: '12%' },
+    { field: 'locationToCtry', header: 'Billed To', width: '12%' },
+    { field: 'erpBuyerLeName', header: 'Buyer', width: '20%' },
+    { field: 'invoiceName', header: 'Invoice Name', width: '20%' },
+    { field: 'vendorPaidBy', header: 'Vendor Paid By', width: '20%' },
+    { field: 'liquidatedVia', header: 'Liquidated Via', width: '20%' },
+    { field: 'taxEngine', header: 'TaxEngine', width: '20%' }
   ];
 
  
@@ -177,6 +180,20 @@ public cloneFlag = false;
     this.getAllBillingModel();
     this.getAllModel();
     this.getBillingModelTypes();
+  }
+
+  setBuyerDetails()
+  {
+    let buyerObj=this.buyerReferenceData.filter(x=>x.buyerId==this.banInsertData.buyerId)[0];
+    this.banInsertData.overrideGoldId=buyerObj.goldId;
+  }
+
+  enableGoldIdText()
+  {
+    if(this.goldIdDisable)
+   this.goldIdDisable=false;
+   else
+   this.goldIdDisable=true;
   }
 
   getAllBanDetails() {

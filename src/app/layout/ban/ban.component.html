@@ -64,7 +64,7 @@
                     <div class="p-grid ">
                             <div class="p-col-4 item-right"><span class="required">*</span>Buyer Name</div>
                             <div class="p-col-8 item-left">
-                                <p-dropdown [options]="buyerReferenceDataList" [style]="{'width': '100%'}"  [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.buyerId"></p-dropdown>
+                                <p-dropdown [options]="buyerReferenceDataList" [style]="{'width': '100%'}"  (click)="setBuyerDetails()" [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.buyerId"></p-dropdown>
                             </div>
                     </div>
                     <!-- <div class="p-grid ">
@@ -137,13 +137,13 @@
                         <div class="p-grid ">
                                 <div class="p-col-4 item-right">Gold Id override flag </div>
                                 <div class="p-col-1 item-left">
-                                        <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="banInsertData.goldIdOverrideFlag"></p-checkbox><label class="label"></label>
+                                        <p-checkbox  binary="true" labelStyleClass="chkLabel" (click)="enableGoldIdText()" [(ngModel)]="banInsertData.goldIdOverrideFlag"></p-checkbox><label class="label"></label>
                                 </div>
                         </div>
                         <div class="p-grid ">
                                 <div class="p-col-4 item-right">Override Gold Id </div>
                                 <div class="p-col-6 item-left">
-                                        <input class="form-control" [(ngModel)]="banInsertData.overrideGoldId" />
+                                        <input class="form-control" [disabled]="goldIdDisable" [(ngModel)]="banInsertData.overrideGoldId" />
                                 </div>
                         </div>
                         <div class="p-grid ">
@@ -544,8 +544,8 @@
                             [style]="{'margin-top':'2px','width':'100%'}" [rows]="10" [paginator]="true" [pageLinks]="3" [responsive]="true">
                             <ng-template pTemplate="header" let-columns>
                                 <tr>
-                                    <th [ngStyle]="{'width': '63px'}">Modify</th>
-                                    <th *ngFor="let col of columns" [pSortableColumn]="col.field" [ngStyle]="{'width': '130px'}">
+                                    <th [ngStyle]="{'width': '40px'}"></th>
+                                    <th *ngFor="let col of columns" [pSortableColumn]="col.field" [ngStyle]="{'width': '85px'}">
                                         {{col.header}}
                                         <p-sortIcon [field]="col.field"></p-sortIcon>
                                     </th>
