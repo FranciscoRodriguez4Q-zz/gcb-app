@@ -492,6 +492,7 @@ public cloneFlag = false;
 
   getVendorServiceType()
   {
+    this.clearServiceList();
     if(this.banInsertData.vendorConfigId!=null || this.banInsertData.vendorConfigId!="Select")
     {
       console.log("selected vendorConfig:",this.banInsertData.vendorConfigId);
@@ -504,7 +505,7 @@ public cloneFlag = false;
       this.banService.getVendorServiceType(this.vendorServiceType).subscribe(
           refData =>{
             this.serviceTypeReferenceData = refData; 
-        this.sourceSystem=this.sourceSystem.concat(refData); 
+            this.sourceSystem=this.sourceSystem.concat(refData);
         for (let data of this.serviceTypeReferenceData) {
           let labelService = data.serviceTypeName;
           this.serviceTypeReferenceDataList.push({ label: labelService, value: data.serviceTypeId })
@@ -630,7 +631,7 @@ public cloneFlag = false;
         refData => {
           let arr: any = [];
           this.serviceTypeReferenceData = refData; 
-          this.sourceSystem=this.sourceSystem.concat(refData); 
+          this.sourceSystem=refData; 
           for (let data of this.serviceTypeReferenceData) {
             let labelService = data.serviceTypeName;
             this.serviceTypeReferenceDataList.push({ label: labelService, value: data.serviceTypeId })
@@ -863,6 +864,39 @@ public cloneFlag = false;
      this.banInsertData.liquidateBillRoutingId+";sso="+sso+";mode=edit");
    
    }
+
+   generateServiceBillRefId() {
+ 
+    const requestorSSO =  "999999999"; //localStorage.getItem(AppConstants.LABEL_LOGGEDIN_SSO);
+  
+    this.banService.getBillHubRefID(this.regKey, requestorSSO, this.entityTypeID).subscribe(
+      refData => {
+        let response = refData;
+        let respArray = [];
+        respArray.push(response);
+        if (respArray[0].OUTPUT === 'FAIL')
+        {
+          this.popupErrorMessage = respArray[0].BillRefID;
+          this.open(this.errorMessagePopUp);
+        }
+       else if (respArray[0].BillRefID) {
+          this.systems.liquidateBillRoutingId = respArray[0].BillRefID;         
+          this.editServiceBillRef();
+        } 
+      },
+      error => {
+     this.popupErrorMessage ="Internal Server Error!";
+     this.open(this.errorMessagePopUp);
+      });
+  }
+
+   editServiceBillRef(){
+    let sso =999999999;
+     window.open( environment.APP_BILLHUB_URL_UI_ENDPOINT + 
+      "/EditBillReference;billRefId="+
+     this.systems.liquidateBillRoutingId+";sso="+sso+";mode=edit");
+   
+   }
   
    upsertBanProduct(productBanId) {
     console.log("Upsert Ban Product");
@@ -878,6 +912,7 @@ public cloneFlag = false;
           // else
           //   this.popupErrorMessage = "ban Name not Saved..";
           //   this.open(this.errorMessagePopUp);
+          this.clearServiceList();
         },
         error => {
         });
@@ -935,26 +970,27 @@ public cloneFlag = false;
   this.banInsertData.vendorPaidBy = "";
   this.banInsertData.liquidatedVia = "";
     this.banInsertData.taxEngine = "";
-    this.banService.getCloneBillingModelTypes(this.banInsertData.banId).subscribe(
-      refData => {
-        let arr: any = [];
-        this.billingModelType = refData;
-        for (let data in this.billingModelType.response) {
-          if (data.toUpperCase()==="LIQUIDATED_VIA") {
-            this.liquidateViaReferenceDataList = this.billingModelType.response[data];
-          } else if (data.toUpperCase()==="PAID_BY") {
-            this.paidByReferenceDataList = this.billingModelType.response[data];
-          }else if (data.toUpperCase()==="INVOICE_NAME_VALUES") {
-            this.invoiceNmReferenceDataList = this.billingModelType.response[data];
-          } else {
-            this.taxEngineReferenceDataList = this.billingModelType.response[data];
-          }
-        }
-        this.banInsertData.banId = 0;
+     this.banInsertData.banId = 0;
+    // this.banService.getCloneBillingModelTypes(this.banInsertData.banId).subscribe(
+    //   refData => {
+    //     let arr: any = [];
+    //     this.billingModelType = refData;
+    //     for (let data in this.billingModelType.response) {
+    //       if (data.toUpperCase()==="LIQUIDATED_VIA") {
+    //         this.liquidateViaReferenceDataList = this.billingModelType.response[data];
+    //       } else if (data.toUpperCase()==="PAID_BY") {
+    //         this.paidByReferenceDataList = this.billingModelType.response[data];
+    //       }else if (data.toUpperCase()==="INVOICE_NAME_VALUES") {
+    //         this.invoiceNmReferenceDataList = this.billingModelType.response[data];
+    //       } else {
+    //         this.taxEngineReferenceDataList = this.billingModelType.response[data];
+    //       }
+    //     }
+    //    
 
-      },
-      error => {
-      });   
+    //   },
+    //   error => {
+    //   });   
 
   }
    getBillingModelTypes() {
@@ -990,5 +1026,35 @@ public cloneFlag = false;
       this.banInsertData.cloneFlag = false;
       this.cloneFlag = false;
     }
+  }
+
+  clearServiceList(){
+    this.sourceSystem=[];
+    this.targetSystem=[];
+    this.triggerUnspscEvent(this.systems.unspscOverrideFlag);
+    this.triggerCostCenterEvent(this.systems.costCentreOverrideFlag);
+    this.triggerErpPmtEvent(this.systems.erpPmtOverrideFlag);
+    this.triggerErpAwtGrpEvent(this.systems.erpAwtGroupNameOverrideFlag);
+    this.triggerErpVatAwtEvent(this.systems.erpVatAwtGroupOverrideFlag);
+    this.triggerDirOffsetEvent(this.systems.directOffsetBucOverrideFlag);
+    this.triggerindirectOffsetEvent(this.systems.indirectOffsetBucOverrideFlag);
+    this.systems ={
+      serviceTypeId: "", 
+      overrideErpPmtTerms: "",
+      overrideErpAwtGroupName: "",
+      overrideDirectOffsetBuc: "",
+      overrideIndirectOffsetBuc:"",
+      overrideErpVatAwtGroupName:"",
+      overrideUnspsc:"",
+      overrideOffsetCostCenter:"",
+      unspscOverrideFlag:"",
+      costCentreOverrideFlag:"",
+      erpPmtOverrideFlag:"",
+      erpAwtGroupNameOverrideFlag:"",
+      erpVatAwtGroupOverrideFlag:"",
+      directOffsetBucOverrideFlag:"",
+      indirectOffsetBucOverrideFlag:"",
+    }; 
+    this.serviceList=[];
   }
 }

@@ -509,14 +509,19 @@
                                         </div>
                                         <div class="p-grid ">
                                                 <div class="p-col-5 item-right">Liquidate to Bill Routing ID</div>
-                                                <div class="p-col-6 item-left">
-                                                    <input class="form-control" [(ngModel)]="systems.liquidateBillRoutingId" (ngModelChange)="systems.liquidateBillRoutingId = $event.toUpperCase()"/>
+                                                <div class="p-col-7 item-left">
+                                                        <div *ngIf="systems.liquidateBillRoutingId">
+        
+                                                                        <span> {{systems.liquidateBillRoutingId}} </span>
+                                                                        <a class="a-color" style="cursor:pointer;" (click)="editServiceBillRef()">
+                                                                            <i class="fa fa-pencil-square-o fa-2x"></i>
+                                                                        </a>
+                                                        </div>
+                                                        <div *ngIf="!systems.liquidateBillRoutingId">                                
+                                                                <button class="button-link" (click)="generateServiceBillRefId()">Enter BUC/ADN details</button>
+                                                        </div>
                                                 </div>
-                                                <div class="p-col-1 item-left">
-                                                    <a class="a-color" style="cursor:pointer;" (click)="clearAllFilters()">
-                                                        <i class="fa fa-pencil-square-o fa-2x"></i>
-                                                    </a>
-                                                </div>
+
                                         </div>  
                                     </p-accordionTab>
                             </div>
@@ -533,7 +538,7 @@
                         <button pButton type="button" label="Cancel" class="ui-button-rounded ui-button-secondary" (click)="clearAllFilters()"></button> -->
                         <button class="ge-button -fill--solid" (click)="cloneRec(true)" *ngIf="editFlag" [disabled]="cloneFlag">Clone</button>
                         <button class="ge-button -fill--solid" (click)="upsertBan()">Submit</button>
-                        <button class="ge-button -fill--solid" (click)="clearAllFilters()">Cancel</button> 
+                        <button class="ge-button -fill--solid" (click)="clearAllFilters();clearServiceList()">Cancel</button> 
                         <app-file-download [dwnData]="banDwnData" [colsHeader]="this.downloadCols" [fileName]="fileName"></app-file-download>
                     </div>
             </div>
