@@ -315,7 +315,7 @@ public cloneFlag = false;
     this.editFlag = false;
     this.cloneFlag = false;
     this.errorMessage = "";
-    this.popupErrorMessage = "";
+   // this.popupErrorMessage = "";
     this.expandAllPanels();
     window.scrollTo(0, 0);
     this.getBillingModelTypes();
@@ -805,30 +805,30 @@ public cloneFlag = false;
     console.log("remove new list"+this.serviceList.length);
   }
 
-  upsertBanService() {
-    this.errorMessage = "";
-    //this.msgs = [];
-    console.log("test button click");
-    if (this.validation()) {
-      this.banService.upsertBan(this.serviceList).subscribe(
-        refData => {
-          this.saveMessage = refData;
-          if(!this.saveMessage.Error == undefined)
-            this.popupErrorMessage = "Ban Already Exits";
-          if(this.saveMessage.Error == false)
-            this.popupErrorMessage = "Ban Name "+this.serviceList+" Save Suceesfully.";
-          else
-            this.popupErrorMessage =  "ban Name "+this.serviceList+" not Saved..";
-          this.open(this.errorMessagePopUp);
-          this.getAllBanDetails();
-          this.clearAllFilters();
-        },
-        error => {
-        });
-    }else{
-      //this.open(this.errorMessage);
-    }
-  }
+  // upsertBanService() {
+  //   this.errorMessage = "";
+  //   //this.msgs = [];
+  //   console.log("test button click");
+  //   if (this.validation()) {
+  //     this.banService.upsertBan(this.serviceList).subscribe(
+  //       refData => {
+  //         this.saveMessage = refData;
+  //         if(!this.saveMessage.Error == undefined)
+  //           this.popupErrorMessage = "Ban Already Exits";
+  //         if(this.saveMessage.Error == false)
+  //           this.popupErrorMessage = "Ban Name "+this.serviceList+" Save Suceesfully.";
+  //         else
+  //           this.popupErrorMessage =  "ban Name "+this.serviceList+" not Saved..";
+  //         this.open(this.errorMessagePopUp);
+  //         this.getAllBanDetails();
+  //         this.clearAllFilters();
+  //       },
+  //       error => {
+  //       });
+  //   }else{
+  //     //this.open(this.errorMessage);
+  //   }
+  // }
 
   generateBillRefId() {
  
@@ -870,14 +870,14 @@ public cloneFlag = false;
       //this.productBanId=68;
       this.banService.upsertBanProduct(this.serviceList,productBanId).subscribe(
         refData => {
-          this.saveMessage = refData;
-          if(!this.saveMessage.Error == undefined)
-            this.popupErrorMessage = "Ban Already Exits";
-          if(this.saveMessage.Error == false)
-            this.popupErrorMessage = "Ban Name Save Suceesfully.";
-          else
-            this.popupErrorMessage = "ban Name not Saved..";
-            this.open(this.errorMessagePopUp);
+          //this.saveMessage = refData;
+          // if(!this.saveMessage.Error == undefined)
+          //   this.popupErrorMessage = "Ban Already Exits";
+          // if(this.saveMessage.Error == false)
+          //   this.popupErrorMessage = "Ban Name Save Suceesfully.";
+          // else
+          //   this.popupErrorMessage = "ban Name not Saved..";
+          //   this.open(this.errorMessagePopUp);
         },
         error => {
         });
