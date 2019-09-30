@@ -185,7 +185,7 @@ public cloneFlag = false;
   setBuyerDetails()
   {
     let buyerObj=this.buyerReferenceData.filter(x=>x.buyerId==this.banInsertData.buyerId)[0];
-    this.banInsertData.overrideGoldId=buyerObj.goldId;
+    this.banInsertData.currentGoldId=buyerObj.goldId;
   }
 
   enableGoldIdText()
@@ -619,6 +619,7 @@ public cloneFlag = false;
     }
   }
   getServiceType(){
+    this.targetSystem=[];
     this.errorMessage = "";
     if (this.banInsertData.vendorConfigId != "Select" && this.banInsertData.vendorConfigId != "" && 
     this.banInsertData.billProcessId!= null && this.banInsertData.billProcessId!= "") {
@@ -753,6 +754,13 @@ public cloneFlag = false;
     erpVatAwtGroupOverrideFlag:boolean,
     directOffsetBucOverrideFlag:boolean,
     indirectOffsetBucOverrideFlag:boolean,
+    unspsc:string,
+    costCenter:string,
+    erpPmtTerms:string,
+    erpAwtGroupName:string,
+    directOffsetBuc:string,
+    indirectOffsetBuc:string,
+    erpVatAwtGroupName:string
   }> = [];
 
   public systems :any ={
@@ -771,6 +779,13 @@ public cloneFlag = false;
     erpVatAwtGroupOverrideFlag:"",
     directOffsetBucOverrideFlag:"",
     indirectOffsetBucOverrideFlag:"",
+    unspsc:"",
+    costCenter:"",
+    erpPmtTerms:"",
+    erpAwtGroupName:"",
+    directOffsetBuc:"",
+    indirectOffsetBuc:"",
+    erpVatAwtGroupName:""
   }; 
 
 
@@ -782,14 +797,17 @@ public cloneFlag = false;
         this.banService.getOtherServiceDet(this.banInsertData).subscribe(
           refData => {
             this.otherServiceData=refData;
-            this.serviceList.push({ serviceTypeId: system.serviceTypeId, overrideErpPmtTerms: this.banInsertData.overrideErpPmtTerms,
-              overrideErpAwtGroupName:this.banInsertData.overrideErpAwtGroupName,overrideDirectOffsetBuc:this.banInsertData.overrideDirectOffsetBuc, 
-              overrideIndirectOffsetBuc:this.banInsertData.overrideIndirectOffsetBuc, overrideErpVatAwtGroupName:this.banInsertData.overrideErpVatAwtGroupName,
-              overrideUnspsc:this.otherServiceData.unspsc,overrideOffsetCostCenter:this.otherServiceData.costCenter,
+            this.serviceList.push({ serviceTypeId: system.serviceTypeId, overrideErpPmtTerms: "",
+              overrideErpAwtGroupName:"",overrideDirectOffsetBuc:"", 
+              overrideIndirectOffsetBuc:"", overrideErpVatAwtGroupName:"",
+              overrideUnspsc:"",overrideOffsetCostCenter:"",
               unspscOverrideFlag:false,costCentreOverrideFlag:false,
               erpPmtOverrideFlag:false,erpAwtGroupNameOverrideFlag:false,
               erpVatAwtGroupOverrideFlag:false,directOffsetBucOverrideFlag:false,
-              indirectOffsetBucOverrideFlag:false})
+              indirectOffsetBucOverrideFlag:false,unspsc:this.otherServiceData.unspsc,costCenter:this.otherServiceData.costCenter,
+              erpPmtTerms: this.banInsertData.overrideErpPmtTerms,erpAwtGroupName:this.banInsertData.overrideErpAwtGroupName,
+              directOffsetBuc:this.banInsertData.overrideDirectOffsetBuc,indirectOffsetBuc:this.banInsertData.overrideIndirectOffsetBuc,
+              erpVatAwtGroupName:this.banInsertData.overrideErpVatAwtGroupName})
         },
         error => {
         }); 

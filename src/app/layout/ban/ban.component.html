@@ -139,6 +139,9 @@
                                 <div class="p-col-1 item-left">
                                         <p-checkbox  binary="true" labelStyleClass="chkLabel" (click)="enableGoldIdText()" [(ngModel)]="banInsertData.goldIdOverrideFlag"></p-checkbox><label class="label"></label>
                                 </div>
+                                <div class="p-col-5 item-left">
+                                        <span *ngIf="goldIdDisable">Current Value: {{banInsertData.currentGoldId}} </span>
+                                </div>
                         </div>
                         <div class="p-grid ">
                                 <div class="p-col-4 item-right">Override Gold Id </div>
@@ -388,21 +391,27 @@
                             <div class="p-col-6">
                                     <p-accordionTab header="Service Type Details">
                                         <div class="p-grid ">
-                                            <div class="p-col-5 item-right">UNSPSC Override</div>
-                                            <div class="p-col-7 item-left">
+                                            <div class="p-col-5 item-right">UNSPSC Override</div> 
+                                            <div class="p-col-1 item-left">
                                                 <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="systems.unspscOverrideFlag" (onChange)="triggerUnspscEvent(systems.unspscOverrideFlag)"></p-checkbox><label class="label"></label>
+                                            </div>
+                                            <div class="p-col-6 item-left">
+                                                <span *ngIf="isDisabledUnspsc">Current Value: {{systems.unspsc}} </span>
                                             </div>
                                         </div>
                                         <div class="p-grid ">
-                                                <div class="p-col-5 item-right">Override UNSPSC</div>
+                                                <div class="p-col-5 item-right">Override UNSPSC</div> 
                                                 <div class="p-col-7 item-left">
                                                     <input class="form-control" [(ngModel)]="systems.overrideUnspsc" [disabled]="isDisabledUnspsc" (ngModelChange)="systems.overrideUnspsc = $event.toUpperCase()"/>
                                                 </div>
                                         </div>
                                         <div class="p-grid ">
                                                 <div class="p-col-5 item-right">Cost Center Override</div>
-                                                <div class="p-col-7 item-left">
+                                                <div class="p-col-1 item-left">
                                                     <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="systems.costCentreOverrideFlag" (onChange)="triggerCostCenterEvent(systems.costCentreOverrideFlag)"></p-checkbox><label class="label"></label>
+                                                </div>
+                                                <div class="p-col-6 item-left">
+                                                        <span *ngIf="isDisableCostCenter">Current Value: {{systems.costCenter}} </span>
                                                 </div>
                                         </div>
                                         <div class="p-grid ">
@@ -413,8 +422,11 @@
                                         </div>
                                         <div class="p-grid ">
                                             <div class="p-col-5 item-right">ERP PMT Override</div>
-                                            <div class="p-col-7 item-left">
+                                            <div class="p-col-1 item-left">
                                                 <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="systems.erpPmtOverrideFlag" (onChange)="triggerErpPmtEvent(systems.erpPmtOverrideFlag)"></p-checkbox><label class="label"></label>
+                                            </div>
+                                            <div class="p-col-6 item-left">
+                                                <span *ngIf="isDisableErpPmt">Current Value: {{banInsertData.overrideErpPmtTerms}} </span>
                                             </div>
                                         </div>
                                         <div class="p-grid ">
@@ -425,8 +437,11 @@
                                         </div>
                                         <div class="p-grid ">
                                                 <div class="p-col-5 item-right">ERP AWT Group Name Override</div>
-                                                <div class="p-col-7 item-left">
+                                                <div class="p-col-1 item-left">
                                                     <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="systems.erpAwtGroupNameOverrideFlag" (onChange)="triggerErpAwtGrpEvent(systems.erpAwtGroupNameOverrideFlag)"></p-checkbox><label class="label"></label>
+                                                </div>
+                                                <div class="p-col-6 item-left">
+                                                        <span *ngIf="isDisableErpAwtGrp">Current Value: {{banInsertData.overrideErpAwtGroupName}} </span>
                                                 </div>
                                         </div>
                                         <div class="p-grid ">
@@ -437,8 +452,11 @@
                                         </div>
                                         <div class="p-grid ">
                                                 <div class="p-col-5 item-right">ERP VAT AWT Group Name Override</div>
-                                                <div class="p-col-7 item-left">
+                                                <div class="p-col-1 item-left">
                                                     <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="systems.erpVatAwtGroupOverrideFlag" (onChange)="triggerErpVatAwtEvent(systems.erpVatAwtGroupOverrideFlag)"></p-checkbox><label class="label"></label>
+                                                </div>
+                                                <div class="p-col-6 item-left">
+                                                        <span *ngIf="isDisableErpVatAwt">Current Value: {{banInsertData.overrideErpVatAwtGroupName}} </span>
                                                 </div>
                                         </div>
                                         <div class="p-grid ">
@@ -449,8 +467,11 @@
                                         </div>
                                         <div class="p-grid ">
                                                 <div class="p-col-5 item-right">Direct Offset BUC Override</div>
-                                                <div class="p-col-7 item-left">
+                                                <div class="p-col-1 item-left">
                                                     <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="systems.directOffsetBucOverrideFlag" (onChange)="triggerDirOffsetEvent(systems.directOffsetBucOverrideFlag)"></p-checkbox><label class="label"></label>
+                                                </div>
+                                                <div class="p-col-6 item-left">
+                                                        <span *ngIf="isDisableDirOSAwt">Current Value: {{banInsertData.overrideDirectOffsetBuc}} </span>
                                                 </div>
                                         </div>
                                         <div class="p-grid ">
@@ -461,8 +482,11 @@
                                         </div>
                                         <div class="p-grid ">
                                                 <div class="p-col-5 item-right">Indirect Offset BUC Override</div>
-                                                <div class="p-col-7 item-left">
+                                                <div class="p-col-1 item-left">
                                                     <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="systems.indirectOffsetBucOverrideFlag" (onChange)="triggerindirectOffsetEvent(systems.indirectOffsetBucOverrideFlag)"></p-checkbox><label class="label"></label>
+                                                </div>
+                                                <div class="p-col-6 item-left">
+                                                        <span *ngIf="isDisableIndirOSAwt">Current Value: {{banInsertData.overrideIndirectOffsetBuc}} </span>
                                                 </div>
                                         </div>
                                         <div class="p-grid ">
