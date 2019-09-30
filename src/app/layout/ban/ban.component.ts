@@ -963,17 +963,17 @@ public cloneFlag = false;
 
   onSelectTargetFetch(item:any){
     //console.log("clicked"+item.serviceTypeId);
-    this.systems = this.serviceList.filter(x => x.serviceTypeId == item.serviceTypeId)[0];
+    var testSystem = this.serviceList.filter(x => x.serviceTypeId == item.serviceTypeId)[0];
     //console.log(this.systems);
     
     //trigger events
-    this.triggerUnspscEvent(this.systems.unspscOverrideFlag);
-    this.triggerCostCenterEvent(this.systems.costCentreOverrideFlag);
-    this.triggerErpPmtEvent(this.systems.erpPmtOverrideFlag);
-    this.triggerErpAwtGrpEvent(this.systems.erpAwtGroupNameOverrideFlag);
-    this.triggerErpVatAwtEvent(this.systems.erpVatAwtGroupOverrideFlag);
-    this.triggerDirOffsetEvent(this.systems.directOffsetBucOverrideFlag);
-    this.triggerindirectOffsetEvent(this.systems.indirectOffsetBucOverrideFlag);
+    this.triggerUnspscEvent(testSystem.unspscOverrideFlag);
+    this.triggerCostCenterEvent(testSystem.costCentreOverrideFlag);
+    this.triggerErpPmtEvent(testSystem.erpPmtOverrideFlag);
+    this.triggerErpAwtGrpEvent(testSystem.erpAwtGroupNameOverrideFlag);
+    this.triggerErpVatAwtEvent(testSystem.erpVatAwtGroupOverrideFlag);
+    this.triggerDirOffsetEvent(testSystem.directOffsetBucOverrideFlag);
+    this.triggerindirectOffsetEvent(testSystem.indirectOffsetBucOverrideFlag);
   }
       
   cloneRecord() {
