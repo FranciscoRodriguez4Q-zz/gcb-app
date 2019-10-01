@@ -86,7 +86,7 @@
                                 <div class="p-grid ">
                                                 <div class="p-col-4 item-right"><span class="required">*</span>Mode</div>
                                                 <div class="p-col-8 item-left">
-                                                    <p-dropdown [options]="modeReferenceDataList" [style]="{'width': '100%'}"  [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.mode"></p-dropdown>
+                                                    <p-dropdown [options]="modeReferenceDataList" [style]="{'width': '100%'}"  [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.mode"  (onChange)="onModeChange($event)"></p-dropdown>
                                                 </div>
                                 </div>
                                 <div class="p-grid ">

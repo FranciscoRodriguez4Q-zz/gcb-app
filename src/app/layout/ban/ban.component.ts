@@ -377,7 +377,7 @@ public cloneFlag = false;
   upsertBan() {
     this.errorMessage = "";
     if (this.validation()) {
-      debugger;
+
       /* if (this.banInsertData.cloneFlag){
         this.banInsertData.cloneOfId = this.banInsertData.banId;
         this.banInsertData.banId = 0;
@@ -998,10 +998,10 @@ public cloneFlag = false;
   //  this.collapsed=true;
   //  this.panelExpansionFlag = true;
   this.banInsertData.mode = "TEST";
-  this.banInsertData.invoiceName = "";
-  this.banInsertData.vendorPaidBy = "";
-  this.banInsertData.liquidatedVia = "";
-    this.banInsertData.taxEngine = "";
+  this.banInsertData.invoiceName = "UNSPECIFIED";
+  this.banInsertData.vendorPaidBy = "UNSPECIFIED";
+  this.banInsertData.liquidatedVia = "UNSPECIFIED";
+    this.banInsertData.taxEngine = "UNSPECIFIED";
      this.banInsertData.banId = 0;
     // this.banService.getCloneBillingModelTypes(this.banInsertData.banId).subscribe(
     //   refData => {
@@ -1088,5 +1088,21 @@ public cloneFlag = false;
       indirectOffsetBucOverrideFlag:"",
     }; 
     this.serviceList=[];
+  }
+
+  onModeChange(mode : any) {
+    debugger;
+    if (mode.value === "PRODUCTION") { 
+      this.banService.modeChange(this.banInsertData).subscribe(
+        refData => {
+          this.saveMessage = refData;
+          if (this.saveMessage.status === "Success") {
+            this.popupErrorMessage = this.saveMessage.message;
+            this.open(this.errorMessagePopUp);
+          }
+        },
+        error => {
+        });
+    }
   }
 }
