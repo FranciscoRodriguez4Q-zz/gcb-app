@@ -26,6 +26,11 @@ export class BuyerService {
   public upsertBuyer(buyerInsertData): Observable<Object> {
      return this.http.post(environment.APP_BASE_URL_SERVICE_ENDPOINT+"/buyer/buyers", buyerInsertData);
    }
+   
+   public getGoldNetList(): Observable<Object> {
+    return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT+"/buyer/goldNet");
+  }
+
   private handleError(error){
     return throwError(error + "UrlConstants.SERVER_ERROR");
   }

@@ -12,7 +12,7 @@
                             Gold ID
                     </div>
                     <div class="p-col-4">
-                        <input class="form-control" style="width: 35%" [(ngModel)]="buyerInsertData.goldId" (ngModelChange)="buyerInsertData.goldId = $event.toUpperCase()">
+                       <p-dropdown [options]="goldNetIdReferenceDataList" [style]="{'width': '100%'}" [(ngModel)]="buyerInsertData.goldId" [filter]="true" placeholder="Select"></p-dropdown>
                     </div>
               </div>
               <div class="p-grid">

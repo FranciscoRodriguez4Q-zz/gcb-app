@@ -161,7 +161,8 @@ public cloneFlag = false;
     { field: 'invoiceName', header: 'Invoice Name', width: '20%' },
     { field: 'vendorPaidBy', header: 'Vendor Paid By', width: '20%' },
     { field: 'liquidatedVia', header: 'Liquidated Via', width: '20%' },
-    { field: 'taxEngine', header: 'TaxEngine', width: '20%' }
+    { field: 'taxEngine', header: 'TaxEngine', width: '20%' },
+	{ field: 'mode', header: 'Mode', width: '20%' }
   ];
 
  
@@ -558,7 +559,9 @@ public cloneFlag = false;
         let arr: any = [];
         this.buyerReferenceData = refData;  
         for (let data of this.buyerReferenceData) {
-          let labelService = data.erpBuyerLeName;
+         // let labelService = data.erpBuyerLeName;
+		 let labelService = data.erpBuyerLeName +" | " +data.erpOuEntityName +" | "+data.goldId;
+
           this.buyerReferenceDataList.push({ label: labelService, value: data.buyerId })
         }
       },
