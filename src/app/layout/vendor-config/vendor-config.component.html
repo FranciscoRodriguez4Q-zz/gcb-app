@@ -120,7 +120,7 @@
     <div class="p-col-12" style="text-align:right">
         <button class="ge-button -fill--solid" (click)="upsertVendorConfig()">Submit</button>
         <button class="ge-button -fill--solid" (click)="clearAllFilters()">Cancel</button>
-        <app-file-download [dwnData]="dwnVendor" [colsHeader]="this.reportHeader" [fileName]="fileName"  (dwnAction)="getAllVendor();"></app-file-download>
+        <app-file-download [dwnData]="dwnVendor" [colsHeader]="this.reportHeader" [fileName]="fileName"  (dwnAction)="getVendorDetailGridData();"></app-file-download>
 
     </div>
 </div>
