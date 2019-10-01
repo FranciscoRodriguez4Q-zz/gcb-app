@@ -1002,7 +1002,8 @@ public cloneFlag = false;
   this.banInsertData.vendorPaidBy = "UNSPECIFIED";
   this.banInsertData.liquidatedVia = "UNSPECIFIED";
     this.banInsertData.taxEngine = "UNSPECIFIED";
-     this.banInsertData.banId = 0;
+    this.banInsertData.banId = 0;
+    this.banInsertData.liquidateBillRoutingId = "";
     // this.banService.getCloneBillingModelTypes(this.banInsertData.banId).subscribe(
     //   refData => {
     //     let arr: any = [];
