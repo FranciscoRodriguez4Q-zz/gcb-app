@@ -161,7 +161,8 @@ public cloneFlag = false;
     { field: 'invoiceName', header: 'Invoice Name', width: '20%' },
     { field: 'vendorPaidBy', header: 'Vendor Paid By', width: '20%' },
     { field: 'liquidatedVia', header: 'Liquidated Via', width: '20%' },
-    { field: 'taxEngine', header: 'TaxEngine', width: '20%' }
+    { field: 'taxEngine', header: 'TaxEngine', width: '20%' },
+	{ field: 'mode', header: 'Mode', width: '20%' }
   ];
 
  
@@ -225,9 +226,11 @@ public cloneFlag = false;
     console.log("radio button click" + this.banId);
     this.editFlag = true;
     this.formMode="Modify";
+    this.clearServiceList();
     this.banService.getBanById(banId).subscribe(
       refData => {
         this.banInsertData = refData;
+        this.setBuyerDetails();
         this.getSourceServiceType(banId);
       },
       error => {
@@ -247,6 +250,7 @@ public cloneFlag = false;
           }
         }
       )   
+      this.tableValueChanged(this.banInsertData.erpAwtGroupName,this.banInsertData.erpVatAwtGroupName,this.banInsertData.erpPaymentTerms,this.banInsertData.directOffsetBuc,this.banInsertData.indirectOffsetBuc);
   }
 
   open(content) {
@@ -373,7 +377,7 @@ public cloneFlag = false;
   upsertBan() {
     this.errorMessage = "";
     if (this.validation()) {
-      debugger;
+
       /* if (this.banInsertData.cloneFlag){
         this.banInsertData.cloneOfId = this.banInsertData.banId;
         this.banInsertData.banId = 0;
@@ -555,7 +559,9 @@ public cloneFlag = false;
         let arr: any = [];
         this.buyerReferenceData = refData;  
         for (let data of this.buyerReferenceData) {
-          let labelService = data.erpBuyerLeName;
+         // let labelService = data.erpBuyerLeName;
+		 let labelService = data.erpBuyerLeName +" | " +data.erpOuEntityName +" | "+data.goldId;
+
           this.buyerReferenceDataList.push({ label: labelService, value: data.buyerId })
         }
       },
@@ -654,10 +660,12 @@ public cloneFlag = false;
   onSelectTarget(item:any){
     //this.getClearData();
     console.log("clicked"+item.items[0].serviceTypeId);
+    if(null != item.items[0].serviceTypeId){}
     this.systems = this.serviceList.filter(x => x.serviceTypeId == item.items[0].serviceTypeId)[0];
-    console.log(this.systems);
-    
-    //trigger events
+    this.triggerEvent();
+  }
+  triggerEvent(){
+    console.log("trgger handle: "+this.systems);
     this.triggerUnspscEvent(this.systems.unspscOverrideFlag);
     this.triggerCostCenterEvent(this.systems.costCentreOverrideFlag);
     this.triggerErpPmtEvent(this.systems.erpPmtOverrideFlag);
@@ -666,7 +674,6 @@ public cloneFlag = false;
     this.triggerDirOffsetEvent(this.systems.directOffsetBucOverrideFlag);
     this.triggerindirectOffsetEvent(this.systems.indirectOffsetBucOverrideFlag);
   }
-
   isDisabledUnspsc = true;
   isDisableCostCenter = true;
   isDisableErpPmt = true;
@@ -676,49 +683,49 @@ public cloneFlag = false;
   isDisableIndirOSAwt = true;
   triggerUnspscEvent(unspscOverrideFlag) {
     if(unspscOverrideFlag)
-      this.isDisabledUnspsc = !this.isDisabledUnspsc;
+      this.isDisabledUnspsc = false;
     else
     this.isDisabledUnspsc = true;
       return;
   }
   triggerCostCenterEvent(costCentreOverrideFlag){
     if(costCentreOverrideFlag)
-      this.isDisableCostCenter = !this.isDisableCostCenter;
+      this.isDisableCostCenter = false;
     else
      this.isDisableCostCenter = true;
       return;
   }
   triggerErpPmtEvent(erpPmtOverrideFlag){
     if(erpPmtOverrideFlag)
-    this.isDisableErpPmt = !this.isDisableErpPmt;
+    this.isDisableErpPmt = false;
     else
     this.isDisableErpPmt =true;
       return;
   } 
   triggerErpAwtGrpEvent(erpAwtGroupNameOverrideFlag){
     if(erpAwtGroupNameOverrideFlag)
-    this.isDisableErpAwtGrp = !this.isDisableErpAwtGrp;
+    this.isDisableErpAwtGrp = false;
     else
     this.isDisableErpAwtGrp =true;
     return;
   }
   triggerErpVatAwtEvent(erpVatAwtGroupOverrideFlag){
     if(erpVatAwtGroupOverrideFlag)
-    this.isDisableErpVatAwt = !this.isDisableErpVatAwt;
+    this.isDisableErpVatAwt = false;
     else
     this.isDisableErpVatAwt = true;
     return;
   }
   triggerDirOffsetEvent(directOffsetBucOverrideFlag){
     if(directOffsetBucOverrideFlag)
-    this.isDisableDirOSAwt = !this.isDisableDirOSAwt;
+    this.isDisableDirOSAwt = false;
     else
     this.isDisableDirOSAwt = true;
     return;
   }
   triggerindirectOffsetEvent(indirectOffsetBucOverrideFlag){
     if(indirectOffsetBucOverrideFlag)
-      this.isDisableIndirOSAwt = !this.isDisableIndirOSAwt;
+      this.isDisableIndirOSAwt = false;
     else
       this.isDisableIndirOSAwt =true;
     return;
@@ -965,7 +972,13 @@ public cloneFlag = false;
     //console.log("clicked"+item.serviceTypeId);
     var testSystem = this.serviceList.filter(x => x.serviceTypeId == item.serviceTypeId)[0];
     //console.log(this.systems);
-    
+    this.banInsertData.serviceTypeId = testSystem.serviceTypeId;
+      this.banService.getOtherServiceDet(this.banInsertData).subscribe(
+        refData => {
+          this.otherServiceData=refData;    
+          testSystem.unspsc=this.otherServiceData.unspsc;
+          testSystem.costCenter=this.otherServiceData.costCenter;     
+        })
     //trigger events
     this.triggerUnspscEvent(testSystem.unspscOverrideFlag);
     this.triggerCostCenterEvent(testSystem.costCentreOverrideFlag);
@@ -974,6 +987,7 @@ public cloneFlag = false;
     this.triggerErpVatAwtEvent(testSystem.erpVatAwtGroupOverrideFlag);
     this.triggerDirOffsetEvent(testSystem.directOffsetBucOverrideFlag);
     this.triggerindirectOffsetEvent(testSystem.indirectOffsetBucOverrideFlag);
+    this.tableValueChanged(this.banInsertData.erpAwtGroupName,this.banInsertData.erpVatAwtGroupName,this.banInsertData.erpPaymentTerms,this.banInsertData.directOffsetBuc,this.banInsertData.indirectOffsetBuc)
   }
       
   cloneRecord() {
@@ -984,11 +998,12 @@ public cloneFlag = false;
   //  this.collapsed=true;
   //  this.panelExpansionFlag = true;
   this.banInsertData.mode = "TEST";
-  this.banInsertData.invoiceName = "";
-  this.banInsertData.vendorPaidBy = "";
-  this.banInsertData.liquidatedVia = "";
-    this.banInsertData.taxEngine = "";
-     this.banInsertData.banId = 0;
+  this.banInsertData.invoiceName = "UNSPECIFIED";
+  this.banInsertData.vendorPaidBy = "UNSPECIFIED";
+  this.banInsertData.liquidatedVia = "UNSPECIFIED";
+    this.banInsertData.taxEngine = "UNSPECIFIED";
+    this.banInsertData.banId = 0;
+    this.banInsertData.liquidateBillRoutingId = "";
     // this.banService.getCloneBillingModelTypes(this.banInsertData.banId).subscribe(
     //   refData => {
     //     let arr: any = [];
@@ -1074,5 +1089,21 @@ public cloneFlag = false;
       indirectOffsetBucOverrideFlag:"",
     }; 
     this.serviceList=[];
+  }
+
+  onModeChange(mode : any) {
+    debugger;
+    if (mode.value === "PRODUCTION") { 
+      this.banService.modeChange(this.banInsertData).subscribe(
+        refData => {
+          this.saveMessage = refData;
+          if (this.saveMessage.status === "Success") {
+            this.popupErrorMessage = this.saveMessage.message;
+            this.open(this.errorMessagePopUp);
+          }
+        },
+        error => {
+        });
+    }
   }
 }

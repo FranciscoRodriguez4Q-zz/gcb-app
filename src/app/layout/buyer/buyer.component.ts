@@ -49,6 +49,9 @@ export class BuyerComponent implements OnInit {
   countryCodeReferenceDataList: SelectItem[] = [];
   public formMode="New";
   
+  public goldNetReferenceData: any;
+ goldNetIdReferenceDataList:SelectItem[] = [];
+  
   constructor(private buyerService: BuyerService,private modalService: NgbModal) { }
   
 
@@ -80,6 +83,7 @@ export class BuyerComponent implements OnInit {
       this.downloadCols.push(this.cols[i].header);
     }    
     this.getAllCountryData();
+	this.getGoldNetList();
   }
 
   getAllBuyerDetails() {
@@ -119,7 +123,21 @@ export class BuyerComponent implements OnInit {
       error => {
       });
   }
-
+  getGoldNetList(){
+    this.buyerService.getGoldNetList().subscribe(
+      refData => {
+        let arr: any = [];
+        this.goldNetReferenceData = refData;
+        this.goldNetIdReferenceDataList.push({ label: "Select", value: "Select" })
+  
+       for (let data of this.goldNetReferenceData) {
+          let labelCountry =  data.goldId + " | " + data.goldnetName+ " | " + data.countryCode;
+          this.goldNetIdReferenceDataList.push({ label: labelCountry, value: data.goldId })
+        }
+      },
+      error => {
+      });
+  }
   showSelectedData(buyerId) {
     console.log("radio button click" + this.buyerId);
     this.editFlag = true;
