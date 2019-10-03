@@ -34,9 +34,9 @@ export class ProductComponent implements OnInit {
 
   public fileName : any ="Product";
   public cols = [
+     { field: 'billProcessName', header: 'Process Name', width: '15%' },
     { field: 'productName', header: 'Product Name', width: '15%' },
     { field: 'productCode', header: 'Product Code', width: '15%' },
-    { field: 'billProcessName', header: 'Process Name', width: '15%' },
    // { field: 'productType', header: 'Product Type', width: '15%' },
     { field: 'unspsc', header: 'UNSPSC', width: '15%' },
     { field: 'updatedBy', header: 'Updated By', width: '15%' },

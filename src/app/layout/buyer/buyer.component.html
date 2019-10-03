@@ -9,7 +9,7 @@
                         <input class="form-control" style="width: 100%" [(ngModel)]="buyerInsertData.erpBuyerLeName" (ngModelChange)="buyerInsertData.erpBuyerLeName = $event.toUpperCase()">
                     </div>
                     <div class="p-col-2 item-right">
-                            Gold ID
+                           Gold ID/Name
                     </div>
                     <div class="p-col-4">
                        <p-dropdown [options]="goldNetIdReferenceDataList" [style]="{'width': '100%'}" [(ngModel)]="buyerInsertData.goldId" [filter]="true" placeholder="Select"></p-dropdown>
@@ -21,13 +21,7 @@
                      </div>
                      <div class="p-col-4 item-left">
                             <input class="form-control" style="width: 100%" [(ngModel)]="buyerInsertData.erpOuEntityName" (ngModelChange)="buyerInsertData.erpOuEntityName = $event.toUpperCase()">
-                     </div>
-                     <div class="p-col-2 item-right">
-                        GoldNet Name
-                      </div>
-                      <div class="p-col-4">
-                         <input class="form-control" style="width: 100%" [(ngModel)]="buyerInsertData.goldNetName" (ngModelChange)="buyerInsertData.goldNetName = $event.toUpperCase()">
-                      </div>
+                     </div>                    
               </div>
               <div class="p-grid">
                   <div class="p-col-2 item-right">

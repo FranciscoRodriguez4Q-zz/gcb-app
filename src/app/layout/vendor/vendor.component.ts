@@ -59,6 +59,7 @@ export class VendorComponent implements OnInit {
   
 
   public cols = [
+    { field: 'hlVendorName', header: 'HL Vendor', width: '10%' },
     { field: 'vendorLegalEntityName', header: 'Vendor Name', width: '10%' },
     { field: 'active', header: 'Active', width: '5%' },
     { field: 'updatedBy', header: 'Updated By', width: '10%' },

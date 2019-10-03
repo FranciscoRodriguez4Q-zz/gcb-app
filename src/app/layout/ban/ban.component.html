@@ -40,7 +40,7 @@
                     <div class="p-grid ">
                         <div class="p-col-4 item-right"><span class="required">*</span>Process Name</div>
                         <div class="p-col-8 item-left">
-                                <p-dropdown [options]="billProcessReferenceList" [style]="{'width': '100%'}"  [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.billProcessId" (onFocus)="getServiceType()"></p-dropdown>
+                                <p-dropdown [options]="billProcessReferenceList" [style]="{'width': '100%'}"  [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.billProcessId"></p-dropdown>
                         </div>
                     </div>
                     <div class="p-grid ">
@@ -140,7 +140,7 @@
                                         <p-checkbox  binary="true" labelStyleClass="chkLabel" (click)="enableGoldIdText()" [(ngModel)]="banInsertData.goldIdOverrideFlag"></p-checkbox><label class="label"></label>
                                 </div>
                                 <div class="p-col-5 item-left">
-                                        <span>Current Value: {{banInsertData.currentGoldId}} </span>
+                                        <span>Original/Default value: {{banInsertData.currentGoldId}} </span>
                                 </div>
                         </div>
                         <div class="p-grid ">
@@ -396,7 +396,7 @@
                                                 <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="systems.unspscOverrideFlag" (onChange)="triggerUnspscEvent(systems.unspscOverrideFlag)"></p-checkbox><label class="label"></label>
                                             </div>
                                             <div class="p-col-6 item-left">
-                                                <span>Current Value: {{systems.unspsc}} </span>
+                                                <span>Original/Default value: {{systems.unspsc}} </span>
                                             </div>
                                         </div>
                                         <div class="p-grid ">
@@ -411,7 +411,7 @@
                                                     <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="systems.costCentreOverrideFlag" (onChange)="triggerCostCenterEvent(systems.costCentreOverrideFlag)"></p-checkbox><label class="label"></label>
                                                 </div>
                                                 <div class="p-col-6 item-left">
-                                                        <span>Current Value: {{systems.costCenter}} </span>
+                                                        <span>Original/Default value: {{systems.costCenter}} </span>
                                                 </div>
                                         </div>
                                         <div class="p-grid ">
@@ -426,7 +426,7 @@
                                                 <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="systems.erpPmtOverrideFlag" (onChange)="triggerErpPmtEvent(systems.erpPmtOverrideFlag)"></p-checkbox><label class="label"></label>
                                             </div>
                                             <div class="p-col-6 item-left">
-                                                <span>Current Value: {{banInsertData.overrideErpPmtTerms}} </span>
+                                                <span>Original/Default value: {{banInsertData.overrideErpPmtTerms}} </span>
                                             </div>
                                         </div>
                                         <div class="p-grid ">
@@ -441,7 +441,7 @@
                                                     <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="systems.erpAwtGroupNameOverrideFlag" (onChange)="triggerErpAwtGrpEvent(systems.erpAwtGroupNameOverrideFlag)"></p-checkbox><label class="label"></label>
                                                 </div>
                                                 <div class="p-col-6 item-left">
-                                                        <span>Current Value: {{banInsertData.overrideErpAwtGroupName}} </span>
+                                                        <span>Original/Default value: {{banInsertData.overrideErpAwtGroupName}} </span>
                                                 </div>
                                         </div>
                                         <div class="p-grid ">
@@ -456,7 +456,7 @@
                                                     <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="systems.erpVatAwtGroupOverrideFlag" (onChange)="triggerErpVatAwtEvent(systems.erpVatAwtGroupOverrideFlag)"></p-checkbox><label class="label"></label>
                                                 </div>
                                                 <div class="p-col-6 item-left">
-                                                        <span>Current Value: {{banInsertData.overrideErpVatAwtGroupName}} </span>
+                                                        <span>Original/Default value: {{banInsertData.overrideErpVatAwtGroupName}} </span>
                                                 </div>
                                         </div>
                                         <div class="p-grid ">
@@ -471,7 +471,7 @@
                                                     <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="systems.directOffsetBucOverrideFlag" (onChange)="triggerDirOffsetEvent(systems.directOffsetBucOverrideFlag)"></p-checkbox><label class="label"></label>
                                                 </div>
                                                 <div class="p-col-6 item-left">
-                                                        <span>Current Value: {{banInsertData.overrideDirectOffsetBuc}} </span>
+                                                        <span>Original/Default value: {{banInsertData.overrideDirectOffsetBuc}} </span>
                                                 </div>
                                         </div>
                                         <div class="p-grid ">
@@ -486,7 +486,7 @@
                                                     <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="systems.indirectOffsetBucOverrideFlag" (onChange)="triggerindirectOffsetEvent(systems.indirectOffsetBucOverrideFlag)"></p-checkbox><label class="label"></label>
                                                 </div>
                                                 <div class="p-col-6 item-left">
-                                                        <span>Current Value: {{banInsertData.overrideIndirectOffsetBuc}} </span>
+                                                        <span>Original/Default value: {{banInsertData.overrideIndirectOffsetBuc}} </span>
                                                 </div>
                                         </div>
                                         <div class="p-grid ">
@@ -624,5 +624,20 @@
                 <button type="button" class="btn btn-outline-dark" (click)="c('Save click');cloneRecord() " *ngIf="cloneFlag">Yes</button>
                 <button type="button" class="btn btn-outline-dark" (click)="c('Save click');cloneRec(false) " *ngIf="cloneFlag">No</button>            
                 <button type="button" class="btn btn-outline-dark" (click)="c('Save click'); " *ngIf="!cloneFlag">Ok</button>
+        </div>
+      </ng-template>
+      <ng-template #content2 let-c="close" let-d="dismiss">
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">Message</h4>
+            <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <p class="text-center">{{popupErrorMessage}}</p>
+        </div>
+        <div class="modal-footer">
+                <button type="button" class="btn btn-outline-dark" (click)="c('Save click');changeMode(true) " >Yes</button>
+                <button type="button" class="btn btn-outline-dark" (click)="c('Save click');changeMode(false) " >No</button>            
         </div>
       </ng-template>
