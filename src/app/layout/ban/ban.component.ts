@@ -22,7 +22,8 @@ public vendorServiceType : any ={
 	"billedFromLocationId":"",
 	"billProcessId":""
 };
-public cloneFlag = false;
+  public cloneFlag = false;
+  public modeFlag = false;
   public billingModelType: any = [];
 
   public banInsertData: any = {
@@ -104,6 +105,7 @@ public cloneFlag = false;
   public popupErrorMessage: any;
   public editFlag = false;
   @ViewChild('content1') errorMessagePopUp;
+  @ViewChild('content2') modeMessagePopUp;
   closeResult: string;
   public formMode="New";
   public sourceSystem:any = [];
@@ -318,6 +320,7 @@ public cloneFlag = false;
     };
     this.editFlag = false;
     this.cloneFlag = false;
+    this.modeFlag = false;
     this.errorMessage = "";
    // this.popupErrorMessage = "";
     this.expandAllPanels();
@@ -386,7 +389,7 @@ public cloneFlag = false;
         this.banInsertData.liquidatedVia = this.banInsertData.cloneLiquidatedVia;
         this.banInsertData.taxEngine = this.banInsertData.cloneTaxEngine; 
       } */
-      this.cloneFlag = false;
+      //this.cloneFlag = false;
 
       // this.banService.getBillRefIDTokensAssociated(this.banInsertData.liquidateBillRoutingId,
       //   this.regKey).subscribe(
@@ -426,6 +429,8 @@ public cloneFlag = false;
           if (!this.saveMessage.Error) {
             this.clearAllFilters();
             this.editFlag = false;
+            this.cloneFlag = false;
+
           }
         },
         error => {
@@ -1052,6 +1057,7 @@ public cloneFlag = false;
     this.popupErrorMessage = "";
     if (flag) {
       this.cloneFlag = true;
+      this.modeFlag = false;
       this.popupErrorMessage = "Do you want to Clone the record?";
       this.open(this.errorMessagePopUp);
     }
@@ -1097,13 +1103,22 @@ public cloneFlag = false;
       this.banService.modeChange(this.banInsertData).subscribe(
         refData => {
           this.saveMessage = refData;
+          this.modeFlag = false;
           if (this.saveMessage.status === "Success") {
             this.popupErrorMessage = this.saveMessage.message;
-            this.open(this.errorMessagePopUp);
+            this.open(this.modeMessagePopUp);
           }
         },
         error => {
         });
+    }
+  }
+
+  changeMode(flag) {
+    if (flag) {
+      this.banInsertData.mode = "PRODUCTION";
+    } else {
+      this.banInsertData.mode = "TEST";
     }
   }
 }
