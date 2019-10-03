@@ -119,7 +119,8 @@ getAllCurrencyData() {
     refData => {
       this.currencyReferenceData = refData;
       for (let data of this.currencyReferenceData) {
-        this.currencyReferenceDataList.push({ label: data.currencyCode, value: data.currencyCode })
+        let currencyLebel = data.currencyCode+" | "+data.currencyDescription;
+        this.currencyReferenceDataList.push({ label: currencyLebel, value: data.currencyCode })
       }
     },
     error => {
