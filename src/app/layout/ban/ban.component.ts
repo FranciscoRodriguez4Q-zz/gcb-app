@@ -27,7 +27,6 @@ public vendorServiceType : any ={
   public billingModelType: any = [];
 
   public banInsertData: any = {
-      banId:"",
       billProcessName: "",
       billProcessId:"",
       vendorBan: "",
@@ -62,7 +61,7 @@ public vendorServiceType : any ={
       vatUnspsc: "",
       buyerPaymentApprovalEmail: "",
       buyerContactSso: "",
-      focusGroup: "",
+      focusGroup: [],
       shipFromAddress: "",
       shipToCountry: 0,
       shipToProvince: "",
@@ -78,7 +77,8 @@ public vendorServiceType : any ={
       vendorPaidBy: "UNSPECIFIED",
       liquidatedVia: "UNSPECIFIED",
       taxEngine: "UNSPECIFIED",
-      cloneFlag : false
+      cloneFlag : false,
+      cloneOfId : ""
     };
   
 
@@ -316,7 +316,8 @@ public vendorServiceType : any ={
       vendorPaidBy: "",
       liquidatedVia: "",
       taxEngine: "",
-      cloneFlag : false
+      cloneFlag : false,
+      cloneOfId : ""
     };
     this.editFlag = false;
     this.cloneFlag = false;
@@ -1070,13 +1071,13 @@ public vendorServiceType : any ={
   clearServiceList(){
     this.sourceSystem=[];
     this.targetSystem=[];
-    this.triggerUnspscEvent(this.systems.unspscOverrideFlag);
-    this.triggerCostCenterEvent(this.systems.costCentreOverrideFlag);
-    this.triggerErpPmtEvent(this.systems.erpPmtOverrideFlag);
-    this.triggerErpAwtGrpEvent(this.systems.erpAwtGroupNameOverrideFlag);
-    this.triggerErpVatAwtEvent(this.systems.erpVatAwtGroupOverrideFlag);
-    this.triggerDirOffsetEvent(this.systems.directOffsetBucOverrideFlag);
-    this.triggerindirectOffsetEvent(this.systems.indirectOffsetBucOverrideFlag);
+    this.triggerUnspscEvent(false);
+    this.triggerCostCenterEvent(false);
+    this.triggerErpPmtEvent(false);
+    this.triggerErpAwtGrpEvent(false);
+    this.triggerErpVatAwtEvent(false);
+    this.triggerDirOffsetEvent(false);
+    this.triggerindirectOffsetEvent(false);
     this.systems ={
       serviceTypeId: "", 
       overrideErpPmtTerms: "",
