@@ -11,7 +11,7 @@ export class VendorConfigService
     constructor(private http: HttpClient) { }
 
     public getAllVendors(): Observable<Object> {
-      return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT+"/vendor/vendor-details");
+      return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT+"/vendor/vendor-names");
     }
 
     public getAllCurrencyCode(): Observable<Object> {

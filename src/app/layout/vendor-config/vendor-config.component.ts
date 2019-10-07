@@ -176,7 +176,7 @@ clearAllFilters() {
     lastUpdated:"",
     lastUpdatedBy:""
     };
-  this.popupErrorMessage = "";
+  //this.popupErrorMessage = "";
   this.getVendorDetailGridData();
 }
 
@@ -191,10 +191,7 @@ upsertVendorConfig(){
           this.saveMessage = refData;
           this.popupErrorMessage =  this.saveMessage.message;
           this.open(this.errorMessagePopUp);
-          this.getVendorDetailGridData();
-              if(!this.saveMessage.Error){
-              this.clearAllFilters();
-              }
+          this.clearAllFilters();
         },
         error => {
           this.open("An system error occured");

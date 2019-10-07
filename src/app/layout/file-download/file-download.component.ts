@@ -120,7 +120,18 @@ export class FileDownloadComponent implements OnInit {
   getVendorData() {
     this.fileDownloadService.getVendorData(this.colsHeader).subscribe(
       refData => {
-        this.dwnData = refData;
+      //this.dwnData  = refData;
+        let dwnObj:any= refData;
+        dwnObj.map(item => {
+          return {
+              hlVendorName:item.hlVendorName,
+              vendorLegalEntityName: item.vendorLegalEntityName,
+              active: item.active,
+              updatedBy: item.updatedBy,
+              lastUpdatedDate: item.lastUpdatedDate
+          }
+      }).forEach(item => this.dwnData.push(item));
+
         this.downloadFile();
       },
       error => {

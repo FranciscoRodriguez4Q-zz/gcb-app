@@ -83,12 +83,14 @@ export class VendorComponent implements OnInit {
 
         this.vendorData.map(item => {
           return {
+              hlVendorName:item.hlVendorName,
               vendorLegalEntityName: item.vendorLegalEntityName,
               active: item.active,
               updatedBy: item.updatedBy,
               lastUpdatedDate: item.lastUpdatedDate
           }
       }).forEach(item => this.venDwnData.push(item));
+      console.log("This is the manipulated vendorDwm",this.venDwnData);
       },
       error => {
       });
