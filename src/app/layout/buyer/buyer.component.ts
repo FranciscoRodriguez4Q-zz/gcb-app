@@ -210,9 +210,9 @@ export class BuyerComponent implements OnInit {
           if(!this.saveMessage.Error == undefined)
             this.errorMessage = "The "+this.buyerInsertData.erpBuyerLeName+" was already exits.";
           if(this.saveMessage.Error == false)
-            this.errorMessage = "The "+this.buyerInsertData.erpBuyerLeName+" was Suceesfully Created.";
+            this.errorMessage = this.saveMessage.message;
           else
-            this.errorMessage =  "The "+this.buyerInsertData.erpBuyerLeName+" not saved successfully.";
+            this.errorMessage =  this.saveMessage.message;
           this.popupErrorMessage =  this.errorMessage;
           this.open(this.errorMessagePopUp);
           this.getAllBuyerDetails();
