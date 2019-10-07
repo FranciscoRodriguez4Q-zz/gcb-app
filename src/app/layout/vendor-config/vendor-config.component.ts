@@ -46,6 +46,10 @@ public saveMessage: any = [];
 @ViewChild('content1') errorMessagePopUp;
 closeResult: string;
 public editFlag: boolean;
+public vendorCode:any;
+public updatedBy:any;
+public lastUpdated:any;
+public downloadCols = [];
 
 public vendorConfigDto : any ={vendorConfigId:0,
 vendorEntityId:"",
@@ -89,7 +93,12 @@ ngOnInit() {
     this.getAllVendorsData();
     this.getAllCountryData();
     this.getAllCurrencyData();
-    this.getVendorDetailGridData();
+    
+    for (let i = 0; i < this.cols.length; i++) {
+      // console.log("in Download method"+i);
+      this.downloadCols.push(this.cols[i].header);
+    } 
+    this.getVendorDetailGridData();     
 }
 
 
@@ -147,6 +156,18 @@ getVendorDetailGridData() {
     refData => {
       this.vendorGridData = refData;
       this.dwnVendor=refData;
+
+      this.dwnVendor.map(item => {
+        return {
+          vendorLegalEntityName: item.vendorLegalEntityName,
+          currencyCode: item.currencyCode,
+          billedFromCountry: item.billedFromCountry,
+          billedToCountry: item.billedToCountry,
+          vendorCode:this.vendorCode,
+          updatedBy:this.updatedBy,
+          lastUpdated:this.lastUpdated,
+        }
+      }).forEach(item => this.dwnVendor.push(item));
     },
     error => {
     });
