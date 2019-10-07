@@ -82,7 +82,7 @@ export class ProductComponent implements OnInit {
               billProcessName: item.billProcessName,
               productType: item.productType, 
               unspsc: item.unspsc,
-              updatedBy: item.uupdatedBypdatedBy,
+              updatedBy: item.updatedBy,
               lastUpdated: item.lastUpdated
             }
         }).forEach(item => this.productDwnData.push(item));
