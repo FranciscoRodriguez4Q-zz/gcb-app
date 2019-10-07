@@ -7,9 +7,11 @@ import {InputSwitchModule} from 'primeng/inputswitch';
 import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 import { LayoutModule } from '../layout.module';
 import {PickListModule} from 'primeng/picklist';
+import { NumberOnlyDirective } from '../../directives/num-only.directive';
+
 
 @NgModule({
-  declarations: [BanComponent],
+  declarations: [BanComponent, NumberOnlyDirective],
   imports: [
     CommonModule,
     BanRoutingModule,

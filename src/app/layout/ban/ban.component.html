@@ -529,7 +529,8 @@
                                         <div class="p-grid ">
                                                 <div class="p-col-5 item-right">VAT Percent</div>
                                                 <div class="p-col-7 item-left">
-                                                        <input class="form-control" [(ngModel)]="systems.vatPercent" (ngModelChange)="systems.vatPercent = $event.toUpperCase()"/>
+                                                        <!-- <input class="form-control" [(ngModel)]="systems.vatPercent" (ngModelChange)="systems.vatPercent = $event.toUpperCase()"/> -->
+                                                        <input class="form-control" [(ngModel)]="systems.vatPercent" number />
                                                 </div>
                                         </div>
                                         <div class="p-grid ">
