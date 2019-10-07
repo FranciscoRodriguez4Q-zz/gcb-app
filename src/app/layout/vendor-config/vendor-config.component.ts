@@ -93,12 +93,13 @@ ngOnInit() {
     this.getAllVendorsData();
     this.getAllCountryData();
     this.getAllCurrencyData();
+    this.getVendorDetailGridData();    
     
     for (let i = 0; i < this.cols.length; i++) {
       // console.log("in Download method"+i);
       this.downloadCols.push(this.cols[i].header);
     } 
-    this.getVendorDetailGridData();     
+     this.getDwnVendorConfigData();
 }
 
 
@@ -151,10 +152,10 @@ getAllCountryData(){
     });
 }
 
-getVendorDetailGridData() {
-  this.vendorConfigService.getVendorGridData().subscribe(
+getDwnVendorConfigData(){
+  this.vendorConfigService.getDwnVendorConfigData().subscribe(
     refData => {
-      this.vendorGridData = refData;
+      //this.vendorGridData = refData;
       this.dwnVendor=refData;
 
       this.dwnVendor.map(item => {
@@ -168,6 +169,16 @@ getVendorDetailGridData() {
           lastUpdated:this.lastUpdated,
         }
       }).forEach(item => this.dwnVendor.push(item));
+    },
+    error => {
+    });
+}
+
+getVendorDetailGridData() {
+  this.vendorConfigService.getVendorGridData().subscribe(
+    refData => {
+      this.vendorGridData = refData;
+      //this.dwnVendor=refData;
     },
     error => {
     });

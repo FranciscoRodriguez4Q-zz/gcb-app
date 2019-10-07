@@ -121,12 +121,13 @@
         <button class="ge-button -fill--solid" (click)="upsertVendorConfig()">Submit</button>
         <button class="ge-button -fill--solid" (click)="clearAllFilters()">Cancel</button>
         <app-file-download [dwnData]="dwnVendor" [colsHeader]="this.downloadCols" [fileName]="fileName"></app-file-download>
+
     </div>
 </div>
 </p-fieldset>
 <div class="p-grid">
     <div class="p-col-12">
-     <p-table #tt [columns]="cols" [value]="dwnVendor" [style]="{'margin-top':'2px','width':'100%'}" [rows]="10" [paginator]="true" [pageLinks]="3" [responsive]="true">
+     <p-table #tt [columns]="cols" [value]="vendorGridData" [style]="{'margin-top':'2px','width':'100%'}" [rows]="10" [paginator]="true" [pageLinks]="3" [responsive]="true">
         <ng-template pTemplate="header" let-columns>
             <tr>
               <th [ngStyle]="{'width': '5%'}">Modify</th>

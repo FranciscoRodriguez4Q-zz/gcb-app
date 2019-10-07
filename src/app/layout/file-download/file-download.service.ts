@@ -159,7 +159,7 @@ export class FileDownloadService {
   }
 
   public getVendorConfigData(colsHeader): Observable<Object> {
-    return this.http.post(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/vendorconfig-details",'');
+    return this.http.post(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/dwnVendorConfig",'');
   }
 
   public getBanData(colsHeader): Observable<Object> {

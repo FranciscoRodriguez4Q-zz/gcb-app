@@ -32,5 +32,9 @@ export class VendorConfigService
       public getAllCurrency(): Observable<Object> {
         return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/currency");
       }
+
+      public getDwnVendorConfigData(): Observable<Object> {
+        return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT+"/dwnVendorConfig");
+      }
       
 }
