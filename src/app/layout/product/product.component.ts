@@ -77,10 +77,10 @@ export class ProductComponent implements OnInit {
           this.products=refData;
           this.products.map(item => {
             return {
+              billProcessName: item.billProcessName,
               productName: item.productName,
               productCode: item.productCode,   
-              billProcessName: item.billProcessName,
-              productType: item.productType, 
+              //productType: item.productType, 
               unspsc: item.unspsc,
               updatedBy: item.updatedBy,
               lastUpdated: item.lastUpdated
