@@ -8,7 +8,8 @@ import { Injectable, Optional } from '@angular/core';
   providedIn: 'root',
 })
 export class Globals {
-  public role: string = 'default';
+  public role: string = 'User';
+  public roleNM: string = 'USER';
 
   public sso: string = '999999999';
   public firstName: string = 'Test';

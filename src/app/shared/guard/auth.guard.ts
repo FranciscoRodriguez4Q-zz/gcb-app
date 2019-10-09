@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -9,8 +10,8 @@ import { CookieService } from 'ngx-cookie-service';
 export class AuthGuard implements CanActivate {
 
 
-  constructor( private cookieService: CookieService ) { }
-
+  constructor( private cookieService: CookieService, private router: Router ) { }
+ 
 
   canActivate(
     next: ActivatedRouteSnapshot,
@@ -23,7 +24,7 @@ export class AuthGuard implements CanActivate {
              return true;
              //sessionStorage.getItem
          } else {
-            //this.router.navigate(['/access-denied']);
+            this.router.navigate(['/access-denied']);
             return false;
          }
      return true;
