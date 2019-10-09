@@ -84,6 +84,7 @@
 
 <div class="p-grid">
   <div class="p-col-12">
+    <div class="p-col-12" style="text-align:right"> {{ tt.totalRecords }} records</div>
       <p-table #tt [columns]="cols" [value]="buyerData" [scrollable]="true" [resizableColumns]="true" [reorderableColumns]="true"
           [style]="{'margin-top':'2px','width':'100%'}" [rows]="10" [paginator]="true" [pageLinks]="3" [responsive]="true">
           <ng-template pTemplate="header" let-columns>

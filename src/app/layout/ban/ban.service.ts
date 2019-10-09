@@ -127,4 +127,8 @@ export class BanService {
   public modeChange(banInsertData): Observable<Object> {
     return this.http.post(environment.APP_BASE_URL_SERVICE_ENDPOINT+"/ban/banMode", banInsertData);
   }
+
+  public getUserData(): Observable<Object> {
+    return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/UserDetails");
+   }
 }

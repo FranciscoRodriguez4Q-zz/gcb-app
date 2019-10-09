@@ -207,6 +207,7 @@
 </div> -->
             <div class="ui-g  ">
                 <div class="ui-g-12  " style="width:100%;overflow:auto;">
+                        <div class="p-col-12" style="text-align:right"> {{ tt.totalRecords }} records</div>
                     <p-table #tt [columns]="cols" [value]="vendorSrCountryData"
                      [scrollable]="true" [resizableColumns]="true" [reorderableColumns]="true"
                         scrollWidth="700px" [style]="{'margin-top':'2px',   'width' : '1220px'} " [rows]="10" [paginator]="true"

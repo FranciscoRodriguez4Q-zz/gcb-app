@@ -46,7 +46,7 @@
                     <div class="p-grid ">
                         <div class="p-col-4 item-right"><span class="required">*</span>Vendor Ban</div>
                         <div class="p-col-8 item-left">
-                                <input class="form-control" [(ngModel)]="banInsertData.vendorBan" />
+                                <input class="form-control" [(ngModel)]="banInsertData.vendorBan" [disabled]="vBanFlag"/>
                         </div>
                     </div>
                     <div class="p-grid ">
@@ -86,18 +86,18 @@
                                 <div class="p-grid ">
                                                 <div class="p-col-4 item-right"><span class="required">*</span>Mode</div>
                                                 <div class="p-col-8 item-left">
-                                                    <p-dropdown [options]="modeReferenceDataList" [style]="{'width': '100%'}"  [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.mode"  (onChange)="onModeChange($event)"></p-dropdown>
+                                                    <p-dropdown [options]="modeReferenceDataList" [style]="{'width': '100%'}"  [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.mode"  (onChange)="onModeChange($event)" [disabled]="userFlag"></p-dropdown>
                                                 </div>
                                 </div>
                                 <div class="p-grid ">
                                                 <div class="p-col-4 item-right">Active </div>
                                                 <div class="p-col-1 item-left">
-                                                        <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="banInsertData.active"></p-checkbox><label class="label"></label>
+                                                        <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="banInsertData.active" [disabled]="userFlag"></p-checkbox><label class="label"></label>
                                                 </div>
                     
                                                 <div class="p-col-2 item-right">Active To </div>
                                                 <div class="p-col-4 item-left">
-                                                    <p-calendar [(ngModel)]="banInsertData.activeTo" showButtonBar="true" [style]="{'width': '120%'}"></p-calendar>
+                                                    <p-calendar [(ngModel)]="banInsertData.activeTo" showButtonBar="true" [style]="{'width': '120%'}" [disabled]="userFlag"></p-calendar>
                                                 </div>
                                         </div>
                                 <div class="p-grid">
@@ -105,7 +105,7 @@
                                                         <span class="required">*</span>Invoice Name
                                         </div>
                                         <div class="p-col-8 item-left">
-                                            <p-dropdown [options]="invoiceNmReferenceDataList" [style]="{'width': '100%'}"  [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.invoiceName"></p-dropdown>
+                                            <p-dropdown [options]="invoiceNmReferenceDataList" [style]="{'width': '100%'}"  [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.invoiceName" [disabled]="userFlag"></p-dropdown>
                                         </div>
                                     </div>
                                     <div class="p-grid">
@@ -113,7 +113,7 @@
                                                         <span class="required">*</span>Paid By
                                             </div>
                                             <div class="p-col-8 item-left">
-                                                <p-dropdown [options]="paidByReferenceDataList" [style]="{'width': '100%'}"  [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.vendorPaidBy"></p-dropdown>
+                                                <p-dropdown [options]="paidByReferenceDataList" [style]="{'width': '100%'}"  [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.vendorPaidBy" [disabled]="userFlag"></p-dropdown>
                                             </div>
                                     </div>
                                     <div class="p-grid">
@@ -121,7 +121,7 @@
                                                                 <span class="required">*</span>Liquidated Via
                                                 </div>
                                                 <div class="p-col-8 item-left">
-                                                    <p-dropdown [options]="liquidateViaReferenceDataList" [style]="{'width': '100%'}"  [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.liquidatedVia"></p-dropdown>
+                                                    <p-dropdown [options]="liquidateViaReferenceDataList" [style]="{'width': '100%'}"  [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.liquidatedVia" [disabled]="userFlag"></p-dropdown>
                                                 </div>
                                     </div>
                                     <div class="p-grid">
@@ -129,7 +129,7 @@
                                                         <span class="required">*</span>Tax Engine
                                             </div>
                                             <div class="p-col-8 item-left">
-                                                <p-dropdown [options]="taxEngineReferenceDataList" [style]="{'width': '100%'}"  [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.taxEngine"></p-dropdown>
+                                                <p-dropdown [options]="taxEngineReferenceDataList" [style]="{'width': '100%'}"  [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.taxEngine" [disabled]="userFlag"></p-dropdown>
                                             </div>
                                         </div>
                         </p-accordionTab>
@@ -582,6 +582,7 @@
                 
             <div class="p-grid">
                     <div class="p-col-12">
+                        <div class="p-col-12" style="text-align:right"> {{ tt.totalRecords }} records</div>
                         <p-table #tt [columns]="cols" [value]="banData" [scrollable]="true" [resizableColumns]="true" [reorderableColumns]="true"
                             [style]="{'margin-top':'2px','width':'100%'}" [rows]="10" [paginator]="true" [pageLinks]="3" [responsive]="true">
                             <ng-template pTemplate="header" let-columns>
@@ -650,7 +651,9 @@
             <p class="text-center">{{popupErrorMessage}}</p>
         </div>
         <div class="modal-footer">
-                <button type="button" class="btn btn-outline-dark" (click)="c('Save click');changeMode(true) " >Yes</button>
-                <button type="button" class="btn btn-outline-dark" (click)="c('Save click');changeMode(false) " >No</button>            
+                <button type="button" class="btn btn-outline-dark" (click)="c('Save click');changeMode(true) " *ngIf="modeFlag">Yes</button>
+                <button type="button" class="btn btn-outline-dark" (click)="c('Save click');changeMode(false) " *ngIf="modeFlag">No</button>       
+                <button type="button" class="btn btn-outline-dark" (click)="c('Save click'); upsertBan();" *ngIf="!modeFlag">Ok</button>
+     
         </div>
       </ng-template>

@@ -21,11 +21,11 @@ export class AppComponent implements OnInit  {
         this.userInfo = refData;
         console.log('user details captured:',this.userInfo);
 
-        this.globals.sso = this.userInfo.User["sso"] 
-        this.globals.firstName = this.userInfo.User["firstname"] 
-        this.globals.lastName = this.userInfo.User["lastname"] 
-        this.globals.role = this.userInfo.User["roleid"] 
-
+        this.globals.sso = this.userInfo.User["sso"];
+        this.globals.firstName = this.userInfo.User["firstName"];
+        this.globals.lastName = this.userInfo.User["lastName"];
+        this.globals.role = this.userInfo.User["role"];
+        this.globals.roleNM = this.userInfo.User["roleName"];
 
       },
       error => {

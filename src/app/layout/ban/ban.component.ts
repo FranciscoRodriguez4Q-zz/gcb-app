@@ -5,6 +5,8 @@ import { SelectItem } from 'primeng/primeng';
 import {ListboxModule} from 'primeng/listbox';
 import {PickListModule} from 'primeng/picklist';
 import { environment } from 'src/environments/environment.prod';	
+import { Globals } from '../../shared/constants/globals';
+import { debug } from 'util';
 
 @Component({
   selector: 'app-product',
@@ -27,6 +29,7 @@ public vendorServiceType : any ={
   public billingModelType: any = [];
 
   public banInsertData: any = {
+      banId:"",
       billProcessName: "",
       billProcessId:"",
       vendorBan: "",
@@ -104,6 +107,7 @@ public vendorServiceType : any ={
   public saveMessage: any = [];
   public popupErrorMessage: any;
   public editFlag = false;
+  public vBanFlag = false;
   @ViewChild('content1') errorMessagePopUp;
   @ViewChild('content2') modeMessagePopUp;
   closeResult: string;
@@ -151,8 +155,28 @@ public vendorServiceType : any ={
   public regKey = "8c8606d1-e591-435f-a435-d112ba4cd43c";		
   public entityTypeID = "5";
   goldIdDisable : boolean =true;
+  role: String = "";
+  public userFlag: boolean = true;
+  userInfo :any;
 
-  constructor(private banService: BanService,private modalService: NgbModal) { }
+  constructor(private banService: BanService, private modalService: NgbModal, private globals: Globals, ) {
+    this.banService.getUserData().subscribe(
+      refData => {
+        this.userInfo = refData;
+        console.log('user details captured:',this.userInfo);
+        this.role = this.userInfo.User["roleName"];
+
+        if (this.role==='ADMIN') {
+          this.userFlag = false;
+        }
+        else {
+          this.userFlag = true;
+        }
+
+      },
+      error => {
+      });    
+   }
   
 
   public cols = [
@@ -228,6 +252,7 @@ public vendorServiceType : any ={
     window.scrollTo(0, 0);
     console.log("radio button click" + this.banId);
     this.editFlag = true;
+    this.vBanFlag = true;
     this.formMode="Modify";
     this.clearServiceList();
     this.banService.getBanById(banId).subscribe(
@@ -276,7 +301,7 @@ public vendorServiceType : any ={
       buyerId:"",
       buyerName: "",
       billingModel: "",
-      mode: "",
+      mode:  "TEST",
       invoiceBuyerLeName: "",
       active: "",
       activeTo: "",  
@@ -313,14 +338,15 @@ public vendorServiceType : any ={
       useAssetFileVendorName: "",
       liquidateBillRoutingIdServiceType: "",
       
-      invoiceName: "",
-      vendorPaidBy: "",
-      liquidatedVia: "",
-      taxEngine: "",
+      invoiceName: "UNSPECIFIED",
+      vendorPaidBy: "UNSPECIFIED",
+      liquidatedVia: "UNSPECIFIED",
+      taxEngine: "UNSPECIFIED",
       cloneFlag : false,
       cloneOfId : ""
     };
     this.editFlag = false;
+    this.vBanFlag = false;
     this.cloneFlag = false;
     this.modeFlag = false;
     this.errorMessage = "";
@@ -382,7 +408,15 @@ public vendorServiceType : any ={
   upsertBan() {
     this.errorMessage = "";
     if (this.validation()) {
-
+      debugger;
+      if (this.cloneFlag && this.vendorBan != this.banInsertData.vendorBan) {
+        this.cloneFlag = false;
+        this.modeFlag = false;
+        this.banInsertData.cloneOfId = "";
+        this.popupErrorMessage = "Vendor Ban has been changed, so creating a new record but not clone";
+        this.open(this.modeMessagePopUp);
+        return false;
+      }
       /* if (this.banInsertData.cloneFlag){
         this.banInsertData.cloneOfId = this.banInsertData.banId;
         this.banInsertData.banId = 0;
@@ -432,6 +466,7 @@ public vendorServiceType : any ={
             this.clearAllFilters();
             this.editFlag = false;
             this.cloneFlag = false;
+            this.vBanFlag = false;
 
           }
         },
@@ -1001,8 +1036,10 @@ public vendorServiceType : any ={
       
   cloneRecord() {
     this.cloneFlag = true;
+    this.vBanFlag = false;
     this.banInsertData.cloneFlag = true;
     this.banInsertData.cloneOfId = this.banInsertData.banId;
+    this.vendorBan = this.banInsertData.vendorBan;
   //  this.index = [0,1];
   //  this.collapsed=true;
   //  this.panelExpansionFlag = true;
@@ -1102,12 +1139,11 @@ public vendorServiceType : any ={
   }
 
   onModeChange(mode : any) {
-    debugger;
     if (mode.value === "PRODUCTION") { 
       this.banService.modeChange(this.banInsertData).subscribe(
         refData => {
           this.saveMessage = refData;
-          this.modeFlag = false;
+          this.modeFlag = true;
           if (this.saveMessage.status === "Success") {
             this.popupErrorMessage = this.saveMessage.message;
             this.open(this.modeMessagePopUp);
@@ -1119,6 +1155,7 @@ public vendorServiceType : any ={
   }
 
   changeMode(flag) {
+    this.modeFlag = false;
     if (flag) {
       this.banInsertData.mode = "PRODUCTION";
     } else {
