@@ -374,9 +374,11 @@
             </div>  
             
             
-            <div class="p-grid">
+           
+        <p-accordion header="Service Type" [multiple]="true" [activeIndex]="indexST" (onClose)="onTabClose($event)" (onOpen)="onTabOpen($event)">
+        <div class="p-grid">
                 <div class="p-col-6">
-                    <p-accordionTab header="Service Type">
+                    <p-accordionTab header="Service Type" >
                                 <p-pickList [source]="sourceSystem" [target]="targetSystem" sourceHeader="Available" targetHeader="Selected" [responsive]="true" filterBy="serviceTypeName" 
                                 dragdrop="true" sourceFilterPlaceholder="Search" targetFilterPlaceholder="Search" [sourceStyle]="{'height':'300px'}" [targetStyle]="{'height':'300px'}"
                                 [showSourceControls]="false" [showTargetControls]="false" filterMatchMode="contains" (onTargetSelect)="onSelectTarget($event)" (onMoveToTarget)="addTargetValueToArray($event)" (onMoveToSource)="removeTargetValueFromArray($event)">
@@ -390,6 +392,22 @@
                             </div>
                             <div class="p-col-6">
                                     <p-accordionTab header="Service Type Details">
+                                                <div class="p-grid ">
+                                                                <div class="p-col-5 item-right">Liquidate to Bill Routing ID</div>
+                                                                <div class="p-col-7 item-left">
+                                                                        <div *ngIf="systems.liquidateBillRoutingId">
+                        
+                                                                                        <span> {{systems.liquidateBillRoutingId}} </span>
+                                                                                        <a class="a-color" style="cursor:pointer;" (click)="editServiceBillRef()">
+                                                                                            <i class="fa fa-pencil-square-o fa-2x"></i>
+                                                                                        </a>
+                                                                        </div>
+                                                                        <div *ngIf="!systems.liquidateBillRoutingId">                                
+                                                                                <button class="button-link" (click)="generateServiceBillRefId()">Enter BUC/ADN details</button>
+                                                                        </div>
+                                                                </div>
+                
+                                                        </div> 
                                         <div class="p-grid ">
                                             <div class="p-col-5 item-right">UNSPSC Override</div> 
                                             <div class="p-col-1 item-left">
@@ -538,26 +556,14 @@
                                                         <input class="form-control" [(ngModel)]="systems.tpPercent" (ngModelChange)="systems.tpPercent = $event.toUpperCase()"/>
                                                 </div>
                                         </div>
-                                        <div class="p-grid ">
-                                                <div class="p-col-5 item-right">Liquidate to Bill Routing ID</div>
-                                                <div class="p-col-7 item-left">
-                                                        <div *ngIf="systems.liquidateBillRoutingId">
-        
-                                                                        <span> {{systems.liquidateBillRoutingId}} </span>
-                                                                        <a class="a-color" style="cursor:pointer;" (click)="editServiceBillRef()">
-                                                                            <i class="fa fa-pencil-square-o fa-2x"></i>
-                                                                        </a>
-                                                        </div>
-                                                        <div *ngIf="!systems.liquidateBillRoutingId">                                
-                                                                <button class="button-link" (click)="generateServiceBillRefId()">Enter BUC/ADN details</button>
-                                                        </div>
-                                                </div>
-
-                                        </div>  
+                                        
                                     </p-accordionTab>
                             </div>
-                    
+                                            
                 </div>
+          </p-accordion>
+
+    
                 
            
             <div class="p-grid">

@@ -113,6 +113,7 @@ public vendorServiceType : any ={
   public countryCodeReferenceData: any;
   countryCodeReferenceDataList: SelectItem[] = [];
   public index = [];
+  public indexST = [];
   public expansionEventFlag = true;
   public collapsed=true;
   public panelExpansionFlag=true;
@@ -614,13 +615,15 @@ public vendorServiceType : any ={
   }
 
   expandAllPanels(){
-    this.index = [0,1,2,3,4,5,6,7,8];
+    this.index = [0,1,2,3,4,5,6,7];
+    this.indexST=[0,1];
     this.collapsed=false;
     this.panelExpansionFlag=false;
   }
 
   collapseAllPanels(){
     this.index = [];
+    this.indexST=[];
     this.collapsed=true;
     this.panelExpansionFlag=true;
   }
@@ -1122,4 +1125,17 @@ public vendorServiceType : any ={
       this.banInsertData.mode = "TEST";
     }
   }
+
+  onTabOpen(event) {
+    console.log(event);
+    this.indexST = [0,1];
+    this.collapsed=false;
+    this.panelExpansionFlag=false; 
+}
+onTabClose(event) {
+    this.indexST = [];
+    this.collapsed=true;
+    this.panelExpansionFlag=true; 
+}
+
 }

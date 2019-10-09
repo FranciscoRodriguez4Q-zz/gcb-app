@@ -8,12 +8,14 @@ import { HomeService } from './home.service';
 import { HttpClientModule } from '@angular/common/http';
 import {TabViewModule} from 'primeng/tabview';
 import {TabMenuModule} from 'primeng/tabmenu';
+import { SpinnerComponent } from '../../shared/modules/spinner/spinner.component';
+import { CommonModule } from '@angular/common';
 
 
 
 @NgModule({
-declarations :[ HomeComponent],
-imports : [FormsModule, HomeRoutingModule,PrimeModule,TreeModule,TabViewModule,TabMenuModule ]
+declarations :[ HomeComponent,SpinnerComponent],
+imports : [FormsModule, HomeRoutingModule,PrimeModule,TreeModule,TabViewModule,TabMenuModule,CommonModule ]
 })
 export class HomeModule
 {}
