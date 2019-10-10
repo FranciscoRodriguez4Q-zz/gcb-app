@@ -7,11 +7,21 @@
 }
 
  .chkLabel {
-    padding-top: 0.25rem;
-    margin-bottom:0.25rem !important; 
+    padding-top: 1rem;
+   // margin-bottom:0.25rem !important; 
     display: block;
     word-wrap: break-word;
-    color: #63666a;
+}
+.gridServiceType{
+    margin-top: 0.7rem;
+}
+
+.gridCheckBox{
+    margin-top: 0.5rem;
+}
+
+.gridServiceTypeTwoLine{
+    margin-top: 1rem;
 }
 
  .nested-grid{
@@ -28,8 +38,7 @@
         background:none!important;
          border:none; 
          padding:0!important;
-        
-        
+         margin-top: 0.3rem;        
          color:#069;
          text-decoration:underline;
          cursor:pointer;
@@ -49,6 +58,7 @@
 
 .item-right{
     text-align:right;
+    margin-top: 0.4rem;
   }
   .item-left{
     text-align:left;

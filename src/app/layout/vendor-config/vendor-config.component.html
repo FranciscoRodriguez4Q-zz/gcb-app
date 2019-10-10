@@ -17,7 +17,7 @@
         <span class="required">*</span>Vendor LE
       </div>
       <div class="p-col-4">
-        <p-dropdown [options]="vendorReferenceDataList" [style]="{'width': '100%'}" [(ngModel)]="vendorConfigDto.vendorEntityId" [filter]="true" placeholder="Select"></p-dropdown>
+        <p-dropdown [options]="vendorReferenceDataList" [style]="{'width': '100%'}" [(ngModel)]="vendorConfigDto.vendorEntityId" [filter]="true" placeholder="Select"  [resetFilterOnHide]="true" ></p-dropdown>
       </div>
       <div class="p-col-2 item-right">
         Active
@@ -29,7 +29,7 @@
          LLD CoE
       </div>
       <div class="p-col-2">
-        <p-dropdown [options]="lldCoeList"  [style]="{'width': '8px'}"  [(ngModel)]="vendorConfigDto.lldCoeFlag" [filter]="true" placeholder="Select"></p-dropdown>
+        <p-dropdown [options]="lldCoeList"  [style]="{'width': '8px'}"  [(ngModel)]="vendorConfigDto.lldCoeFlag" [filter]="true" placeholder="Select"  [resetFilterOnHide]="true" ></p-dropdown>
       </div>
 </div>
 <div class="p-grid">
@@ -43,7 +43,7 @@
           Exchange Rate Type
         </div>
         <div class="p-col-4 upper">
-            <p-dropdown [options]="exRateType" [(ngModel)]="vendorConfigDto.exchangeRateType" [filter]="true"  [style]="{'width': '25%'}" placeholder="Select"></p-dropdown>
+            <p-dropdown [options]="exRateType" [(ngModel)]="vendorConfigDto.exchangeRateType" [filter]="true"  [style]="{'width': '25%'}" placeholder="Select" [resetFilterOnHide]="true" ></p-dropdown>
         </div>
 </div>
 <div class="p-grid">
@@ -65,7 +65,7 @@
       <span class="required">*</span>Currency Code
     </div>
     <div class="p-col-4 item-left">
-        <p-dropdown [options]="currencyReferenceDataList" [(ngModel)]="vendorConfigDto.currencyCode" [filter]="true"  placeholder="Select"></p-dropdown>
+        <p-dropdown [options]="currencyReferenceDataList" [(ngModel)]="vendorConfigDto.currencyCode" [filter]="true"  placeholder="Select" [resetFilterOnHide]="true" ></p-dropdown>
     </div>
     <div class="p-col-2 item-right">
       Expected Feed Date
@@ -80,7 +80,7 @@
       <span class="required">*</span>Billed From
     </div>
     <div class="p-col-4 item-left">
-        <p-dropdown [options]="countryCodeReferenceDataList" [style]="{'width': '100%'}" [(ngModel)]="vendorConfigDto.billedFromLocationId" [filter]="true" placeholder="Select" [disabled]="editFlag"></p-dropdown>
+        <p-dropdown [options]="countryCodeReferenceDataList" [style]="{'width': '100%'}" [(ngModel)]="vendorConfigDto.billedFromLocationId" [filter]="true" placeholder="Select" [disabled]="editFlag" [resetFilterOnHide]="true" ></p-dropdown>
     </div>
     <div class="p-col-2 item-right">
       Final Invoice Date
@@ -94,7 +94,7 @@
       <span class="required">*</span>Billed To
     </div>
     <div class="p-col-4 item-left">
-        <p-dropdown [options]="countryCodeReferenceDataList" [style]="{'width': '100%'}" [(ngModel)]="vendorConfigDto.billedToLocationId" [filter]="true" placeholder="Select" [disabled]="editFlag"></p-dropdown>
+        <p-dropdown [options]="countryCodeReferenceDataList" [style]="{'width': '100%'}" [(ngModel)]="vendorConfigDto.billedToLocationId" [filter]="true" placeholder="Select" [disabled]="editFlag" [resetFilterOnHide]="true" ></p-dropdown>
     </div>
     <!-- <div class="p-col-2 item-right">
       <span class="required">*</span>Reporting Security DL
@@ -127,8 +127,11 @@
 </p-fieldset>
 <div class="p-grid">
     <div class="p-col-12">
-            <div class="p-col-12" style="text-align:right"> {{ tt.totalRecords }} records</div>
-     <p-table #tt [columns]="cols" [value]="vendorGridData" [style]="{'margin-top':'2px','width':'100%'}" [rows]="10" [paginator]="true" [pageLinks]="3" [responsive]="true">
+        <div class="p-col-12" style="text-align:right" *ngIf="gridLoadFlag"> {{ tt.totalRecords }} records</div>
+        <div class="p-col-12" style="text-align:right" *ngIf="!gridLoadFlag"> Please wait, loading.
+            <p-progressSpinner [style]="{width: '30px', height: '30px'}" strokeWidth="8" fill="#EEEEEE" animationDuration=".5s"></p-progressSpinner>
+    </div>  
+         <p-table #tt [columns]="cols" [value]="vendorGridData" [style]="{'margin-top':'2px','width':'100%'}" [rows]="10" [paginator]="true" [pageLinks]="3" [responsive]="true">
         <ng-template pTemplate="header" let-columns>
             <tr>
               <th [ngStyle]="{'width': '5%'}">Modify</th>

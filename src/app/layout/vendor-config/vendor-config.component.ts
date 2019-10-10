@@ -20,6 +20,8 @@ public currencyCodeReferenceData: any;
 currencyCodeReferenceDataList: SelectItem[] = [];
 public currencyReferenceData: any;
 currencyReferenceDataList:SelectItem[] = [];
+public gridLoadFlag:boolean=false;
+
 
 public vendorGridDataList :SelectItem[] = [];
 
@@ -178,6 +180,7 @@ getVendorDetailGridData() {
   this.vendorConfigService.getVendorGridData().subscribe(
     refData => {
       this.vendorGridData = refData;
+      this.gridLoadFlag=true;
       //this.dwnVendor=refData;
     },
     error => {

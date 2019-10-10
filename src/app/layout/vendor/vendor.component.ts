@@ -162,11 +162,11 @@ export class VendorComponent implements OnInit {
         refData => {
           this.saveMessage = refData;
           if(!this.saveMessage.Error == undefined)
-            this.errorMessage = " Vendor Legal Entity: "+this.vendorInsertData.vendorLegalEntityName+" was already exits.";
+            this.errorMessage = " Vendor Legal Entity: "+this.vendorInsertData.vendorLegalEntityName+"  already exist.";
           if(this.saveMessage.Error == false)
-            this.errorMessage = " Vendor Legal Entity: "+this.vendorInsertData.vendorLegalEntityName+" was suceesfully created.";
+            this.errorMessage = " Vendor Legal Entity: "+this.vendorInsertData.vendorLegalEntityName+" was successfully created.";
           else
-            this.errorMessage =  " Vendor Legal Entity: "+this.vendorInsertData.vendorLegalEntityName+" not saved successfully.";
+            this.errorMessage =  " Entity cannot saved due to error.";
           this.popupErrorMessage =  this.errorMessage;
           this.open(this.errorMessagePopUp);
           this.getAllVendorDetails();

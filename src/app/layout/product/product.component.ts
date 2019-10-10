@@ -30,6 +30,8 @@ export class ProductComponent implements OnInit {
   public popupErrorMessage: any;
   closeResult: string;
   public formMode="New";
+  public gridLoadFlag:boolean=false;
+
 
 
   public fileName : any ="Product";
@@ -75,6 +77,7 @@ export class ProductComponent implements OnInit {
       this.productService.getProductDetails().subscribe(
         refData =>{
           this.products=refData;
+          this.gridLoadFlag=true;
           this.products.map(item => {
             return {
               billProcessName: item.billProcessName,
