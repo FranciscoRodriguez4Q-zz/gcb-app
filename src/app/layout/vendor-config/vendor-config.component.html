@@ -118,7 +118,7 @@
 </div>
 <div class="p-grid">
     <div class="p-col-12" style="text-align:right">
-        <button class="ge-button -fill--solid" (click)="upsertVendorConfig()">Submit</button>
+        <button class="ge-button -fill--solid" (click)="upsertVendorConfig()" [disabled]="disabled">Submit</button>
         <button class="ge-button -fill--solid" (click)="clearAllFilters()">Cancel</button>
         <app-file-download [dwnData]="dwnVendor" [colsHeader]="this.downloadCols" [fileName]="fileName"></app-file-download>
 

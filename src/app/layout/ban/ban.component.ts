@@ -83,7 +83,7 @@ public vendorServiceType : any ={
       cloneFlag : false,
       cloneOfId : ""
     };
-  
+  public banInsertDataCopy: any;
 
   billProcessReferenceList: SelectItem[] = [];
   public billProcessReference: any;
@@ -260,6 +260,7 @@ public vendorServiceType : any ={
         this.banInsertData = refData;
         this.setBuyerDetails();
         this.getSourceServiceType(banId);
+        this.banInsertDataCopy = { ...this.banInsertData }
       },
       error => {
       });
@@ -345,6 +346,7 @@ public vendorServiceType : any ={
       cloneFlag : false,
       cloneOfId : ""
     };
+    this.banInsertDataCopy = {};
     this.editFlag = false;
     this.vBanFlag = false;
     this.cloneFlag = false;
@@ -1196,5 +1198,11 @@ getVendorCode() {
   }
 } 
  
+get disabled() {
+  if (this.editFlag) {
+    return JSON.stringify(this.banInsertData) === JSON.stringify(this.banInsertDataCopy)
+  }
+  return false;
+}
 
 }

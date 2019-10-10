@@ -67,7 +67,7 @@
       </div> 
       <div class="p-grid">
         <div class="p-col-12" style="text-align:right">
-            <button class="ge-button -fill--solid" (click)="upsertProduct()">Submit</button>
+            <button class="ge-button -fill--solid" (click)="upsertProduct()"  [disabled]="disabled" >Submit</button>
             <button class="ge-button -fill--solid" (click)="clearAllFilters()">Cancel</button>
             <app-file-download [dwnData]="productDwnData" [colsHeader]="downloadCols" [fileName]="fileName" ></app-file-download>
     

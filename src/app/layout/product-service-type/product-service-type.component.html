@@ -144,7 +144,7 @@
     </div>
 <div class="p-grid">
         <div class="p-col-12" style="text-align:right">
-            <button class="ge-button -fill--solid" (click)="upsertServiceType()">Submit</button>
+            <button class="ge-button -fill--solid" (click)="upsertServiceType()" [disabled]="disabled">Submit</button>
             <button class="ge-button -fill--solid" (click)="clearAllFilters()">Cancel</button>
             <app-file-download [dwnData]="gcbDwnData" [colsHeader]="this.downloadCols" [fileName]="fileName"  (dwnAction)="getAllServiceType();"></app-file-download>
 
