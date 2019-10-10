@@ -1175,4 +1175,26 @@ onTabClose(event) {
     this.panelExpansionFlag=true; 
 }
 
+
+getVendorCode() {
+  if (this.banInsertData.billProcessId === 2) {
+  this.vendorReferenceDataList = [];
+  var vendorFilterData = this.vendorReferenceData.filter(x => String(x.vendorLegalEntityName).startsWith('C'));
+    for (let data of vendorFilterData) {
+    let labelService = data.vendorLegalEntityName+' | '+data.vendorCode+' | '+data.billedFromCountryCode+' | '+data.billedToCountryCode+' | '
+    +data.currencyCode;
+    this.vendorReferenceDataList.push({ label: labelService, value: data.vendorConfigId })
+    }
+  }
+  else {
+  this.vendorReferenceDataList = [];
+    for (let data of this.vendorReferenceData) {
+    let labelService = data.vendorLegalEntityName+' | '+data.vendorCode+' | '+data.billedFromCountryCode+' | '+data.billedToCountryCode+' | '
+    +data.currencyCode;
+    this.vendorReferenceDataList.push({ label: labelService, value: data.vendorConfigId })
+    }
+  }
+} 
+ 
+
 }

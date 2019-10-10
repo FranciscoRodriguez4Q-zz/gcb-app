@@ -5,9 +5,11 @@ import { BanComponent } from './ban.component';
 import { PrimeModule } from 'src/app/prime';
 import {InputSwitchModule} from 'primeng/inputswitch';
 import { FormsModule,ReactiveFormsModule } from '@angular/forms';
-import { LayoutModule } from '../layout.module';
 import {PickListModule} from 'primeng/picklist';
 import { NumberOnlyDirective } from '../../directives/num-only.directive';
+import { LayoutModule } from '../layout.module';
+import {ProgressSpinnerModule} from 'primeng/progressspinner';
+
 
 
 @NgModule({
@@ -20,7 +22,8 @@ import { NumberOnlyDirective } from '../../directives/num-only.directive';
     FormsModule,
     ReactiveFormsModule,
     LayoutModule,
-    PickListModule
+    PickListModule,
+    ProgressSpinnerModule
   ]
 })
 export class BanModule { }

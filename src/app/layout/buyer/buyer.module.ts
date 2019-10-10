@@ -6,6 +6,8 @@ import { PrimeModule } from 'src/app/prime';
 import {InputSwitchModule} from 'primeng/inputswitch';
 import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 import { LayoutModule } from '../layout.module';
+import {ProgressSpinnerModule} from 'primeng/progressspinner';
+
 
 @NgModule({
   declarations: [BuyerComponent],
@@ -16,7 +18,8 @@ import { LayoutModule } from '../layout.module';
     InputSwitchModule,
     FormsModule,
     ReactiveFormsModule,
-    LayoutModule
+    LayoutModule,
+    ProgressSpinnerModule
   ]
 })
 export class BuyerModule { }

@@ -1,7 +1,14 @@
 <div class="p-grid">
-    <div class="p-col-2.8 treeView" >
-        <p-tree [value]="treeData" [filter]="true"></p-tree>
+    <div class="p-col-2.8 treeView" *ngIf="!screenFlag">
+        <p-tree [value]="treeData" [filter]="true">            
+        </p-tree>
     </div>
+        <div class="p-col-2.8 treeView" *ngIf="screenFlag">  
+                <p-tree [value]="treeData" [filter]="true">       
+                    </p-tree>
+                    Please wait, loading.<p-progressSpinner [style]="{width: '30px', height: '30px'}" strokeWidth="8" fill="#EEEEEE" animationDuration=".5s"></p-progressSpinner>
+ 
+    </div> 
     <div class="p-col-9 menuAndForms" >
             <div class="p-col-12">
                 <p-tabMenu [model]="menuItems" ></p-tabMenu>
@@ -9,8 +16,6 @@
             <div class="p-col-12">
                 <router-outlet></router-outlet>
             </div>
-            <div *ngIf="screenFlag">                
-                <app-spinner></app-spinner>
-        </div> 
+            
     </div>
 </div>

@@ -23,6 +23,8 @@ export class ProductServiceTypeComponent implements OnInit {
   public gcbDwnData: any = [];
   public downloadCols = [];
   public fileName : any ="ServiceType";
+  public gridLoadFlag:boolean=false;
+
 
   public billProcessReference: any;
   public legacyServiceTypeEnableFlag:boolean=false;
@@ -174,6 +176,7 @@ export class ProductServiceTypeComponent implements OnInit {
     this.serviceTypeService.getServicetypeData().subscribe(
       refData => {
         this.serviceTypes = refData;
+        this.gridLoadFlag=true;
         this.gcbDwnData = refData;
       },
       error => {
