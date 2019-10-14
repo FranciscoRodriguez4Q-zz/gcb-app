@@ -208,7 +208,7 @@ export class BuyerComponent implements OnInit {
         refData => {
           this.saveMessage = refData;
           if(!this.saveMessage.Error == undefined)
-            this.errorMessage = "The "+this.buyerInsertData.erpBuyerLeName+" was already exits.";
+            this.errorMessage = "Buyer : "+this.buyerInsertData.erpBuyerLeName+" already exists.";
           if(this.saveMessage.Error == false)
             this.errorMessage = this.saveMessage.message;
           else

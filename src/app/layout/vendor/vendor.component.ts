@@ -90,7 +90,6 @@ export class VendorComponent implements OnInit {
               lastUpdatedDate: item.lastUpdatedDate
           }
       }).forEach(item => this.venDwnData.push(item));
-      console.log("This is the manipulated vendorDwm",this.venDwnData);
       },
       error => {
       });
@@ -164,9 +163,9 @@ export class VendorComponent implements OnInit {
           if(!this.saveMessage.Error == undefined)
             this.errorMessage = " Vendor Legal Entity: "+this.vendorInsertData.vendorLegalEntityName+"  already exist.";
           if(this.saveMessage.Error == false)
-            this.errorMessage = " Vendor Legal Entity: "+this.vendorInsertData.vendorLegalEntityName+" was successfully created.";
+            this.errorMessage = " Vendor Legal Entity: "+this.vendorInsertData.vendorLegalEntityName+" was successfully saved.";
           else
-            this.errorMessage =  " Entity cannot saved due to error.";
+            this.errorMessage =  " Entity cannot be saved due to error.";
           this.popupErrorMessage =  this.errorMessage;
           this.open(this.errorMessagePopUp);
           this.getAllVendorDetails();
