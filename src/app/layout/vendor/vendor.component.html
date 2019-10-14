@@ -8,7 +8,7 @@
                             <label class="label"><span class="required">*</span>HL Vendor Name</label>
                     </div>
                      <div class="p-col-5 item-left">
-                        <p-dropdown [options]="hlVendorDataList" [style]="{'width': '130%'}" [(ngModel)]="vendorInsertData.hlVendorId" [filter]="true" placeholder="Select" [resetFilterOnHide]="true" ></p-dropdown>
+                        <p-dropdown [options]="hlVendorDataList" [style]="{'width': '130%'}" [(ngModel)]="vendorInsertData.hlVendorId" [filter]="true" placeholder="Select" [resetFilterOnHide]="true" [disabled]="userFlag"></p-dropdown>
                     </div> 
                 </div>
                 <div class="p-grid">
@@ -16,7 +16,7 @@
                         <label class="label"><span class="required">*</span>Vendor Legal Entity Name </label>
                     </div>
                     <div class="p-col-5 item-left">
-                            <input style="width: 130%" class="form-control" [(ngModel)]="vendorInsertData.vendorLegalEntityName" (ngModelChange)="vendorInsertData.vendorLegalEntityName = $event.toUpperCase()">
+                            <input style="width: 130%" class="form-control" [(ngModel)]="vendorInsertData.vendorLegalEntityName" (ngModelChange)="vendorInsertData.vendorLegalEntityName = $event.toUpperCase()" [disabled]="userFlag">
                     </div>
                 </div>
                 <div class="p-grid">
@@ -24,7 +24,7 @@
                         <label class="label"><span class="required">*</span>Active </label>
                     </div>
                     <div class="p-col-5 item-left">
-                            <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="vendorInsertData.active"></p-checkbox><label class="label"></label>
+                            <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="vendorInsertData.active" [disabled]="userFlag"></p-checkbox><label class="label"></label>
                     </div>
                 </div>                        
             </div>
@@ -37,8 +37,8 @@
   </div>
 <div class="p-grid">
     <div class="p-col-12" style="text-align:right">
-        <button class="ge-button -fill--solid -size--medium" (click)="upsertVendor()" [disabled]="disabled">Submit</button>
-        <button class="ge-button -fill--solid -size--medium" (click)="cancel()">Cancel</button>
+        <button class="ge-button -fill--solid -size--medium" (click)="upsertVendor()" [disabled]="userFlag || disabled">Submit</button>
+        <button class="ge-button -fill--solid -size--medium" (click)="cancel()" [disabled]="userFlag">Cancel</button>
         <app-file-download [dwnData]="venDwnData" [colsHeader]="this.downloadCols" [fileName]="fileName"></app-file-download>
     </div>
   </div>

@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { VendorService } from './vendor.service';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { SelectItem } from 'primeng/primeng';
+import { Globals } from '../../shared/constants/globals';
 
 @Component({
   selector: 'app-product',
@@ -55,8 +56,17 @@ export class VendorComponent implements OnInit {
   public formMode="New";
   public hlvendorReferenceData: any;
   hlVendorDataList: SelectItem[] = [];
+  public userFlag: boolean = true;
   
-  constructor(private vendorService: VendorService,private modalService: NgbModal) { }
+  constructor(private vendorService: VendorService,private modalService: NgbModal,private globals: Globals,) { 
+    //console.log("Role: "+this.globals.roleNM);
+    if (this.globals.roleNM==='ADMIN') {
+      this.userFlag = false;
+    }
+    else {
+      this.userFlag = true;
+    }
+  }
   
 
   public cols = [
@@ -91,7 +101,6 @@ export class VendorComponent implements OnInit {
               lastUpdatedDate: item.lastUpdatedDate
           }
       }).forEach(item => this.venDwnData.push(item));
-      console.log("This is the manipulated vendorDwm",this.venDwnData);
       },
       error => {
       });
@@ -166,9 +175,9 @@ export class VendorComponent implements OnInit {
           if(!this.saveMessage.Error == undefined)
             this.errorMessage = " Vendor Legal Entity: "+this.vendorInsertData.vendorLegalEntityName+"  already exist.";
           if(this.saveMessage.Error == false)
-            this.errorMessage = " Vendor Legal Entity: "+this.vendorInsertData.vendorLegalEntityName+" was successfully created.";
+            this.errorMessage = " Vendor Legal Entity: "+this.vendorInsertData.vendorLegalEntityName+" was successfully saved.";
           else
-            this.errorMessage =  " Entity cannot saved due to error.";
+            this.errorMessage =  " Entity cannot be saved due to error.";
           this.popupErrorMessage =  this.errorMessage;
           this.open(this.errorMessagePopUp);
           this.getAllVendorDetails();

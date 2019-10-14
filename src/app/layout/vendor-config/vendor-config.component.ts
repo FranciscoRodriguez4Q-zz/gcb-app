@@ -4,6 +4,7 @@ import { VendorConfigService } from './vendor-config.service';
 import { ServiceTypeService } from '../service-type/service-type.service';
 import { ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Globals } from '../../shared/constants/globals';
 
 @Component({
   selector: 'app-vendor-config',
@@ -52,6 +53,7 @@ public vendorCode:any;
 public updatedBy:any;
 public lastUpdated:any;
 public downloadCols = [];
+public userFlag: boolean = true;
 
 public vendorConfigDto : any ={vendorConfigId:0,
 vendorEntityId:"",
@@ -87,8 +89,13 @@ public cols = [
 
 ];
 
-constructor( private vendorConfigService: VendorConfigService, private serviceTypeService : ServiceTypeService,private modalService: NgbModal) {
-    
+constructor( private vendorConfigService: VendorConfigService, private serviceTypeService : ServiceTypeService,private modalService: NgbModal,private globals: Globals,) {
+  if (this.globals.roleNM==='ADMIN') {
+    this.userFlag = false;
+  }
+  else {
+    this.userFlag = true;
+  }
    }
 
 ngOnInit() { 

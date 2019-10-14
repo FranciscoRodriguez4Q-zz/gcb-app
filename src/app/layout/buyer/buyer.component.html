@@ -6,13 +6,13 @@
                       <span class="required">*</span>ERP Buyer LE Name
                     </div>
                     <div class="p-col-4">
-                        <input class="form-control" style="width: 100%" [(ngModel)]="buyerInsertData.erpBuyerLeName" (ngModelChange)="buyerInsertData.erpBuyerLeName = $event.toUpperCase()">
+                        <input class="form-control" style="width: 100%" [(ngModel)]="buyerInsertData.erpBuyerLeName" (ngModelChange)="buyerInsertData.erpBuyerLeName = $event.toUpperCase()" [disabled]="userFlag">
                     </div>
                     <div class="p-col-2 item-right">
                            Gold ID/Name
                     </div>
                     <div class="p-col-4">
-                       <p-dropdown [options]="goldNetIdReferenceDataList" [style]="{'width': '100%'}" [(ngModel)]="buyerInsertData.goldId" [filter]="true" placeholder="Select" [resetFilterOnHide]="true" ></p-dropdown>
+                       <p-dropdown [options]="goldNetIdReferenceDataList" [style]="{'width': '100%'}" [(ngModel)]="buyerInsertData.goldId" [filter]="true" placeholder="Select" [resetFilterOnHide]="true" [disabled]="userFlag"></p-dropdown>
                     </div>
               </div>
               <div class="p-grid">
@@ -20,7 +20,7 @@
                        ERP OU Entity Name
                      </div>
                      <div class="p-col-4 item-left">
-                            <input class="form-control" style="width: 100%" [(ngModel)]="buyerInsertData.erpOuEntityName" (ngModelChange)="buyerInsertData.erpOuEntityName = $event.toUpperCase()">
+                            <input class="form-control" style="width: 100%" [(ngModel)]="buyerInsertData.erpOuEntityName" (ngModelChange)="buyerInsertData.erpOuEntityName = $event.toUpperCase()" [disabled]="userFlag">
                      </div>                    
               </div>
               <div class="p-grid">
@@ -28,7 +28,7 @@
                     ERP OU Number
                   </div>
                   <div class="p-col-4 item-left">
-                     <input class="form-control" style="width: 100%" [(ngModel)]="buyerInsertData.erpOuNumber" (ngModelChange)="buyerInsertData.erpOuNumber = $event.toUpperCase()">
+                     <input class="form-control" style="width: 100%" [(ngModel)]="buyerInsertData.erpOuNumber" (ngModelChange)="buyerInsertData.erpOuNumber = $event.toUpperCase()" [disabled]="userFlag">
                   </div>
                   <div class="p-col-2 item-right">
                      
@@ -42,7 +42,7 @@
                     Buyer Info
                   </div>
                   <div class="p-col-4 item-left">
-                        <input class="form-control" style="width: 100%" [(ngModel)]="buyerInsertData.buyerInfo" (ngModelChange)="buyerInsertData.buyerInfo = $event.toUpperCase()">
+                        <input class="form-control" style="width: 100%" [(ngModel)]="buyerInsertData.buyerInfo" (ngModelChange)="buyerInsertData.buyerInfo = $event.toUpperCase()" [disabled]="userFlag">
                   </div>
                   <div class="p-col-2 item-right">
                      
@@ -56,7 +56,7 @@
                     <span class="required">*</span>Buyer Location
                   </div>
                   <div class="p-col-4 item-left">
-                      <p-dropdown [options]="countryCodeReferenceDataList" [style]="{'width': '100%'}" [(ngModel)]="buyerInsertData.buyerLocationId" [filter]="true" placeholder="Select" [resetFilterOnHide]="true" ></p-dropdown>
+                      <p-dropdown [options]="countryCodeReferenceDataList" [style]="{'width': '100%'}" [(ngModel)]="buyerInsertData.buyerLocationId" [filter]="true" placeholder="Select" [resetFilterOnHide]="true" [disabled]="userFlag"></p-dropdown>
                   </div>
                   <div class="p-col-2 item-right">
                      
@@ -71,8 +71,8 @@
               </div>
               <div class="p-grid">
                   <div class="p-col-12" style="text-align:right">
-                      <button class="ge-button -fill--solid" (click)="upsertBuyer()" [disabled]="disabled">Submit</button>
-                      <button class="ge-button -fill--solid" (click)="clearAllFilters()">Cancel</button>
+                      <button class="ge-button -fill--solid" (click)="upsertBuyer()" [disabled]="userFlag || disabled">Submit</button>
+                      <button class="ge-button -fill--solid" (click)="clearAllFilters()" [disabled]="userFlag">Cancel</button>
                       <app-file-download [dwnData]="buyerDwnData" [colsHeader]="this.downloadCols" [fileName]="fileName"></app-file-download>
                   </div>
               </div>

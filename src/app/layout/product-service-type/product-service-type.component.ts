@@ -4,6 +4,7 @@ import { Message } from 'primeng/components/common/api';
 import { MessageService } from 'primeng/api';
 import { ProductServiceTypeService } from './product-service-type.service';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { Globals } from '../../shared/constants/globals';
 
 @Component({
   selector: 'app-product-service-type',
@@ -24,7 +25,7 @@ export class ProductServiceTypeComponent implements OnInit {
   public downloadCols = [];
   public fileName : any ="ServiceType";
   public gridLoadFlag:boolean=false;
-
+  public userFlag: boolean = true;
 
   public billProcessReference: any;
   public legacyServiceTypeEnableFlag:boolean=false;
@@ -67,7 +68,14 @@ export class ProductServiceTypeComponent implements OnInit {
   @ViewChild('content1') errorMessagePopUp;
   public popupErrorMessage: any;
   closeResult: string;
-  constructor(private serviceTypeService: ProductServiceTypeService, private modalService: NgbModal) { }
+  constructor(private serviceTypeService: ProductServiceTypeService, private modalService: NgbModal,private globals: Globals,) { 
+    if (this.globals.roleNM==='ADMIN') {
+      this.userFlag = false;
+    }
+    else {
+      this.userFlag = true;
+    }
+  }
 
   ngOnInit() {
     for (let i = 0; i < this.cols.length; i++) {

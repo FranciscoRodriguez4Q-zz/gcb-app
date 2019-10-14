@@ -14,7 +14,7 @@
             [(ngModel)]="gcbDetailFilters.productId"      placeholder="Select"   [autoWidth]="true"
             [style]="{'width': '130%'}"   
             [filter]="true"  (click)="getServicetype()"
-            scrollHeight="150px"  [disabled]="editFlag" [resetFilterOnHide]="true" >
+            scrollHeight="150px"  [disabled]="editFlag || userFlag" [resetFilterOnHide]="true" >
             
             </p-dropdown>
             </div>
@@ -25,7 +25,7 @@
                     <label class="label">Process  Name</label>
                 </div>
                 <div class="p-col-5 item-left">
-                        <input class="form-control widthAdjust" [(ngModel)]="gcbDetailFilters.processName" [disabled]="true" >
+                        <input class="form-control widthAdjust" [(ngModel)]="gcbDetailFilters.processName" [disabled]="true || userFlag" >
                 </div>
             </div>
 
@@ -39,7 +39,7 @@
                                     [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
                                     [filter]="true" (click)="getServicetype()" scrollHeight="150px">
                 </p-dropdown> -->
-                <p-dropdown [options]="countryCodeReferenceDataList" (click)="getServicetype()"  [style]="{'width': '130%'}" placeholder="Select" [(ngModel)]="gcbDetailFilters.billedFromLocationId" [filter]="true"  [resetFilterOnHide]="true" ></p-dropdown>
+                <p-dropdown [options]="countryCodeReferenceDataList" (click)="getServicetype()"  [style]="{'width': '130%'}" placeholder="Select" [(ngModel)]="gcbDetailFilters.billedFromLocationId" [filter]="true"  [resetFilterOnHide]="true" [disabled]="userFlag"></p-dropdown>
             </div>
         </div>
         <div class="p-grid">
@@ -48,7 +48,7 @@
             </div>
             <div class="p-col-5 item-left">
                 <p-dropdown [options]="countryCodeReferenceDataList" [(ngModel)]="gcbDetailFilters.billedToLocationId" placeholder="Select" [autoWidth]="true"
-                [style]="{'width': '130%'}"  [filter]="true" (click)="getServicetype()" scrollHeight="150px" [resetFilterOnHide]="true" >
+                [style]="{'width': '130%'}"  [filter]="true" (click)="getServicetype()" scrollHeight="150px" [resetFilterOnHide]="true" [disabled]="userFlag">
                 </p-dropdown>
             </div>
         </div>
@@ -57,7 +57,7 @@
                  <label class="label"><span class="required">*</span>Service Type Name </label>
             </div>
             <div class="p-col-5 item-left">
-                <input class="form-control widthAdjust"  [disabled]="true" [(ngModel)]="gcbDetailFilters.serviceTypeName" tooltip="gcbDetailFilters.serviceTypeName" >
+                <input class="form-control widthAdjust"  [disabled]="true ||userFlag" [(ngModel)]="gcbDetailFilters.serviceTypeName" tooltip="gcbDetailFilters.serviceTypeName" >
             </div>
         </div>
         <div class="p-grid">
@@ -65,7 +65,7 @@
                      <label class="label">Legacy Service Type Name</label>
                 </div>
                 <div class="p-col-5 item-left">
-                    <input class="form-control widthAdjust"  [(ngModel)]="gcbDetailFilters.legacyServiceTypeName" [disabled]="legacyServiceTypeEnableFlag">
+                    <input class="form-control widthAdjust"  [(ngModel)]="gcbDetailFilters.legacyServiceTypeName" [disabled]="legacyServiceTypeEnableFlag || userFlag">
                 </div>
             </div>
        
@@ -80,7 +80,7 @@
                             <div class="p-col-5 item-left">
                                  <p-dropdown [options]="billingReferenceDataList" [(ngModel)]="gcbDetailFilters.billingBasis" placeholder="Select" [autoWidth]="true"
                                                     [style]="{'width': '130%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
-                                                    [filter]="true" scrollHeight="150px" [resetFilterOnHide]="true" >
+                                                    [filter]="true" scrollHeight="150px" [resetFilterOnHide]="true" [disabled]="userFlag">
                                                 </p-dropdown>
                             </div>
                         </div>
@@ -89,7 +89,7 @@
                                   <label class="label"><span class="required">*</span>Cost Center </label>
                             </div>
                             <div class="p-col-5 item-left">
-                                <input class="form-control widthAdjust" [(ngModel)]="gcbDetailFilters.costCenter"  >
+                                <input class="form-control widthAdjust" [(ngModel)]="gcbDetailFilters.costCenter"  [disabled]="userFlag">
                 
                             </div>
                         </div>
@@ -144,8 +144,8 @@
     </div>
 <div class="p-grid">
         <div class="p-col-12" style="text-align:right">
-            <button class="ge-button -fill--solid" (click)="upsertServiceType()" [disabled]="disabled">Submit</button>
-            <button class="ge-button -fill--solid" (click)="clearAllFilters()">Cancel</button>
+            <button class="ge-button -fill--solid" (click)="upsertServiceType()" [disabled]="userFlag || disabled">Submit</button>
+            <button class="ge-button -fill--solid" (click)="clearAllFilters()" [disabled]="userFlag">Cancel</button>
             <app-file-download [dwnData]="gcbDwnData" [colsHeader]="this.downloadCols" [fileName]="fileName"  (dwnAction)="getAllServiceType();"></app-file-download>
 
         </div>
