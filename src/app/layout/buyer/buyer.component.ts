@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { BuyerService } from './buyer.service';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { SelectItem } from 'primeng/primeng';
+import { Globals } from '../../shared/constants/globals';
 
 @Component({
   selector: 'app-product',
@@ -48,11 +49,18 @@ export class BuyerComponent implements OnInit {
   public countryCodeReferenceData: any;
   countryCodeReferenceDataList: SelectItem[] = [];
   public formMode="New";
-  
+  public userFlag = false;
   public goldNetReferenceData: any;
  goldNetIdReferenceDataList:SelectItem[] = [];
   
-  constructor(private buyerService: BuyerService,private modalService: NgbModal) { }
+  constructor(private buyerService: BuyerService,private modalService: NgbModal,private globals: Globals,) { 
+    if (this.globals.roleNM==='ADMIN') {
+      this.userFlag = false;
+    }
+    else {
+      this.userFlag = false;
+    }
+  }
   
 
   public cols = [
