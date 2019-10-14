@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { VendorService } from './vendor.service';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { SelectItem } from 'primeng/primeng';
+import { Globals } from '../../shared/constants/globals';
 
 @Component({
   selector: 'app-product',
@@ -54,8 +55,17 @@ export class VendorComponent implements OnInit {
   public formMode="New";
   public hlvendorReferenceData: any;
   hlVendorDataList: SelectItem[] = [];
+  public userFlag: boolean = true;
   
-  constructor(private vendorService: VendorService,private modalService: NgbModal) { }
+  constructor(private vendorService: VendorService,private modalService: NgbModal,private globals: Globals,) { 
+    //console.log("Role: "+this.globals.roleNM);
+    if (this.globals.roleNM==='ADMIN') {
+      this.userFlag = false;
+    }
+    else {
+      this.userFlag = true;
+    }
+  }
   
 
   public cols = [

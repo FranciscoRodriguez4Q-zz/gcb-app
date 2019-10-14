@@ -13,7 +13,7 @@
                   [options]="billProcessReferenceList"
                   [(ngModel)]="gcbProductFilters.billProcessId"      placeholder="Select"   [autoWidth]="true"
                   [style]="{'width': '100%' ,'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"   
-                  [filter]="true"  scrollHeight="150px"  [disabled]="editFlag"  [resetFilterOnHide]="true">
+                  [filter]="true"  scrollHeight="150px"  [disabled]="editFlag || userFlag"  [resetFilterOnHide]="true">
                   </p-dropdown>
                   </div>
               </div>
@@ -22,7 +22,7 @@
                       <label class="label"><span class="required">*</span>Product Name</label>
                   </div>
                   <div class="p-col-7 item-left">
-                      <input class="form-control" [(ngModel)]="gcbProductFilters.productName" >
+                      <input class="form-control" [(ngModel)]="gcbProductFilters.productName"  [disabled]="userFlag">
                   </div>
               </div>
               <div class="p-grid">
@@ -30,7 +30,7 @@
                       <label class="label"><span class="required">*</span>Product Code</label>
                   </div>
                   <div class="p-col-7 item-left">
-                      <input class="form-control" [(ngModel)]="gcbProductFilters.productCode">
+                      <input class="form-control" [(ngModel)]="gcbProductFilters.productCode" [disabled]="userFlag">
                   </div>
               </div>
               <!-- <div class="p-grid">
@@ -53,7 +53,7 @@
                                         [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
                                         [filter]="true" scrollHeight="150px">
                      </p-dropdown> -->
-                     <input class="form-control" [(ngModel)]="gcbProductFilters.unspsc">
+                     <input class="form-control" [(ngModel)]="gcbProductFilters.unspsc" [disabled]="userFlag">
                 </div>
             </div> 
            
@@ -67,8 +67,8 @@
       </div> 
       <div class="p-grid">
         <div class="p-col-12" style="text-align:right">
-            <button class="ge-button -fill--solid" (click)="upsertProduct()">Submit</button>
-            <button class="ge-button -fill--solid" (click)="clearAllFilters()">Cancel</button>
+            <button class="ge-button -fill--solid" (click)="upsertProduct()" [disabled]="userFlag">Submit</button>
+            <button class="ge-button -fill--solid" (click)="clearAllFilters()" [disabled]="userFlag">Cancel</button>
             <app-file-download [dwnData]="productDwnData" [colsHeader]="downloadCols" [fileName]="fileName" ></app-file-download>
     
         </div>

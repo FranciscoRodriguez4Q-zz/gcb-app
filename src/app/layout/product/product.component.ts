@@ -3,7 +3,7 @@ import { SelectItem, MessageService } from 'primeng/api';
 import { ProductService } from './product.service';
 import {Router} from "@angular/router";
 import { NgbModal ,ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
-
+import { Globals } from '../../shared/constants/globals';
 
 @Component({
   selector: 'app-product',
@@ -31,7 +31,7 @@ export class ProductComponent implements OnInit {
   closeResult: string;
   public formMode="New";
   public gridLoadFlag:boolean=false;
-
+  public userFlag = false;
 
 
   public fileName : any ="Product";
@@ -58,7 +58,14 @@ export class ProductComponent implements OnInit {
     upspscId: "Select"
   }
 
-  constructor(private router: Router,private productService:ProductService , private modalService: NgbModal) { }
+  constructor(private router: Router,private productService:ProductService , private modalService: NgbModal,private globals: Globals,) { 
+    if (this.globals.roleNM==='ADMIN') {
+      this.userFlag = false;
+    }
+    else {
+      this.userFlag = true;
+    }
+  }
 
   ngOnInit() { 
     this.getProductDetails();

@@ -17,19 +17,19 @@
         <span class="required">*</span>Vendor LE
       </div>
       <div class="p-col-4">
-        <p-dropdown [options]="vendorReferenceDataList" [style]="{'width': '100%'}" [(ngModel)]="vendorConfigDto.vendorEntityId" [filter]="true" placeholder="Select"  [resetFilterOnHide]="true" ></p-dropdown>
+        <p-dropdown [options]="vendorReferenceDataList" [style]="{'width': '100%'}" [(ngModel)]="vendorConfigDto.vendorEntityId" [filter]="true" placeholder="Select"  [resetFilterOnHide]="true" [disabled]="userFlag"></p-dropdown>
       </div>
       <div class="p-col-2 item-right">
         Active
       </div>
       <div class="p-col-1" >
-         <p-checkbox [(ngModel)]="vendorConfigDto.active" binary="true"></p-checkbox>
+         <p-checkbox [(ngModel)]="vendorConfigDto.active" binary="true" [disabled]="userFlag"></p-checkbox>
       </div>
       <div class="p-col-1 item-right">
          LLD CoE
       </div>
       <div class="p-col-2">
-        <p-dropdown [options]="lldCoeList"  [style]="{'width': '8px'}"  [(ngModel)]="vendorConfigDto.lldCoeFlag" [filter]="true" placeholder="Select"  [resetFilterOnHide]="true" ></p-dropdown>
+        <p-dropdown [options]="lldCoeList"  [style]="{'width': '8px'}"  [(ngModel)]="vendorConfigDto.lldCoeFlag" [filter]="true" placeholder="Select"  [resetFilterOnHide]="true" [disabled]="userFlag"></p-dropdown>
       </div>
 </div>
 <div class="p-grid">
@@ -37,13 +37,13 @@
          <span class="required">*</span>Vendor Code
        </div>
        <div class="p-col-4 item-left upper">
-          <input class="form-control" [(ngModel)]="vendorConfigDto.vendorCode" style="width: 25%" >
+          <input class="form-control" [(ngModel)]="vendorConfigDto.vendorCode" style="width: 25%" [disabled]="userFlag">
        </div>
        <div class="p-col-2 item-right">
           Exchange Rate Type
         </div>
         <div class="p-col-4 upper">
-            <p-dropdown [options]="exRateType" [(ngModel)]="vendorConfigDto.exchangeRateType" [filter]="true"  [style]="{'width': '25%'}" placeholder="Select" [resetFilterOnHide]="true" ></p-dropdown>
+            <p-dropdown [options]="exRateType" [(ngModel)]="vendorConfigDto.exchangeRateType" [filter]="true"  [style]="{'width': '25%'}" placeholder="Select" [resetFilterOnHide]="true" [disabled]="userFlag"></p-dropdown>
         </div>
 </div>
 <div class="p-grid">
@@ -51,13 +51,13 @@
        Vendor Contact Email
      </div>
      <div class="p-col-4 upper">
-        <input class="form-control" [(ngModel)]="vendorConfigDto.vendorContactEmail" style="width: 100%">
+        <input class="form-control" [(ngModel)]="vendorConfigDto.vendorContactEmail" style="width: 100%" [disabled]="userFlag">
      </div>
      <div class="p-col-2 item-right">
       Payment Approval Email
     </div>
     <div class="p-col-4">
-       <input class="form-control" [(ngModel)]="vendorConfigDto.paymentApprovalEmail" style="width: 100%">
+       <input class="form-control" [(ngModel)]="vendorConfigDto.paymentApprovalEmail" style="width: 100%" [disabled]="userFlag">
     </div>
 </div>
 <div class="p-grid">
@@ -65,13 +65,13 @@
       <span class="required">*</span>Currency Code
     </div>
     <div class="p-col-4 item-left">
-        <p-dropdown [options]="currencyReferenceDataList" [(ngModel)]="vendorConfigDto.currencyCode" [filter]="true"  placeholder="Select" [resetFilterOnHide]="true" ></p-dropdown>
+        <p-dropdown [options]="currencyReferenceDataList" [(ngModel)]="vendorConfigDto.currencyCode" [filter]="true"  placeholder="Select" [resetFilterOnHide]="true" [disabled]="userFlag"></p-dropdown>
     </div>
     <div class="p-col-2 item-right">
       Expected Feed Date
     </div>
     <div class="p-col-4">
-       <p-calendar [(ngModel)]="vendorConfigDto.expectedFeedDate"  [style]="{'width': '50%'}" ></p-calendar>
+       <p-calendar [(ngModel)]="vendorConfigDto.expectedFeedDate"  [style]="{'width': '50%'}" [disabled]="userFlag"></p-calendar>
     </div>
 
 </div>
@@ -80,13 +80,13 @@
       <span class="required">*</span>Billed From
     </div>
     <div class="p-col-4 item-left">
-        <p-dropdown [options]="countryCodeReferenceDataList" [style]="{'width': '100%'}" [(ngModel)]="vendorConfigDto.billedFromLocationId" [filter]="true" placeholder="Select" [disabled]="editFlag" [resetFilterOnHide]="true" ></p-dropdown>
+        <p-dropdown [options]="countryCodeReferenceDataList" [style]="{'width': '100%'}" [(ngModel)]="vendorConfigDto.billedFromLocationId" [filter]="true" placeholder="Select" [disabled]="editFlag || userFlag" [resetFilterOnHide]="true" [disabled]="userFlag"></p-dropdown>
     </div>
     <div class="p-col-2 item-right">
       Final Invoice Date
     </div>
     <div class="p-col-4">
-       <p-calendar [(ngModel)]="vendorConfigDto.finalInvoiceDate" [style]="{'width': '50%'}"></p-calendar>
+       <p-calendar [(ngModel)]="vendorConfigDto.finalInvoiceDate" [style]="{'width': '50%'}" [disabled]="userFlag"></p-calendar>
     </div>
 </div>
 <div class="p-grid">
@@ -94,7 +94,7 @@
       <span class="required">*</span>Billed To
     </div>
     <div class="p-col-4 item-left">
-        <p-dropdown [options]="countryCodeReferenceDataList" [style]="{'width': '100%'}" [(ngModel)]="vendorConfigDto.billedToLocationId" [filter]="true" placeholder="Select" [disabled]="editFlag" [resetFilterOnHide]="true" ></p-dropdown>
+        <p-dropdown [options]="countryCodeReferenceDataList" [style]="{'width': '100%'}" [(ngModel)]="vendorConfigDto.billedToLocationId" [filter]="true" placeholder="Select" [disabled]="editFlag || userFlag" [resetFilterOnHide]="true" ></p-dropdown>
     </div>
     <!-- <div class="p-col-2 item-right">
       <span class="required">*</span>Reporting Security DL
@@ -106,7 +106,7 @@
         <span class="required">*</span>Date Format
       </div>
       <div class="p-col-4 item-left upper">
-         <input class="form-control" [(ngModel)]="vendorConfigDto.dateFormat" style="width:40%">
+         <input class="form-control" [(ngModel)]="vendorConfigDto.dateFormat" style="width:40%" [disabled]="userFlag">
       </div>
 </div>
 <div class="p-grid">
@@ -118,8 +118,8 @@
 </div>
 <div class="p-grid">
     <div class="p-col-12" style="text-align:right">
-        <button class="ge-button -fill--solid" (click)="upsertVendorConfig()">Submit</button>
-        <button class="ge-button -fill--solid" (click)="clearAllFilters()">Cancel</button>
+        <button class="ge-button -fill--solid" (click)="upsertVendorConfig()" [disabled]="userFlag">Submit</button>
+        <button class="ge-button -fill--solid" (click)="clearAllFilters()" [disabled]="userFlag">Cancel</button>
         <app-file-download [dwnData]="dwnVendor" [colsHeader]="this.downloadCols" [fileName]="fileName"></app-file-download>
 
     </div>
