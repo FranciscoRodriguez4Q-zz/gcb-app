@@ -6,7 +6,7 @@
     color: #63666a;
 }
 
- .chkLabel {
+.chkLabel {
     padding-top: 1rem;
    // margin-bottom:0.25rem !important; 
     display: block;
@@ -66,4 +66,8 @@
 
   .ge-text-input-date{
     width: calc(65% - 2rem) !important;
+  }
+
+  .form-control {
+      font-size: 14px;
   }
