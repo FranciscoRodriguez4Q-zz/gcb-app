@@ -25,6 +25,7 @@ public vendorServiceType : any ={
 	"billProcessId":""
 };
   public cloneFlag = false;
+  public errorFlag = false;
   public modeFlag = false;
   public billingModelType: any = [];
 
@@ -413,7 +414,7 @@ public vendorServiceType : any ={
         this.cloneFlag = false;
         this.modeFlag = false;
         this.banInsertData.cloneOfId = "";
-        this.popupErrorMessage = "Vendor Ban has been changed, so creating a new record but not clone";
+        this.popupErrorMessage = "Vendor Ban has been modified, so creating a new record instead of a clone";
         this.open(this.modeMessagePopUp);
         return false;
       }
@@ -450,6 +451,7 @@ public vendorServiceType : any ={
       //   else {
       this.banService.upsertBan(this.banInsertData).subscribe(
         refData => {
+          this.errorFlag = true;
           this.saveMessage = refData;
           this.popupErrorMessage =  this.saveMessage.statusMessage;
           this.open(this.errorMessagePopUp);
@@ -467,7 +469,7 @@ public vendorServiceType : any ={
             this.editFlag = false;
             this.cloneFlag = false;
             this.vBanFlag = false;
-
+            this.errorFlag = false;
           }
         },
         error => {
@@ -501,6 +503,7 @@ public vendorServiceType : any ={
         }
       },
       (error) => {
+        this.errorFlag = true;
         this.popupErrorMessage = error;
         this.open(this.errorMessagePopUp);
       });
@@ -911,6 +914,7 @@ public vendorServiceType : any ={
         respArray.push(response);
         if (respArray[0].OUTPUT === 'FAIL')
         {
+          this.errorFlag = true;
           this.popupErrorMessage = respArray[0].BillRefID;
           this.open(this.errorMessagePopUp);
         }
@@ -920,6 +924,7 @@ public vendorServiceType : any ={
         } 
       },
       error => {
+        this.errorFlag = true;
      this.popupErrorMessage ="Internal Server Error!";
      this.open(this.errorMessagePopUp);
       });
@@ -945,6 +950,7 @@ public vendorServiceType : any ={
         respArray.push(response);
         if (respArray[0].OUTPUT === 'FAIL')
         {
+          this.errorFlag = true;
           this.popupErrorMessage = respArray[0].BillRefID;
           this.open(this.errorMessagePopUp);
         }
@@ -954,6 +960,7 @@ public vendorServiceType : any ={
         } 
       },
       error => {
+        this.errorFlag = true;
      this.popupErrorMessage ="Internal Server Error!";
      this.open(this.errorMessagePopUp);
       });
@@ -1099,6 +1106,7 @@ public vendorServiceType : any ={
     if (flag) {
       this.cloneFlag = true;
       this.modeFlag = false;
+      this.errorFlag = false;
       this.popupErrorMessage = "Do you want to Clone the record?";
       this.open(this.errorMessagePopUp);
     }

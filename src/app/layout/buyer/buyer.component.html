@@ -92,8 +92,8 @@
           [style]="{'margin-top':'2px','width':'100%'}" [rows]="10" [paginator]="true" [pageLinks]="3" [responsive]="true">
           <ng-template pTemplate="header" let-columns>
               <tr>
-                  <th [ngStyle]="{'width': '63px'}">Modify</th>
-                  <th *ngFor="let col of columns" [pSortableColumn]="col.field" [ngStyle]="{'width': '130px'}">
+                  <th [ngStyle]="{'width': '48px'}">Modify</th>
+                  <th *ngFor="let col of columns" [pSortableColumn]="col.field" [ngStyle]="{'width': '100px'}">
                       {{col.header}}
                       <p-sortIcon [field]="col.field"></p-sortIcon>
                   </th>
