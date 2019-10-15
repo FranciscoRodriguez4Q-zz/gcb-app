@@ -31,6 +31,7 @@ export class VendorComponent implements OnInit {
     // "createdBy":"503148032",
     // "updatedBy":"503148032"
   };
+  public vendorInsertDataCopy: any;
 
   public vendorEntityId: any;
   public vendorLegalEntityName: any;
@@ -110,6 +111,7 @@ export class VendorComponent implements OnInit {
       this.editFlag = true;
       this.formMode="Modify";
       this.vendorInsertData = this.vendorData.filter(x => x.vendorEntityId == vendorEntityId)[0];
+      this.vendorInsertDataCopy = { ...this.vendorInsertData }
       this.vendor = this.vendorInsertData;
   }
 
@@ -218,5 +220,12 @@ export class VendorComponent implements OnInit {
       updatedBy: ""
     };
     this.popupErrorMessage = "";
+  }
+
+  get disabled() {
+    if (this.editFlag) {
+      return JSON.stringify(this.vendorInsertData) === JSON.stringify(this.vendorInsertDataCopy)
+    }
+    return false;
   }
 }

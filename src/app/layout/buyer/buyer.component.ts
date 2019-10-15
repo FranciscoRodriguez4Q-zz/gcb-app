@@ -83,6 +83,7 @@ export class BuyerComponent implements OnInit {
     "buyerInfo":"",
     "goldNetName":""
   };
+  public buyerInsertDataCopy: any;
 
   ngOnInit() {
     this.getAllBuyerDetails();
@@ -151,6 +152,7 @@ export class BuyerComponent implements OnInit {
     this.editFlag = true;
     this.formMode="Modify";
     this.buyerInsertData = this.buyerData.filter(x => x.buyerId == buyerId)[0];
+    this.buyerInsertDataCopy = { ...this.buyerInsertData }
   }
 
   open(content) {
@@ -173,6 +175,7 @@ export class BuyerComponent implements OnInit {
       goldNetName:""
     }
     this.errorMessage ="";
+    this.buyerInsertDataCopy = {}
   }
 
   validation(){
@@ -245,5 +248,12 @@ export class BuyerComponent implements OnInit {
     } else {
       return `with: ${reason}`;
     }
+  }
+
+  get disabled() {
+    if (this.editFlag) {
+      return JSON.stringify(this.buyerInsertData) === JSON.stringify(this.buyerInsertDataCopy)
+    }
+    return false;
   }
 }

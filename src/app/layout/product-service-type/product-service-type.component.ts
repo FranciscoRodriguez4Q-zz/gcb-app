@@ -48,6 +48,7 @@ export class ProductServiceTypeComponent implements OnInit {
     legacyServiceTypeName:"",
     processName:""
   };
+  public gcbDetailFiltersCopy: any;  
   public cols = [
     { field: 'productNm', header: 'Product Name', width: '15%' },
     { field: 'serviceTypeName', header: 'Service Type Name', width: '15%' },
@@ -293,12 +294,14 @@ export class ProductServiceTypeComponent implements OnInit {
       costCenter: ""  ,
       processName:""  
     };
+    this.gcbDetailFiltersCopy = {};
   }
 
   showSelectedData(serviceTypeId) {
     console.log("radio button click" + serviceTypeId);
     this.editFlag = true;
     this.gcbDetailFilters = this.serviceTypes.filter(x => x.serviceTypeId == serviceTypeId)[0];
+    this.gcbDetailFiltersCopy = { ...this.gcbDetailFilters };
     this.formMode="Modify";
 
     if(this.gcbDetailFilters.processName=='TELECOM'){
@@ -308,5 +311,12 @@ export class ProductServiceTypeComponent implements OnInit {
       // }
     } 
     
+  }
+
+  get disabled() {
+    if (this.editFlag) {
+      return JSON.stringify(this.gcbDetailFilters) === JSON.stringify(this.gcbDetailFiltersCopy);
+    }
+    return false;
   }
 } 

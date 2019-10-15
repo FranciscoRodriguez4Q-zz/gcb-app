@@ -57,6 +57,7 @@ export class ProductComponent implements OnInit {
     unspsc: "",
     upspscId: "Select"
   }
+  public gcbProductFiltersCopy : any;
 
   constructor(private router: Router,private productService:ProductService , private modalService: NgbModal,private globals: Globals,) { 
     if (this.globals.roleNM==='ADMIN') {
@@ -145,6 +146,7 @@ export class ProductComponent implements OnInit {
       console.log("radio button click" + productId);
       this.editFlag = true;      
       this.gcbProductFilters = this.products.filter(x => x.productId == productId)[0];
+      this.gcbProductFiltersCopy = { ...this.gcbProductFilters };
       this.formMode="Modify";
     }
 
@@ -242,6 +244,14 @@ export class ProductComponent implements OnInit {
         unspsc: "",
         upspscId: "Select"
       };
+      this.gcbProductFiltersCopy = {}
+    }
+
+    get disabled() {
+      if (this.editFlag) {
+        return JSON.stringify(this.gcbProductFilters) === JSON.stringify(this.gcbProductFiltersCopy)
+      }
+      return false;
     }
 
   }

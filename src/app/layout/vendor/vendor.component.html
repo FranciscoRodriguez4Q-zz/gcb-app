@@ -37,7 +37,7 @@
   </div>
 <div class="p-grid">
     <div class="p-col-12" style="text-align:right">
-        <button class="ge-button -fill--solid -size--medium" (click)="upsertVendor()" [disabled]="userFlag">Submit</button>
+        <button class="ge-button -fill--solid -size--medium" (click)="upsertVendor()" [disabled]="userFlag || disabled">Submit</button>
         <button class="ge-button -fill--solid -size--medium" (click)="cancel()" [disabled]="userFlag">Cancel</button>
         <app-file-download [dwnData]="venDwnData" [colsHeader]="this.downloadCols" [fileName]="fileName"></app-file-download>
     </div>

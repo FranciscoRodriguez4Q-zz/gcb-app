@@ -76,6 +76,7 @@ createdBy:"",
 lastUpdated:"",
 lastUpdatedBy:""
 };
+public vendorConfigDtoCopy: any;
 
 public cols = [
   { field: 'vendorLegalEntityName', header: 'Vendor Legal Entity Name', width: '40%' },
@@ -219,6 +220,7 @@ clearAllFilters() {
     lastUpdatedBy:""
     };
   //this.popupErrorMessage = "";
+  this.vendorConfigDtoCopy = {};
   this.getVendorDetailGridData();
 }
 
@@ -333,6 +335,14 @@ showSelectedData(vendorConfigId) {
   console.log("vendorConfig modify click :" + vendorConfigId);
   this.editFlag = true;
   this.vendorConfigDto = this.vendorGridData.filter(x => x.vendorConfigId == vendorConfigId)[0];
+  this.vendorConfigDtoCopy = { ...this.vendorConfigDto };
+}
+
+get disabled() {
+  if (this.editFlag) {
+    return JSON.stringify(this.vendorConfigDto) === JSON.stringify(this.vendorConfigDtoCopy);
+  }
+  return false;
 }
 
 }
