@@ -134,12 +134,12 @@
                                         </div>
                         </p-accordionTab>
                 <p-accordionTab header="Billing Details">
-                        <div class="p-grid ">
-                                <div class="p-col-4 item-right">Gold Id override flag </div>
-                                <div class="p-col-1 item-left gridCheckBox">
+                        <div class="container-details p-grid">
+                                <div class="p-col-4 align-end">Gold Id override flag </div>
+                                <div class="p-col-1 item-container-details" >
                                         <p-checkbox  binary="true" labelStyleClass="chkLabel" (click)="enableGoldIdText()" [(ngModel)]="banInsertData.goldIdOverrideFlag"></p-checkbox><label class="label"></label>
                                 </div>
-                                <div class="p-col-5 item-left gridCheckBox">
+                                <div class="p-col-5">
                                         <span>Original/Default value: {{banInsertData.currentGoldId}} </span>
                                 </div>
                         </div>
@@ -150,7 +150,7 @@
                                 </div>
                         </div>
                         <div class="p-grid ">
-                                <div class="p-col-4 item-right">Liquidate to Bill Routing ID </div>
+                                <div class="p-col-4 item-right">Liquidation BUC/ADN</div>
                                   <div class="p-col-8 item-left">
                                                 <div *ngIf="banInsertData.liquidateBillRoutingId">
 
@@ -178,9 +178,9 @@
                                         (ngModelChange)="tableValueChanged(banInsertData.erpAwtGroupName,banInsertData.erpVatAwtGroupName,banInsertData.erpPaymentTerms,banInsertData.directOffsetBuc,banInsertData.indirectOffsetBuc)"/>
                                 </div>
                         </div>
-                        <div class="p-grid ">
-                                <div class="p-col-4 item-right">Is Equipment</div>
-                                <div class="p-col-1 item-left gridServiceType">
+                        <div class="container-details p-grid">
+                                <div class="p-col-4 align-end">Is Equipment</div>
+                                <div class="p-col-1 item-container-details">
                                         <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="banInsertData.isEquipment"></p-checkbox><label class="label"></label>
                                 </div>
                         </div>
@@ -438,7 +438,7 @@
                                                         <input class="form-control" [(ngModel)]="systems.overrideOffsetCostCenter" [disabled]="isDisableCostCenter" (ngModelChange)="systems.overrideOffsetCostCenter = $event.toUpperCase()"/>
                                                 </div>
                                         </div>
-                                        <div class="p-grid gridServiceType">
+                                        <!-- <div class="p-grid gridServiceType">
                                             <div class="p-col-5 item-right">ERP PMT Override</div>
                                             <div class="p-col-1 item-left">
                                                 <p-checkbox  binary="true"  [(ngModel)]="systems.erpPmtOverrideFlag" (onChange)="triggerErpPmtEvent(systems.erpPmtOverrideFlag)"></p-checkbox>
@@ -452,7 +452,7 @@
                                             <div class="p-col-7 item-left">
                                                 <input class="form-control" [(ngModel)]="systems.overrideErpPmtTerms" [disabled]="isDisableErpPmt" (ngModelChange)="systems.overrideErpPmtTerms = $event.toUpperCase()"/>
                                             </div>
-                                        </div>
+                                        </div> -->
                                         <div class="p-grid gridServiceType">
                                                 <div class="p-col-5 item-right">ERP AWT Group Name Override</div>
                                                 <div class="p-col-1 item-left gridServiceTypeTwoLine">
