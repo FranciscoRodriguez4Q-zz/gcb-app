@@ -20,6 +20,22 @@
     margin-top: 0.5rem;
 }
 
+.container-details {
+    display: flex;
+    align-items: center;
+    margin-top: 0.1rem;
+    margin-bottom: 0.1875rem;
+}
+
+.item-container-details {
+    display: flex;
+}
+
+.align-end {
+    display: flex;
+    justify-content: flex-end;
+}
+
 .gridServiceTypeTwoLine{
     margin-top: 1rem;
 }
