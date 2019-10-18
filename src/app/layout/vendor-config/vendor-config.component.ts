@@ -1,17 +1,19 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { SelectItem } from 'primeng/primeng';
 import { VendorConfigService } from './vendor-config.service';
 import { ServiceTypeService } from '../service-type/service-type.service';
 import { ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Globals } from '../../shared/constants/globals';
+import { Subscription } from 'rxjs';
+import { HomeService } from '../home/home.service';
 
 @Component({
   selector: 'app-vendor-config',
   templateUrl: './vendor-config.component.html',
   styleUrls: ['./vendor-config.component.scss']
 })
-export class VendorConfigComponent implements OnInit {
+export class VendorConfigComponent implements OnInit, OnDestroy {
   
 public vendorReferenceData : any;
 vendorReferenceDataList :SelectItem[] = [];
@@ -89,7 +91,16 @@ public cols = [
 
 ];
 
-constructor( private vendorConfigService: VendorConfigService, private serviceTypeService : ServiceTypeService,private modalService: NgbModal,private globals: Globals,) {
+private readonly KEY: string = 'VendorConfig';
+private subs: Subscription;
+
+constructor(
+  private vendorConfigService: VendorConfigService, 
+  private serviceTypeService : ServiceTypeService,
+  private modalService: NgbModal,
+  private globals: Globals,
+  private homeService: HomeService
+  ) {
   if (this.globals.roleNM==='ADMIN') {
     this.userFlag = false;
   }
@@ -98,19 +109,30 @@ constructor( private vendorConfigService: VendorConfigService, private serviceTy
   }
    }
 
-ngOnInit() { 
+  async ngOnInit() {
     this.setReportHeader();
-    this.getAllVendorsData();
-    this.getAllCountryData();
-    this.getAllCurrencyData();
-    this.getVendorDetailGridData();    
-    
+    await this.getAllVendorsData();
+    await this.getAllCountryData();
+    await this.getAllCurrencyData();
+    await this.getVendorDetailGridData();
+
     for (let i = 0; i < this.cols.length; i++) {
       // console.log("in Download method"+i);
       this.downloadCols.push(this.cols[i].header);
-    } 
-     this.getDwnVendorConfigData();
-}
+    }
+    await this.getDwnVendorConfigData();
+    this.subs = this.homeService.state$.subscribe(({ [this.KEY]: item }) => {
+      if (item) {
+        const { id } = item;
+        this.showSelectedData(id);
+      }
+    })
+  }
+
+  ngOnDestroy() {
+    this.homeService.setState({ key: this.KEY, data: null });
+    this.subs.unsubscribe();
+  }
 
 
 setReportHeader()
@@ -121,81 +143,134 @@ setReportHeader()
   }
 }
 
-getAllVendorsData() {
-  this.vendorConfigService.getAllVendors().subscribe(
-    refData => {
-      let arr: any = [];
-      this.vendorReferenceData = refData;
-      for (let data of this.vendorReferenceData) {
-        this.vendorReferenceDataList.push({ label: data.vendorLegalEntityName, value: data.vendorEntityId })
-      }
-    },
-    error => {
-    });
-}
-
-getAllCurrencyData() {
-  this.vendorConfigService.getAllCurrency().subscribe(
-    refData => {
-      this.currencyReferenceData = refData;
-      for (let data of this.currencyReferenceData) {
-        let currencyLebel = data.currencyCode+" | "+data.currencyDescription;
-        this.currencyReferenceDataList.push({ label: currencyLebel, value: data.currencyCode })
-      }
-    },
-    error => {
-    });
-}
-
-getAllCountryData(){
-  this.vendorConfigService.getAllCountryCode().subscribe(
-    refData => {
-      let arr: any = [];
-      this.countryCodeReferenceData = refData;
-
-      for (let data of this.countryCodeReferenceData) {
-        let labelCountry = data.countryCode + " | " + data.countryName;
-        this.countryCodeReferenceDataList.push({ label: labelCountry, value: data.countryId })
-      }
-    },
-    error => {
-    });
-}
-
-getDwnVendorConfigData(){
-  this.vendorConfigService.getDwnVendorConfigData().subscribe(
-    refData => {
-      //this.vendorGridData = refData;
-      this.dwnVendor=refData;
-
-      this.dwnVendor.map(item => {
-        return {
-          vendorLegalEntityName: item.vendorLegalEntityName,
-          currencyCode: item.currencyCode,
-          billedFromCountry: item.billedFromCountry,
-          billedToCountry: item.billedToCountry,
-          vendorCode:this.vendorCode,
-          updatedBy:this.updatedBy,
-          lastUpdated:this.lastUpdated,
+  getAllVendorsData() {
+    return this.vendorConfigService.getAllVendors().toPromise().then(
+      refData => {
+        let arr: any = [];
+        this.vendorReferenceData = refData;
+        for (let data of this.vendorReferenceData) {
+          this.vendorReferenceDataList.push({ label: data.vendorLegalEntityName, value: data.vendorEntityId })
         }
-      }).forEach(item => this.dwnVendor.push(item));
-    },
-    error => {
-    });
-}
+      }
+    ).catch(console.log)
+    // .subscribe(
+    //   refData => {
+    //     let arr: any = [];
+    //     this.vendorReferenceData = refData;
+    //     for (let data of this.vendorReferenceData) {
+    //       this.vendorReferenceDataList.push({ label: data.vendorLegalEntityName, value: data.vendorEntityId })
+    //     }
+    //   },
+    //   error => {
+    //   });
+  }
 
-getVendorDetailGridData() {
-  this.vendorConfigService.getVendorGridData().subscribe(
-    refData => {
-      this.vendorGridData = refData;
-      this.gridLoadFlag=true;
-      //this.dwnVendor=refData;
-    },
-    error => {
-    });
-}
+  getAllCurrencyData() {
+    return this.vendorConfigService.getAllCurrency().toPromise().then(
+      refData => {
+        this.currencyReferenceData = refData;
+        for (let data of this.currencyReferenceData) {
+          let currencyLebel = data.currencyCode + " | " + data.currencyDescription;
+          this.currencyReferenceDataList.push({ label: currencyLebel, value: data.currencyCode })
+        }
+      }
+    ).catch(console.log)
+    // .subscribe(
+    //     refData => {
+    //       this.currencyReferenceData = refData;
+    //       for (let data of this.currencyReferenceData) {
+    //         let currencyLebel = data.currencyCode+" | "+data.currencyDescription;
+    //         this.currencyReferenceDataList.push({ label: currencyLebel, value: data.currencyCode })
+    //       }
+    //     },
+    //     error => {
+    //     });
+  }
 
-clearAllFilters() {
+  getAllCountryData() {
+    return this.vendorConfigService.getAllCountryCode().toPromise().then(
+      refData => {
+        let arr: any = [];
+        this.countryCodeReferenceData = refData;
+
+        for (let data of this.countryCodeReferenceData) {
+          let labelCountry = data.countryCode + " | " + data.countryName;
+          this.countryCodeReferenceDataList.push({ label: labelCountry, value: data.countryId })
+        }
+      }
+    ).catch(console.log)
+    // .subscribe(
+    //   refData => {
+    //     let arr: any = [];
+    //     this.countryCodeReferenceData = refData;
+
+    //     for (let data of this.countryCodeReferenceData) {
+    //       let labelCountry = data.countryCode + " | " + data.countryName;
+    //       this.countryCodeReferenceDataList.push({ label: labelCountry, value: data.countryId })
+    //     }
+    //   },
+    //   error => {
+    //   });
+  }
+
+  getDwnVendorConfigData() {
+    return this.vendorConfigService.getDwnVendorConfigData().toPromise().then(
+      refData => {
+        //this.vendorGridData = refData;
+        this.dwnVendor = refData;
+        this.dwnVendor.map(item => {
+          return {
+            vendorLegalEntityName: item.vendorLegalEntityName,
+            currencyCode: item.currencyCode,
+            billedFromCountry: item.billedFromCountry,
+            billedToCountry: item.billedToCountry,
+            vendorCode: this.vendorCode,
+            updatedBy: this.updatedBy,
+            lastUpdated: this.lastUpdated,
+          }
+        }).forEach(item => this.dwnVendor.push(item));
+      }
+    ).catch(console.log)
+    // .subscribe(
+    //   refData => {
+    //     //this.vendorGridData = refData;
+    //     this.dwnVendor=refData;
+
+    //     this.dwnVendor.map(item => {
+    //       return {
+    //         vendorLegalEntityName: item.vendorLegalEntityName,
+    //         currencyCode: item.currencyCode,
+    //         billedFromCountry: item.billedFromCountry,
+    //         billedToCountry: item.billedToCountry,
+    //         vendorCode:this.vendorCode,
+    //         updatedBy:this.updatedBy,
+    //         lastUpdated:this.lastUpdated,
+    //       }
+    //     }).forEach(item => this.dwnVendor.push(item));
+    //   },
+    //   error => {
+    //   });
+  }
+
+  getVendorDetailGridData() {
+    return this.vendorConfigService.getVendorGridData().toPromise().then(
+      refData => {
+        this.vendorGridData = refData;
+        this.gridLoadFlag = true;
+        //this.dwnVendor=refData;
+      }
+    ).catch(console.log)
+    // .subscribe(
+    //   refData => {
+    //     this.vendorGridData = refData;
+    //     this.gridLoadFlag=true;
+    //     //this.dwnVendor=refData;
+    //   },
+    //   error => {
+    //   });
+  }
+
+async clearAllFilters() {
   this.errorMessage = "";
   this.editFlag = false;
   this.vendorConfigDto={vendorConfigId:0,
@@ -221,7 +296,7 @@ clearAllFilters() {
     };
   //this.popupErrorMessage = "";
   this.vendorConfigDtoCopy = {};
-  this.getVendorDetailGridData();
+  await this.getVendorDetailGridData();
 }
 
 upsertVendorConfig(){

@@ -1,10 +1,12 @@
-import { Component, OnInit,  ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { SelectItem } from 'primeng/api';
 import { Message } from 'primeng/components/common/api';
 import { MessageService } from 'primeng/api';
 import { ProductServiceTypeService } from './product-service-type.service';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { Globals } from '../../shared/constants/globals';
+import { HomeService } from '../home/home.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-product-service-type',
@@ -13,7 +15,7 @@ import { Globals } from '../../shared/constants/globals';
   providers: [ProductServiceTypeService, MessageService]
 
 })
-export class ProductServiceTypeComponent implements OnInit {
+export class ProductServiceTypeComponent implements OnInit, OnDestroy {
   public serviceTypes: any = [];
   productReferenceDataList: SelectItem[] = [];
   public productReferenceData: any;
@@ -23,15 +25,17 @@ export class ProductServiceTypeComponent implements OnInit {
   public billingBasisReferenceData: any;
   public gcbDwnData: any = [];
   public downloadCols = [];
-  public fileName : any ="ServiceType";
-  public gridLoadFlag:boolean=false;
+  public fileName: any = "ServiceType";
+  public gridLoadFlag: boolean = false;
   public userFlag: boolean = true;
+  private readonly KEY: string = 'ProductServiceType'
+  private subs: Subscription;
 
   public billProcessReference: any;
-  public legacyServiceTypeEnableFlag:boolean=false;
+  public legacyServiceTypeEnableFlag: boolean = false;
   public gcbDetailFilters: any = {
     productId: "Select",
-    productNm:"",
+    productNm: "",
     billedFromLocationId: "Select",
     billedToLocationId: "Select",
     billingBasis: "Select",
@@ -39,16 +43,16 @@ export class ProductServiceTypeComponent implements OnInit {
     suggestedServiceType: "",
     serviceTypeMessage: "",
     useSuggested: true,
-    vatPercent :"",
-    whtPercent :"",
-    tpPercent :"",
-    unspscOverride :false,
+    vatPercent: "",
+    whtPercent: "",
+    tpPercent: "",
+    unspscOverride: false,
     unspsc: "",
     costCenter: "",
-    legacyServiceTypeName:"",
-    processName:""
+    legacyServiceTypeName: "",
+    processName: ""
   };
-  public gcbDetailFiltersCopy: any;  
+  public gcbDetailFiltersCopy: any;
   public cols = [
     { field: 'productNm', header: 'Product Name', width: '15%' },
     { field: 'serviceTypeName', header: 'Service Type Name', width: '15%' },
@@ -58,18 +62,23 @@ export class ProductServiceTypeComponent implements OnInit {
     { field: 'costCenter', header: 'Cost Center', width: '15%' },
     { field: 'updatedBy', header: 'Updated By', width: '10%' },
     { field: 'lastUpdated', header: 'Updated Date', width: '10%' },
-  
+
 
   ];
   public editFlag = false;
-  public formMode="New";
+  public formMode = "New";
   public errorMessage = "";
   public saveMessage: any = [];
   @ViewChild('content1') errorMessagePopUp;
   public popupErrorMessage: any;
   closeResult: string;
-  constructor(private serviceTypeService: ProductServiceTypeService, private modalService: NgbModal,private globals: Globals,) { 
-    if (this.globals.roleNM==='ADMIN') {
+  constructor(
+    private serviceTypeService: ProductServiceTypeService,
+    private modalService: NgbModal,
+    private globals: Globals,
+    private homeService: HomeService,
+  ) {
+    if (this.globals.roleNM === 'ADMIN') {
       this.userFlag = false;
     }
     else {
@@ -77,21 +86,31 @@ export class ProductServiceTypeComponent implements OnInit {
     }
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     for (let i = 0; i < this.cols.length; i++) {
       this.downloadCols.push(this.cols[i].header);
       //this.downloadCols[this.cols[i].header] = "";
     }
-    this.getAllServiceType();
-    this.getAllProductData();
-    this.getAllCountryData();
+    await this.getAllServiceType();
+    await this.getAllProductData();
+    await this.getAllCountryData();
     this.getBillingBasisData();
-    this.getBillProcess()
+    await this.getBillProcess()
+    this.subs = this.homeService.state$.subscribe(({ [this.KEY]: item }) => {
+      if (item) {
+        const { id } = item;
+        this.showSelectedData(id);
+      }
+    })
   }
 
+  ngOnDestroy() {
+    this.homeService.setState({ key: this.KEY, data: null });
+    this.subs.unsubscribe()
+  }
 
- getAllCountryData(){
-    this.serviceTypeService.getCountryData().subscribe(
+  getAllCountryData() {
+    return this.serviceTypeService.getCountryData().toPromise().then(
       refData => {
         let arr: any = [];
         this.countryCodeReferenceData = refData;
@@ -101,31 +120,53 @@ export class ProductServiceTypeComponent implements OnInit {
           let labelCountry = data.countryCode + " | " + data.countryName;
           this.countryCodeReferenceDataList.push({ label: labelCountry, value: data.countryId })
         }
-      },
-      error => {
-      });
-  }
-
-  getAllProductData(){
-    this.serviceTypeService.getProducts()
-    .subscribe(
-    refData => {
-      let arr: any = [];
-      this.productReferenceData = refData;
-      this.productReferenceDataList.push({ label: "Select", value: "Select" })
-      for (let data of this.productReferenceData) {
-        let labelProd = data.productCode + " | " + data.productName
-        this.productReferenceDataList.push({ label: labelProd, value: data.productId })
-
       }
-    },
-    error => {
-      console.log(error);
-    });
+    ).catch(console.log)
+    // .subscribe(
+    //   refData => {
+    //     let arr: any = [];
+    //     this.countryCodeReferenceData = refData;
+    //     this.countryCodeReferenceDataList.push({ label: "Select", value: "Select" })
+
+    //     for (let data of this.countryCodeReferenceData) {
+    //       let labelCountry = data.countryCode + " | " + data.countryName;
+    //       this.countryCodeRefe2renceDataList.push({ label: labelCountry, value: data.countryId })
+    //     }
+    //   },
+    //   error => {
+    //   });
+  }
+
+  getAllProductData() {
+    return this.serviceTypeService.getProducts().toPromise().then(
+      refData => {
+        let arr: any = [];
+        this.productReferenceData = refData;
+        this.productReferenceDataList.push({ label: "Select", value: "Select" })
+        for (let data of this.productReferenceData) {
+          let labelProd = data.productCode + " | " + data.productName
+          this.productReferenceDataList.push({ label: labelProd, value: data.productId })
+        }
+      }
+    ).catch(console.log)
+    // .subscribe(
+    // refData => {
+    //   let arr: any = [];
+    //   this.productReferenceData = refData;
+    //   this.productReferenceDataList.push({ label: "Select", value: "Select" })
+    //   for (let data of this.productReferenceData) {
+    //     let labelProd = data.productCode + " | " + data.productName
+    //     this.productReferenceDataList.push({ label: labelProd, value: data.productId })
+    //   }
+    //   this.test()
+    // },
+    // error => {
+    //   console.log(error);
+    // });
 
   }
 
-  getBillingBasisData(){
+  getBillingBasisData() {
     /*this.serviceTypeService.getBillingBasis().subscribe(
       refData => {
         let arr: any = [];
@@ -139,58 +180,70 @@ export class ProductServiceTypeComponent implements OnInit {
       },
       error => {
       });*/
-      this.billingReferenceDataList.push({ label: "Select", value: "Select" });
-      this.billingReferenceDataList.push({ label: "ACCOUNT-BASED", value: "ACCOUNT-BASED" });
-      this.billingReferenceDataList.push({ label: "SSO-BASED", value: "SSO-BASED" });
+    this.billingReferenceDataList.push({ label: "Select", value: "Select" });
+    this.billingReferenceDataList.push({ label: "ACCOUNT-BASED", value: "ACCOUNT-BASED" });
+    this.billingReferenceDataList.push({ label: "SSO-BASED", value: "SSO-BASED" });
   }
-  getBillProcess(){
-    this.serviceTypeService.getBillProcessList().subscribe(
+  getBillProcess() {
+    return this.serviceTypeService.getBillProcessList().toPromise().then(
       refData => {
-        this.billProcessReference = refData;       
-      },
-      error => {
-      });
-    }
+        this.billProcessReference = refData;
+      }
+    ).catch(console.log)
+    // .subscribe(
+    //   refData => {
+    //     this.billProcessReference = refData;       
+    //   },
+    //   error => {
+    //   });
+  }
 
   getServicetype() {
     this.errorMessage = "";
     if (this.gcbDetailFilters.productId != "Select") {
       let productData = this.productReferenceData.filter(x => x.productId == this.gcbDetailFilters.productId)[0];
-      let billProcessData=this.billProcessReference.filter(y => y.billProcessId == productData.billProcessId)[0];
-      this.gcbDetailFilters.unspsc = productData.unspsc; 
-      this.gcbDetailFilters.processName=billProcessData.processName;
-      if(this.gcbDetailFilters.processName=='GOTEMS'){
-        this.legacyServiceTypeEnableFlag=true;
-      }     
+      let billProcessData = this.billProcessReference.filter(y => y.billProcessId == productData.billProcessId)[0];
+      this.gcbDetailFilters.unspsc = productData.unspsc;
+      this.gcbDetailFilters.processName = billProcessData.processName;
+      if (this.gcbDetailFilters.processName == 'GOTEMS') {
+        this.legacyServiceTypeEnableFlag = true;
+      }
     }
     if (this.gcbDetailFilters.productId != "Select" && this.gcbDetailFilters.billedFromLocationId != "Select" && this.gcbDetailFilters.billedToLocationId != "Select") {
       let productData = this.productReferenceData.filter(x => x.productId == this.gcbDetailFilters.productId)[0];
       console.log("Product Selected : " + productData);
-      let fromCountry =  this.countryCodeReferenceData.filter(x => x.countryId == this.gcbDetailFilters.billedFromLocationId)[0];
-      let toCountry =  this.countryCodeReferenceData.filter(x => x.countryId == this.gcbDetailFilters.billedToLocationId)[0];
-      this.gcbDetailFilters.serviceTypeName = productData.productCode +"_"+ fromCountry.countryCode+"_2"+toCountry.countryCode;
+      let fromCountry = this.countryCodeReferenceData.filter(x => x.countryId == this.gcbDetailFilters.billedFromLocationId)[0];
+      let toCountry = this.countryCodeReferenceData.filter(x => x.countryId == this.gcbDetailFilters.billedToLocationId)[0];
+      this.gcbDetailFilters.serviceTypeName = productData.productCode + "_" + fromCountry.countryCode + "_2" + toCountry.countryCode;
       console.log("Product this.gcbDetailFilters.suggestedServiceType : " + this.gcbDetailFilters.serviceType);
       this.gcbDetailFilters.suggestedServiceType = this.gcbDetailFilters.serviceTypeName;
-      this.gcbDetailFilters.legacyServiceTypeName=this.gcbDetailFilters.serviceTypeName;
-      if(this.gcbDetailFilters.processName=='TELECOM'){
-        this.legacyServiceTypeEnableFlag=false;
-      }       
-    
+      this.gcbDetailFilters.legacyServiceTypeName = this.gcbDetailFilters.serviceTypeName;
+      if (this.gcbDetailFilters.processName == 'TELECOM') {
+        this.legacyServiceTypeEnableFlag = false;
+      }
+
     }
 
   }
 
   getAllServiceType() {
     console.log("getAllServiceType");
-    this.serviceTypeService.getServicetypeData().subscribe(
+    return this.serviceTypeService.getServicetypeData().toPromise().then(
       refData => {
         this.serviceTypes = refData;
-        this.gridLoadFlag=true;
+        this.gridLoadFlag = true;
         this.gcbDwnData = refData;
-      },
-      error => {
-      });
-      
+      }
+    ).catch()
+    // .subscribe(
+    //   refData => {
+    //     this.serviceTypes = refData;
+    //     this.gridLoadFlag=true;
+    //     this.gcbDwnData = refData;
+    //   },
+    //   error => {
+    //   });
+
   }
 
   upsertServiceType() {
@@ -202,12 +255,12 @@ export class ProductServiceTypeComponent implements OnInit {
           refData => {
             this.saveMessage = refData;
             //this.errorMessage = this.saveMessage.statusMessage;
-           /*  this.msgs = [];
-            this.msgs.push({ severity: 'error', summary: this.errorMessage, detail: '' }); */
-            this.popupErrorMessage =  this.saveMessage.statusMessage;
+            /*  this.msgs = [];
+             this.msgs.push({ severity: 'error', summary: this.errorMessage, detail: '' }); */
+            this.popupErrorMessage = this.saveMessage.statusMessage;
             this.open(this.errorMessagePopUp);
             this.getAllServiceType();
-            if(this.saveMessage.status){
+            if (this.saveMessage.status) {
               this.clearAllFilters();
             }
           },
@@ -232,23 +285,23 @@ export class ProductServiceTypeComponent implements OnInit {
     }
     if (this.gcbDetailFilters.billingBasis == "Select") {
       this.errorMessage = "Please select Billing Basis";
-       return false;
+      return false;
     }
     if (this.gcbDetailFilters.costCenter == "") {
       this.errorMessage = "Please select Cost Center";
-       return false;
+      return false;
     }
     if (this.gcbDetailFilters.billingBasis == "Select") {
       this.errorMessage = "Please select Cost Center";
-       return false;
+      return false;
     }
     return true;
   }
 
-    /**
-   * Method to open modal pop up.
-   * @param: content: @ViewChild
-   */
+  /**
+ * Method to open modal pop up.
+ * @param: content: @ViewChild
+ */
   open(content) {
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
@@ -257,10 +310,10 @@ export class ProductServiceTypeComponent implements OnInit {
     });
   }
 
-    /**
-   * Private Method to get popup dismissed reason Can be removed if not needed.
-   * @param: reason: $event.
-   */
+  /**
+ * Private Method to get popup dismissed reason Can be removed if not needed.
+ * @param: reason: $event.
+ */
   private getDismissReason(reason: any): string {
     if (reason === ModalDismissReasons.ESC) {
       return 'by pressing ESC';
@@ -273,12 +326,13 @@ export class ProductServiceTypeComponent implements OnInit {
 
   clearAllFilters() {
     this.errorMessage = "";
-   /*  this.messageService.clear();
-    this.msgs = []; */
+    /*  this.messageService.clear();
+     this.msgs = []; */
     this.editFlag = false;
+    this.formMode = "New";
     this.gcbDetailFilters = {
       productId: "Select",
-      productNm:"",
+      productNm: "",
       billedFromLocationId: "Select",
       billedToLocationId: "Select",
       billingBasis: "Select",
@@ -286,13 +340,13 @@ export class ProductServiceTypeComponent implements OnInit {
       suggestedServiceType: "",
       serviceTypeMessage: "",
       useSuggested: true,
-      vatPercent :"",
-      whtPercent :"",
-      tpPercent :"",
-      unspscOver :"",
-      unspscOverride :false,
-      costCenter: ""  ,
-      processName:""  
+      vatPercent: "",
+      whtPercent: "",
+      tpPercent: "",
+      unspscOver: "",
+      unspscOverride: false,
+      costCenter: "",
+      processName: ""
     };
     this.gcbDetailFiltersCopy = {};
   }
@@ -302,15 +356,15 @@ export class ProductServiceTypeComponent implements OnInit {
     this.editFlag = true;
     this.gcbDetailFilters = this.serviceTypes.filter(x => x.serviceTypeId == serviceTypeId)[0];
     this.gcbDetailFiltersCopy = { ...this.gcbDetailFilters };
-    this.formMode="Modify";
+    this.formMode = "Modify";
 
-    if(this.gcbDetailFilters.processName=='TELECOM'){
-      this.legacyServiceTypeEnableFlag=false;
+    if (this.gcbDetailFilters.processName == 'TELECOM') {
+      this.legacyServiceTypeEnableFlag = false;
       // if(this.gcbDetailFilters.legacyServiceTypeName=="" || this.gcbDetailFilters.legacyServiceTypeName==null){
       // this.gcbDetailFilters.legacyServiceTypeName=this.gcbDetailFilters.serviceTypeName;
       // }
-    } 
-    
+    }
+
   }
 
   get disabled() {
