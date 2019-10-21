@@ -1,15 +1,17 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { BuyerService } from './buyer.service';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { SelectItem } from 'primeng/primeng';
 import { Globals } from '../../shared/constants/globals';
+import { Subscription } from 'rxjs';
+import { HomeService } from '../home/home.service';
 
 @Component({
   selector: 'app-product',
   templateUrl: './buyer.component.html',
   styleUrls: ['./buyer.component.scss']
 })
-export class BuyerComponent implements OnInit {
+export class BuyerComponent implements OnInit, OnDestroy {
 
   public gridData: any = [];
   data:any;
@@ -52,9 +54,17 @@ export class BuyerComponent implements OnInit {
   public userFlag = false;
   public goldNetReferenceData: any;
  goldNetIdReferenceDataList:SelectItem[] = [];
+
+ private readonly KEY: string = 'Buyer';
+ private subs: Subscription;
   
-  constructor(private buyerService: BuyerService,private modalService: NgbModal,private globals: Globals,) { 
-    if (this.globals.roleNM==='ADMIN') {
+  constructor(
+    private buyerService: BuyerService,
+    private modalService: NgbModal,
+    private globals: Globals,
+    private homeService: HomeService
+  ) {
+    if (this.globals.roleNM === 'ADMIN') {
       this.userFlag = false;
     }
     else {
@@ -85,68 +95,123 @@ export class BuyerComponent implements OnInit {
   };
   public buyerInsertDataCopy: any;
 
-  ngOnInit() {
-    this.getAllBuyerDetails();
+  async ngOnInit() {
+    await this.getAllBuyerDetails();
     for (let i = 0; i < this.cols.length; i++) {
       // console.log("in Download method"+i);
       this.downloadCols.push(this.cols[i].header);
-    }    
-    this.getAllCountryData();
-	this.getGoldNetList();
+    }
+    await this.getAllCountryData();
+    await this.getGoldNetList();
+    this.subs = this.homeService.state$.subscribe(({ [this.KEY]: item }) => {
+      if(item) {
+        const { id } = item;
+        this.showSelectedData(id);
+      }
+    })
+  }
+
+  ngOnDestroy() {
+    this.homeService.setState({ key: this.KEY, data: null });
+    this.subs.unsubscribe()
   }
 
   getAllBuyerDetails() {
-    this.buyerService.getBuyerDetails().subscribe(
+    return this.buyerService.getBuyerDetails().toPromise().then(
       refData => {
-        this.buyerData=refData;
+        this.buyerData = refData;
         this.gridLoadFlag = true;
 
         this.buyerData.map(item => {
           return {
-              erpBuyerLeName: item.erpBuyerLeName,
-              erpOuEntityName: item.erpOuEntityName,
-              erpOuNumber: item.erpOuNumber,
-              locationName: item.locationName,
-              goldId:this.goldId,
-              updatedBy:this.updatedBy,
-              lastUpdatedDate:this.lastUpdatedDate,
+            erpBuyerLeName: item.erpBuyerLeName,
+            erpOuEntityName: item.erpOuEntityName,
+            erpOuNumber: item.erpOuNumber,
+            locationName: item.locationName,
+            goldId: this.goldId,
+            updatedBy: this.updatedBy,
+            lastUpdatedDate: this.lastUpdatedDate,
           }
-      }).forEach(item => this.buyerDwnData.push(item));
-      },
-      error => {
-      });
+        }).forEach(item => this.buyerDwnData.push(item));
+      }
+    ).catch(console.log);
+    // .subscribe(
+    //   refData => {
+    //     this.buyerData=refData;
+    //     this.gridLoadFlag = true;
+
+    //     this.buyerData.map(item => {
+    //       return {
+    //           erpBuyerLeName: item.erpBuyerLeName,
+    //           erpOuEntityName: item.erpOuEntityName,
+    //           erpOuNumber: item.erpOuNumber,
+    //           locationName: item.locationName,
+    //           goldId:this.goldId,
+    //           updatedBy:this.updatedBy,
+    //           lastUpdatedDate:this.lastUpdatedDate,
+    //       }
+    //   }).forEach(item => this.buyerDwnData.push(item));
+    //   },
+    //   error => {
+    //   });
   }
 
-  getAllCountryData(){
-    this.buyerService.getAllCountryCode().subscribe(
+  getAllCountryData() {
+    return this.buyerService.getAllCountryCode().toPromise().then(
       refData => {
         let arr: any = [];
         this.countryCodeReferenceData = refData;
         this.countryCodeReferenceDataList.push({ label: "Select", value: "Select" })
-  
+
         for (let data of this.countryCodeReferenceData) {
           let labelCountry = data.countryCode + " | " + data.countryName;
           this.countryCodeReferenceDataList.push({ label: labelCountry, value: data.countryId })
         }
-      },
-      error => {
-      });
+      }
+    ).catch(console.log)
+    // .subscribe(
+    //   refData => {
+    //     let arr: any = [];
+    //     this.countryCodeReferenceData = refData;
+    //     this.countryCodeReferenceDataList.push({ label: "Select", value: "Select" })
+
+    //     for (let data of this.countryCodeReferenceData) {
+    //       let labelCountry = data.countryCode + " | " + data.countryName;
+    //       this.countryCodeReferenceDataList.push({ label: labelCountry, value: data.countryId })
+    //     }
+    //   },
+    //   error => {
+    //   });
   }
-  getGoldNetList(){
-    this.buyerService.getGoldNetList().subscribe(
+
+  getGoldNetList() {
+    return this.buyerService.getGoldNetList().toPromise().then(
       refData => {
         let arr: any = [];
         this.goldNetReferenceData = refData;
         this.goldNetIdReferenceDataList.push({ label: "Select", value: "Select" })
-  
-       for (let data of this.goldNetReferenceData) {
-          let labelCountry =  data.goldId + " | " + data.goldnetName+ " | " + data.countryCode;
+
+        for (let data of this.goldNetReferenceData) {
+          let labelCountry = data.goldId + " | " + data.goldnetName + " | " + data.countryCode;
           this.goldNetIdReferenceDataList.push({ label: labelCountry, value: data.goldId })
         }
-      },
-      error => {
-      });
+      }
+    ).catch(console.log)
+    // .subscribe(
+    //   refData => {
+    //     let arr: any = [];
+    //     this.goldNetReferenceData = refData;
+    //     this.goldNetIdReferenceDataList.push({ label: "Select", value: "Select" })
+
+    //    for (let data of this.goldNetReferenceData) {
+    //       let labelCountry =  data.goldId + " | " + data.goldnetName+ " | " + data.countryCode;
+    //       this.goldNetIdReferenceDataList.push({ label: labelCountry, value: data.goldId })
+    //     }
+    //   },
+    //   error => {
+    //   });
   }
+
   showSelectedData(buyerId) {
     console.log("radio button click" + this.buyerId);
     this.editFlag = true;
@@ -164,6 +229,8 @@ export class BuyerComponent implements OnInit {
   }
 
   clearAllFilters(){
+    this.editFlag = false;
+    this.formMode = "New";
     this.buyerInsertData={
       erpBuyerLeName:"",
       erpOuNumber: "",

@@ -3,6 +3,8 @@ import { VendorService } from './vendor.service';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { SelectItem } from 'primeng/primeng';
 import { Globals } from '../../shared/constants/globals';
+import { HomeService } from '../home/home.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-product',
@@ -57,8 +59,16 @@ export class VendorComponent implements OnInit {
   public hlvendorReferenceData: any;
   hlVendorDataList: SelectItem[] = [];
   public userFlag: boolean = true;
+
+  private readonly KEY: string = 'Vendor';
+  private subs: Subscription;
   
-  constructor(private vendorService: VendorService,private modalService: NgbModal,private globals: Globals,) { 
+  constructor(
+    private vendorService: VendorService,
+    private modalService: NgbModal,
+    private globals: Globals,
+    private homeService: HomeService
+    ) { 
     //console.log("Role: "+this.globals.roleNM);
     if (this.globals.roleNM==='ADMIN') {
       this.userFlag = false;
@@ -77,36 +87,58 @@ export class VendorComponent implements OnInit {
     { field: 'lastUpdatedDate', header: 'Updated Date', width: '10%' },
   ];
 
-  ngOnInit() {
-    this.getAllVendorDetails();
+  async ngOnInit() {
+    await this.getAllVendorDetails();
     for (let i = 0; i < this.cols.length; i++) {
       // console.log("in Download method"+i);
       this.downloadCols.push(this.cols[i].header);
     } 
-    this.getAllHlVendorData();      
+    await this.getAllHlVendorData();
+    this.subs = this.homeService.state$.subscribe(({ [this.KEY]: item }) => {
+      if (item) {
+        const { id } = item;
+        this.showSelectedData(id);
+      }
+    })
   }
 
   getAllVendorDetails() {
-    this.vendorService.getVendorDetails().subscribe(
+    return this.vendorService.getVendorDetails().toPromise().then(
       refData => {
-        this.vendorData=refData;
+        this.vendorData = refData;
         this.gridLoadFlag = true;
 
         this.vendorData.map(item => {
           return {
-              hlVendorName:item.hlVendorName,
-              vendorLegalEntityName: item.vendorLegalEntityName,
-              active: item.active,
-              updatedBy: item.updatedBy,
-              lastUpdatedDate: item.lastUpdatedDate
+            hlVendorName: item.hlVendorName,
+            vendorLegalEntityName: item.vendorLegalEntityName,
+            active: item.active,
+            updatedBy: item.updatedBy,
+            lastUpdatedDate: item.lastUpdatedDate
           }
-      }).forEach(item => this.venDwnData.push(item));
-      },
-      error => {
-      });
+        }).forEach(item => this.venDwnData.push(item));
+      }
+    ).catch(console.log)
+    // .subscribe(
+    //   refData => {
+    //     this.vendorData=refData;
+    //     this.gridLoadFlag = true;
+
+    //     this.vendorData.map(item => {
+    //       return {
+    //           hlVendorName:item.hlVendorName,
+    //           vendorLegalEntityName: item.vendorLegalEntityName,
+    //           active: item.active,
+    //           updatedBy: item.updatedBy,
+    //           lastUpdatedDate: item.lastUpdatedDate
+    //       }
+    //   }).forEach(item => this.venDwnData.push(item));
+    //   },
+    //   error => {
+    //   });
   }
 
-  showSelectedData(vendorEntityId,vendorLegalEntityName,active,updatedBy) {  
+  showSelectedData(vendorEntityId) {  
       console.log("radio button click" + vendorEntityId);
       this.editFlag = true;
       this.formMode="Modify";
@@ -170,7 +202,7 @@ export class VendorComponent implements OnInit {
       // this.vendorInsertData.createdBy="503148032";
       // this.vendorInsertData.updatedBy="503148032";
       this.vendorService.saveOrUpdateVendor(this.vendorInsertData).subscribe(
-        refData => {
+        async refData => {
           this.saveMessage = refData;
           if(!this.saveMessage.Error == undefined)
             this.errorMessage = " Vendor Legal Entity: "+this.vendorInsertData.vendorLegalEntityName+"  already exist.";
@@ -180,7 +212,7 @@ export class VendorComponent implements OnInit {
             this.errorMessage =  " Entity cannot be saved due to error.";
           this.popupErrorMessage =  this.errorMessage;
           this.open(this.errorMessagePopUp);
-          this.getAllVendorDetails();
+          await this.getAllVendorDetails();
           this.cancel();
         },
         error => {
@@ -190,20 +222,31 @@ export class VendorComponent implements OnInit {
     }
   }
 
-  getAllHlVendorData(){
-    this.vendorService.getAllHlVendorData().subscribe(
+  getAllHlVendorData() {
+    return this.vendorService.getAllHlVendorData().toPromise().then(
       refData => {
         let arr: any = [];
         this.hlvendorReferenceData = refData;
         //this.hlVendorDataList.push({ label: "Select", value: "Select" })
-  
         for (let data of this.hlvendorReferenceData) {
           let labelVendor = data.hlVendorName;
           this.hlVendorDataList.push({ label: labelVendor, value: data.hlvendorId })
         }
-      },
-      error => {
-      });
+      }
+    ).catch(console.log)
+    // .subscribe(
+    //   refData => {
+    //     let arr: any = [];
+    //     this.hlvendorReferenceData = refData;
+    //     //this.hlVendorDataList.push({ label: "Select", value: "Select" })
+
+    //     for (let data of this.hlvendorReferenceData) {
+    //       let labelVendor = data.hlVendorName;
+    //       this.hlVendorDataList.push({ label: labelVendor, value: data.hlvendorId })
+    //     }
+    //   },
+    //   error => {
+    //   });
   }
 
   clearAllFilters() {
@@ -211,6 +254,7 @@ export class VendorComponent implements OnInit {
    /*  this.messageService.clear();
     this.msgs = []; */
     this.editFlag = false;
+    this.formMode="New";
     this.vendorFormData = {
       vendorLegalEntityName: "Select",
       active: true,

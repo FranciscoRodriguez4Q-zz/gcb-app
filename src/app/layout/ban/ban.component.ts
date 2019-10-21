@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { BanService } from './ban.service';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { SelectItem } from 'primeng/primeng';
@@ -7,13 +7,15 @@ import {PickListModule} from 'primeng/picklist';
 import { environment } from 'src/environments/environment.prod';	
 import { Globals } from '../../shared/constants/globals';
 import { debug } from 'util';
+import { HomeService } from '../home/home.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-product',
   templateUrl: './ban.component.html',
   styleUrls: ['./ban.component.scss']
 })
-export class BanComponent implements OnInit {
+export class BanComponent implements OnInit, OnDestroy {
 
   public gridData: any = [];
   data:any;
@@ -159,8 +161,15 @@ public vendorServiceType : any ={
   role: String = "";
   public userFlag: boolean = true;
   userInfo :any;
+  private subs: Subscription;
+  private readonly KEY: string = 'Ban';
 
-  constructor(private banService: BanService, private modalService: NgbModal, private globals: Globals, ) {
+  constructor(
+    private banService: BanService, 
+    private modalService: NgbModal, 
+    private globals: Globals,
+    private homeService: HomeService
+    ) {
     this.banService.getUserData().subscribe(
       refData => {
         this.userInfo = refData;
@@ -195,20 +204,31 @@ public vendorServiceType : any ={
 
  
 
-  ngOnInit() {
-    this.getAllBanDetails();
+  async ngOnInit() {
+    await this.getAllBanDetails();
     for (let i = 0; i < this.cols.length; i++) {
       // console.log("in Download method"+i);
       this.downloadCols.push(this.cols[i].header);
     }    
-    this.getAllCountryData();
-    this.getAllFocusGroups();
-    this.getAllVendorConfig();
-    this.getAllProcessDet();
-    this.getAllBuyers();
-    this.getAllBillingModel();
+    await this.getAllCountryData();
+    await this.getAllFocusGroups();
+    await this.getAllVendorConfig();
+    await this.getAllProcessDet();
+    await this.getAllBuyers();
+    await this.getAllBillingModel();
     this.getAllModel();
-    this.getBillingModelTypes();
+    await this.getBillingModelTypes();
+    this.subs = this.homeService.state$.subscribe(({ [this.KEY]: item }) => {
+      if (item) {
+        const { id } = item;
+        this.showSelectedData(id);
+      }
+    })
+  }
+
+  ngOnDestroy() {
+    this.homeService.setState({ key: this.KEY, data: null })
+    this.subs.unsubscribe()
   }
 
   setBuyerDetails()
@@ -226,25 +246,42 @@ public vendorServiceType : any ={
   }
 
   getAllBanDetails() {
-    this.banService.getBanDetails().subscribe(
+    return this.banService.getBanDetails().toPromise().then(
       refData => {
-        this.banData=refData;
+        this.banData = refData;
         this.gridLoadFlag = true;
-
         this.banData.map(item => {
           return {
-            banId:this.banId,
-            vendorCode:this.vendorCode,
-            serviceTypeName:this.serviceTypeName,
-            erpBuyerLeName:this.erpBuyerLeName,
-            liquidateBillRoutingId:this.liquidateBillRoutingId,
-            updatedBy:this.updatedBy,
-            lastUpdated:this.lastUpdated,
+            banId: this.banId,
+            vendorCode: this.vendorCode,
+            serviceTypeName: this.serviceTypeName,
+            erpBuyerLeName: this.erpBuyerLeName,
+            liquidateBillRoutingId: this.liquidateBillRoutingId,
+            updatedBy: this.updatedBy,
+            lastUpdated: this.lastUpdated,
           }
-      }).forEach(item => this.banDwnData.push(item));
-      },
-      error => {
-      });
+        }).forEach(item => this.banDwnData.push(item));
+      }
+    ).catch(console.log)
+    // .subscribe(
+    //   refData => {
+    //     this.banData=refData;
+    //     this.gridLoadFlag = true;
+
+    //     this.banData.map(item => {
+    //       return {
+    //         banId:this.banId,
+    //         vendorCode:this.vendorCode,
+    //         serviceTypeName:this.serviceTypeName,
+    //         erpBuyerLeName:this.erpBuyerLeName,
+    //         liquidateBillRoutingId:this.liquidateBillRoutingId,
+    //         updatedBy:this.updatedBy,
+    //         lastUpdated:this.lastUpdated,
+    //       }
+    //   }).forEach(item => this.banDwnData.push(item));
+    //   },
+    //   error => {
+    //   });
   }
 
   showSelectedData(banId) {
@@ -291,7 +328,7 @@ public vendorServiceType : any ={
     });
   }
 
-  clearAllFilters(){
+  async clearAllFilters(){
    this.banInsertData = {
       banId:"",
       billProcessName: "",
@@ -349,6 +386,7 @@ public vendorServiceType : any ={
     };
     this.banInsertDataCopy = {};
     this.editFlag = false;
+    this.formMode = "New";
     this.vBanFlag = false;
     this.cloneFlag = false;
     this.modeFlag = false;
@@ -356,7 +394,7 @@ public vendorServiceType : any ={
    // this.popupErrorMessage = "";
     this.expandAllPanels();
     window.scrollTo(0, 0);
-    this.getBillingModelTypes();
+    await this.getBillingModelTypes();
   }
 
   validation(){    
@@ -452,7 +490,7 @@ public vendorServiceType : any ={
       //   }
       //   else {
       this.banService.upsertBan(this.banInsertData).subscribe(
-        refData => {
+        async refData => {
           this.errorFlag = true;
           this.saveMessage = refData;
           this.popupErrorMessage =  this.saveMessage.statusMessage;
@@ -462,7 +500,7 @@ public vendorServiceType : any ={
               {
                 this.associateBillRefToAsset(this.saveMessage.banId);
               }
-          this.getAllBanDetails();
+          await this.getAllBanDetails();
           if(null != this.saveMessage.banId){
             this.upsertBanProduct(this.saveMessage.banId);
           }
@@ -512,23 +550,34 @@ public vendorServiceType : any ={
   
   }
 
-  getAllCountryData(){
-    this.banService.getAllCountryCode().subscribe(
+  getAllCountryData() {
+    return this.banService.getAllCountryCode().toPromise().then(
       refData => {
         let arr: any = [];
         this.countryCodeReferenceData = refData;
-        this.countryCodeReferenceDataList.push({ label: "Select", value: "Select" })  
+        this.countryCodeReferenceDataList.push({ label: "Select", value: "Select" })
         for (let data of this.countryCodeReferenceData) {
           let labelCountry = data.countryCode + " | " + data.countryName;
           this.countryCodeReferenceDataList.push({ label: labelCountry, value: data.countryId })
         }
-      },
-      error => {
-      });
+      }
+    ).catch(console.log);
+    // .subscribe(
+    //   refData => {
+    //     let arr: any = [];
+    //     this.countryCodeReferenceData = refData;
+    //     this.countryCodeReferenceDataList.push({ label: "Select", value: "Select" })  
+    //     for (let data of this.countryCodeReferenceData) {
+    //       let labelCountry = data.countryCode + " | " + data.countryName;
+    //       this.countryCodeReferenceDataList.push({ label: labelCountry, value: data.countryId })
+    //     }
+    //   },
+    //   error => {
+    //   });
   }
 
-  getAllFocusGroups(){
-    this.banService.getAllFocusGroups().subscribe(
+  getAllFocusGroups() {
+    return this.banService.getAllFocusGroups().toPromise().then(
       refData => {
         let arr: any = [];
         this.focusReferenceData = refData;
@@ -536,9 +585,19 @@ public vendorServiceType : any ={
           let labelFocus = data.focusGroupName;
           this.focusReferenceDataList.push({ label: labelFocus, value: data.focusGroupId })
         }
-      },
-      error => {
-      });
+      }
+    ).catch(console.log)
+    // .subscribe(
+    //   refData => {
+    //     let arr: any = [];
+    //     this.focusReferenceData = refData;
+    //     for (let data of this.focusReferenceData) {
+    //       let labelFocus = data.focusGroupName;
+    //       this.focusReferenceDataList.push({ label: labelFocus, value: data.focusGroupId })
+    //     }
+    //   },
+    //   error => {
+    //   });
   }
 
   getVendorServiceType()
@@ -572,66 +631,106 @@ public vendorServiceType : any ={
   }
 
   getAllVendorConfig() {
-    this.banService.getVendorConfigDetails().subscribe(
+    return this.banService.getVendorConfigDetails().toPromise().then(
       refData => {
         let arr: any = [];
-        this.vendorReferenceData = refData;  
+        this.vendorReferenceData = refData;
         for (let data of this.vendorReferenceData) {
-          let labelService = data.vendorLegalEntityName+' | '+data.vendorCode+' | '+data.billedFromCountryCode+' | '+data.billedToCountryCode+' | '
-          +data.currencyCode;
+          let labelService = data.vendorLegalEntityName + ' | ' + data.vendorCode + ' | ' + data.billedFromCountryCode + ' | ' + data.billedToCountryCode + ' | '
+            + data.currencyCode;
           this.vendorReferenceDataList.push({ label: labelService, value: data.vendorConfigId })
         }
-      },
-      error => {
-      });      
+      }
+    ).catch(console.log)
+    // .subscribe(
+    //   refData => {
+    //     let arr: any = [];
+    //     this.vendorReferenceData = refData;  
+    //     for (let data of this.vendorReferenceData) {
+    //       let labelService = data.vendorLegalEntityName+' | '+data.vendorCode+' | '+data.billedFromCountryCode+' | '+data.billedToCountryCode+' | '
+    //       +data.currencyCode;
+    //       this.vendorReferenceDataList.push({ label: labelService, value: data.vendorConfigId })
+    //     }
+    //   },
+    //   error => {
+    //   });      
   }
 
-  getAllProcessDet(){  
-
-    this.banService.getBillProcessList().subscribe(
+  getAllProcessDet() {
+    return this.banService.getBillProcessList().toPromise().then(
       refData => {
         let arr: any = [];
         this.billProcessReference = refData;
         for (let data of this.billProcessReference) {
           this.billProcessReferenceList.push({ label: data.processName, value: data.billProcessId })
         }
-      },
-      error => {
-      });    
+      }
+    ).catch(console.log)
+    // .subscribe(
+    //   refData => {
+    //     let arr: any = [];
+    //     this.billProcessReference = refData;
+    //     for (let data of this.billProcessReference) {
+    //       this.billProcessReferenceList.push({ label: data.processName, value: data.billProcessId })
+    //     }
+    //   },
+    //   error => {
+    //   });    
   }
 
-  getAllBuyers(){
-    this.banService.getBuyerDetails().subscribe(
+  getAllBuyers() {
+    return this.banService.getBuyerDetails().toPromise().then(
       refData => {
         let arr: any = [];
-        this.buyerReferenceData = refData;  
+        this.buyerReferenceData = refData;
         for (let data of this.buyerReferenceData) {
-         // let labelService = data.erpBuyerLeName;
-		 let labelService = data.erpBuyerLeName +" | " +data.erpOuEntityName +" | "+data.goldId;
-
+          // let labelService = data.erpBuyerLeName;
+          let labelService = data.erpBuyerLeName + " | " + data.erpOuEntityName + " | " + data.goldId;
           this.buyerReferenceDataList.push({ label: labelService, value: data.buyerId })
         }
-      },
-      error => {
-      });
+      }
+    ).catch(console.log)
+    // .subscribe(
+    //   refData => {
+    //     let arr: any = [];
+    //     this.buyerReferenceData = refData;  
+    //     for (let data of this.buyerReferenceData) {
+    //      // let labelService = data.erpBuyerLeName;
+    //  let labelService = data.erpBuyerLeName +" | " +data.erpOuEntityName +" | "+data.goldId;
+
+    //       this.buyerReferenceDataList.push({ label: labelService, value: data.buyerId })
+    //     }
+    //   },
+    //   error => {
+    //   });
   }
 
-  getAllBillingModel(){
+  getAllBillingModel() {
     //this.billingReferenceDataList.push({ label: "Select", value: "Select" });
     // this.billingReferenceDataList.push({ label: "Sabrix", value: "SABRIX" });
     // this.billingReferenceDataList.push({ label: "PayMaster", value: PAYMASTER" });
     // this.billingReferenceDataList.push({ label: "CoE Liquidation", value: "COE LIQUIDATION" });
-    this.banService.getBillingModelDetails().subscribe(
+    return this.banService.getBillingModelDetails().toPromise().then(
       refData => {
         let arr: any = [];
-        this.billingModelReferenceData = refData;  
+        this.billingModelReferenceData = refData;
         for (let data of this.billingModelReferenceData) {
           let labelService = data.billingModelDesc;
           this.billingReferenceDataList.push({ label: labelService, value: data.billingModelId })
         }
-      },
-      error => {
-      });
+      }
+    ).catch(console.log)
+    // .subscribe(
+    //   refData => {
+    //     let arr: any = [];
+    //     this.billingModelReferenceData = refData;  
+    //     for (let data of this.billingModelReferenceData) {
+    //       let labelService = data.billingModelDesc;
+    //       this.billingReferenceDataList.push({ label: labelService, value: data.billingModelId })
+    //     }
+    //   },
+    //   error => {
+    //   });
   }
 
   getAllModel(){
@@ -1078,29 +1177,45 @@ public vendorServiceType : any ={
 
     //   },
     //   error => {
-    //   });   
-
+    //   });
   }
-   getBillingModelTypes() {
-    
-    this.banService.getBillingModelTypes().subscribe(
+
+  getBillingModelTypes() {
+    return this.banService.getBillingModelTypes().toPromise().then(
       refData => {
         let arr: any = [];
         this.billingModelType = refData;
         for (let data in this.billingModelType.response) {
-          if (data.toUpperCase()==="LIQUIDATED_VIA") {
+          if (data.toUpperCase() === "LIQUIDATED_VIA") {
             this.liquidateViaReferenceDataList = this.billingModelType.response[data];
-          } else if (data.toUpperCase()==="PAID_BY") {
+          } else if (data.toUpperCase() === "PAID_BY") {
             this.paidByReferenceDataList = this.billingModelType.response[data];
-          }else if (data.toUpperCase()==="INVOICE_NAME_VALUES") {
+          } else if (data.toUpperCase() === "INVOICE_NAME_VALUES") {
             this.invoiceNmReferenceDataList = this.billingModelType.response[data];
           } else {
             this.taxEngineReferenceDataList = this.billingModelType.response[data];
           }
         }
-      },
-      error => {
-      });    
+      }
+    ).catch(console.log);
+    // .subscribe(
+    //   refData => {
+    //     let arr: any = [];
+    //     this.billingModelType = refData;
+    //     for (let data in this.billingModelType.response) {
+    //       if (data.toUpperCase()==="LIQUIDATED_VIA") {
+    //         this.liquidateViaReferenceDataList = this.billingModelType.response[data];
+    //       } else if (data.toUpperCase()==="PAID_BY") {
+    //         this.paidByReferenceDataList = this.billingModelType.response[data];
+    //       }else if (data.toUpperCase()==="INVOICE_NAME_VALUES") {
+    //         this.invoiceNmReferenceDataList = this.billingModelType.response[data];
+    //       } else {
+    //         this.taxEngineReferenceDataList = this.billingModelType.response[data];
+    //       }
+    //     }
+    //   },
+    //   error => {
+    //   });    
   }
 
   cloneRec(flag) {
