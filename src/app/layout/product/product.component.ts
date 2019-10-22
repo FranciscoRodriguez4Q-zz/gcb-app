@@ -197,6 +197,7 @@ export class ProductComponent implements OnInit, OnDestroy {
 
   showSelectedData(productId) {
     console.log("radio button click" + productId);
+    window.scroll(0,0);
     this.editFlag = true;
     this.gcbProductFilters = this.products.filter(x => x.productId == productId)[0];
     this.gcbProductFiltersCopy = { ...this.gcbProductFilters };

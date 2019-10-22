@@ -13,7 +13,13 @@
     word-wrap: break-word;
 }
 .gridServiceType{
-    margin-top: 0.7rem;
+    margin-top: 0.2rem;
+    padding: 0;
+    margin: 0;
+    flex-wrap: wrap;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
 }
 
 .gridCheckBox{
@@ -40,7 +46,7 @@
     margin-top: 1rem;
 }
 
- .nested-grid{
+.nested-grid{
     margin-top: 1rem;
 }
 

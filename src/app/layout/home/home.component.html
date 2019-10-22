@@ -1,6 +1,12 @@
 <div class="p-grid">
     <div class="p-col-2.8 treeView" *ngIf="!screenFlag">
-        <p-tree [value]="treeData" [filter]="true" (onNodeSelect)="nodeSelect($event)" selectionMode="single"></p-tree>
+        <p-tree 
+            [value]="treeData" 
+            [filter]="true"
+            [style]="{'max-height':'100vh', 'overflow-y':'auto'}"
+            (onNodeSelect)="nodeSelect($event)" 
+            selectionMode="single">
+        </p-tree>
     </div>
     <div class="p-col-2.8 treeView" *ngIf="screenFlag">
         <p-tree [value]="treeData" [filter]="true"></p-tree>
