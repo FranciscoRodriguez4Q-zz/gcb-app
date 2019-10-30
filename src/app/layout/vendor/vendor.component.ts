@@ -108,7 +108,7 @@ export class VendorComponent implements OnInit {
         this.vendorData = refData;
         this.gridLoadFlag = true;
 
-        this.vendorData.map(item => {
+        this.venDwnData = this.vendorData.map(item => {
           return {
             hlVendorName: item.hlVendorName,
             vendorLegalEntityName: item.vendorLegalEntityName,
@@ -116,7 +116,10 @@ export class VendorComponent implements OnInit {
             updatedBy: item.updatedBy,
             lastUpdatedDate: item.lastUpdatedDate
           }
-        }).forEach(item => this.venDwnData.push(item));
+        })
+        console.log('this.venDwnData', this.venDwnData)
+
+        // this.venDwnData = this.vendorData;
       }
     ).catch(console.log)
     // .subscribe(
