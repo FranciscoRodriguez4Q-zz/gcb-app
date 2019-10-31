@@ -9,11 +9,12 @@ import {PickListModule} from 'primeng/picklist';
 import { NumberOnlyDirective } from '../../directives/num-only.directive';
 import { LayoutModule } from '../layout.module';
 import {ProgressSpinnerModule} from 'primeng/progressspinner';
+import { SiteDetailsComponent } from './site-details/site-details.component';
 
 
 
 @NgModule({
-  declarations: [BanComponent, NumberOnlyDirective],
+  declarations: [BanComponent, NumberOnlyDirective, SiteDetailsComponent],
   imports: [
     CommonModule,
     BanRoutingModule,

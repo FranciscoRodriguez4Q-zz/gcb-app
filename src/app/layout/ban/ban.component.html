@@ -49,7 +49,14 @@
 				<div class="p-grid ">
 				   <div class="p-col-4 item-right"><span class="required">*</span>Vendor Code</div>
 				   <div class="p-col-8 item-left">
-					  <p-dropdown [options]="vendorReferenceDataList" [style]="{'width': '100%'}" (click)="getServiceType()" (onChange)="getServiceType()" [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.vendorConfigId"   [resetFilterOnHide]="true" ></p-dropdown>
+					  <p-dropdown 
+						  [options]="vendorReferenceDataList" 
+						  [style]="{'width': '100%'}"
+						  (onChange)="getServiceType()"
+						  [filter]="true" placeholder="Select"
+						  [(ngModel)]="banInsertData.vendorConfigId"
+						  [resetFilterOnHide]="true">
+						</p-dropdown>
 				   </div>
 				</div>
 				<div class="p-grid ">
@@ -58,6 +65,7 @@
 					  <input class="form-control" [(ngModel)]="banInsertData.vendorFriendlyName" />
 				   </div>
 				</div>
+				<app-site-details></app-site-details>
 				<div class="p-grid ">
 				   <div class="p-col-4 item-right"><span class="required">*</span>Buyer Name</div>
 				   <div class="p-col-8 item-left">
