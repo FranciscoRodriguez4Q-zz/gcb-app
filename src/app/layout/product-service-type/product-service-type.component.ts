@@ -68,6 +68,7 @@ export class ProductServiceTypeComponent implements OnInit, OnDestroy {
   public editFlag = false;
   public formMode = "New";
   public errorMessage = "";
+  
   public saveMessage: any = [];
   @ViewChild('content1') errorMessagePopUp;
   public popupErrorMessage: any;

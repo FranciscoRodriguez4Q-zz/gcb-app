@@ -198,6 +198,7 @@ export class VendorComponent implements OnInit {
   }
 
   upsertVendor() {
+    alert("Testing");
     this.errorMessage = "";
     //this.msgs = [];
     console.log("test button click");
