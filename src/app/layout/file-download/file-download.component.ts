@@ -122,7 +122,7 @@ export class FileDownloadComponent implements OnInit {
       refData => {
       //this.dwnData  = refData;
         let dwnObj:any= refData;
-        dwnObj.map(item => {
+        this.dwnData = dwnObj.map(item => {
           return {
               hlVendorName:item.hlVendorName,
               vendorLegalEntityName: item.vendorLegalEntityName,
@@ -130,7 +130,7 @@ export class FileDownloadComponent implements OnInit {
               updatedBy: item.updatedBy,
               lastUpdatedDate: item.lastUpdatedDate
           }
-      }).forEach(item => this.dwnData.push(item));
+      })
 
         this.downloadFile();
       },
