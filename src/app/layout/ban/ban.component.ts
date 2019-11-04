@@ -85,12 +85,7 @@ public vendorServiceType : any ={
       taxEngine: "UNSPECIFIED",
       cloneFlag : false,
       cloneOfId : "",
-      locationId: "",
-      location: {
-        country: "",
-        state: "",
-        citySite: ""
-      }
+      detailedLocationId: ""
     };
   public banInsertDataCopy: any;
 
@@ -169,6 +164,7 @@ public vendorServiceType : any ={
   userInfo :any;
   private subs: Subscription;
   private readonly KEY: string = 'Ban';
+  public countryId = null;
 
   constructor(
     private banService: BanService, 
@@ -289,7 +285,7 @@ public vendorServiceType : any ={
     //   error => {
     //   });
   }
-
+  public detailInfo = null;
   showSelectedData(banId) {
     this.cloneFlag = false;
     this.expandAllPanels();
@@ -305,6 +301,10 @@ public vendorServiceType : any ={
         this.setBuyerDetails();
         this.getSourceServiceType(banId);
         this.banInsertDataCopy = { ...this.banInsertData }
+        this.detailInfo = {
+          detailedLocationId: this.banInsertData.detailedLocationId,
+          billedToLocationId: this.banInsertData.billedToLocationId
+        }
       },
       error => {
       });
@@ -391,6 +391,8 @@ public vendorServiceType : any ={
       cloneOfId : ""
     };
     this.banInsertDataCopy = {};
+    this.countryId = null;
+    this.detailInfo = null;
     this.editFlag = false;
     this.formMode = "New";
     this.vBanFlag = false;
@@ -777,7 +779,6 @@ public vendorServiceType : any ={
     }
   }
 
-  public locationsByCountryList;
   getServiceType(){
     this.targetSystem=[];
     this.errorMessage = "";
@@ -788,6 +789,7 @@ public vendorServiceType : any ={
         let vendorConfigData=this.vendorReferenceData.filter(x => x.vendorConfigId == this.banInsertData.vendorConfigId)[0];
         this.banInsertData.billedFromLocationId=vendorConfigData.billedFromLocationId;
         this.banInsertData.billedToLocationId=vendorConfigData.billedToLocationId;
+        this.countryId = vendorConfigData.billedToLocationId;
         //console.log("Vendor Selected : " + vendorConfigData);
         //console.log("process Id "+this.banInsertData.billProcessId);
         this.banService.getServiceType(this.banInsertData).subscribe(
@@ -802,18 +804,6 @@ public vendorServiceType : any ={
           },
           error => {
           })
-        this.banService.getAllLocationsByCountry(vendorConfigData).subscribe(
-          data => {
-            console.log('[INFO] - BanService - getAllLocationsByCountry')
-            this.locationsByCountryList = data.map(({ locationId, locationCode, locationName }) => {
-              return {
-                label: `${locationCode} | ${locationName}`,
-                value: locationId
-              }
-            });
-            this.locationsByCountryList.unshift({ label: 'UNSPECIFIED', value: 1 })
-          }
-        );
     }
     if(this.banInsertData.billProcessId== ""){
       this.errorMessage = "You must select a Bill process";
@@ -1346,6 +1336,10 @@ get disabled() {
     return JSON.stringify(this.banInsertData) === JSON.stringify(this.banInsertDataCopy)
   }
   return false;
+}
+
+setLocationId(locationId) {
+  this.banInsertData.detailedLocationId = locationId;
 }
 
 }
