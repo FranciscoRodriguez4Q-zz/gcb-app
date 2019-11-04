@@ -1,0 +1,29 @@
+<div class="p-grid">
+  <div class="p-col-4 item-right">Detail Location Type</div>
+  <div class="p-col-8 item-left">
+    <p-dropdown
+      [(ngModel)]="locationType"
+      [options]="locationTypeList"
+      [style]="{'width': '100%'}"
+      [filter]="true"
+      [autoDisplayFirst]="true"
+      (onChange)="fetchLocations()"
+      [disabled]="isCountry"
+      [resetFilterOnHide]="true">
+    </p-dropdown>
+  </div>
+</div>
+<div class="p-grid">
+  <div class="p-col-4 item-right">Detailed Location Info</div>
+  <div class="p-col-8 item-left">
+    <p-dropdown
+      [(ngModel)]="detailedLocationId"
+      [disabled]="isLocationType"
+      [options]="locationsByCountryList"
+      [style]="{'width': '100%'}"
+      [filter]="true"
+      [autoDisplayFirst]="true"
+      [resetFilterOnHide]="true">
+    </p-dropdown>
+  </div>
+</div>
