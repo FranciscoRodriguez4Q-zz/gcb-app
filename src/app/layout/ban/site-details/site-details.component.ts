@@ -54,7 +54,7 @@ export class SiteDetailsComponent {
   }
 
 
-  private readonly locationTypeList = [{
+  public readonly locationTypeList = [{
     label: "UNSPECIFIED",
     value: 0
   },{
