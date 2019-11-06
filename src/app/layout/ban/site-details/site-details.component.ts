@@ -103,14 +103,16 @@ export class SiteDetailsComponent {
     if (this.countryId) {
       this.siteDetailsService.getAllLocationsByCountry(this.countryId, this.locationType).subscribe(
         data => {
-          console.log('[INFO] - SiteDetailsComponent - getAllLocationsByCountry')
-          this.locationsByCountryList = data.map(({ locationId, locationCode, locationName }) => {
-            return {
-              label: `${locationCode} | ${locationName}`,
-              value: locationId
-            }
-          });
-          this.locationsByCountryList.unshift({ label: 'UNSPECIFIED', value: 0 })
+          if (data) {
+            console.log('[INFO] - SiteDetailsComponent - getAllLocationsByCountry')
+            this.locationsByCountryList = data.map(({ locationId, locationCode, locationName }) => {
+              return {
+                label: `${locationCode} | ${locationName}`,
+                value: locationId
+              }
+            });
+            this.locationsByCountryList.unshift({ label: 'UNSPECIFIED', value: 0 })
+          }
         }
       );
     }
