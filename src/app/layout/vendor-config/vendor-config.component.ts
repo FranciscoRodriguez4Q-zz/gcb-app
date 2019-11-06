@@ -313,7 +313,8 @@ upsertVendorConfig(){
           this.clearAllFilters();
         },
         error => {
-          this.open("An system error occured");
+          this.popupErrorMessage = "An system error occured";          
+          this.open(this.errorMessagePopUp);
         });
     }
 }

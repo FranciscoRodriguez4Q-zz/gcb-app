@@ -779,7 +779,15 @@ public vendorServiceType : any ={
     }
   }
 
+  setCountryId() {
+    if (this.banInsertData.vendorConfigId != "Select" && this.banInsertData.vendorConfigId != "") {
+      const [vendorConfigData] = this.vendorReferenceData.filter(x => x.vendorConfigId == this.banInsertData.vendorConfigId)
+      this.countryId = vendorConfigData.billedToLocationId;
+    }
+  }
+
   getServiceType(){
+    this.setCountryId();
     this.targetSystem=[];
     this.errorMessage = "";
     console.log('[INFO] - BanComponent - getServiceType()')
@@ -789,7 +797,6 @@ public vendorServiceType : any ={
         let vendorConfigData=this.vendorReferenceData.filter(x => x.vendorConfigId == this.banInsertData.vendorConfigId)[0];
         this.banInsertData.billedFromLocationId=vendorConfigData.billedFromLocationId;
         this.banInsertData.billedToLocationId=vendorConfigData.billedToLocationId;
-        this.countryId = vendorConfigData.billedToLocationId;
         //console.log("Vendor Selected : " + vendorConfigData);
         //console.log("process Id "+this.banInsertData.billProcessId);
         this.banService.getServiceType(this.banInsertData).subscribe(
@@ -1310,26 +1317,27 @@ onTabClose(event) {
     this.panelExpansionFlag=true; 
 }
 
-
-getVendorCode() {
-  if (this.banInsertData.billProcessId === 2) {
-  this.vendorReferenceDataList = [];
-  var vendorFilterData = this.vendorReferenceData.filter(x => String(x.vendorCode).startsWith('Z'));
-    for (let data of vendorFilterData) {
-    let labelService = data.vendorLegalEntityName+' | '+data.vendorCode+' | '+data.billedFromCountryCode+' | '+data.billedToCountryCode+' | '
-    +data.currencyCode;
-    this.vendorReferenceDataList.push({ label: labelService, value: data.vendorConfigId })
+  getVendorCode() {
+    if (this.banInsertData.billProcessId === 2) {
+      this.banInsertData.vendorConfigId = ""
+      this.countryId = null;
+      this.vendorReferenceDataList = [];
+      var vendorFilterData = this.vendorReferenceData.filter(x => String(x.vendorCode).startsWith('Z'));
+      for (let data of vendorFilterData) {
+        let labelService = data.vendorLegalEntityName + ' | ' + data.vendorCode + ' | ' + data.billedFromCountryCode + ' | ' + data.billedToCountryCode + ' | '
+          + data.currencyCode;
+        this.vendorReferenceDataList.push({ label: labelService, value: data.vendorConfigId })
+      }
     }
-  }
-  else {
-  this.vendorReferenceDataList = [];
-    for (let data of this.vendorReferenceData) {
-    let labelService = data.vendorLegalEntityName+' | '+data.vendorCode+' | '+data.billedFromCountryCode+' | '+data.billedToCountryCode+' | '
-    +data.currencyCode;
-    this.vendorReferenceDataList.push({ label: labelService, value: data.vendorConfigId })
+    else {
+      this.vendorReferenceDataList = [];
+      for (let data of this.vendorReferenceData) {
+        let labelService = data.vendorLegalEntityName + ' | ' + data.vendorCode + ' | ' + data.billedFromCountryCode + ' | ' + data.billedToCountryCode + ' | '
+          + data.currencyCode;
+        this.vendorReferenceDataList.push({ label: labelService, value: data.vendorConfigId })
+      }
     }
-  }
-} 
+  } 
  
 get disabled() {
   if (this.editFlag) {
