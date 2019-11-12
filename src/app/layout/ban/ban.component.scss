@@ -12,6 +12,27 @@
     display: block;
     word-wrap: break-word;
 }
+
+.button-valid{
+    background: none !important;
+    border: none;
+    padding: 0 !important;
+    margin-top: 0.3rem;
+    text-decoration: underline;
+    color: #069;
+    cursor: pointer;
+}
+
+.button-invalid{
+    background: none !important;
+    border: none;
+    padding: 0 !important;
+    margin-top: 0.3rem;
+    text-decoration: underline;
+    color: #555;
+    cursor: default;
+}
+
 .gridServiceType{
     margin-top: 0.2rem;
     padding: 0;
