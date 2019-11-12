@@ -5,6 +5,7 @@ import { SelectItem } from 'primeng/primeng';
 import { Globals } from '../../shared/constants/globals';
 import { Subscription } from 'rxjs';
 import { HomeService } from '../home/home.service';
+import { BackupModelService } from '../backupmodel.service';
 
 @Component({
   selector: 'app-product',
@@ -62,7 +63,8 @@ export class BuyerComponent implements OnInit, OnDestroy {
     private buyerService: BuyerService,
     private modalService: NgbModal,
     private globals: Globals,
-    private homeService: HomeService
+    private homeService: HomeService,
+    private backupModelService: BackupModelService
   ) {
     if (this.globals.roleNM === 'ADMIN') {
       this.userFlag = false;
@@ -108,10 +110,14 @@ export class BuyerComponent implements OnInit, OnDestroy {
         const { id } = item;
         this.showSelectedData(id);
       }
-    })
+    });
+    if(this.backupModelService.buyerTabModel != null 
+      && this.backupModelService.buyerTabModel != undefined)
+    this.buyerInsertData = this.backupModelService.buyerTabModel;
   }
 
   ngOnDestroy() {
+    this.backupModelService.buyerTabModel = this.buyerInsertData;
     this.homeService.setState({ key: this.KEY, data: null });
     this.subs.unsubscribe()
   }

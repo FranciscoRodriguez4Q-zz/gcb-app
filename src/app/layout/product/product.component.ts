@@ -6,7 +6,7 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { Globals } from '../../shared/constants/globals';
 import { HomeService } from '../home/home.service';
 import { Subscription } from 'rxjs';
-
+import { BackupModelService } from '../backupmodel.service';
 @Component({
   selector: 'app-product',
   templateUrl: './product.component.html',
@@ -69,6 +69,7 @@ export class ProductComponent implements OnInit, OnDestroy {
     private modalService: NgbModal,
     private globals: Globals,
     private homeService: HomeService,
+    private backupModelService: BackupModelService
   ) {
     if (this.globals.roleNM === 'ADMIN') {
       this.userFlag = false;
@@ -91,10 +92,14 @@ export class ProductComponent implements OnInit, OnDestroy {
         const { id } = item;
         this.showSelectedData(id);
       }
-    })
+    });
+    if(this.backupModelService.productTabModel != null 
+      && this.backupModelService.productTabModel != undefined)
+    this.gcbProductFilters = this.backupModelService.productTabModel;
   }
 
   ngOnDestroy() {
+    this.backupModelService.productTabModel = this.gcbProductFilters;
     this.homeService.setState({ key: this.KEY, data: null });
     this.subs.unsubscribe();
   }

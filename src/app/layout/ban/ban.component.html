@@ -49,14 +49,14 @@
 				<div class="p-grid ">
 				   <div class="p-col-4 item-right"><span class="required">*</span>Vendor Code</div>
 				   <div class="p-col-8 item-left">
-					  <p-dropdown 
-						  [options]="vendorReferenceDataList" 
-						  [style]="{'width': '100%'}"
-						  (onChange)="getServiceType()"
-						  [filter]="true" placeholder="Select"
-						  [(ngModel)]="banInsertData.vendorConfigId"
-						  [resetFilterOnHide]="true">
-						</p-dropdown>
+					<p-dropdown 
+					[options]="vendorReferenceDataList" 
+					[style]="{'width': '100%'}"
+					(onChange)="getServiceType()"
+					[filter]="true" placeholder="Select"
+					[(ngModel)]="banInsertData.vendorConfigId"
+					[resetFilterOnHide]="true">
+				  </p-dropdown>
 				   </div>
 				</div>
 				<div class="p-grid ">
@@ -401,8 +401,8 @@
 						 <i class="fa fa-pencil-square-o fa-2x"></i>
 						 </a>
 					  </div>
-					  <div *ngIf="!systems.liquidateBillRoutingId">                                
-						 <button class="button-link" (click)="generateServiceBillRefId()">Enter BUC/ADN details</button>
+					  <div *ngIf="!systems.liquidateBillRoutingId">
+						 <button (click)="generateServiceBillRefId()" [disabled]="!isSystemsSelected" [ngClass]="{ 'button-valid' : isSystemsSelected, 'button-invalid' : !isSystemsSelected }">Enter BUC/ADN details</button>
 					  </div>
 				   </div>
 				</div>

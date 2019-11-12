@@ -9,6 +9,7 @@ import { Globals } from '../../shared/constants/globals';
 import { debug } from 'util';
 import { HomeService } from '../home/home.service';
 import { Subscription } from 'rxjs';
+import { BackupModelService } from '../backupmodel.service';
 
 @Component({
   selector: 'app-product',
@@ -16,7 +17,7 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./ban.component.scss']
 })
 export class BanComponent implements OnInit, OnDestroy {
-
+  isSystemsSelected = false;
   public gridData: any = [];
   data:any;
   files: any ={};
@@ -170,7 +171,8 @@ public vendorServiceType : any ={
     private banService: BanService, 
     private modalService: NgbModal, 
     private globals: Globals,
-    private homeService: HomeService
+    private homeService: HomeService,
+    private backupModelService: BackupModelService
     ) {
     this.banService.getUserData().subscribe(
       refData => {
@@ -225,10 +227,25 @@ public vendorServiceType : any ={
         const { id } = item;
         this.showSelectedData(id);
       }
-    })
+    });
+    if(this.backupModelService.banTabModel != null 
+      && this.backupModelService.banTabModel != undefined){
+      this.banInsertData = this.backupModelService.banTabModel.banInsertData;
+      this.targetSystem = this.backupModelService.banTabModel.targetSystem;
+      this.sourceSystem = this.backupModelService.banTabModel.sourceSystem;
+      this.serviceTypeReferenceData = this.backupModelService.banTabModel.serviceTypeReferenceData;
+      this.serviceList = this.backupModelService.banTabModel.serviceList;
+    }
   }
 
   ngOnDestroy() {
+    this.backupModelService.banTabModel = {
+      banInsertData: this.banInsertData,
+      targetSystem: this.targetSystem,
+      sourceSystem: this.sourceSystem,
+      serviceTypeReferenceData: this.serviceTypeReferenceData,
+      serviceList: this.serviceList
+    };
     this.homeService.setState({ key: this.KEY, data: null })
     this.subs.unsubscribe()
   }
@@ -828,6 +845,7 @@ public vendorServiceType : any ={
     if(null != item.items[0].serviceTypeId){}
     this.systems = this.serviceList.filter(x => x.serviceTypeId == item.items[0].serviceTypeId)[0];
     this.triggerEvent();
+    this.isSystemsSelected =true;
   }
   triggerEvent(){
     console.log("trgger handle: "+this.systems);
@@ -1317,37 +1335,37 @@ onTabClose(event) {
     this.panelExpansionFlag=true; 
 }
 
-  getVendorCode() {
-    if (this.banInsertData.billProcessId === 2) {
-      this.banInsertData.vendorConfigId = ""
-      this.countryId = null;
-      this.vendorReferenceDataList = [];
-      var vendorFilterData = this.vendorReferenceData.filter(x => String(x.vendorCode).startsWith('Z'));
-      for (let data of vendorFilterData) {
-        let labelService = data.vendorLegalEntityName + ' | ' + data.vendorCode + ' | ' + data.billedFromCountryCode + ' | ' + data.billedToCountryCode + ' | '
-          + data.currencyCode;
-        this.vendorReferenceDataList.push({ label: labelService, value: data.vendorConfigId })
-      }
+getVendorCode() {
+  if (this.banInsertData.billProcessId === 2) {
+    this.banInsertData.vendorConfigId = ""
+    this.countryId = null;
+    this.vendorReferenceDataList = [];
+    var vendorFilterData = this.vendorReferenceData.filter(x => String(x.vendorCode).startsWith('Z'));
+    for (let data of vendorFilterData) {
+      let labelService = data.vendorLegalEntityName + ' | ' + data.vendorCode + ' | ' + data.billedFromCountryCode + ' | ' + data.billedToCountryCode + ' | '
+        + data.currencyCode;
+      this.vendorReferenceDataList.push({ label: labelService, value: data.vendorConfigId })
     }
-    else {
-      this.vendorReferenceDataList = [];
-      for (let data of this.vendorReferenceData) {
-        let labelService = data.vendorLegalEntityName + ' | ' + data.vendorCode + ' | ' + data.billedFromCountryCode + ' | ' + data.billedToCountryCode + ' | '
-          + data.currencyCode;
-        this.vendorReferenceDataList.push({ label: labelService, value: data.vendorConfigId })
-      }
-    }
-  } 
- 
-get disabled() {
-  if (this.editFlag) {
-    return JSON.stringify(this.banInsertData) === JSON.stringify(this.banInsertDataCopy)
   }
-  return false;
+  else {
+    this.vendorReferenceDataList = [];
+    for (let data of this.vendorReferenceData) {
+      let labelService = data.vendorLegalEntityName + ' | ' + data.vendorCode + ' | ' + data.billedFromCountryCode + ' | ' + data.billedToCountryCode + ' | '
+        + data.currencyCode;
+      this.vendorReferenceDataList.push({ label: labelService, value: data.vendorConfigId })
+    }
+  }
+} 
+
+get disabled() {
+if (this.editFlag) {
+  return JSON.stringify(this.banInsertData) === JSON.stringify(this.banInsertDataCopy)
+}
+return false;
 }
 
 setLocationId(locationId) {
-  this.banInsertData.detailedLocationId = locationId;
+this.banInsertData.detailedLocationId = locationId;
 }
 
 }
