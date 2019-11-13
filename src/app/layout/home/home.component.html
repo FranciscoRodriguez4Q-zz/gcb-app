@@ -1,5 +1,5 @@
 <div class="p-grid">
-    <div class="p-col-2.8 treeView" *ngIf="!screenFlag">
+    <div class="p-col-2.8 treeView sidebar" *ngIf="!screenFlag">
         <p-tree 
             [value]="treeData" 
             [filter]="true"
@@ -8,7 +8,7 @@
             selectionMode="single">
         </p-tree>
     </div>
-    <div class="p-col-2.8 treeView" *ngIf="screenFlag">
+    <div class="p-col-2.8 treeView sidebar" *ngIf="screenFlag">
         <p-tree [value]="treeData" [filter]="true"></p-tree>
         <div class="loader">
             <span>Please wait, loading.&nbsp;</span>
@@ -16,7 +16,7 @@
                 animationDuration=".5s"></p-progressSpinner>
         </div>
     </div>
-    <div class="p-col-9 menuAndForms">
+    <div class="p-col-9 menuAndForms content">
         <div class="p-col-12">
             <p-tabMenu [model]="menuItems"></p-tabMenu>
         </div>
