@@ -9,7 +9,7 @@
                       <label class="label"><span class="required">*</span>Process Name </label>
                   </div>
                   <div class="p-col-7 item-left">
-                    <p-dropdown    
+                    <p-dropdown
                   [options]="billProcessReferenceList"
                   [(ngModel)]="gcbProductFilters.billProcessId"      placeholder="Select"   [autoWidth]="true"
                   [style]="{'width': '100%' ,'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"   
@@ -38,7 +38,7 @@
                      <label class="label"><span class="required">*</span>Product Type </label>
                 </div>
                 <div class="p-col-7 item-left">
-                    <p-dropdown [options]="productTypeReferenceList" [(ngModel)]="gcbProductFilters.productType" placeholder="Select" [autoWidth]="true"
+                    <p-dropdown [virtualScroll]="true" itemSize="30" [options]="productTypeReferenceList" [(ngModel)]="gcbProductFilters.productType" placeholder="Select" [autoWidth]="true"
                                         [style]="{'width': '50%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
                                         [filter]="true" scrollHeight="150px">
                     </p-dropdown>
@@ -49,7 +49,7 @@
                       <label class="label">UNSPSC </label>
                 </div>
                 <div class="p-col-7 item-left">
-                     <!-- <p-dropdown [options]="unspscReferenceList" [(ngModel)]="gcbProductFilters.unspsc" placeholder="Select" [autoWidth]="true"
+                     <!-- <p-dropdown [virtualScroll]="true" itemSize="30" [options]="unspscReferenceList" [(ngModel)]="gcbProductFilters.unspsc" placeholder="Select" [autoWidth]="true"
                                         [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
                                         [filter]="true" scrollHeight="150px">
                      </p-dropdown> -->
