@@ -7,11 +7,13 @@ import {InputSwitchModule} from 'primeng/inputswitch';
 import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 import { LayoutModule } from '../layout.module';
 import {ProgressSpinnerModule} from 'primeng/progressspinner';
+import { SharedDirectivesModule } from '../../directives/shared-directives.module';
 
 
 @NgModule({
   declarations: [BuyerComponent],
   imports: [
+    SharedDirectivesModule,
     CommonModule,
     BuyerRoutingModule,
     PrimeModule,

@@ -6,6 +6,7 @@ import { PrimeModule } from 'src/app/prime';
 import {InputSwitchModule} from 'primeng/inputswitch';
 import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 import { LayoutModule } from '../layout.module';
+import { SharedDirectivesModule } from '../../directives/shared-directives.module';
 
 @NgModule({
   declarations: [VendorComponent],
@@ -13,6 +14,7 @@ import { LayoutModule } from '../layout.module';
     CommonModule,
     VendorRoutingModule,
     PrimeModule,
+    SharedDirectivesModule,
     InputSwitchModule,
     FormsModule,
     ReactiveFormsModule,
