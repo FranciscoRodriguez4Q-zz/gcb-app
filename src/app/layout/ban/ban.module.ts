@@ -6,15 +6,15 @@ import { PrimeModule } from 'src/app/prime';
 import {InputSwitchModule} from 'primeng/inputswitch';
 import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 import {PickListModule} from 'primeng/picklist';
-import { NumberOnlyDirective } from '../../directives/num-only.directive';
 import { LayoutModule } from '../layout.module';
 import {ProgressSpinnerModule} from 'primeng/progressspinner';
 import { SiteDetailsComponent } from './site-details/site-details.component';
+import { SharedDirectivesModule } from '../../directives/shared-directives.module';
 
 
 
 @NgModule({
-  declarations: [BanComponent, NumberOnlyDirective, SiteDetailsComponent],
+  declarations: [BanComponent, SiteDetailsComponent],
   imports: [
     CommonModule,
     BanRoutingModule,
@@ -24,7 +24,8 @@ import { SiteDetailsComponent } from './site-details/site-details.component';
     ReactiveFormsModule,
     LayoutModule,
     PickListModule,
-    ProgressSpinnerModule
+    ProgressSpinnerModule,
+    SharedDirectivesModule
   ]
 })
 export class BanModule { }

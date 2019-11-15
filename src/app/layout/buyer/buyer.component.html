@@ -12,7 +12,7 @@
                            Gold ID/Name
                     </div>
                     <div class="p-col-4">
-                       <p-dropdown [virtualScroll]="true" itemSize="30" [options]="goldNetIdReferenceDataList" [style]="{'width': '100%'}" [(ngModel)]="buyerInsertData.goldId" [filter]="true" placeholder="Select" [resetFilterOnHide]="true" [disabled]="userFlag"></p-dropdown>
+                       <p-dropdown onEnter [virtualScroll]="true" itemSize="30" [options]="goldNetIdReferenceDataList" [style]="{'width': '100%'}" [(ngModel)]="buyerInsertData.goldId" [filter]="true" placeholder="Select" [resetFilterOnHide]="true" [disabled]="userFlag"></p-dropdown>
                     </div>
               </div>
               <div class="p-grid">
@@ -56,7 +56,7 @@
                     <span class="required">*</span>Buyer Location
                   </div>
                   <div class="p-col-4 item-left">
-                      <p-dropdown [virtualScroll]="true" itemSize="30" [options]="countryCodeReferenceDataList" [style]="{'width': '100%'}" [(ngModel)]="buyerInsertData.buyerLocationId" [filter]="true" placeholder="Select" [resetFilterOnHide]="true" [disabled]="userFlag"></p-dropdown>
+                      <p-dropdown onEnter [virtualScroll]="true" itemSize="30" [options]="countryCodeReferenceDataList" [style]="{'width': '100%'}" [(ngModel)]="buyerInsertData.buyerLocationId" [filter]="true" placeholder="Select" [resetFilterOnHide]="true" [disabled]="userFlag"></p-dropdown>
                   </div>
                   <div class="p-col-2 item-right">
                      

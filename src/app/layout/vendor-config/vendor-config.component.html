@@ -17,7 +17,7 @@
         <span class="required">*</span>Vendor LE
       </div>
       <div class="p-col-4">
-        <p-dropdown [virtualScroll]="true" itemSize="30" [options]="vendorReferenceDataList" [style]="{'width': '100%'}" [(ngModel)]="vendorConfigDto.vendorEntityId" [filter]="true" placeholder="Select"  [resetFilterOnHide]="true" [disabled]="userFlag"></p-dropdown>
+        <p-dropdown onEnter [virtualScroll]="true" itemSize="30" [options]="vendorReferenceDataList" [style]="{'width': '100%'}" [(ngModel)]="vendorConfigDto.vendorEntityId" [filter]="true" placeholder="Select"  [resetFilterOnHide]="true" [disabled]="userFlag"></p-dropdown>
       </div>
       <div class="p-col-2 item-right">
         Active
@@ -29,7 +29,7 @@
          LLD CoE
       </div>
       <div class="p-col-1">
-        <p-dropdown [options]="lldCoeList"  [style]="{'width': '100%','min-width':'9.15em'}"  [(ngModel)]="vendorConfigDto.lldCoeFlag" [filter]="true" placeholder="Select"  [resetFilterOnHide]="true" [disabled]="userFlag"></p-dropdown>
+        <p-dropdown onEnter [options]="lldCoeList"  [style]="{'width': '100%','min-width':'9.15em'}"  [(ngModel)]="vendorConfigDto.lldCoeFlag" [filter]="true" placeholder="Select"  [resetFilterOnHide]="true" [disabled]="userFlag"></p-dropdown>
       </div>
 </div>
 <div class="p-grid">
@@ -43,7 +43,7 @@
           Exchange Rate Type
         </div>
         <div class="p-col-4 upper">
-            <p-dropdown [options]="exRateType" [(ngModel)]="vendorConfigDto.exchangeRateType" [filter]="true"  [style]="{'width': '25%'}" placeholder="Select" [resetFilterOnHide]="true" [disabled]="userFlag"></p-dropdown>
+            <p-dropdown onEnter [options]="exRateType" [(ngModel)]="vendorConfigDto.exchangeRateType" [filter]="true"  [style]="{'width': '25%'}" placeholder="Select" [resetFilterOnHide]="true" [disabled]="userFlag"></p-dropdown>
         </div>
 </div>
 <div class="p-grid">
@@ -65,7 +65,7 @@
       <span class="required">*</span>Currency Code
     </div>
     <div class="p-col-4 item-left">
-        <p-dropdown [virtualScroll]="true" itemSize="30" [options]="currencyReferenceDataList" [(ngModel)]="vendorConfigDto.currencyCode" [filter]="true"  placeholder="Select" [resetFilterOnHide]="true" [disabled]="userFlag"></p-dropdown>
+        <p-dropdown onEnter [virtualScroll]="true" itemSize="30" [options]="currencyReferenceDataList" [(ngModel)]="vendorConfigDto.currencyCode" [filter]="true"  placeholder="Select" [resetFilterOnHide]="true" [disabled]="userFlag"></p-dropdown>
     </div>
     <div class="p-col-2 item-right">
       Expected Feed Date
@@ -80,7 +80,7 @@
       <span class="required">*</span>Billed From
     </div>
     <div class="p-col-4 item-left">
-        <p-dropdown [virtualScroll]="true" itemSize="30" [options]="countryCodeReferenceDataList" [style]="{'width': '100%'}" [(ngModel)]="vendorConfigDto.billedFromLocationId" [filter]="true" placeholder="Select" [disabled]="editFlag || userFlag" [resetFilterOnHide]="true" [disabled]="userFlag"></p-dropdown>
+        <p-dropdown onEnter [virtualScroll]="true" itemSize="30" [options]="countryCodeReferenceDataList" [style]="{'width': '100%'}" [(ngModel)]="vendorConfigDto.billedFromLocationId" [filter]="true" placeholder="Select" [disabled]="editFlag || userFlag" [resetFilterOnHide]="true" [disabled]="userFlag"></p-dropdown>
     </div>
     <div class="p-col-2 item-right">
       Final Invoice Date
@@ -94,7 +94,7 @@
       <span class="required">*</span>Billed To
     </div>
     <div class="p-col-4 item-left">
-        <p-dropdown [virtualScroll]="true" itemSize="30" [options]="countryCodeReferenceDataList" [style]="{'width': '100%'}" [(ngModel)]="vendorConfigDto.billedToLocationId" [filter]="true" placeholder="Select" [disabled]="editFlag || userFlag" [resetFilterOnHide]="true" ></p-dropdown>
+        <p-dropdown onEnter [virtualScroll]="true" itemSize="30" [options]="countryCodeReferenceDataList" [style]="{'width': '100%'}" [(ngModel)]="vendorConfigDto.billedToLocationId" [filter]="true" placeholder="Select" [disabled]="editFlag || userFlag" [resetFilterOnHide]="true" ></p-dropdown>
     </div>
     <!-- <div class="p-col-2 item-right">
       <span class="required">*</span>Reporting Security DL
