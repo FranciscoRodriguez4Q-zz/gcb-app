@@ -21,6 +21,13 @@ export class BanComponent implements OnInit, OnDestroy, DoCheck {
   data:any;
   files: any ={};
 
+  lldCoeList : SelectItem[] =[
+    { label: "Y", value: "Y" },
+    { label: "N", value: "N" },
+    { label: "L", value: "L" }  
+  ];
+  
+
 public vendorServiceType : any ={
   "billedToLocationId":"",
 	"billedFromLocationId":"",
@@ -79,7 +86,7 @@ public vendorServiceType : any ={
       addCountryISOtoVendorName: "",
       useAssetFileVendorName: "",
       liquidateBillRoutingIdServiceType: "",
-      
+      lldCoeFlag: "",
       invoiceName: "UNSPECIFIED",
       vendorPaidBy: "UNSPECIFIED",
       liquidatedVia: "UNSPECIFIED",

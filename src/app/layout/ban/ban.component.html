@@ -203,6 +203,13 @@
 					  <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="banInsertData.isEquipment"></p-checkbox><label class="label"></label>
 				   </div>
 				</div>
+				<div class="container-details p-grid">
+					<div class="p-col-4 align-end">LLD CoE</div>
+					<div class="p-col-2 item-container-details">
+						<p-dropdown onEnter [options]="lldCoeList"  [style]="{'width': '100%','min-width':'9.15em'}"  [(ngModel)]="banInsertData.lldCoeFlag" [filter]="true" placeholder="Select"  [resetFilterOnHide]="true" [disabled]="userFlag"></p-dropdown>
+					</div>
+				</div>
+
 			 </p-accordionTab>
 			 <p-accordionTab header="Focus Groups">
 				<div class="p-grid">
