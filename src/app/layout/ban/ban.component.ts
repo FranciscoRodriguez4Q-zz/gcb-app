@@ -397,7 +397,7 @@ public vendorServiceType : any ={
       vatUnspsc: "",
       buyerPaymentApprovalEmail: "",
       buyerContactSso: "",
-      focusGroup: "",
+      focusGroup: [],
       shipFromAddress: "",
       shipToCountry: 0,
       shipToProvince: "",
@@ -483,6 +483,7 @@ public vendorServiceType : any ={
   }
 
   upsertBan() {
+    alert("upsertBan main")
     this.errorMessage = "";
     if (this.validation()) {
       // debugger;
