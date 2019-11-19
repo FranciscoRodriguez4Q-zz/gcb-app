@@ -16,6 +16,9 @@ export class VendorComponent implements OnInit, OnDestroy {
   
   ngOnDestroy(): void {
     this.backupModelService.vendorTabModel = this.vendorInsertData;
+    if(this.subs != null && this.subs != undefined){
+      this.subs.unsubscribe()
+    }
   }
 
   public gridData: any = [];

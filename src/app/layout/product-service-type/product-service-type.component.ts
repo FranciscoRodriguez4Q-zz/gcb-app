@@ -112,7 +112,9 @@ export class ProductServiceTypeComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.backupModelService.serviceTypeTabModel = this.gcbDetailFilters;
     this.homeService.setState({ key: this.KEY, data: null });
-    this.subs.unsubscribe()
+    if(this.subs != null && this.subs != undefined){
+      this.subs.unsubscribe()
+    }
   }
 
   getAllCountryData() {
