@@ -119,7 +119,9 @@ export class BuyerComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.backupModelService.buyerTabModel = this.buyerInsertData;
     this.homeService.setState({ key: this.KEY, data: null });
-    this.subs.unsubscribe()
+    if(this.subs != null && this.subs != undefined){
+      this.subs.unsubscribe()
+    }
   }
 
   getAllBuyerDetails() {
