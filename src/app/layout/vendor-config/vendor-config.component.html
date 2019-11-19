@@ -25,12 +25,6 @@
       <div class="p-col-1" >
          <p-checkbox [(ngModel)]="vendorConfigDto.active" binary="true" [disabled]="userFlag"></p-checkbox>
       </div>
-      <div class="p-col-1 item-right">
-         LLD CoE
-      </div>
-      <div class="p-col-1">
-        <p-dropdown onEnter [options]="lldCoeList"  [style]="{'width': '100%','min-width':'9.15em'}"  [(ngModel)]="vendorConfigDto.lldCoeFlag" [filter]="true" placeholder="Select"  [resetFilterOnHide]="true" [disabled]="userFlag"></p-dropdown>
-      </div>
 </div>
 <div class="p-grid">
        <div class="p-col-2 item-right">
