@@ -18,13 +18,14 @@ import {FieldsetModule} from 'primeng/fieldset';
 
 import { ProductRoutingModule } from './product-routing.module';
 import { ProductComponent } from './product.component';
+import { SharedDirectivesModule } from '../../directives/shared-directives.module';
 
 @NgModule({
   declarations: [ProductComponent],
   imports: [      
     CommonModule,
     FormsModule,
-    
+    SharedDirectivesModule,
     ProductRoutingModule,
     LayoutModule,
     

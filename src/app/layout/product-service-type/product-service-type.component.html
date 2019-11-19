@@ -9,7 +9,7 @@
                 <label class="label"><span class="required">*</span>Product Name </label>
             </div>
             <div class="p-col-5 item-left">
-                <p-dropdown    
+                <p-dropdown onEnter [virtualScroll]="true" itemSize="30"    
             [options]="productReferenceDataList"
             [(ngModel)]="gcbDetailFilters.productId"      placeholder="Select"   [autoWidth]="true"
             [style]="{'width': '130%'}"   
@@ -35,11 +35,11 @@
                 <label class="label"><span class="required">*</span>Billed From </label>
             </div>
             <div class="p-col-5 item-left">
-                 <!-- <p-dropdown [options]="countryCodeReferenceDataList" [(ngModel)]="gcbDetailFilters.billedFromLocationId" placeholder="Select" [autoWidth]="true"
+                 <!-- <p-dropdown onEnter [virtualScroll]="true" itemSize="30" [options]="countryCodeReferenceDataList" [(ngModel)]="gcbDetailFilters.billedFromLocationId" placeholder="Select" [autoWidth]="true"
                                     [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
                                     [filter]="true" (click)="getServicetype()" scrollHeight="150px">
                 </p-dropdown> -->
-                <p-dropdown [options]="countryCodeReferenceDataList" (click)="getServicetype()"  [style]="{'width': '130%'}" placeholder="Select" [(ngModel)]="gcbDetailFilters.billedFromLocationId" [filter]="true"  [resetFilterOnHide]="true" [disabled]="userFlag"></p-dropdown>
+                <p-dropdown onEnter [virtualScroll]="true" itemSize="30" [options]="countryCodeReferenceDataList" (click)="getServicetype()"  [style]="{'width': '130%'}" placeholder="Select" [(ngModel)]="gcbDetailFilters.billedFromLocationId" [filter]="true"  [resetFilterOnHide]="true" [disabled]="userFlag"></p-dropdown>
             </div>
         </div>
         <div class="p-grid">
@@ -47,7 +47,7 @@
                  <label class="label"><span class="required">*</span>Billed To </label>
             </div>
             <div class="p-col-5 item-left">
-                <p-dropdown [options]="countryCodeReferenceDataList" [(ngModel)]="gcbDetailFilters.billedToLocationId" placeholder="Select" [autoWidth]="true"
+                <p-dropdown onEnter [virtualScroll]="true" itemSize="30" [options]="countryCodeReferenceDataList" [(ngModel)]="gcbDetailFilters.billedToLocationId" placeholder="Select" [autoWidth]="true"
                 [style]="{'width': '130%'}"  [filter]="true" (click)="getServicetype()" scrollHeight="150px" [resetFilterOnHide]="true" [disabled]="userFlag">
                 </p-dropdown>
             </div>
@@ -78,7 +78,7 @@
                                   <label class="label"><span class="required">*</span>Billing Basis </label>
                             </div>
                             <div class="p-col-5 item-left">
-                                 <p-dropdown [options]="billingReferenceDataList" [(ngModel)]="gcbDetailFilters.billingBasis" placeholder="Select" [autoWidth]="true"
+                                 <p-dropdown onEnter [options]="billingReferenceDataList" [(ngModel)]="gcbDetailFilters.billingBasis" placeholder="Select" [autoWidth]="true"
                                                     [style]="{'width': '130%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
                                                     [filter]="true" scrollHeight="150px" [resetFilterOnHide]="true" [disabled]="userFlag">
                                                 </p-dropdown>

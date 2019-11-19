@@ -9,11 +9,13 @@ import { DropdownModule } from 'primeng/dropdown';
 import {FileDownloadComponent} from '../file-download/file-download.component';
 import { LayoutModule } from '../layout.module';
 import {FieldsetModule} from 'primeng/fieldset';
+import { SharedDirectivesModule } from '../../directives/shared-directives.module';
 
 @NgModule({
   declarations: [ProductServiceTypeComponent],
   imports: [ 
     CommonModule,
+    SharedDirectivesModule,
     ProductServiceTypeRoutingModule,
     NgbModalModule.forRoot(),
     DropdownModule,

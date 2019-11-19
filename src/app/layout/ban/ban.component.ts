@@ -53,7 +53,7 @@ public vendorServiceType : any ={
       directOffsetBuc: "",
       indirectOffsetBuc: "",
       isEquipment: "",
-  
+      sez:0,
       erpName: "",
       erpSystem: "",
       erpProject: "",
@@ -247,7 +247,9 @@ public vendorServiceType : any ={
       serviceList: this.serviceList
     };
     this.homeService.setState({ key: this.KEY, data: null })
-    this.subs.unsubscribe()
+    if(this.subs != null && this.subs != undefined){
+      this.subs.unsubscribe()
+    }
   }
 
   ngDoCheck() {
