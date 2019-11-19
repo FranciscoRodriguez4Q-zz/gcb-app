@@ -1,17 +1,25 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { VendorService } from './vendor.service';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { SelectItem } from 'primeng/primeng';
 import { Globals } from '../../shared/constants/globals';
 import { HomeService } from '../home/home.service';
 import { Subscription } from 'rxjs';
+import { BackupModelService } from '../backupmodel.service';
 
 @Component({
   selector: 'app-product',
   templateUrl: './vendor.component.html',
   styleUrls: ['./vendor.component.scss']
 })
-export class VendorComponent implements OnInit {
+export class VendorComponent implements OnInit, OnDestroy {
+  
+  ngOnDestroy(): void {
+    this.backupModelService.vendorTabModel = this.vendorInsertData;
+    if(this.subs != null && this.subs != undefined){
+      this.subs.unsubscribe()
+    }
+  }
 
   public gridData: any = [];
   data:any;
@@ -67,7 +75,8 @@ export class VendorComponent implements OnInit {
     private vendorService: VendorService,
     private modalService: NgbModal,
     private globals: Globals,
-    private homeService: HomeService
+    private homeService: HomeService,
+    private backupModelService: BackupModelService
     ) { 
     //console.log("Role: "+this.globals.roleNM);
     if (this.globals.roleNM==='ADMIN') {
@@ -99,7 +108,10 @@ export class VendorComponent implements OnInit {
         const { id } = item;
         this.showSelectedData(id);
       }
-    })
+    });
+    if (this.backupModelService.vendorTabModel != null 
+      && this.backupModelService.vendorTabModel != undefined)
+      this.vendorInsertData = this.backupModelService.vendorTabModel;
   }
 
   getAllVendorDetails() {

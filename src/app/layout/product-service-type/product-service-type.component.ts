@@ -7,6 +7,7 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { Globals } from '../../shared/constants/globals';
 import { HomeService } from '../home/home.service';
 import { Subscription } from 'rxjs';
+import { BackupModelService } from '../backupmodel.service';
 
 @Component({
   selector: 'app-product-service-type',
@@ -68,7 +69,6 @@ export class ProductServiceTypeComponent implements OnInit, OnDestroy {
   public editFlag = false;
   public formMode = "New";
   public errorMessage = "";
-  
   public saveMessage: any = [];
   @ViewChild('content1') errorMessagePopUp;
   public popupErrorMessage: any;
@@ -78,6 +78,7 @@ export class ProductServiceTypeComponent implements OnInit, OnDestroy {
     private modalService: NgbModal,
     private globals: Globals,
     private homeService: HomeService,
+    private backupModelService: BackupModelService
   ) {
     if (this.globals.roleNM === 'ADMIN') {
       this.userFlag = false;
@@ -102,12 +103,18 @@ export class ProductServiceTypeComponent implements OnInit, OnDestroy {
         const { id } = item;
         this.showSelectedData(id);
       }
-    })
+    });
+    if(this.backupModelService.serviceTypeTabModel != null 
+        && this.backupModelService.serviceTypeTabModel != undefined)
+      this.gcbDetailFilters = this.backupModelService.serviceTypeTabModel;
   }
 
   ngOnDestroy() {
+    this.backupModelService.serviceTypeTabModel = this.gcbDetailFilters;
     this.homeService.setState({ key: this.KEY, data: null });
-    this.subs.unsubscribe()
+    if(this.subs != null && this.subs != undefined){
+      this.subs.unsubscribe()
+    }
   }
 
   getAllCountryData() {

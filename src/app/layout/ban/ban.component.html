@@ -37,7 +37,7 @@
 				<div class="p-grid ">
 				   <div class="p-col-4 item-right"><span class="required">*</span>Process Name</div>
 				   <div class="p-col-8 item-left">
-					  <p-dropdown [options]="billProcessReferenceList" [style]="{'width': '100%'}"  [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.billProcessId" [resetFilterOnHide]="true"  (onChange)="getVendorCode()" ></p-dropdown>
+					  <p-dropdown onEnter [options]="billProcessReferenceList" [style]="{'width': '100%'}"  [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.billProcessId" [resetFilterOnHide]="true"  (onChange)="getVendorCode()" ></p-dropdown>
 				   </div>
 				</div>
 				<div class="p-grid ">
@@ -49,7 +49,14 @@
 				<div class="p-grid ">
 				   <div class="p-col-4 item-right"><span class="required">*</span>Vendor Code</div>
 				   <div class="p-col-8 item-left">
-					  <p-dropdown [options]="vendorReferenceDataList" [style]="{'width': '100%'}" (click)="getServiceType()" (onChange)="getServiceType()" [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.vendorConfigId"   [resetFilterOnHide]="true" ></p-dropdown>
+					<p-dropdown onEnter [virtualScroll]="true" itemSize="30" 
+					[options]="vendorReferenceDataList" 
+					[style]="{'width': '100%'}"
+					(onChange)="getServiceType()"
+					[filter]="true" placeholder="Select"
+					[(ngModel)]="banInsertData.vendorConfigId"
+					[resetFilterOnHide]="true">
+				  </p-dropdown>
 				   </div>
 				</div>
 				<div class="p-grid ">
@@ -58,16 +65,21 @@
 					  <input class="form-control" [(ngModel)]="banInsertData.vendorFriendlyName" />
 				   </div>
 				</div>
+				<app-site-details
+					[detailInfo]="detailInfo"
+					(locationId)="setLocationId($event)"
+					[countryId]="countryId">
+				</app-site-details>
 				<div class="p-grid ">
 				   <div class="p-col-4 item-right"><span class="required">*</span>Buyer Name</div>
 				   <div class="p-col-8 item-left">
-					  <p-dropdown [options]="buyerReferenceDataList" [style]="{'width': '100%'}" (onChange)="setBuyerDetails()"  [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.buyerId" [resetFilterOnHide]="true" ></p-dropdown>
+					  <p-dropdown onEnter [virtualScroll]="true" itemSize="30" [options]="buyerReferenceDataList" [style]="{'width': '100%'}" (onChange)="setBuyerDetails()"  [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.buyerId" [resetFilterOnHide]="true" ></p-dropdown>
 				   </div>
 				</div>
 				<!-- <div class="p-grid ">
 				   <div class="p-col-4 item-right"><span class="required">*</span>Billing Model :</div>
 				   <div class="p-col-8 item-left">
-					   <p-dropdown [options]="billingReferenceDataList" [style]="{'width': '100%'}"  [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.billingModel" [resetFilterOnHide]="true" ></p-dropdown>
+					   <p-dropdown onEnter [virtualScroll]="true" itemSize="30" [options]="billingReferenceDataList" [style]="{'width': '100%'}"  [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.billingModel" [resetFilterOnHide]="true" ></p-dropdown>
 				   </div>
 				   </div> -->
 				<div class="p-grid ">
@@ -81,7 +93,7 @@
 				<div class="p-grid ">
 				   <div class="p-col-4 item-right"><span class="required">*</span>Mode</div>
 				   <div class="p-col-8 item-left">
-					  <p-dropdown [options]="modeReferenceDataList" [style]="{'width': '100%'}"  [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.mode"  (onChange)="onModeChange($event)" [disabled]="userFlag" [resetFilterOnHide]="true" ></p-dropdown>
+					  <p-dropdown onEnter [options]="modeReferenceDataList" [style]="{'width': '100%'}"  [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.mode"  (onChange)="onModeChange($event)" [disabled]="userFlag" [resetFilterOnHide]="true" ></p-dropdown>
 				   </div>
 				</div>
 				<div class="p-grid ">
@@ -99,7 +111,7 @@
 					  <span class="required">*</span>Invoice Name
 				   </div>
 				   <div class="p-col-8 item-left">
-					  <p-dropdown [options]="invoiceNmReferenceDataList" [style]="{'width': '100%'}"  [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.invoiceName" [disabled]="userFlag" [resetFilterOnHide]="true" ></p-dropdown>
+					  <p-dropdown onEnter [options]="invoiceNmReferenceDataList" [style]="{'width': '100%'}"  [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.invoiceName" [disabled]="userFlag" [resetFilterOnHide]="true" ></p-dropdown>
 				   </div>
 				</div>
 				<div class="p-grid">
@@ -107,7 +119,7 @@
 					  <span class="required">*</span>Paid By
 				   </div>
 				   <div class="p-col-8 item-left">
-					  <p-dropdown [options]="paidByReferenceDataList" [style]="{'width': '100%'}"  [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.vendorPaidBy" [disabled]="userFlag" [resetFilterOnHide]="true" ></p-dropdown>
+					  <p-dropdown onEnter [options]="paidByReferenceDataList" [style]="{'width': '100%'}"  [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.vendorPaidBy" [disabled]="userFlag" [resetFilterOnHide]="true" ></p-dropdown>
 				   </div>
 				</div>
 				<div class="p-grid">
@@ -115,7 +127,7 @@
 					  <span class="required">*</span>Liquidated Via
 				   </div>
 				   <div class="p-col-8 item-left">
-					  <p-dropdown [options]="liquidateViaReferenceDataList" [style]="{'width': '100%'}"  [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.liquidatedVia" [disabled]="userFlag" [resetFilterOnHide]="true" ></p-dropdown>
+					  <p-dropdown onEnter [options]="liquidateViaReferenceDataList" [style]="{'width': '100%'}"  [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.liquidatedVia" [disabled]="userFlag" [resetFilterOnHide]="true" ></p-dropdown>
 				   </div>
 				</div>
 				<div class="p-grid">
@@ -123,7 +135,7 @@
 					  <span class="required">*</span>Tax Engine
 				   </div>
 				   <div class="p-col-8 item-left">
-					  <p-dropdown [options]="taxEngineReferenceDataList" [style]="{'width': '100%'}"  [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.taxEngine" [disabled]="userFlag" [resetFilterOnHide]="true" ></p-dropdown>
+					  <p-dropdown onEnter [options]="taxEngineReferenceDataList" [style]="{'width': '100%'}"  [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.taxEngine" [disabled]="userFlag" [resetFilterOnHide]="true" ></p-dropdown>
 				   </div>
 				</div>
 			 </p-accordionTab>
@@ -299,7 +311,7 @@
 					  Ship To Country
 				   </div>
 				   <div class="p-col-8 item-left">
-					  <p-dropdown [options]="countryCodeReferenceDataList" [style]="{'width': '100%'}"  [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.shipToCountry" [resetFilterOnHide]="true" ></p-dropdown>
+					  <p-dropdown onEnter [virtualScroll]="true" onEnter itemSize="30" [options]="countryCodeReferenceDataList" [style]="{'width': '100%'}"  [filter]="true" placeholder="Select" [(ngModel)]="banInsertData.shipToCountry" [resetFilterOnHide]="true" ></p-dropdown>
 				   </div>
 				</div>
 				<div class="p-grid">
@@ -341,6 +353,14 @@
 				   <div class="p-col-8 item-left">
 					  <input class="form-control" style="width: 100%" [(ngModel)]="banInsertData.shipToZip5">
 				   </div>
+				</div>
+				<div class="p-grid ">
+					<div class="p-col-8 item-right">
+						Special Economic Zone?
+					</div>
+					<div class="p-col-2 gridCheckBox">
+					   <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="banInsertData.sez"></p-checkbox>
+					</div>
 				</div>
 			 </p-accordionTab>
 			 <p-accordionTab header="Asset file configuration">
@@ -389,8 +409,8 @@
 						 <i class="fa fa-pencil-square-o fa-2x"></i>
 						 </a>
 					  </div>
-					  <div *ngIf="!systems.liquidateBillRoutingId">                                
-						 <button class="button-link" (click)="generateServiceBillRefId()">Enter BUC/ADN details</button>
+					  <div *ngIf="!systems.liquidateBillRoutingId">
+						 <button (click)="generateServiceBillRefId()" [disabled]="!isSystemsSelected" [ngClass]="{ 'button-valid' : isSystemsSelected, 'button-invalid' : !isSystemsSelected }">Enter BUC/ADN details</button>
 					  </div>
 				   </div>
 				</div>

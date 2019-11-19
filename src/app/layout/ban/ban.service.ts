@@ -23,6 +23,10 @@ export class BanService {
      return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT+"/country");
    }
 
+  public getAllLocationsByCountry({ billedToLocationId }): Observable<any> {
+    return this.http.get(`${environment.APP_BASE_URL_SERVICE_ENDPOINT}/locations/${billedToLocationId}`);
+  }
+
   public upsertBan(banInsertData): Observable<Object> {
      return this.http.post(environment.APP_BASE_URL_SERVICE_ENDPOINT+"/ban/bans", banInsertData);
    }
@@ -101,7 +105,7 @@ export class BanService {
     );
   }
 
-  public associateBillReftoAsset(billRefId,assetID,regkey):Observable<Object> { 
+  public associateBillReftoAsset(billRefId, assetID, regkey):Observable<Object> { 
     return this.http.get(environment.APP_BILLHUB_URL_SERVICE_ENDPOINT+
       "/AssociateBillReftoAsset?billRefAssetArray="+billRefId+","+
       assetID+

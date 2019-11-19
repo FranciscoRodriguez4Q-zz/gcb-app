@@ -8,7 +8,7 @@
                             <label class="label"><span class="required">*</span>HL Vendor Name</label>
                     </div>
                      <div class="p-col-5 item-left">
-                        <p-dropdown [options]="hlVendorDataList" [style]="{'width': '130%'}" [(ngModel)]="vendorInsertData.hlVendorId" [filter]="true" placeholder="Select" [resetFilterOnHide]="true" [disabled]="userFlag"></p-dropdown>
+                        <p-dropdown onEnter [options]="hlVendorDataList" [style]="{'width': '130%'}" [(ngModel)]="vendorInsertData.hlVendorId" [filter]="true" placeholder="Select" [resetFilterOnHide]="true" [disabled]="userFlag"></p-dropdown>
                     </div> 
                 </div>
                 <div class="p-grid">

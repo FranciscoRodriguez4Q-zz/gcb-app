@@ -9,6 +9,7 @@ import { Globals } from '../../shared/constants/globals';
 import { debug } from 'util';
 import { HomeService } from '../home/home.service';
 import { Subscription } from 'rxjs';
+import { BackupModelService } from '../backupmodel.service';
 
 @Component({
   selector: 'app-product',
@@ -16,7 +17,7 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./ban.component.scss']
 })
 export class BanComponent implements OnInit, OnDestroy {
-
+  isSystemsSelected = false;
   public gridData: any = [];
   data:any;
   files: any ={};
@@ -52,7 +53,7 @@ public vendorServiceType : any ={
       directOffsetBuc: "",
       indirectOffsetBuc: "",
       isEquipment: "",
-  
+      sez:0,
       erpName: "",
       erpSystem: "",
       erpProject: "",
@@ -84,7 +85,8 @@ public vendorServiceType : any ={
       liquidatedVia: "UNSPECIFIED",
       taxEngine: "UNSPECIFIED",
       cloneFlag : false,
-      cloneOfId : ""
+      cloneOfId : "",
+      detailedLocationId: ""
     };
   public banInsertDataCopy: any;
 
@@ -163,12 +165,14 @@ public vendorServiceType : any ={
   userInfo :any;
   private subs: Subscription;
   private readonly KEY: string = 'Ban';
+  public countryId = null;
 
   constructor(
     private banService: BanService, 
     private modalService: NgbModal, 
     private globals: Globals,
-    private homeService: HomeService
+    private homeService: HomeService,
+    private backupModelService: BackupModelService
     ) {
     this.banService.getUserData().subscribe(
       refData => {
@@ -223,12 +227,29 @@ public vendorServiceType : any ={
         const { id } = item;
         this.showSelectedData(id);
       }
-    })
+    });
+    if(this.backupModelService.banTabModel != null 
+      && this.backupModelService.banTabModel != undefined){
+      this.banInsertData = this.backupModelService.banTabModel.banInsertData;
+      this.targetSystem = this.backupModelService.banTabModel.targetSystem;
+      this.sourceSystem = this.backupModelService.banTabModel.sourceSystem;
+      this.serviceTypeReferenceData = this.backupModelService.banTabModel.serviceTypeReferenceData;
+      this.serviceList = this.backupModelService.banTabModel.serviceList;
+    }
   }
 
   ngOnDestroy() {
+    this.backupModelService.banTabModel = {
+      banInsertData: this.banInsertData,
+      targetSystem: this.targetSystem,
+      sourceSystem: this.sourceSystem,
+      serviceTypeReferenceData: this.serviceTypeReferenceData,
+      serviceList: this.serviceList
+    };
     this.homeService.setState({ key: this.KEY, data: null })
-    this.subs.unsubscribe()
+    if(this.subs != null && this.subs != undefined){
+      this.subs.unsubscribe()
+    }
   }
 
   setBuyerDetails()
@@ -283,7 +304,7 @@ public vendorServiceType : any ={
     //   error => {
     //   });
   }
-
+  public detailInfo = null;
   showSelectedData(banId) {
     this.cloneFlag = false;
     this.expandAllPanels();
@@ -299,6 +320,10 @@ public vendorServiceType : any ={
         this.setBuyerDetails();
         this.getSourceServiceType(banId);
         this.banInsertDataCopy = { ...this.banInsertData }
+        this.detailInfo = {
+          detailedLocationId: this.banInsertData.detailedLocationId,
+          billedToLocationId: this.banInsertData.billedToLocationId
+        }
       },
       error => {
       });
@@ -385,6 +410,8 @@ public vendorServiceType : any ={
       cloneOfId : ""
     };
     this.banInsertDataCopy = {};
+    this.countryId = null;
+    this.detailInfo = null;
     this.editFlag = false;
     this.formMode = "New";
     this.vBanFlag = false;
@@ -397,53 +424,51 @@ public vendorServiceType : any ={
     await this.getBillingModelTypes();
   }
 
-  validation(){    
-    if(this.banInsertData.billProcessId==0){
+  validation() {
+    if (this.banInsertData.billProcessId == 0) {
       this.errorMessage = "Please Select Bill Process";
       return false;
     }
-    if(this.banInsertData.vendorBan==""){
+    if (this.banInsertData.vendorBan == "") {
       this.errorMessage = "Please Enter Vendor Ban";
       return false;
     }
-    if(this.banInsertData.vendorConfigId==0){
+    if (this.banInsertData.vendorConfigId == 0) {
       this.errorMessage = "Please Enter Vendor Code";
       return false;
     }
-    if(this.banInsertData.buyerId==0){
+    if (this.banInsertData.buyerId == 0) {
       this.errorMessage = "Please Select Buyer Name";
       return false;
     }
-    if(this.banInsertData.mode==""){
+    if (this.banInsertData.mode == "") {
       this.errorMessage = "Please Select Mode";
       return false;
-    } 
+    }
     if (this.banInsertData.cloneFlag) {
-      if(this.banInsertData.invoiceName==undefined || this.banInsertData.invoiceName=="undefined"  || this.banInsertData.invoiceName==""){
+      if (this.banInsertData.invoiceName == undefined || this.banInsertData.invoiceName == "undefined" || this.banInsertData.invoiceName == "") {
         this.errorMessage = "Please select Invoice Name for Clone record";
         return false;
       }
-      if(this.banInsertData.vendorPaidBy==undefined || this.banInsertData.vendorPaidBy=="undefined"  || this.banInsertData.vendorPaidBy==""){
+      if (this.banInsertData.vendorPaidBy == undefined || this.banInsertData.vendorPaidBy == "undefined" || this.banInsertData.vendorPaidBy == "") {
         this.errorMessage = "Please select Vendor Paid By for Clone record";
         return false;
       }
-      if(this.banInsertData.liquidatedVia==undefined || this.banInsertData.liquidatedVia=="undefined"  || this.banInsertData.liquidatedVia==""){
+      if (this.banInsertData.liquidatedVia == undefined || this.banInsertData.liquidatedVia == "undefined" || this.banInsertData.liquidatedVia == "") {
         this.errorMessage = "Please select Liquidated Via for Clone record";
         return false;
       }
-      if(this.banInsertData.taxEngine==undefined || this.banInsertData.taxEngine=="undefined"  || this.banInsertData.taxEngine==""){
+      if (this.banInsertData.taxEngine == undefined || this.banInsertData.taxEngine == "undefined" || this.banInsertData.taxEngine == "") {
         this.errorMessage = "Please select Tax Engine for Clone record";
         return false;
       }
-      else 
-      {
+      else {
         return true;
-        }
-      
+      }
     }
-     else{
+    else {
       return true;
-   }
+    }
   }
 
   upsertBan() {
@@ -480,29 +505,28 @@ public vendorServiceType : any ={
       //     this.errorMessage = respArray[0].message;
       //     this.popupErrorMessage = respArray[0].message;
       //     this.open(this.errorMessagePopUp);
-          
+
       //   }
       //   else   if (respArray[0].message === "BillRef does not exist"){
       //     this.errorMessage = "Please Enter BUC/ADN details";
       //     this.popupErrorMessage = "Please Enter BUC/ADN details";
       //     this.banInsertData.liquidateBillRoutingId = "";
       //     this.open(this.errorMessagePopUp);
-         
+
       //   }
       //   else {
       this.banService.upsertBan(this.banInsertData).subscribe(
         async refData => {
           this.errorFlag = true;
           this.saveMessage = refData;
-          this.popupErrorMessage =  this.saveMessage.statusMessage;
+          this.popupErrorMessage = this.saveMessage.statusMessage;
           this.open(this.errorMessagePopUp);
           console.log(this.saveMessage);
-          if(!this.saveMessage.error && this.banInsertData.liquidateBillRoutingId &&!this.editFlag)
-              {
-                this.associateBillRefToAsset(this.saveMessage.banId);
-              }
+          if (!this.saveMessage.error && this.banInsertData.liquidateBillRoutingId && !this.editFlag) {
+            this.associateBillRefToAsset(this.saveMessage.banId);
+          }
           await this.getAllBanDetails();
-          if(null != this.saveMessage.banId){
+          if (null != this.saveMessage.banId) {
             this.upsertBanProduct(this.saveMessage.banId);
           }
           if (!this.saveMessage.Error) {
@@ -515,31 +539,32 @@ public vendorServiceType : any ={
         },
         error => {
         });
-      }
+    }
     // },
     // error => {
     // });
     // }
-    else{
+    else {
       //this.open(this.errorMessage);
     }
   }
 
-  associateBillRefToAsset(internalCbId){
+  associateBillRefToAsset(internalCbId) {
 
-    this.banService.associateBillReftoAsset(this.banInsertData.liquidateBillRoutingId,
-      internalCbId, this.regKey).subscribe(
+    this.banService.associateBillReftoAsset(
+      this.banInsertData.liquidateBillRoutingId,
+      internalCbId, // ban_id
+      this.regKey
+    ).subscribe(
       refData => {
         let response = refData;
         let respArray = [];
         respArray.push(response);
-        if (respArray[0].Successful_Count === 1) {
-  
-        }
+        if (respArray[0].Successful_Count === 1) { }
         else {
           if (!(respArray[0].RecordsArray[0].message === "Bill Ref Already Associated.")) {
             this.popupErrorMessage = respArray[0].RecordsArray[0].message;
-           //this.open(this.errorMessagePopUp);
+            //this.open(this.errorMessagePopUp);
           }
         }
       },
@@ -548,7 +573,7 @@ public vendorServiceType : any ={
         this.popupErrorMessage = error;
         this.open(this.errorMessagePopUp);
       });
-  
+
   }
 
   getAllCountryData() {
@@ -773,28 +798,39 @@ public vendorServiceType : any ={
       billedToLocationId:"",
     }
   }
+
+  setCountryId() {
+    if (this.banInsertData.vendorConfigId != "Select" && this.banInsertData.vendorConfigId != "") {
+      const [vendorConfigData] = this.vendorReferenceData.filter(x => x.vendorConfigId == this.banInsertData.vendorConfigId)
+      this.countryId = vendorConfigData.billedToLocationId;
+    }
+  }
+
   getServiceType(){
+    this.setCountryId();
     this.targetSystem=[];
     this.errorMessage = "";
-    if (this.banInsertData.vendorConfigId != "Select" && this.banInsertData.vendorConfigId != "" && 
-    this.banInsertData.billProcessId!= null && this.banInsertData.billProcessId!= "") {
-      let vendorConfigData=this.vendorReferenceData.filter(x => x.vendorConfigId == this.banInsertData.vendorConfigId)[0];
-      this.banInsertData.billedFromLocationId=vendorConfigData.billedFromLocationId;
-      this.banInsertData.billedToLocationId=vendorConfigData.billedToLocationId;
-      //console.log("Vendor Selected : " + vendorConfigData);
-      //console.log("process Id "+this.banInsertData.billProcessId);
-      this.banService.getServiceType(this.banInsertData).subscribe(
-        refData => {
-          let arr: any = [];
-          this.serviceTypeReferenceData = refData; 
-          this.sourceSystem=refData; 
-          for (let data of this.serviceTypeReferenceData) {
-            let labelService = data.serviceTypeName;
-            this.serviceTypeReferenceDataList.push({ label: labelService, value: data.serviceTypeId })
-          }
-        },
-        error => {
-        })
+    console.log('[INFO] - BanComponent - getServiceType()')
+    if (
+      this.banInsertData.vendorConfigId != "Select" && this.banInsertData.vendorConfigId != "" && 
+      this.banInsertData.billProcessId != null && this.banInsertData.billProcessId != "") {
+        let vendorConfigData=this.vendorReferenceData.filter(x => x.vendorConfigId == this.banInsertData.vendorConfigId)[0];
+        this.banInsertData.billedFromLocationId=vendorConfigData.billedFromLocationId;
+        this.banInsertData.billedToLocationId=vendorConfigData.billedToLocationId;
+        //console.log("Vendor Selected : " + vendorConfigData);
+        //console.log("process Id "+this.banInsertData.billProcessId);
+        this.banService.getServiceType(this.banInsertData).subscribe(
+          refData => {
+            let arr: any = [];
+            this.serviceTypeReferenceData = refData; 
+            this.sourceSystem=refData; 
+            for (let data of this.serviceTypeReferenceData) {
+              let labelService = data.serviceTypeName;
+              this.serviceTypeReferenceDataList.push({ label: labelService, value: data.serviceTypeId })
+            }
+          },
+          error => {
+          })
     }
     if(this.banInsertData.billProcessId== ""){
       this.errorMessage = "You must select a Bill process";
@@ -812,6 +848,7 @@ public vendorServiceType : any ={
     if(null != item.items[0].serviceTypeId){}
     this.systems = this.serviceList.filter(x => x.serviceTypeId == item.items[0].serviceTypeId)[0];
     this.triggerEvent();
+    this.isSystemsSelected =true;
   }
   triggerEvent(){
     console.log("trgger handle: "+this.systems);
@@ -1301,32 +1338,37 @@ onTabClose(event) {
     this.panelExpansionFlag=true; 
 }
 
-
 getVendorCode() {
-  if (this.banInsertData.billProcessId === 2) {
-  this.vendorReferenceDataList = [];
-  var vendorFilterData = this.vendorReferenceData.filter(x => String(x.vendorLegalEntityName).startsWith('Z'));
-    for (let data of vendorFilterData) {
-    let labelService = data.vendorLegalEntityName+' | '+data.vendorCode+' | '+data.billedFromCountryCode+' | '+data.billedToCountryCode+' | '
-    +data.currencyCode;
-    this.vendorReferenceDataList.push({ label: labelService, value: data.vendorConfigId })
+  if (this.banInsertData.billProcessId === 2) {
+    this.banInsertData.vendorConfigId = ""
+    this.countryId = null;
+    this.vendorReferenceDataList = [];
+    var vendorFilterData = this.vendorReferenceData.filter(x => String(x.vendorCode).startsWith('Z'));
+    for (let data of vendorFilterData) {
+      let labelService = data.vendorLegalEntityName + ' | ' + data.vendorCode + ' | ' + data.billedFromCountryCode + ' | ' + data.billedToCountryCode + ' | '
+        + data.currencyCode;
+      this.vendorReferenceDataList.push({ label: labelService, value: data.vendorConfigId })
     }
   }
-  else {
-  this.vendorReferenceDataList = [];
-    for (let data of this.vendorReferenceData) {
-    let labelService = data.vendorLegalEntityName+' | '+data.vendorCode+' | '+data.billedFromCountryCode+' | '+data.billedToCountryCode+' | '
-    +data.currencyCode;
-    this.vendorReferenceDataList.push({ label: labelService, value: data.vendorConfigId })
+  else {
+    this.vendorReferenceDataList = [];
+    for (let data of this.vendorReferenceData) {
+      let labelService = data.vendorLegalEntityName + ' | ' + data.vendorCode + ' | ' + data.billedFromCountryCode + ' | ' + data.billedToCountryCode + ' | '
+        + data.currencyCode;
+      this.vendorReferenceDataList.push({ label: labelService, value: data.vendorConfigId })
     }
   }
 } 
- 
+
 get disabled() {
-  if (this.editFlag) {
-    return JSON.stringify(this.banInsertData) === JSON.stringify(this.banInsertDataCopy)
-  }
-  return false;
+if (this.editFlag) {
+  return JSON.stringify(this.banInsertData) === JSON.stringify(this.banInsertDataCopy)
+}
+return false;
+}
+
+setLocationId(locationId) {
+this.banInsertData.detailedLocationId = locationId;
 }
 
 }

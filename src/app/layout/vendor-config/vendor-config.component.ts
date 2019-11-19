@@ -131,7 +131,9 @@ constructor(
 
   ngOnDestroy() {
     this.homeService.setState({ key: this.KEY, data: null });
-    this.subs.unsubscribe();
+    if(this.subs != null && this.subs != undefined){
+      this.subs.unsubscribe()
+    }
   }
 
 
@@ -313,7 +315,8 @@ upsertVendorConfig(){
           this.clearAllFilters();
         },
         error => {
-          this.open("An system error occured");
+          this.popupErrorMessage = "An system error occured";          
+          this.open(this.errorMessagePopUp);
         });
     }
 }
