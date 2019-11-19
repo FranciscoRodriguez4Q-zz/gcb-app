@@ -74,7 +74,7 @@ export class BanService {
     return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/ban/banProductById/"+banId);
   }
 
-  public upsertBanProduct(serviceList,banId): Observable<Object> {
+  public upsertBanProduct(serviceList,banId): Observable<any> {
     return this.http.post(environment.APP_BASE_URL_SERVICE_ENDPOINT+"/ban/banProducts/"+banId, serviceList);
   }
 
@@ -90,7 +90,7 @@ export class BanService {
     return this.http.post(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/getSourceServiceType/"+banId,banInsertData);
   }
 
-  public getBillHubRefID(regKey,requestorSSO,entityTypeID):Observable<Object> { 
+  public getBillHubRefID(regKey,requestorSSO,entityTypeID):Observable<any> { 
     return this.http.get(environment.APP_BILLHUB_URL_SERVICE_ENDPOINT+
       "/GetBillHubRefID?regKey="+regKey+
       "&requestorSSO="+requestorSSO+

@@ -155,21 +155,35 @@
 					  <input class="form-control" [disabled]="goldIdDisable" [(ngModel)]="banInsertData.overrideGoldId" />
 				   </div>
 				</div>
-				<div class="p-grid ">
-				   <div class="p-col-4 item-right">Liquidation BUC/ADN</div>
-				   <div class="p-col-8 item-left">
-					  <div *ngIf="banInsertData.liquidateBillRoutingId">
-						 <span> {{banInsertData.liquidateBillRoutingId}} </span>
-						 <a class="a-color" style="cursor:pointer;" (click)="editBillRef()">
-						 <i class="fa fa-pencil-square-o fa-2x"></i>
-						 </a>
-					  </div>
-					  <div *ngIf="!banInsertData.liquidateBillRoutingId">                                
-						 <button class="button-link" (click)="generateBillRefId()">Enter BUC/ADN details</button>
-					  </div>
-				   </div>
+				<div class="p-grid">
+					<div class="p-col-4 item-right"><span class="required">*</span>Liquidation BUC/ADN</div>
+					<div class="p-col-8 item-left">
+						<div *ngIf="banInsertData.liquidateBillRoutingId">
+							<span>{{banInsertData.liquidateBillRoutingId}} </span>
+							<a class="a-color" style="cursor:pointer;" (click)="editBillRef('BAN_LIQ')">
+								<i class="fa fa-pencil-square-o fa-2x"></i>
+							</a>
+						</div>
+						<div *ngIf="!banInsertData.liquidateBillRoutingId">
+							<button class="button-link" (click)="generateBillRefId('BAN_LIQ')">Enter BUC/ADN details</button>
+						</div>
+					</div>
 				</div>
-				<div class="p-grid ">
+				<div class="p-grid">
+					<div class="p-col-4 item-right"><span class="required">*</span>Pay from BUC/ADN</div>
+					<div class="p-col-8 item-left">
+						<div *ngIf="banInsertData.payFromBillRoutingId">
+							<span> {{banInsertData.payFromBillRoutingId}} </span>
+							<a class="a-color" style="cursor:pointer;" (click)="editBillRef('BAN_PAY_FROM')">
+								<i class="fa fa-pencil-square-o fa-2x"></i>
+							</a>
+						</div>
+						<div *ngIf="!banInsertData.payFromBillRoutingId">
+							<button class="button-link" (click)="generateBillRefId('BAN_PAY_FROM')">Enter BUC/ADN details</button>
+						</div>
+					</div>
+				</div>
+				<!-- <div class="p-grid ">
 				   <div class="p-col-4 item-right">Direct Offset Buc</div>
 				   <div class="p-col-8 item-left">
 					  <input class="form-control" [(ngModel)]="banInsertData.directOffsetBuc" 
@@ -182,7 +196,7 @@
 					  <input class="form-control" [(ngModel)]="banInsertData.indirectOffsetBuc" 
 					  (ngModelChange)="tableValueChanged(banInsertData.erpAwtGroupName,banInsertData.erpVatAwtGroupName,banInsertData.erpPaymentTerms,banInsertData.directOffsetBuc,banInsertData.indirectOffsetBuc)"/>
 				   </div>
-				</div>
+				</div> -->
 				<div class="container-details p-grid">
 				   <div class="p-col-4 align-end">Is Equipment</div>
 				   <div class="p-col-1 item-container-details">
@@ -400,19 +414,37 @@
 		  </div>
 		  <div class="p-col-6">
 			 <p-accordionTab header="Service Type Details">
-				<div class="p-grid ">
-				   <div class="p-col-5 item-right">Liquidate BUC/ADN</div>
-				   <div class="p-col-7 item-left">
-					  <div *ngIf="systems.liquidateBillRoutingId">
-						 <span> {{systems.liquidateBillRoutingId}} </span>
-						 <a class="a-color" style="cursor:pointer;" (click)="editServiceBillRef()">
-						 <i class="fa fa-pencil-square-o fa-2x"></i>
-						 </a>
-					  </div>
-					  <div *ngIf="!systems.liquidateBillRoutingId">
-						 <button (click)="generateServiceBillRefId()" [disabled]="!isSystemsSelected" [ngClass]="{ 'button-valid' : isSystemsSelected, 'button-invalid' : !isSystemsSelected }">Enter BUC/ADN details</button>
-					  </div>
-				   </div>
+				<div class="p-grid">
+					<div class="p-col-5 item-right">Liquidate BUC/ADN</div>
+					<div class="p-col-7 item-left">
+						<div *ngIf="systems.liquidateBillRoutingId">
+							<span> {{systems.liquidateBillRoutingId}} </span>
+							<a class="a-color" style="cursor:pointer;" (click)="editBillRef('BAN_ST_LIQ')">
+								<i class="fa fa-pencil-square-o fa-2x"></i>
+							</a>
+						</div>
+						<div *ngIf="!systems.liquidateBillRoutingId">
+							<button (click)="generateBillRefId('BAN_ST_LIQ')" [disabled]="shouldDisableLiq"
+								[ngClass]="{'button-valid': !shouldDisableLiq, 'button-invalid' : shouldDisableLiq }">Enter BUC/ADN
+								details</button>
+						</div>
+					</div>
+				</div>
+				<div class="p-grid">
+					<div class="p-col-5 item-right">Pay from BUC/ADN</div>
+					<div class="p-col-7 item-left">
+						<div *ngIf="systems.payFromBillRoutingId">
+							<span> {{systems.payFromBillRoutingId}} </span>
+							<a class="a-color" style="cursor:pointer;" (click)="editBillRef('BAN_ST_PAY_FROM')">
+								<i class="fa fa-pencil-square-o fa-2x"></i>
+							</a>
+						</div>
+						<div *ngIf="!systems.payFromBillRoutingId">
+							<button (click)="generateBillRefId('BAN_ST_PAY_FROM')" [disabled]="shouldDisablePayFrom"
+								[ngClass]="{ 'button-valid' : !shouldDisablePayFrom, 'button-invalid' : shouldDisablePayFrom }">Enter BUC/ADN
+								details</button>
+						</div>
+					</div>
 				</div>
 				<div class="p-grid gridServiceType">
 				   <div class="p-col-5 item-right">UNSPSC Override</div>
