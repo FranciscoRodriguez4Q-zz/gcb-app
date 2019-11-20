@@ -8,7 +8,8 @@ const routes: Routes = [
   {
     path: 'layout', loadChildren: './layout/layout.module#LayoutModule' 
    },
-   { path: 'sampleForm', component : SampleFormComponent }
+  { path: 'sampleForm', component: SampleFormComponent },
+  { path: 'access-denied', loadChildren: './access-denied/access-denied.module#AccessDeniedModule' },
 ];
 
 @NgModule({

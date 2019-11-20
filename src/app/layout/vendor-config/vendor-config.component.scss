@@ -1,0 +1,40 @@
+.label {
+    padding-top: 0.25rem;
+    padding-bottom: 0.5rem;
+    display: block;
+    word-wrap: break-word;
+    color: #63666a;
+}
+
+.chkLabel {
+    padding-top: 0.25rem;
+    margin-bottom:0.25rem !important; 
+    display: block;
+    word-wrap: break-word;
+    color: #63666a;
+}
+
+.required{
+    color:red;
+}
+
+  .item-right{
+    text-align:right;
+    margin-top: 0.4rem;
+  }
+  .item-left{
+    text-align:left;
+  }
+  .upper {
+    text-transform: uppercase;  
+  }
+
+  .ge-text-input-date{
+    width: calc(65% - 2rem) !important;
+  }
+
+  .gridInputSize{
+    padding: 0 4px;
+    min-height: auto;
+    border-color:  #63666a;
+}

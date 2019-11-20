@@ -3,6 +3,8 @@ import { SelectItem, MessageService } from 'primeng/api';
 import { VendorServiceCountryService } from './vendor-service-country.service';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import {Router} from "@angular/router";
+import { AppConstants } from '../../shared/constants/app.constants';
+
 @Component({
   selector: 'app-vendor-service-country',
   templateUrl: './vendor-service-country.component.html',
@@ -29,7 +31,7 @@ export class VendorServiceCountryComponent implements OnInit {
   @ViewChild('content1') errorMessagePopUp;
   public popupErrorMessage: any;
   closeResult: string;
-  vendorSrCountryData: any = [];
+  public vendorSrCountryData: any = [];
   vSCountryData: any = [];
   public downloadCols = [];
   public fileName : any ="VSC";
@@ -107,7 +109,6 @@ export class VendorServiceCountryComponent implements OnInit {
       },
       error => {
       });
-      this.getVSCdwData();
   }
   getAllCountryData(){
     this.vendorServiceCountryService.getAllCountryData().subscribe(
@@ -176,6 +177,7 @@ export class VendorServiceCountryComponent implements OnInit {
     this.editFlag = true;
     this.vscDtoObj = this.vendorSrCountryData.filter(x => x.vendorServiceCountryId == vendorSrCtryId)[0];
     this.getSuggestedServiceType();
+    window.scrollTo(0, 0);
   }
 
   upsertVendorServiceCountry()
@@ -184,15 +186,23 @@ export class VendorServiceCountryComponent implements OnInit {
 
     console.log("test button click");
     if (this.validation()) {
-        this.vendorServiceCountryService.upsertVendorServiceCountry(this.vscDtoObj).subscribe(
+      this.vscDtoObj.vProductPrefix=this.vscDtoObj.vProductPrefix!=null?this.vscDtoObj.vProductPrefix.toUpperCase():null;
+      this.vscDtoObj.unspscCode=this.vscDtoObj.unspscCode!=null?this.vscDtoObj.unspscCode.toUpperCase():null;
+      this.vscDtoObj.vInvoiceDesc=this.vscDtoObj.vInvoiceDesc!=null?this.vscDtoObj.vInvoiceDesc.toUpperCase():null;
+      this.vendorServiceCountryService.upsertVendorServiceCountry(this.vscDtoObj).subscribe(
           refData => {
             this.saveMessage = refData;
             //this.errorMessage = this.saveMessage.statusMessage;
             this.popupErrorMessage =  this.saveMessage.statusMessage;
             this.open(this.errorMessagePopUp);
             this.getAllVendorServiceCountry();
+            if(this.saveMessage.status){ 
+            this.clearAll();
+            }
           },
           error => {
+            this.popupErrorMessage = AppConstants.ERROR_INTERNAL_SERVER;  
+            this.open(this.errorMessagePopUp);
           });
       
     }
@@ -215,6 +225,8 @@ export class VendorServiceCountryComponent implements OnInit {
     if (this.vscDtoObj.serviceTypeName == null || this.vscDtoObj.serviceTypeName == "") {
       this.errorMessage = "Please Enter the Service Type Name";
       return false;
+    }else{
+      this.vscDtoObj.serviceTypeName = this.vscDtoObj.serviceTypeName.toUpperCase();
     }
     if (this.vscDtoObj.billedFromCountryCode == "Select") {
       this.errorMessage = "Please select the Billed From Country";
@@ -226,6 +238,12 @@ export class VendorServiceCountryComponent implements OnInit {
     }
     if (this.vscDtoObj.suggestedCostCenterDefault == "") {
       this.errorMessage = "Please enter the Suggested Cost Center";
+      return false;
+    }else{
+      this.vscDtoObj.suggestedCostCenterDefault = this.vscDtoObj.suggestedCostCenterDefault.toUpperCase();
+    }
+    if (this.vscDtoObj.billingBasis == "Select") {
+      this.errorMessage = "Please select Billing Basis";
       return false;
     }
    /*  if (this.vscDtoObj.vProductPrefix == null || this.vscDtoObj.vProductPrefix == "") {
@@ -244,6 +262,29 @@ export class VendorServiceCountryComponent implements OnInit {
   }
 
   clearAll()
+  {
+    this.editFlag = false;
+    this.vscDtoObj = {
+      vendorServiceCountryId: "",
+      vendorEntityId:"Select",
+      serviceTypeId:0,
+      billedFromCountryCode: "Select",
+      servicedFromCountryCode: "Select",
+      billedToCountryCode: "Select",
+      suggestedCostCenterDefault: "",
+      productId: 0,
+      consumedInCountryCode: "Select",
+      billingBasis: "Select",
+      vProductPrefix:"",
+      unspscCode:"",
+      vInvoiceDesc:"",
+      suggestedServiceType:"",
+      useSuggested: true
+    };
+    //this.popupErrorMessage = "";
+    //this.errorMessage = "";
+  }
+  cancel()
   {
     this.editFlag = false;
     this.vscDtoObj = {
@@ -317,23 +358,13 @@ export class VendorServiceCountryComponent implements OnInit {
     }
   }
 
-  getVSCdwData(){
-    
-    this.vendorServiceCountryService.getVSCountryDWData(this.downloadCols).subscribe(
-      refData => {
-        this.vSCountryData = refData;
-      },
-      error => {
-      });
-  }
-
   getSuggestedServiceType(){
     let productData = this.productReferenceData.filter(x => x.productId == this.vscDtoObj.productId)[0];
     let vProductPrefix = "";
     if(this.vscDtoObj.vProductPrefix!=null && this.vscDtoObj.vProductPrefix!=""){
       vProductPrefix = this.vscDtoObj.vProductPrefix +this.delimiter;
     }
-    this.vscDtoObj.suggestedServiceType = vProductPrefix+ productData.serviceTypePrefix+this.delimiter+ this.vscDtoObj.billedFromCountryCode+this.delimiter+ this.vscDtoObj.billedToCountryCode;
+    this.vscDtoObj.suggestedServiceType = vProductPrefix+ productData.serviceTypePrefix+this.delimiter+ this.vscDtoObj.billedFromCountryCode+this.delimiter+'2'+this.delimiter+ this.vscDtoObj.billedToCountryCode;
     if(this.vscDtoObj.suggestedServiceType!=""){
       this.vscDtoObj.suggestedServiceType = this.vscDtoObj.suggestedServiceType.toUpperCase();
     }

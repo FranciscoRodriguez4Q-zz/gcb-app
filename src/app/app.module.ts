@@ -10,6 +10,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { SampleFormComponent } from './layout/components/sample-form/sample-form.component';
 import { FieldErrorsComponent } from './shared/modules/field-errors/field-errors.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CookieService } from 'ngx-cookie-service';
 
 export const createTranslateLoader = (http: HttpClient) => {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -32,7 +33,7 @@ export const createTranslateLoader = (http: HttpClient) => {
       }
     }),
   ],
-  providers: [],
+  providers: [CookieService],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 

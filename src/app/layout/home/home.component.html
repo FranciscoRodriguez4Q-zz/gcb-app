@@ -1,0 +1,28 @@
+<div class="p-grid">
+    <div class="p-col-2.8 treeView sidebar" *ngIf="!screenFlag">
+        <p-tree 
+            [value]="treeData" 
+            [filter]="true"
+            [style]="{'max-height':'87vh', 'overflow-y':'auto'}"
+            (onNodeSelect)="nodeSelect($event)" 
+            selectionMode="single">
+        </p-tree>
+    </div>
+    <div class="p-col-2.8 treeView sidebar" style="overflow: hidden !important;" *ngIf="screenFlag">
+        <p-tree [value]="treeData" [filter]="true"></p-tree>
+        <div class="loader">
+            <span>Please wait, loading.&nbsp;</span>
+            <p-progressSpinner [style]="{width: '30px', height: '30px', display: 'flex'}" strokeWidth="8" fill="#EEEEEE"
+                animationDuration=".5s"></p-progressSpinner>
+        </div>
+    </div>
+    <div class="p-col-9 menuAndForms content">
+        <div class="p-col-12">
+            <p-tabMenu [model]="menuItems"></p-tabMenu>
+        </div>
+        <div class="p-col-12">
+            <router-outlet></router-outlet>
+        </div>
+
+    </div>
+</div>

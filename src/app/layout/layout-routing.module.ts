@@ -7,10 +7,11 @@ const routes: Routes = [
   {
     path: '', component: LayoutComponent,
    children: [
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-      { path: 'VendorServiceCountry', loadChildren: './vendor-service-country/vendor-service-country.module#VendorServiceCountryModule'},
+      { path: '', redirectTo: 'home', pathMatch: 'full' },
+      //{ path: 'VendorServiceCountry', loadChildren: './vendor-service-country/vendor-service-country.module#VendorServiceCountryModule'},
       { path: 'Chargeback', loadChildren: './chargeback/chargeback.module#ChargebackModule'},
       { path: 'dashboard', loadChildren: './dashboard/dashboard.module#DashboardModule' },
+      { path: 'home', loadChildren: './home/home.module#HomeModule' },
       { path: 'ServiceType', loadChildren: './service-type/service-type.module#ServiceTypeModule'},
       { path: '**', loadChildren: './dashboard/dashboard.module#DashboardModule' },
       { path: '', loadChildren: './dashboard/dashboard.module#DashboardModule' }

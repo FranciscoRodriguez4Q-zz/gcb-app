@@ -1,0 +1,116 @@
+.label {
+    padding-top: 0.25rem;
+    padding-bottom: 0.5rem;
+    display: block;
+    word-wrap: break-word;
+    color: #63666a;
+}
+
+.chkLabel {
+    padding-top: 1rem;
+   // margin-bottom:0.25rem !important; 
+    display: block;
+    word-wrap: break-word;
+}
+
+.button-valid{
+    background: none !important;
+    border: none;
+    padding: 0 !important;
+    margin-top: 0.3rem;
+    text-decoration: underline;
+    color: #069;
+    cursor: pointer;
+}
+
+.button-invalid{
+    background: none !important;
+    border: none;
+    padding: 0 !important;
+    margin-top: 0.3rem;
+    text-decoration: underline;
+    color: #555;
+    cursor: default;
+}
+
+.gridServiceType{
+    margin-top: 0.2rem;
+    padding: 0;
+    margin: 0;
+    flex-wrap: wrap;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.gridCheckBox{
+    margin-top: 0.5rem;
+}
+
+.container-details {
+    display: flex;
+    align-items: center;
+    margin-top: 0.1rem;
+    margin-bottom: 0.1875rem;
+}
+
+.item-container-details {
+    display: flex;
+}
+
+.align-end {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.gridServiceTypeTwoLine{
+    margin-top: 1rem;
+}
+
+.nested-grid{
+    margin-top: 1rem;
+}
+
+.required{
+    color:red;
+}
+
+.button-link
+{
+    
+        background:none!important;
+         border:none; 
+         padding:0!important;
+         margin-top: 0.3rem;        
+         color:#069;
+         text-decoration:underline;
+         cursor:pointer;
+    
+}
+
+.errorMessage{
+    display: block;
+    color: red !important;
+}
+
+.gridInputSize{
+    padding: 0 4px;
+    min-height: auto;
+    border-color:  #63666a;
+}
+
+.item-right{
+    text-align:right;
+    margin-top: 0.4rem;
+  }
+  .item-left{
+    text-align:left;
+  }
+
+  .ge-text-input-date{
+    width: calc(65% - 2rem) !important;
+  }
+
+  .form-control {
+      font-size: 14px;
+  }

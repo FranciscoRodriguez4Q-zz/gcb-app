@@ -11,6 +11,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { FileDownloadComponent } from './file-download/file-download.component';
+import { HomeComponent } from './home/home.component';
+import { HomeModule } from './home/home.module';
  
 @NgModule({
   declarations: [LayoutComponent,
@@ -21,7 +23,7 @@ import { FileDownloadComponent } from './file-download/file-download.component';
   ],
   imports: [
     CommonModule, TranslateModule,
-    LayoutRoutingModule, PrimeModule, DashboardModule, FormsModule, ReactiveFormsModule,
+    LayoutRoutingModule, PrimeModule, DashboardModule,HomeModule, FormsModule, ReactiveFormsModule,
         NgbDropdownModule.forRoot()
 
   ],

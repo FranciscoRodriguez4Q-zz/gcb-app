@@ -1,6 +1,9 @@
 import { TranslateService } from '@ngx-translate/core';
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
+import { Http } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-header',
@@ -9,8 +12,9 @@ import { Router, NavigationEnd } from '@angular/router';
 })
 export class HeaderComponent implements OnInit {
   pushRightClass: string = 'push-right';
-
-  constructor(private translate: TranslateService,public router: Router) {
+  cookieExists : boolean = true;
+  constructor(private translate: TranslateService,public router: Router,private http: HttpClient,
+    private cookieService: CookieService) {
     this.translate.addLangs(['en', 'fr', 'ur', 'es', 'it', 'fa', 'de', 'zh-CHS']);
     this.translate.setDefaultLang('en');
     const browserLang = this.translate.getBrowserLang();
@@ -45,7 +49,26 @@ rltAndLtr() {
 }
 
 onLoggedout() {
-    localStorage.removeItem('isLoggedin');
+ //   localStorage.removeItem('isLoggedin');
+ this.cookieExists = this.cookieService.check('mod_auth_openidc_session');
+
+ if( this.cookieExists )
+  {
+       this.cookieService.delete('mod_auth_openidc_session');
+
+       //cookieService.deleteAll();
+}
+
+ console.log("calling this ");
+this.http.get("https://ssologin.ssogen2.corporate.ge.com/logoff/logoff.jsp")
+.subscribe(
+    refData => {
+    
+        console.log("refdata sso ", refData );
+
+    },
+    error => {
+    });
 }
 
 changeLang(language: string) {
