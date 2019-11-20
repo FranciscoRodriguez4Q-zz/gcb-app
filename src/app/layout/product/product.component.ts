@@ -94,12 +94,19 @@ export class ProductComponent implements OnInit, OnDestroy {
       }
     });
     if(this.backupModelService.productTabModel != null 
-      && this.backupModelService.productTabModel != undefined)
-    this.gcbProductFilters = this.backupModelService.productTabModel;
+      && this.backupModelService.productTabModel != undefined){
+        this.gcbProductFilters = this.backupModelService.productTabModel.gcbProductFilters;
+        this.formMode = this.backupModelService.productTabModel.formMode;
+        this.editFlag = this.backupModelService.productTabModel.editFlag;
+      }
   }
 
   ngOnDestroy() {
-    this.backupModelService.productTabModel = this.gcbProductFilters;
+    this.backupModelService.productTabModel = {
+      gcbProductFilters: this.gcbProductFilters,
+      formMode: this.formMode,
+      editFlag: this.editFlag
+    }
     this.homeService.setState({ key: this.KEY, data: null });
     if(this.subs != null && this.subs != undefined){
       this.subs.unsubscribe()

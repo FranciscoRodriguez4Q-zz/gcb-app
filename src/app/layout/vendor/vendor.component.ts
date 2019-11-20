@@ -15,7 +15,11 @@ import { BackupModelService } from '../backupmodel.service';
 export class VendorComponent implements OnInit, OnDestroy {
   
   ngOnDestroy(): void {
-    this.backupModelService.vendorTabModel = this.vendorInsertData;
+    this.backupModelService.vendorTabModel ={
+      vendorInsertData: this.vendorInsertData,
+      formMode: this.formMode,
+      editFlag: this.editFlag
+    };
     if(this.subs != null && this.subs != undefined){
       this.subs.unsubscribe()
     }
@@ -110,8 +114,11 @@ export class VendorComponent implements OnInit, OnDestroy {
       }
     });
     if (this.backupModelService.vendorTabModel != null 
-      && this.backupModelService.vendorTabModel != undefined)
-      this.vendorInsertData = this.backupModelService.vendorTabModel;
+      && this.backupModelService.vendorTabModel != undefined){
+        this.vendorInsertData = this.backupModelService.vendorTabModel.vendorInsertData;
+        this.formMode = this.backupModelService.vendorTabModel.formMode;
+        this.editFlag = this.backupModelService.vendorTabModel.editFlag;
+      }
   }
 
   getAllVendorDetails() {
