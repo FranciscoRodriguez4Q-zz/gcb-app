@@ -33,7 +33,6 @@ export class ProductServiceTypeComponent implements OnInit, OnDestroy {
   private subs: Subscription;
 
   public billProcessReference: any;
-  public legacyServiceTypeEnableFlag: boolean = false;
   public gcbDetailFilters: any = {
     productId: "Select",
     productNm: "",
@@ -139,19 +138,6 @@ export class ProductServiceTypeComponent implements OnInit, OnDestroy {
         }
       }
     ).catch(console.log)
-    // .subscribe(
-    //   refData => {
-    //     let arr: any = [];
-    //     this.countryCodeReferenceData = refData;
-    //     this.countryCodeReferenceDataList.push({ label: "Select", value: "Select" })
-
-    //     for (let data of this.countryCodeReferenceData) {
-    //       let labelCountry = data.countryCode + " | " + data.countryName;
-    //       this.countryCodeRefe2renceDataList.push({ label: labelCountry, value: data.countryId })
-    //     }
-    //   },
-    //   error => {
-    //   });
   }
 
   getAllProductData() {
@@ -166,21 +152,6 @@ export class ProductServiceTypeComponent implements OnInit, OnDestroy {
         }
       }
     ).catch(console.log)
-    // .subscribe(
-    // refData => {
-    //   let arr: any = [];
-    //   this.productReferenceData = refData;
-    //   this.productReferenceDataList.push({ label: "Select", value: "Select" })
-    //   for (let data of this.productReferenceData) {
-    //     let labelProd = data.productCode + " | " + data.productName
-    //     this.productReferenceDataList.push({ label: labelProd, value: data.productId })
-    //   }
-    //   this.test()
-    // },
-    // error => {
-    //   console.log(error);
-    // });
-
   }
 
   getBillingBasisData() {
@@ -207,12 +178,6 @@ export class ProductServiceTypeComponent implements OnInit, OnDestroy {
         this.billProcessReference = refData;
       }
     ).catch(console.log)
-    // .subscribe(
-    //   refData => {
-    //     this.billProcessReference = refData;       
-    //   },
-    //   error => {
-    //   });
   }
 
   getServicetype() {
@@ -222,9 +187,6 @@ export class ProductServiceTypeComponent implements OnInit, OnDestroy {
       let billProcessData = this.billProcessReference.filter(y => y.billProcessId == productData.billProcessId)[0];
       this.gcbDetailFilters.unspsc = productData.unspsc;
       this.gcbDetailFilters.processName = billProcessData.processName;
-      if (this.gcbDetailFilters.processName == 'GOTEMS') {
-        this.legacyServiceTypeEnableFlag = true;
-      }
     }
     if (this.gcbDetailFilters.productId != "Select" && this.gcbDetailFilters.billedFromLocationId != "Select" && this.gcbDetailFilters.billedToLocationId != "Select") {
       let productData = this.productReferenceData.filter(x => x.productId == this.gcbDetailFilters.productId)[0];
@@ -235,10 +197,6 @@ export class ProductServiceTypeComponent implements OnInit, OnDestroy {
       console.log("Product this.gcbDetailFilters.suggestedServiceType : " + this.gcbDetailFilters.serviceType);
       this.gcbDetailFilters.suggestedServiceType = this.gcbDetailFilters.serviceTypeName;
       this.gcbDetailFilters.legacyServiceTypeName = this.gcbDetailFilters.serviceTypeName;
-      if (this.gcbDetailFilters.processName == 'TELECOM') {
-        this.legacyServiceTypeEnableFlag = false;
-      }
-
     }
 
   }
@@ -252,15 +210,6 @@ export class ProductServiceTypeComponent implements OnInit, OnDestroy {
         this.gcbDwnData = refData;
       }
     ).catch()
-    // .subscribe(
-    //   refData => {
-    //     this.serviceTypes = refData;
-    //     this.gridLoadFlag=true;
-    //     this.gcbDwnData = refData;
-    //   },
-    //   error => {
-    //   });
-
   }
 
   upsertServiceType() {
@@ -374,14 +323,6 @@ export class ProductServiceTypeComponent implements OnInit, OnDestroy {
     this.gcbDetailFilters = this.serviceTypes.filter(x => x.serviceTypeId == serviceTypeId)[0];
     this.gcbDetailFiltersCopy = { ...this.gcbDetailFilters };
     this.formMode = "Modify";
-
-    if (this.gcbDetailFilters.processName == 'TELECOM') {
-      this.legacyServiceTypeEnableFlag = false;
-      // if(this.gcbDetailFilters.legacyServiceTypeName=="" || this.gcbDetailFilters.legacyServiceTypeName==null){
-      // this.gcbDetailFilters.legacyServiceTypeName=this.gcbDetailFilters.serviceTypeName;
-      // }
-    }
-
   }
 
   get disabled() {
@@ -390,4 +331,10 @@ export class ProductServiceTypeComponent implements OnInit, OnDestroy {
     }
     return false;
   }
+
+  get legacyServiceTypeEnableFlag() {
+    const { processName } = this.gcbDetailFilters
+    return processName === 'ITEMS' ? false : true
+  }
+
 } 

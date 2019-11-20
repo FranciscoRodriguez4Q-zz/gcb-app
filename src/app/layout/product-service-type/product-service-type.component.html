@@ -9,14 +9,11 @@
                 <label class="label"><span class="required">*</span>Product Name </label>
             </div>
             <div class="p-col-5 item-left">
-                <p-dropdown onEnter [virtualScroll]="true" itemSize="30"    
-            [options]="productReferenceDataList"
-            [(ngModel)]="gcbDetailFilters.productId"      placeholder="Select"   [autoWidth]="true"
-            [style]="{'width': '130%'}"   
-            [filter]="true"  (click)="getServicetype()"
-            scrollHeight="150px"  [disabled]="editFlag || userFlag" [resetFilterOnHide]="true" >
-            
-            </p-dropdown>
+                <p-dropdown onEnter [virtualScroll]="true" itemSize="30" [options]="productReferenceDataList"
+                    [(ngModel)]="gcbDetailFilters.productId" placeholder="Select" [autoWidth]="true" [style]="{'width': '130%'}"
+                    [filter]="true" (onChange)="getServicetype()" scrollHeight="150px" [disabled]="editFlag || userFlag"
+                    [resetFilterOnHide]="true">
+                </p-dropdown>
             </div>
         </div>
 
@@ -61,14 +58,14 @@
             </div>
         </div>
         <div class="p-grid">
-                <div class="p-col-5 item-right">
-                     <label class="label">Legacy Service Type Name</label>
-                </div>
-                <div class="p-col-5 item-left">
-                    <input class="form-control widthAdjust"  [(ngModel)]="gcbDetailFilters.legacyServiceTypeName" [disabled]="legacyServiceTypeEnableFlag || userFlag">
-                </div>
+            <div class="p-col-5 item-right">
+                <label class="label">Legacy Service Type Name</label>
             </div>
-       
+            <div class="p-col-5 item-left">
+                <input class="form-control widthAdjust" [(ngModel)]="gcbDetailFilters.legacyServiceTypeName"
+                    [disabled]="legacyServiceTypeEnableFlag || userFlag">
+            </div>
+        </div>
     </div>
     <div class="p-col-6">
             <p-fieldset>

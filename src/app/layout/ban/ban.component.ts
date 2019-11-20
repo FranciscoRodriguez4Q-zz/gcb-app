@@ -523,7 +523,6 @@ public vendorServiceType : any ={
   }
 
   upsertBan() {
-    alert("upsertBan main")
     this.errorMessage = "";
     if (this.validation()) {
       // debugger;
