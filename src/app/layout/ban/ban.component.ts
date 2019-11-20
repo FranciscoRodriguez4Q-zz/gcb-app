@@ -567,6 +567,27 @@ public vendorServiceType : any ={
     }
   }
 
+  validateTokensBillHub() {
+    const { regKey } = this.EXTERNAL_SYSTEM_CONFIG;
+    const { liquidateBillRoutingId, payFromBillRoutingId } = this.banInsertData;
+    const banBillRefs = [ liquidateBillRoutingId, payFromBillRoutingId ]
+    const billRefs = this.serviceList.reduce((result, item) => {
+      const { liquidateBillRoutingId, payFromBillRoutingId } = item
+      return [ ...result, liquidateBillRoutingId, payFromBillRoutingId ]
+    }, banBillRefs)
+    const request = billRefs.map(billRef => {
+      return this.banService.validateBillRefTokens(billRef, regKey).toPromise().then(response => {
+        return {
+          ...response,
+          billRef
+        }
+      }).catch(e => e)
+    })
+    Promise.all(request).then(response => {
+
+    })
+  }
+
   associateBan(banId) {
     const { regKey, billingEntities } = this.EXTERNAL_SYSTEM_CONFIG;
     const banLevelEntities = billingEntities.filter(({ billingEntityName }) => !billingEntityName.includes('ST'))
@@ -990,7 +1011,9 @@ public vendorServiceType : any ={
     erpAwtGroupName:string,
     directOffsetBuc:string,
     indirectOffsetBuc:string,
-    erpVatAwtGroupName:string
+    erpVatAwtGroupName:string,
+    liquidateBillRoutingId ? : number,
+    payFromBillRoutingId ? : number
   }> = [];
 
   public systems :any = {};
@@ -1020,31 +1043,44 @@ public vendorServiceType : any ={
   // }; 
 
 
-  addTargetValueToArray(item:any){
+  addTargetValueToArray(item: any) {
     console.log(item);
-    for (let system of item.items){
+    for (let system of item.items) {
       if (system.serviceTypeId != null) {
         this.banInsertData.serviceTypeId = system.serviceTypeId;
         this.banService.getOtherServiceDet(this.banInsertData).subscribe(
           refData => {
-            this.otherServiceData=refData;
-            this.serviceList.push({ serviceTypeId: system.serviceTypeId, overrideErpPmtTerms: "",
-              overrideErpAwtGroupName:"",overrideDirectOffsetBuc:"", 
-              overrideIndirectOffsetBuc:"", overrideErpVatAwtGroupName:"",
-              overrideUnspsc:"",overrideOffsetCostCenter:"",
-              unspscOverrideFlag:false,costCentreOverrideFlag:false,
-              erpPmtOverrideFlag:false,erpAwtGroupNameOverrideFlag:false,
-              erpVatAwtGroupOverrideFlag:false,directOffsetBucOverrideFlag:false,
-              indirectOffsetBucOverrideFlag:false,unspsc:this.otherServiceData.unspsc,costCenter:this.otherServiceData.costCenter,
-              erpPmtTerms: this.banInsertData.overrideErpPmtTerms,erpAwtGroupName:this.banInsertData.overrideErpAwtGroupName,
-              directOffsetBuc:this.banInsertData.overrideDirectOffsetBuc,indirectOffsetBuc:this.banInsertData.overrideIndirectOffsetBuc,
-              erpVatAwtGroupName:this.banInsertData.overrideErpVatAwtGroupName})
-        },
-        error => {
-        }); 
+            this.otherServiceData = refData;
+            this.serviceList.push({
+              serviceTypeId: system.serviceTypeId,
+              overrideErpPmtTerms: "",
+              overrideErpAwtGroupName: "",
+              overrideDirectOffsetBuc: "",
+              overrideIndirectOffsetBuc: "",
+              overrideErpVatAwtGroupName: "",
+              overrideUnspsc: "",
+              overrideOffsetCostCenter: "",
+              unspscOverrideFlag: false,
+              costCentreOverrideFlag: false,
+              erpPmtOverrideFlag: false,
+              erpAwtGroupNameOverrideFlag: false,
+              erpVatAwtGroupOverrideFlag: false,
+              directOffsetBucOverrideFlag: false,
+              indirectOffsetBucOverrideFlag: false,
+              unspsc: this.otherServiceData.unspsc,
+              costCenter: this.otherServiceData.costCenter,
+              erpPmtTerms: this.banInsertData.overrideErpPmtTerms,
+              erpAwtGroupName: this.banInsertData.overrideErpAwtGroupName,
+              directOffsetBuc: this.banInsertData.overrideDirectOffsetBuc,
+              indirectOffsetBuc: this.banInsertData.overrideIndirectOffsetBuc,
+              erpVatAwtGroupName: this.banInsertData.overrideErpVatAwtGroupName
+            })
+          },
+          error => {
+          });
       }
     }
-    console.log( this.serviceList);
+    console.log(this.serviceList);
   }
 
   removeTargetValueFromArray(item:any){
