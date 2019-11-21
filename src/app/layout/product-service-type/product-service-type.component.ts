@@ -106,7 +106,6 @@ export class ProductServiceTypeComponent implements OnInit, OnDestroy {
     if(this.backupModelService.serviceTypeTabModel != null 
         && this.backupModelService.serviceTypeTabModel != undefined){
           this.gcbDetailFilters = this.backupModelService.serviceTypeTabModel.gcbDetailFilters;
-          this.legacyServiceTypeEnableFlag = this.backupModelService.serviceTypeTabModel.legacyServiceTypeEnableFlag;
           this.editFlag = this.backupModelService.serviceTypeTabModel.editFlag;
           this.formMode = this.backupModelService.serviceTypeTabModel.formMode;
         }
@@ -116,7 +115,6 @@ export class ProductServiceTypeComponent implements OnInit, OnDestroy {
     this.backupModelService.serviceTypeTabModel = {
       gcbDetailFilters:this.gcbDetailFilters,
       editFlag: this.editFlag,
-      legacyServiceTypeEnableFlag: this.legacyServiceTypeEnableFlag,
       formMode: this.formMode
     }
     this.homeService.setState({ key: this.KEY, data: null });
