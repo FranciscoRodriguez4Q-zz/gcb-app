@@ -7,6 +7,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Globals } from '../../shared/constants/globals';
 import { Subscription } from 'rxjs';
 import { HomeService } from '../home/home.service';
+import { BackupModelService } from '../backupmodel.service';
 
 @Component({
   selector: 'app-vendor-config',
@@ -95,6 +96,7 @@ private readonly KEY: string = 'VendorConfig';
 private subs: Subscription;
 
 constructor(
+  private backupModelService: BackupModelService,
   private vendorConfigService: VendorConfigService, 
   private serviceTypeService : ServiceTypeService,
   private modalService: NgbModal,
@@ -127,9 +129,18 @@ constructor(
         this.showSelectedData(id);
       }
     })
+    if(this.backupModelService.serviceTypeTabModel != null 
+      && this.backupModelService.serviceTypeTabModel != undefined){
+        this.vendorConfigDto = this.backupModelService.serviceTypeTabModel.vendorConfigDto;
+        this.editFlag = this.backupModelService.serviceTypeTabModel.editFlag;
+      }
   }
 
   ngOnDestroy() {
+    this.backupModelService.serviceTypeTabModel = {
+      vendorConfigDto: this.vendorConfigDto,
+      editFlag: this.editFlag
+    }
     this.homeService.setState({ key: this.KEY, data: null });
     if(this.subs != null && this.subs != undefined){
       this.subs.unsubscribe()

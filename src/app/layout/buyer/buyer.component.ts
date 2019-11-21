@@ -112,12 +112,19 @@ export class BuyerComponent implements OnInit, OnDestroy {
       }
     });
     if(this.backupModelService.buyerTabModel != null 
-      && this.backupModelService.buyerTabModel != undefined)
-    this.buyerInsertData = this.backupModelService.buyerTabModel;
+      && this.backupModelService.buyerTabModel != undefined){
+        this.buyerInsertData = this.backupModelService.buyerTabModel.buyerInsertData;
+        this.editFlag = this.backupModelService.buyerTabModel.editFlag;
+        this.formMode = this.backupModelService.buyerTabModel.formMode;
+      }
   }
 
   ngOnDestroy() {
-    this.backupModelService.buyerTabModel = this.buyerInsertData;
+    this.backupModelService.buyerTabModel = {
+      buyerInsertData: this.buyerInsertData,
+      editFlag: this.editFlag,
+      formMode: this.formMode
+    }
     this.homeService.setState({ key: this.KEY, data: null });
     if(this.subs != null && this.subs != undefined){
       this.subs.unsubscribe()
