@@ -30,7 +30,7 @@
                       <label class="label"><span class="required">*</span>Product Code</label>
                   </div>
                   <div class="p-col-7 item-left">
-                      <input class="form-control" [(ngModel)]="gcbProductFilters.productCode" [disabled]="userFlag">
+                      <input class="form-control" [(ngModel)]="gcbProductFilters.productCode" [disabled]="editFlag || userFlag">
                   </div>
               </div>
               <!-- <div class="p-grid">

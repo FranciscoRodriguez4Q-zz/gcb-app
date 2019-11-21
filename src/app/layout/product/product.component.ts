@@ -213,7 +213,9 @@ export class ProductComponent implements OnInit, OnDestroy {
     console.log("radio button click" + productId);
     window.scroll(0,0);
     this.editFlag = true;
-    this.gcbProductFilters = this.products.filter(x => x.productId == productId)[0];
+
+    const test = this.products.find(x => x.productId == productId)
+    this.gcbProductFilters = { ...test }
     this.gcbProductFiltersCopy = { ...this.gcbProductFilters };
     this.formMode = "Modify";
   }

@@ -423,7 +423,8 @@ validation() {
 showSelectedData(vendorConfigId) {
   console.log("vendorConfig modify click :" + vendorConfigId);
   this.editFlag = true;
-  this.vendorConfigDto = this.vendorGridData.filter(x => x.vendorConfigId == vendorConfigId)[0];
+  const modelTemp = this.vendorGridData.find(x => x.vendorConfigId == vendorConfigId);
+  this.vendorConfigDto = { ...modelTemp };
   this.vendorConfigDtoCopy = { ...this.vendorConfigDto };
 }
 
