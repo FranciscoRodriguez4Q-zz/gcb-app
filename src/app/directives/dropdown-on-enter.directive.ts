@@ -54,11 +54,11 @@ export class DropdownOnEnterDirective {
       if(!isInFiltered){
         const { value } = this.filteredOptions[0];
         this.model.update.emit(value);
-        this.concat = "";
-        this.filteredOptions = [];
-        this.onChange.emit(true);
       }
     }
+    this.concat = "";
+    this.filteredOptions = [];
+    this.onChange.emit(true);
   }
   
 }
