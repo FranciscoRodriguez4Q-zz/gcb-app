@@ -105,6 +105,10 @@ export class BanService {
     );
   }
 
+  public validateBillRefTokens(billRefId, regKey): Observable<any> {
+    return this.http.get(`${environment.APP_BILLHUB_URL_SERVICE_ENDPOINT}/ValidateBillRefTokens?billRefId=${billRefId}&regKey=${regKey}`)
+  }
+
   public associateBillReftoAsset(billRefId, assetID, regkey):Observable<Object> { 
     return this.http.get(environment.APP_BILLHUB_URL_SERVICE_ENDPOINT+
       "/AssociateBillReftoAsset?billRefAssetArray="+billRefId+","+
