@@ -129,15 +129,15 @@ constructor(
         this.showSelectedData(id);
       }
     })
-    if(this.backupModelService.serviceTypeTabModel != null 
-      && this.backupModelService.serviceTypeTabModel != undefined){
-        this.vendorConfigDto = this.backupModelService.serviceTypeTabModel.vendorConfigDto;
-        this.editFlag = this.backupModelService.serviceTypeTabModel.editFlag;
+    if(this.backupModelService.vendorConfigTabModel != null 
+      && this.backupModelService.vendorConfigTabModel != undefined){
+        this.vendorConfigDto = this.backupModelService.vendorConfigTabModel.vendorConfigDto;
+        this.editFlag = this.backupModelService.vendorConfigTabModel.editFlag;
       }
   }
 
   ngOnDestroy() {
-    this.backupModelService.serviceTypeTabModel = {
+    this.backupModelService.vendorConfigTabModel = {
       vendorConfigDto: this.vendorConfigDto,
       editFlag: this.editFlag
     }
@@ -423,7 +423,8 @@ validation() {
 showSelectedData(vendorConfigId) {
   console.log("vendorConfig modify click :" + vendorConfigId);
   this.editFlag = true;
-  this.vendorConfigDto = this.vendorGridData.filter(x => x.vendorConfigId == vendorConfigId)[0];
+  const modelTemp = this.vendorGridData.find(x => x.vendorConfigId == vendorConfigId);
+  this.vendorConfigDto = { ...modelTemp };
   this.vendorConfigDtoCopy = { ...this.vendorConfigDto };
 }
 

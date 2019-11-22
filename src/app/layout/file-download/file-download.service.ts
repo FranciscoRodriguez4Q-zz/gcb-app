@@ -50,7 +50,6 @@ export class FileDownloadService {
     || fileNameCheck==="ServiceType" || fileNameCheck==="Product")
     { //Custom Headers for ServiceType download Report
       let colNm = [];
-      debugger;
       for (i = 0; i < colsHeader.length; i++) {
         colNm[colsHeader[i]] = "";
       }
