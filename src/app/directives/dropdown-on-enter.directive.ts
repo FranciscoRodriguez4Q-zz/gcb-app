@@ -11,13 +11,14 @@ export class DropdownOnEnterDirective {
   
   private filteredOptions;
   public inputElement: HTMLElement;
+  private index = 0;
   private concat: string = "";
 
   constructor(public el: ElementRef, private model: NgModel){
     this.inputElement = el.nativeElement;
     this.onChange.subscribe(() => {
       this.concat = "";
-    });
+    })
   }
   
   @HostListener('input', ['$event'])
@@ -34,31 +35,49 @@ export class DropdownOnEnterDirective {
         const _label = label.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
         return _label.includes(_concat);
       });
+      this.index = 0;
+      let i = 0;
+      while (i<this.filteredOptions.length){
+        if (this.filteredOptions[i].value == this.model.model){
+          this.index = i;
+          break;
+        }
+        i++;
+      }
     }else {
-      this.filteredOptions = this.options;
+      this.filteredOptions = [];
+      this.index=0;
     }
     
   }
   
   @HostListener('keyup.enter')
   onKeyupEnter() {
-    if(this.filteredOptions!=undefined){
-      let i = 0;
-      let isInFiltered:boolean=false;
-      while (i<this.filteredOptions.length){
-        if (this.filteredOptions[i].value == this.model.model){
-          isInFiltered=true;
-        }
-        i++;
-      }
-      if(!isInFiltered){
-        const { value } = this.filteredOptions[0];
-        this.model.update.emit(value);
-      }
+    if (this.filteredOptions.length > 0 && this.concat != "") {
+      const { value } = this.filteredOptions[this.index];
+      this.model.update.emit(value);
+      this.concat = "";
+      this.filteredOptions = [];
+      this.onChange.emit(true)
     }
-    this.concat = "";
-    this.filteredOptions = [];
-    this.onChange.emit(true);
+  }
+
+  @HostListener('keyup.arrowup')
+  onKeyupArrowUp() {
+    if (this.concat != "") {
+      this.index --;
+      if (this.index == -1)
+        this.index = this.filteredOptions.length-1;
+    }
+  }
+
+  @HostListener('keyup.arrowdown')
+  onKeyupArrowDown() {
+    if (this.concat != "") {
+      this.index ++;
+      if (this.filteredOptions.length == this.index)
+        this.index = 0;
+    }
   }
   
 }
