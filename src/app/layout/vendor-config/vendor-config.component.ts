@@ -7,6 +7,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Globals } from '../../shared/constants/globals';
 import { Subscription } from 'rxjs';
 import { HomeService } from '../home/home.service';
+import { BackupModelService } from '../backupmodel.service';
 
 @Component({
   selector: 'app-vendor-config',
@@ -95,6 +96,7 @@ private readonly KEY: string = 'VendorConfig';
 private subs: Subscription;
 
 constructor(
+  private backupModelService: BackupModelService,
   private vendorConfigService: VendorConfigService, 
   private serviceTypeService : ServiceTypeService,
   private modalService: NgbModal,
@@ -127,9 +129,18 @@ constructor(
         this.showSelectedData(id);
       }
     })
+    if(this.backupModelService.vendorConfigTabModel != null 
+      && this.backupModelService.vendorConfigTabModel != undefined){
+        this.vendorConfigDto = this.backupModelService.vendorConfigTabModel.vendorConfigDto;
+        this.editFlag = this.backupModelService.vendorConfigTabModel.editFlag;
+      }
   }
 
   ngOnDestroy() {
+    this.backupModelService.vendorConfigTabModel = {
+      vendorConfigDto: this.vendorConfigDto,
+      editFlag: this.editFlag
+    }
     this.homeService.setState({ key: this.KEY, data: null });
     if(this.subs != null && this.subs != undefined){
       this.subs.unsubscribe()
@@ -412,7 +423,8 @@ validation() {
 showSelectedData(vendorConfigId) {
   console.log("vendorConfig modify click :" + vendorConfigId);
   this.editFlag = true;
-  this.vendorConfigDto = this.vendorGridData.filter(x => x.vendorConfigId == vendorConfigId)[0];
+  const modelTemp = this.vendorGridData.find(x => x.vendorConfigId == vendorConfigId);
+  this.vendorConfigDto = { ...modelTemp };
   this.vendorConfigDtoCopy = { ...this.vendorConfigDto };
 }
 

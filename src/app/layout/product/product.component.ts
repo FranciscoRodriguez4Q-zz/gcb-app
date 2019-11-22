@@ -94,12 +94,19 @@ export class ProductComponent implements OnInit, OnDestroy {
       }
     });
     if(this.backupModelService.productTabModel != null 
-      && this.backupModelService.productTabModel != undefined)
-    this.gcbProductFilters = this.backupModelService.productTabModel;
+      && this.backupModelService.productTabModel != undefined){
+        this.gcbProductFilters = this.backupModelService.productTabModel.gcbProductFilters;
+        this.formMode = this.backupModelService.productTabModel.formMode;
+        this.editFlag = this.backupModelService.productTabModel.editFlag;
+      }
   }
 
   ngOnDestroy() {
-    this.backupModelService.productTabModel = this.gcbProductFilters;
+    this.backupModelService.productTabModel = {
+      gcbProductFilters: this.gcbProductFilters,
+      formMode: this.formMode,
+      editFlag: this.editFlag
+    }
     this.homeService.setState({ key: this.KEY, data: null });
     if(this.subs != null && this.subs != undefined){
       this.subs.unsubscribe()
@@ -206,7 +213,9 @@ export class ProductComponent implements OnInit, OnDestroy {
     console.log("radio button click" + productId);
     window.scroll(0,0);
     this.editFlag = true;
-    this.gcbProductFilters = this.products.filter(x => x.productId == productId)[0];
+
+    const test = this.products.find(x => x.productId == productId)
+    this.gcbProductFilters = { ...test }
     this.gcbProductFiltersCopy = { ...this.gcbProductFilters };
     this.formMode = "Modify";
   }

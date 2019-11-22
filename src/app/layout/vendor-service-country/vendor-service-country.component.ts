@@ -311,7 +311,6 @@ export class VendorServiceCountryComponent implements OnInit {
   getServicetype() {
     this.errorMessage = "";
     if (this.vscDtoObj.productId != "Select" && this.vscDtoObj.billedFromCountryCode != "Select" && this.vscDtoObj.billedToCountryCode != "Select") {
-      debugger;
       this.getSuggestedServiceType();
       this.vendorServiceCountryService.getServicetype(this.vscDtoObj).subscribe(
         refData => {

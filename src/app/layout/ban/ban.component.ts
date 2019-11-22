@@ -128,7 +128,7 @@ public vendorServiceType : any ={
   public targetSystem:any = [];
   public countryCodeReferenceData: any;
   countryCodeReferenceDataList: SelectItem[] = [];
-  public index = [];
+  public index: number[] = [];
   public indexST = [];
   public expansionEventFlag = true;
   public collapsed=true;
@@ -173,6 +173,7 @@ public vendorServiceType : any ={
   private subs: Subscription;
   private readonly KEY: string = 'Ban';
   public countryId = null;
+  isCharging: boolean = true;
 
   constructor(
     private banService: BanService, 
@@ -242,7 +243,18 @@ public vendorServiceType : any ={
       this.sourceSystem = this.backupModelService.banTabModel.sourceSystem;
       this.serviceTypeReferenceData = this.backupModelService.banTabModel.serviceTypeReferenceData;
       this.serviceList = this.backupModelService.banTabModel.serviceList;
+      this.cloneFlag = this.backupModelService.banTabModel.cloneFlag;
+      this.editFlag = this.backupModelService.banTabModel.editFlag;
+      this.errorFlag = this.backupModelService.banTabModel.errorFlag;
+      this.expansionEventFlag = this.backupModelService.banTabModel.expansionEventFlag;
+      this.modeFlag = this.backupModelService.banTabModel.modeFlag;
+      this.panelExpansionFlag = this.backupModelService.banTabModel.panelExpansionFlag;
+      this.vBanFlag = this.backupModelService.banTabModel.vBanFlag;
+      this.index =  this.backupModelService.banTabModel.index;
+      this.indexST =  this.backupModelService.banTabModel.indexST;
+      this.collapsed = this.backupModelService.banTabModel.collapsed;
     }
+    this.isCharging = false;
   }
 
   ngOnDestroy() {
@@ -251,11 +263,32 @@ public vendorServiceType : any ={
       targetSystem: this.targetSystem,
       sourceSystem: this.sourceSystem,
       serviceTypeReferenceData: this.serviceTypeReferenceData,
-      serviceList: this.serviceList
+      serviceList: this.serviceList,
+      cloneFlag: this.cloneFlag,
+      editFlag: this.editFlag,
+      errorFlag: this.errorFlag,
+      expansionEventFlag: this.expansionEventFlag,
+      modeFlag: this.modeFlag,   
+      panelExpansionFlag: this.panelExpansionFlag,
+      vBanFlag: this.vBanFlag,
+      index: this.index,
+      indexST: this.indexST,
+      collapsed: this.collapsed
     };
     this.homeService.setState({ key: this.KEY, data: null })
     if(this.subs != null && this.subs != undefined){
       this.subs.unsubscribe()
+    }
+  }
+
+  onTabOpen(e){
+    this.index.push(e.index);
+  }
+
+  onTabClose(e){
+    const idx = this.index.indexOf(e.index, 0);
+    if (idx > -1) {
+      this.index.splice(idx, 1);
     }
   }
 
@@ -492,7 +525,6 @@ public vendorServiceType : any ={
   upsertBan() {
     this.errorMessage = "";
     if (this.validation()) {
-      // debugger;
       if (this.cloneFlag && this.vendorBan != this.banInsertData.vendorBan) {
         this.cloneFlag = false;
         this.modeFlag = false;
@@ -1352,13 +1384,13 @@ public vendorServiceType : any ={
     }
   }
 
-  onTabOpen(event) {
+  onTabOpenST(event) {
     console.log(event);
     this.indexST = [0,1];
     this.collapsed=false;
     this.panelExpansionFlag=false; 
 }
-onTabClose(event) {
+onTabCloseST(event) {
     this.indexST = [];
     this.collapsed=true;
     this.panelExpansionFlag=true; 

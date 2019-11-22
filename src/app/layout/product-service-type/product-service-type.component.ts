@@ -104,12 +104,19 @@ export class ProductServiceTypeComponent implements OnInit, OnDestroy {
       }
     });
     if(this.backupModelService.serviceTypeTabModel != null 
-        && this.backupModelService.serviceTypeTabModel != undefined)
-      this.gcbDetailFilters = this.backupModelService.serviceTypeTabModel;
+        && this.backupModelService.serviceTypeTabModel != undefined){
+          this.gcbDetailFilters = this.backupModelService.serviceTypeTabModel.gcbDetailFilters;
+          this.editFlag = this.backupModelService.serviceTypeTabModel.editFlag;
+          this.formMode = this.backupModelService.serviceTypeTabModel.formMode;
+        }
   }
 
   ngOnDestroy() {
-    this.backupModelService.serviceTypeTabModel = this.gcbDetailFilters;
+    this.backupModelService.serviceTypeTabModel = {
+      gcbDetailFilters:this.gcbDetailFilters,
+      editFlag: this.editFlag,
+      formMode: this.formMode
+    }
     this.homeService.setState({ key: this.KEY, data: null });
     if(this.subs != null && this.subs != undefined){
       this.subs.unsubscribe()
@@ -311,7 +318,8 @@ export class ProductServiceTypeComponent implements OnInit, OnDestroy {
   showSelectedData(serviceTypeId) {
     console.log("radio button click" + serviceTypeId);
     this.editFlag = true;
-    this.gcbDetailFilters = this.serviceTypes.filter(x => x.serviceTypeId == serviceTypeId)[0];
+    const test = this.serviceTypes.find(x => x.serviceTypeId == serviceTypeId)
+    this.gcbDetailFilters = { ...test }
     this.gcbDetailFiltersCopy = { ...this.gcbDetailFilters };
     this.formMode = "Modify";
   }
