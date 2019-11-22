@@ -122,6 +122,8 @@ public vendorServiceType : any ={
   public vBanFlag = false;
   @ViewChild('content1') errorMessagePopUp;
   @ViewChild('content2') modeMessagePopUp;
+  @ViewChild('content3') arrayErrorMessagePopUp;
+  public arrayErrorMessage;
   closeResult: string;
   public formMode="New";
   public sourceSystem:any = [];
@@ -399,6 +401,14 @@ public vendorServiceType : any ={
     });
   }
 
+  asyncOpen(content) {
+    return this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
   async clearAllFilters(){
    this.banInsertData = {
       banId:"",
@@ -471,7 +481,7 @@ public vendorServiceType : any ={
     await this.getBillingModelTypes();
   }
 
-  validation() {
+  async validation() {
     if (this.banInsertData.billProcessId == 0) {
       this.errorMessage = "Please Select Bill Process";
       return false;
@@ -496,6 +506,12 @@ public vendorServiceType : any ={
       this.errorMessage = "Please provide Liquidation BUC/ADN and Pay from BUC/ADN"
       return false
     }
+    const { valid, message } = await this.validateTokensBillHub()
+    if (!valid) {
+      this.arrayErrorMessage = message
+      await this.asyncOpen(this.arrayErrorMessagePopUp);
+      return false;
+    }
     if (this.banInsertData.cloneFlag) {
       if (this.banInsertData.invoiceName == undefined || this.banInsertData.invoiceName == "undefined" || this.banInsertData.invoiceName == "") {
         this.errorMessage = "Please select Invoice Name for Clone record";
@@ -512,19 +528,17 @@ public vendorServiceType : any ={
       if (this.banInsertData.taxEngine == undefined || this.banInsertData.taxEngine == "undefined" || this.banInsertData.taxEngine == "") {
         this.errorMessage = "Please select Tax Engine for Clone record";
         return false;
-      }
-      else {
+      } else {
         return true;
       }
-    }
-    else {
+    } else {
       return true;
     }
   }
 
-  upsertBan() {
+  async upsertBan() {
     this.errorMessage = "";
-    if (this.validation()) {
+    if (await this.validation()) {
       if (this.cloneFlag && this.vendorBan != this.banInsertData.vendorBan) {
         this.cloneFlag = false;
         this.modeFlag = false;
@@ -589,13 +603,31 @@ public vendorServiceType : any ={
         error => {
         });
     }
-    // },
-    // error => {
-    // });
-    // }
-    else {
-      //this.open(this.errorMessage);
-    }
+  }
+
+  validateTokensBillHub() {
+    const { regKey } = this.EXTERNAL_SYSTEM_CONFIG;
+    const { liquidateBillRoutingId, payFromBillRoutingId } = this.banInsertData;
+    const banBillRefs = [liquidateBillRoutingId, payFromBillRoutingId]
+    const billRefs = this.serviceList.reduce((result, item) => {
+      const { liquidateBillRoutingId, payFromBillRoutingId } = item
+      return [...result, liquidateBillRoutingId, payFromBillRoutingId]
+    }, banBillRefs)
+    const request = billRefs.map(billRef => {
+      return this.banService.validateBillRefTokens(billRef, regKey).toPromise().then(response => {
+        return {
+          ...response,
+          billRef
+        }
+      }).catch(e => e)
+    })
+    return Promise.all(request).then(response => {
+      const valid = !response.some(({ message }) => message === 'No Tokens Associated')
+      const message = response.map(({ billRef, message }) => {
+        return `Billref: ${billRef} --> ${message === '' ? 'Success' : `${message}`}`
+      })
+      return valid ? { valid } : { valid, message }
+    })
   }
 
   associateBan(banId) {
@@ -1021,7 +1053,9 @@ public vendorServiceType : any ={
     erpAwtGroupName:string,
     directOffsetBuc:string,
     indirectOffsetBuc:string,
-    erpVatAwtGroupName:string
+    erpVatAwtGroupName:string,
+    liquidateBillRoutingId ? : number,
+    payFromBillRoutingId ? : number
   }> = [];
 
   public systems :any = {};
@@ -1051,31 +1085,44 @@ public vendorServiceType : any ={
   // }; 
 
 
-  addTargetValueToArray(item:any){
+  addTargetValueToArray(item: any) {
     console.log(item);
-    for (let system of item.items){
+    for (let system of item.items) {
       if (system.serviceTypeId != null) {
         this.banInsertData.serviceTypeId = system.serviceTypeId;
         this.banService.getOtherServiceDet(this.banInsertData).subscribe(
           refData => {
-            this.otherServiceData=refData;
-            this.serviceList.push({ serviceTypeId: system.serviceTypeId, overrideErpPmtTerms: "",
-              overrideErpAwtGroupName:"",overrideDirectOffsetBuc:"", 
-              overrideIndirectOffsetBuc:"", overrideErpVatAwtGroupName:"",
-              overrideUnspsc:"",overrideOffsetCostCenter:"",
-              unspscOverrideFlag:false,costCentreOverrideFlag:false,
-              erpPmtOverrideFlag:false,erpAwtGroupNameOverrideFlag:false,
-              erpVatAwtGroupOverrideFlag:false,directOffsetBucOverrideFlag:false,
-              indirectOffsetBucOverrideFlag:false,unspsc:this.otherServiceData.unspsc,costCenter:this.otherServiceData.costCenter,
-              erpPmtTerms: this.banInsertData.overrideErpPmtTerms,erpAwtGroupName:this.banInsertData.overrideErpAwtGroupName,
-              directOffsetBuc:this.banInsertData.overrideDirectOffsetBuc,indirectOffsetBuc:this.banInsertData.overrideIndirectOffsetBuc,
-              erpVatAwtGroupName:this.banInsertData.overrideErpVatAwtGroupName})
-        },
-        error => {
-        }); 
+            this.otherServiceData = refData;
+            this.serviceList.push({
+              serviceTypeId: system.serviceTypeId,
+              overrideErpPmtTerms: "",
+              overrideErpAwtGroupName: "",
+              overrideDirectOffsetBuc: "",
+              overrideIndirectOffsetBuc: "",
+              overrideErpVatAwtGroupName: "",
+              overrideUnspsc: "",
+              overrideOffsetCostCenter: "",
+              unspscOverrideFlag: false,
+              costCentreOverrideFlag: false,
+              erpPmtOverrideFlag: false,
+              erpAwtGroupNameOverrideFlag: false,
+              erpVatAwtGroupOverrideFlag: false,
+              directOffsetBucOverrideFlag: false,
+              indirectOffsetBucOverrideFlag: false,
+              unspsc: this.otherServiceData.unspsc,
+              costCenter: this.otherServiceData.costCenter,
+              erpPmtTerms: this.banInsertData.overrideErpPmtTerms,
+              erpAwtGroupName: this.banInsertData.overrideErpAwtGroupName,
+              directOffsetBuc: this.banInsertData.overrideDirectOffsetBuc,
+              indirectOffsetBuc: this.banInsertData.overrideIndirectOffsetBuc,
+              erpVatAwtGroupName: this.banInsertData.overrideErpVatAwtGroupName
+            })
+          },
+          error => {
+          });
       }
     }
-    console.log( this.serviceList);
+    console.log(this.serviceList);
   }
 
   removeTargetValueFromArray(item:any){
