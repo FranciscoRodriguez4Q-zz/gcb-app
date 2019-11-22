@@ -164,7 +164,8 @@ export class VendorComponent implements OnInit, OnDestroy {
       console.log("radio button click" + vendorEntityId);
       this.editFlag = true;
       this.formMode="Modify";
-      this.vendorInsertData = this.vendorData.filter(x => x.vendorEntityId == vendorEntityId)[0];
+      const modelTemp = this.vendorData.find(x => x.vendorEntityId == vendorEntityId);
+      this.vendorInsertData = { ...modelTemp };
       this.vendorInsertDataCopy = { ...this.vendorInsertData }
       this.vendor = this.vendorInsertData;
   }
