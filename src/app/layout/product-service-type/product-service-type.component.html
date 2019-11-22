@@ -36,7 +36,7 @@
                                     [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
                                     [filter]="true" (click)="getServicetype()" scrollHeight="150px">
                 </p-dropdown> -->
-                <p-dropdown onEnter [virtualScroll]="true"  itemSize="30" [options]="countryCodeReferenceDataList" (click)="getServicetype()"  [style]="{'width': '130%'}" placeholder="Select" [(ngModel)]="gcbDetailFilters.billedFromLocationId" [filter]="true"  [resetFilterOnHide]="true" [disabled]="editFlag || userFlag"></p-dropdown>
+                <p-dropdown onEnter [virtualScroll]="true" itemSize="30" [options]="countryCodeReferenceDataList" (click)="getServicetype()"  [style]="{'width': '130%'}" placeholder="Select" [(ngModel)]="gcbDetailFilters.billedFromLocationId" [filter]="true"  [resetFilterOnHide]="true" [disabled]="userFlag"></p-dropdown>
             </div>
         </div>
         <div class="p-grid">
@@ -45,7 +45,7 @@
             </div>
             <div class="p-col-5 item-left">
                 <p-dropdown onEnter [virtualScroll]="true" itemSize="30" [options]="countryCodeReferenceDataList" [(ngModel)]="gcbDetailFilters.billedToLocationId" placeholder="Select" [autoWidth]="true"
-                [style]="{'width': '130%'}"  [filter]="true" (click)="getServicetype()" scrollHeight="150px" [resetFilterOnHide]="true" [disabled]="editFlag || userFlag">
+                [style]="{'width': '130%'}"  [filter]="true" (click)="getServicetype()" scrollHeight="150px" [resetFilterOnHide]="true" [disabled]="userFlag">
                 </p-dropdown>
             </div>
         </div>

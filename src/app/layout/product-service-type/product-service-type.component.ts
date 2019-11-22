@@ -318,8 +318,7 @@ export class ProductServiceTypeComponent implements OnInit, OnDestroy {
   showSelectedData(serviceTypeId) {
     console.log("radio button click" + serviceTypeId);
     this.editFlag = true;
-    const test = this.serviceTypes.find(x => x.serviceTypeId == serviceTypeId)
-    this.gcbDetailFilters = { ...test }
+    this.gcbDetailFilters = this.serviceTypes.filter(x => x.serviceTypeId == serviceTypeId)[0];
     this.gcbDetailFiltersCopy = { ...this.gcbDetailFilters };
     this.formMode = "Modify";
   }

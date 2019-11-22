@@ -344,6 +344,7 @@ export class ChargebackComponent implements OnInit {
     this.msgs = [];
     console.log("test button click",this.chargeBackFilters);
     if (this.validation()) {
+      debugger;
       if (this.chargeBackFilters.cloneFlag){
         this.chargeBackFilters.cloneOfId = this.chargeBackFilters.internalCbId;
         this.chargeBackFilters.internalCbId = "";
@@ -487,6 +488,7 @@ export class ChargebackComponent implements OnInit {
   }
 
   showSelectedData(internalCbId,vendorId,productId,vscId) {   
+    //debugger;
     this.expandAllPanels();
     window.scrollTo(0, 0);
     this.vendorEntityDataList=[];
@@ -909,7 +911,9 @@ cloneRecord(){
     this.cloneBillRef = true;
     this.chargebackService.getCloneBillingModel(cbId).subscribe(
       refData => {
+        debugger;
         let arr: any = [];
+        debugger;
         this.billingModelDataList =[];
         this.billingModelReferenceData = refData;          
         for (let data of this.billingModelReferenceData) {
@@ -937,6 +941,7 @@ cloneRecord(){
 
   cloneBillRefRec(flag){
     this.cloneBillRef = flag;
+    debugger;
     if(flag){
       this.chargeBackFilters.billroutingId="";
       this.generateBillRefId();
@@ -953,6 +958,7 @@ cloneRecord(){
     let process = "Chargeback : CBId-"+this.chargeBackFilters.internalCbId+" BillRef-"+billRef;
     this.chargebackService.duplicateBillRefId(billRef, this.regKey, sso,process).subscribe(
       refData => {
+        debugger;
         let response = refData;
         let respArray = [];
         respArray.push(response);

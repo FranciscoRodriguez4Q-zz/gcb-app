@@ -231,8 +231,7 @@ export class BuyerComponent implements OnInit, OnDestroy {
     console.log("radio button click" + this.buyerId);
     this.editFlag = true;
     this.formMode="Modify";
-    const modelTemp = this.buyerData.find(x => x.buyerId == buyerId);
-    this.buyerInsertData = { ...modelTemp };
+    this.buyerInsertData = this.buyerData.filter(x => x.buyerId == buyerId)[0];
     this.buyerInsertDataCopy = { ...this.buyerInsertData }
   }
 
