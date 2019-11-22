@@ -129,15 +129,15 @@ constructor(
         this.showSelectedData(id);
       }
     })
-    if(this.backupModelService.serviceTypeTabModel != null 
-      && this.backupModelService.serviceTypeTabModel != undefined){
-        this.vendorConfigDto = this.backupModelService.serviceTypeTabModel.vendorConfigDto;
-        this.editFlag = this.backupModelService.serviceTypeTabModel.editFlag;
+    if(this.backupModelService.vendorConfigTabModel != null 
+      && this.backupModelService.vendorConfigTabModel != undefined){
+        this.vendorConfigDto = this.backupModelService.vendorConfigTabModel.vendorConfigDto;
+        this.editFlag = this.backupModelService.vendorConfigTabModel.editFlag;
       }
   }
 
   ngOnDestroy() {
-    this.backupModelService.serviceTypeTabModel = {
+    this.backupModelService.vendorConfigTabModel = {
       vendorConfigDto: this.vendorConfigDto,
       editFlag: this.editFlag
     }
