@@ -502,7 +502,8 @@ public vendorServiceType : any ={
       this.errorMessage = "Please Select Mode";
       return false;
     }
-    if (this.banInsertData.liquidateBillRoutingId === "" && this.banInsertData.payFromBillRoutingId === "") {
+    const { liquidateBillRoutingId, payFromBillRoutingId } = this.banInsertData
+    if (this.isEmpty(liquidateBillRoutingId) && this.isEmpty(payFromBillRoutingId)) {
       this.errorMessage = "Please provide Liquidation BUC/ADN and Pay from BUC/ADN"
       return false
     }
@@ -636,7 +637,9 @@ public vendorServiceType : any ={
     const request = banLevelEntities.map(item => {
       const { key } = item
       const billRefId = this.banInsertData[key]
-      return this.banService.associateBillReftoAsset(billRefId, banId, regKey).toPromise().catch(e => e)
+      if (this.isEmpty(billRefId)) {
+        return this.banService.associateBillReftoAsset(billRefId, banId, regKey).toPromise().catch(e => e)
+      }
     })
     Promise.all(request).then(result => {
       console.log('[INFO] - BanComponent - associateBan()')
@@ -649,10 +652,10 @@ public vendorServiceType : any ={
     const requests = banProducts.reduce((result, item) => {
       const { liquidateBillRoutingId, payFromBillRoutingId, banProductId } = item
       const items = []
-      if (liquidateBillRoutingId) {
+      if (!this.isEmpty(liquidateBillRoutingId)) {
         items.push(this.banService.associateBillReftoAsset(liquidateBillRoutingId, banProductId, regKey).toPromise().catch(e => e))
       }
-      if (payFromBillRoutingId) {
+      if (!this.isEmpty(payFromBillRoutingId)) {
         items.push(this.banService.associateBillReftoAsset(payFromBillRoutingId, banProductId, regKey).toPromise().catch(e => e))
       }
       return [...result, ...items]
@@ -1496,5 +1499,9 @@ getVendorCode() {
       return !this.isSystemsSelected || false
     }
     return !this.isSystemsSelected || false;
+  }
+
+  isEmpty(val: any) {
+    return (val === '' || val === 0 || val === "" || val === null || val === undefined)
   }
 }
