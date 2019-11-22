@@ -122,6 +122,8 @@ public vendorServiceType : any ={
   public vBanFlag = false;
   @ViewChild('content1') errorMessagePopUp;
   @ViewChild('content2') modeMessagePopUp;
+  @ViewChild('content3') arrayErrorMessagePopUp;
+  public arrayErrorMessage;
   closeResult: string;
   public formMode="New";
   public sourceSystem:any = [];
@@ -366,6 +368,14 @@ public vendorServiceType : any ={
     });
   }
 
+  asyncOpen(content) {
+    return this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
   async clearAllFilters(){
    this.banInsertData = {
       banId:"",
@@ -438,7 +448,7 @@ public vendorServiceType : any ={
     await this.getBillingModelTypes();
   }
 
-  validation() {
+  async validation() {
     if (this.banInsertData.billProcessId == 0) {
       this.errorMessage = "Please Select Bill Process";
       return false;
@@ -463,6 +473,12 @@ public vendorServiceType : any ={
       this.errorMessage = "Please provide Liquidation BUC/ADN and Pay from BUC/ADN"
       return false
     }
+    const { valid, message } = await this.validateTokensBillHub()
+    if (!valid) {
+      this.arrayErrorMessage = message
+      await this.asyncOpen(this.arrayErrorMessagePopUp);
+      return false;
+    }
     if (this.banInsertData.cloneFlag) {
       if (this.banInsertData.invoiceName == undefined || this.banInsertData.invoiceName == "undefined" || this.banInsertData.invoiceName == "") {
         this.errorMessage = "Please select Invoice Name for Clone record";
@@ -479,19 +495,17 @@ public vendorServiceType : any ={
       if (this.banInsertData.taxEngine == undefined || this.banInsertData.taxEngine == "undefined" || this.banInsertData.taxEngine == "") {
         this.errorMessage = "Please select Tax Engine for Clone record";
         return false;
-      }
-      else {
+      } else {
         return true;
       }
-    }
-    else {
+    } else {
       return true;
     }
   }
 
-  upsertBan() {
+  async upsertBan() {
     this.errorMessage = "";
-    if (this.validation()) {
+    if (await this.validation()) {
       // debugger;
       if (this.cloneFlag && this.vendorBan != this.banInsertData.vendorBan) {
         this.cloneFlag = false;
@@ -557,22 +571,15 @@ public vendorServiceType : any ={
         error => {
         });
     }
-    // },
-    // error => {
-    // });
-    // }
-    else {
-      //this.open(this.errorMessage);
-    }
   }
 
   validateTokensBillHub() {
     const { regKey } = this.EXTERNAL_SYSTEM_CONFIG;
     const { liquidateBillRoutingId, payFromBillRoutingId } = this.banInsertData;
-    const banBillRefs = [ liquidateBillRoutingId, payFromBillRoutingId ]
+    const banBillRefs = [liquidateBillRoutingId, payFromBillRoutingId]
     const billRefs = this.serviceList.reduce((result, item) => {
       const { liquidateBillRoutingId, payFromBillRoutingId } = item
-      return [ ...result, liquidateBillRoutingId, payFromBillRoutingId ]
+      return [...result, liquidateBillRoutingId, payFromBillRoutingId]
     }, banBillRefs)
     const request = billRefs.map(billRef => {
       return this.banService.validateBillRefTokens(billRef, regKey).toPromise().then(response => {
@@ -582,8 +589,12 @@ public vendorServiceType : any ={
         }
       }).catch(e => e)
     })
-    Promise.all(request).then(response => {
-
+    return Promise.all(request).then(response => {
+      const valid = !response.some(({ message }) => message === 'No Tokens Associated')
+      const message = response.map(({ billRef, message }) => {
+        return `Billref: ${billRef} --> ${message === '' ? 'Success' : `${message}`}`
+      })
+      return valid ? { valid } : { valid, message }
     })
   }
 
