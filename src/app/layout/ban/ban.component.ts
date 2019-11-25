@@ -627,8 +627,11 @@ public vendorServiceType : any ={
     })
     return Promise.all(request).then(response => {
       const valid = !response.some(({ message }) => message === 'No Tokens Associated')
-      const message = response.map(({ billRef, message }) => {
-        return `Billref: ${billRef} --> ${message === '' ? 'Success' : `${message}`}`
+      const message = response.map(item => {
+        if (item) {
+          const { billRef, message } = item
+          return `Billref: ${billRef} --> ${message === '' ? 'Success' : `${message}`}`
+        }
       })
       return valid ? { valid } : { valid, message }
     })
