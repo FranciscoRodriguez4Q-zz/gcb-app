@@ -25,6 +25,7 @@
     "@ng-bootstrap/ng-bootstrap": "^4.1.2",
     "@ngx-translate/core": "^11.0.1",
     "@ngx-translate/http-loader": "^4.0.0",
+    "@ngxs/store": "^3.5.1",
     "angular5-csv": "^0.2.11",
     "chart.js": "^2.8.0",
     "core-js": "^2.5.4",
