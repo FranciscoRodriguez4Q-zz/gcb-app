@@ -615,12 +615,15 @@ public vendorServiceType : any ={
       return [...result, liquidateBillRoutingId, payFromBillRoutingId]
     }, banBillRefs)
     const request = billRefs.map(billRef => {
-      return this.banService.validateBillRefTokens(billRef, regKey).toPromise().then(response => {
-        return {
-          ...response,
-          billRef
-        }
-      }).catch(e => e)
+      if (!this.isEmpty(billRef)) {
+        return this.banService.validateBillRefTokens(billRef, regKey).toPromise().then(response => {
+          return {
+            ...response,
+            billRef
+          }
+        }).catch(e => e)
+      }
+      return null
     })
     return Promise.all(request).then(response => {
       const valid = !response.some(({ message }) => message === 'No Tokens Associated')
