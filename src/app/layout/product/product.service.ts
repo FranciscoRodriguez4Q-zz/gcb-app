@@ -8,6 +8,7 @@ import { environment } from '../../../environments/environment';
 import {  } from 'rxjs';
 import { forkJoin } from 'rxjs';
 import { map,delay,catchError,tap} from 'rxjs/operators';
+import { Product } from './product.model';
 
 
 @Injectable({
@@ -24,14 +25,14 @@ export class ProductService {
     return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/unspsc");
   }
 
-  public getProductDetails():Observable<Object>{
+  public getProductDetails():Observable<any>{
     return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/product-details");
   }
 
   public getProductById(productId):Observable<Object>{
     return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/product/{"+productId+"}");
   }
- public upsertProduct(gcbProductFilters):Observable<Object>{
+ public upsertProduct(gcbProductFilters):Observable<any>{
  return this.http.post(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/product", gcbProductFilters);
  }
  

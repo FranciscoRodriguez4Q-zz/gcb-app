@@ -5,8 +5,14 @@ import { Router } from "@angular/router";
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { Globals } from '../../shared/constants/globals';
 import { HomeService } from '../home/home.service';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
 import { BackupModelService } from '../backupmodel.service';
+import { Store, Select } from '@ngxs/store';
+import { ProductState } from './product.state';
+import { Product } from './product.model';
+import { ProductActions } from './product.action';
+import * as  _ from 'lodash'
+
 @Component({
   selector: 'app-product',
   templateUrl: './product.component.html',
@@ -23,7 +29,7 @@ export class ProductComponent implements OnInit, OnDestroy {
   public unspscReference: any;
   public downloadCols = [];
   productDwnData: any = [];
-  public products: any = [];
+  // public products: any = [];
   public gcbDwnData: any = [];
   public editFlag = false;
   public errorMessage = "";
@@ -32,7 +38,6 @@ export class ProductComponent implements OnInit, OnDestroy {
   public popupErrorMessage: any;
   closeResult: string;
   public formMode = "New";
-  public gridLoadFlag: boolean = false;
   public userFlag = false;
   private readonly KEY: string = 'Product'
   private subs: Subscription;
@@ -63,13 +68,22 @@ export class ProductComponent implements OnInit, OnDestroy {
   }
   public gcbProductFiltersCopy: any;
 
+  @Select(ProductState.getProducts) products$: Observable<Product[]>
+  @Select(ProductState.getProductsFetching) gridLoadFlag$: Observable<boolean>
+  @Select(ProductState.getStatusMessage) statusMessage$: Observable<string>
+
+  public totalRecords;
+
+  public products = []
+
   constructor(
     private router: Router,
     private productService: ProductService,
     private modalService: NgbModal,
     private globals: Globals,
     private homeService: HomeService,
-    private backupModelService: BackupModelService
+    private backupModelService: BackupModelService,
+    private store: Store
   ) {
     if (this.globals.roleNM === 'ADMIN') {
       this.userFlag = false;
@@ -79,8 +93,25 @@ export class ProductComponent implements OnInit, OnDestroy {
     }
   }
 
+  public gridLoadFlag;
+
   async ngOnInit() {
-    await this.getProductDetails();
+    // await this.getProductDetails();
+    this.store.dispatch(new ProductActions.FetchProducts())
+    this.products$.subscribe(items => {
+      console.log('products$ executed...')
+      this.products = items
+    })
+    this.gridLoadFlag$.subscribe(band => this.gridLoadFlag = band)
+    this.statusMessage$.subscribe(message => {
+      console.log('[INFO] - StatusMessage')
+      console.log('message', message)
+      console.log('!_.isEmpty(message)', !_.isEmpty(message))
+      if (!_.isEmpty(message)) {
+        this.popupErrorMessage = message
+        this.open(this.errorMessagePopUp)
+      }
+    })
     for (let i = 0; i < this.cols.length; i++) {
       this.downloadCols.push(this.cols[i].header);
     }
@@ -90,7 +121,8 @@ export class ProductComponent implements OnInit, OnDestroy {
     this.subs = this.homeService.state$.subscribe(({ [this.KEY]: item }) => {
       if (item) {
         const { id } = item;
-        this.showSelectedData(id);
+        const product = this.products.find(x => x.productId === id)
+        this.showSelectedData(product);
       }
     });
     if(this.backupModelService.productTabModel != null 
@@ -113,43 +145,42 @@ export class ProductComponent implements OnInit, OnDestroy {
     }
   }
 
-  getProductDetails() {
-    return this.productService.getProductDetails().toPromise().then(
-      refData => {
-        this.products = refData;
-        this.gridLoadFlag = true;
-        this.products.map(item => {
-          return {
-            billProcessName: item.billProcessName,
-            productName: item.productName,
-            productCode: item.productCode,
-            //productType: item.productType, 
-            unspsc: item.unspsc,
-            updatedBy: item.updatedBy,
-            lastUpdated: item.lastUpdated
-          }
-        }).forEach(item => this.productDwnData.push(item));
-      }
-    ).catch(console.log)
-    // .subscribe(
-    //   refData => {
-    //     this.products = refData;
-    //     this.gridLoadFlag = true;
-    //     this.products.map(item => {
-    //       return {
-    //         billProcessName: item.billProcessName,
-    //         productName: item.productName,
-    //         productCode: item.productCode,
-    //         //productType: item.productType, 
-    //         unspsc: item.unspsc,
-    //         updatedBy: item.updatedBy,
-    //         lastUpdated: item.lastUpdated
-    //       }
-    //     }).forEach(item => this.productDwnData.push(item));
-    //   },
-    //   error => {}
-    // );
-  }
+  // getProductDetails() {
+  //   return this.productService.getProductDetails().toPromise().then(
+  //     refData => {
+  //       this.products = refData;
+  //       this.products.map(item => {
+  //         return {
+  //           billProcessName: item.billProcessName,
+  //           productName: item.productName,
+  //           productCode: item.productCode,
+  //           //productType: item.productType, 
+  //           unspsc: item.unspsc,
+  //           updatedBy: item.updatedBy,
+  //           lastUpdated: item.lastUpdated
+  //         }
+  //       }).forEach(item => this.productDwnData.push(item));
+  //     }
+  //   ).catch(console.log)
+  //   // .subscribe(
+  //   //   refData => {
+  //   //     this.products = refData;
+  //   //     this.gridLoadFlag = true;
+  //   //     this.products.map(item => {
+  //   //       return {
+  //   //         billProcessName: item.billProcessName,
+  //   //         productName: item.productName,
+  //   //         productCode: item.productCode,
+  //   //         //productType: item.productType, 
+  //   //         unspsc: item.unspsc,
+  //   //         updatedBy: item.updatedBy,
+  //   //         lastUpdated: item.lastUpdated
+  //   //       }
+  //   //     }).forEach(item => this.productDwnData.push(item));
+  //   //   },
+  //   //   error => {}
+  //   // );
+  // }
 
   getBillProcess() {
     return this.productService.getBillProcessList().toPromise().then(
@@ -209,36 +240,18 @@ export class ProductComponent implements OnInit, OnDestroy {
     //this.unspscReferenceList.push({ label: "84.11.00.00.00", value: "84.11.00.00.00" });
   }
 
-  showSelectedData(productId) {
-    console.log("radio button click" + productId);
+  showSelectedData(productData) {
     window.scroll(0,0);
     this.editFlag = true;
-
-    const test = this.products.find(x => x.productId == productId)
-    this.gcbProductFilters = { ...test }
+    this.gcbProductFilters = { ...productData }
     this.gcbProductFiltersCopy = { ...this.gcbProductFilters };
     this.formMode = "Modify";
   }
 
   upsertProduct() {
-    this.errorMessage = "";
-    console.log("test button click");
     if (this.validation()) {
-      if (this.validation) {
-        this.productService.upsertProduct(this.gcbProductFilters).subscribe(
-          refData => {
-            this.saveMessage = refData;
-            this.popupErrorMessage = this.saveMessage.statusMessage;
-            console.log(this.saveMessage);
-            this.open(this.errorMessagePopUp);
-            this.getProductDetails();
-            if (!this.saveMessage.Error) {
-              this.clearAllFilters();
-            }
-          },
-          error => {
-          });
-      }
+      this.store.dispatch(new ProductActions.UpsertProduct(this.gcbProductFilters))
+      this.clearAllFilters()
     }
   }
 
