@@ -140,13 +140,19 @@
     <label class="errorMessage">{{errorMessage}}</label>
     </div>
 <div class="p-grid">
-        <div class="p-col-12" style="text-align:right">
-            <button class="ge-button -fill--solid" (click)="upsertServiceType()" [disabled]="userFlag || disabled">Submit</button>
-            <button class="ge-button -fill--solid" (click)="clearAllFilters()" [disabled]="userFlag">Cancel</button>
-            <app-file-download [dwnData]="gcbDwnData" [colsHeader]="this.downloadCols" [fileName]="fileName"  (dwnAction)="getAllServiceType();"></app-file-download>
-
+    <div class="p-col-6" style="text-align:left">
+        <div *ngIf="editFlag"> 
+            <b>Inserted by: </b> {{gcbDetailFilters.createdBy}} on {{gcbDetailFilters.created}} <br>
+            <b>Modified by: </b> {{gcbDetailFilters.updatedBy}} on {{gcbDetailFilters.lastUpdated}}
         </div>
+    </div>    
+    <div class="p-col-6" style="text-align:right">
+        <button class="ge-button -fill--solid" (click)="upsertServiceType()" [disabled]="userFlag || disabled">Submit</button>
+        <button class="ge-button -fill--solid" (click)="clearAllFilters()" [disabled]="userFlag">Cancel</button>
+        <app-file-download [dwnData]="gcbDwnData" [colsHeader]="this.downloadCols" [fileName]="fileName"  (dwnAction)="getAllServiceType();"></app-file-download>
+
     </div>
+</div>
 </p-fieldset>
 
 <div class="p-grid">
