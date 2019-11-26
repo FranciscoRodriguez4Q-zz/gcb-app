@@ -4,6 +4,7 @@ import { Router, NavigationEnd } from '@angular/router';
 import { Http } from '@angular/http';
 import { HttpClient } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
+import { Globals } from 'src/app/shared/constants/globals';
 
 @Component({
   selector: 'app-header',
@@ -13,8 +14,11 @@ import { CookieService } from 'ngx-cookie-service';
 export class HeaderComponent implements OnInit {
   pushRightClass: string = 'push-right';
   cookieExists : boolean = true;
+  headText: String = "";
+
   constructor(private translate: TranslateService,public router: Router,private http: HttpClient,
-    private cookieService: CookieService) {
+    private cookieService: CookieService, private globals: Globals) {
+    this.headText = this.globals.firstName+" "+this.globals.lastName+" - "+this.globals.sso;
     this.translate.addLangs(['en', 'fr', 'ur', 'es', 'it', 'fa', 'de', 'zh-CHS']);
     this.translate.setDefaultLang('en');
     const browserLang = this.translate.getBrowserLang();
