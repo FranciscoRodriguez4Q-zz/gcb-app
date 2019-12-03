@@ -6,8 +6,11 @@ import { ProductServiceTypeService } from './product-service-type.service';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { Globals } from '../../shared/constants/globals';
 import { HomeService } from '../home/home.service';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
 import { BackupModelService } from '../backupmodel.service';
+import { Store, Select } from '@ngxs/store';
+import { SharedActions } from 'src/app/shared/state/shared.actions';
+import { SharedState } from 'src/app/shared/state/shared.state';
 
 @Component({
   selector: 'app-product-service-type',
@@ -72,29 +75,35 @@ export class ProductServiceTypeComponent implements OnInit, OnDestroy {
   @ViewChild('content1') errorMessagePopUp;
   public popupErrorMessage: any;
   closeResult: string;
+
+  @Select(SharedState.getCountries) countryCodeReferenceDataList$: Observable<[]>
+  @Select(SharedState.getUserDetails) userDetails$: Observable<any>
+
   constructor(
     private serviceTypeService: ProductServiceTypeService,
     private modalService: NgbModal,
     private globals: Globals,
     private homeService: HomeService,
-    private backupModelService: BackupModelService
+    private backupModelService: BackupModelService,
+    private store: Store
   ) {
-    if (this.globals.roleNM === 'ADMIN') {
-      this.userFlag = false;
-    }
-    else {
-      this.userFlag = true;
-    }
+    // if (this.globals.roleNM === 'ADMIN') {
+    //   this.userFlag = false;
+    // }
+    // else {
+    //   this.userFlag = true;
+    // }
   }
 
   async ngOnInit() {
+    this.initStateOnComponent()
     for (let i = 0; i < this.cols.length; i++) {
       this.downloadCols.push(this.cols[i].header);
       //this.downloadCols[this.cols[i].header] = "";
     }
     await this.getAllServiceType();
     await this.getAllProductData();
-    await this.getAllCountryData();
+    // await this.getAllCountryData();
     this.getBillingBasisData();
     await this.getBillProcess()
     this.subs = this.homeService.state$.subscribe(({ [this.KEY]: item }) => {
@@ -111,6 +120,12 @@ export class ProductServiceTypeComponent implements OnInit, OnDestroy {
         }
   }
 
+  initStateOnComponent() {
+    this.store.dispatch(new SharedActions.FetchCountry())
+    this.userDetails$.subscribe(({ roleNM }) => this.userFlag = roleNM !== 'ADMIN')
+    this.countryCodeReferenceDataList$.subscribe(items => this.countryCodeReferenceDataList = items)
+  }
+
   ngOnDestroy() {
     this.backupModelService.serviceTypeTabModel = {
       gcbDetailFilters:this.gcbDetailFilters,
@@ -123,20 +138,21 @@ export class ProductServiceTypeComponent implements OnInit, OnDestroy {
     }
   }
 
-  getAllCountryData() {
-    return this.serviceTypeService.getCountryData().toPromise().then(
-      refData => {
-        let arr: any = [];
-        this.countryCodeReferenceData = refData;
-        this.countryCodeReferenceDataList.push({ label: "Select", value: "Select" })
+  // getAllCountryData(items) {
 
-        for (let data of this.countryCodeReferenceData) {
-          let labelCountry = data.countryCode + " | " + data.countryName;
-          this.countryCodeReferenceDataList.push({ label: labelCountry, value: data.countryId })
-        }
-      }
-    ).catch(console.log)
-  }
+  //   return this.serviceTypeService.getCountryData().toPromise().then(
+  //     refData => {
+  //       let arr: any = [];
+  //       this.countryCodeReferenceData = refData;
+  //       this.countryCodeReferenceDataList.push({ label: "Select", value: "Select" })
+
+  //       for (let data of this.countryCodeReferenceData) {
+  //         let labelCountry = data.countryCode + " | " + data.countryName;
+  //         this.countryCodeReferenceDataList.push({ label: labelCountry, value: data.countryId })
+  //       }
+  //     }
+  //   ).catch(console.log)
+  // }
 
   getAllProductData() {
     return this.serviceTypeService.getProducts().toPromise().then(

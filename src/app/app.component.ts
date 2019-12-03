@@ -1,39 +1,39 @@
 import { Component, OnInit } from '@angular/core';
 import { AppComponentService } from './app.service';
 import { Globals } from '../app/shared/constants/globals';
+import { SharedState } from './shared/state/shared.state';
+import { Observable } from 'rxjs';
+import { Select, Store } from '@ngxs/store';
+import { SharedActions } from './shared/state/shared.actions';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit  {
- 
-  userInfo :any;
+export class AppComponent implements OnInit {
 
-  constructor(private appComponentService: AppComponentService, private globals: Globals)
- {}
+  userInfo: any;
+
+  @Select(SharedState.getUserDetails) userDetails$: Observable<{
+    role: string,
+    roleNM: string,
+    sso: string,
+    firstName: string,
+    lastName: string
+  }>
+
+  constructor(
+    private appComponentService: AppComponentService,
+    private globals: Globals,
+    private store: Store
+  ) { }
 
   ngOnInit() {
-
-    this.appComponentService.getUserData().subscribe(
-      refData => {
-        this.userInfo = refData;
-        console.log('user details captured:',this.userInfo);
-
-        this.globals.sso = this.userInfo.User["sso"];
-        this.globals.firstName = this.userInfo.User["firstName"];
-        this.globals.lastName = this.userInfo.User["lastName"];
-        this.globals.role = this.userInfo.User["role"];
-        this.globals.roleNM = this.userInfo.User["roleName"];
-
-      },
-      error => {
-      });
-
+    this.store.dispatch(new SharedActions.FetchUserDetails())
   }
   title = 'gcb-ui';
 
-  
+
 }
 

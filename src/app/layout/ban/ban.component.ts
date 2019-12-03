@@ -1453,11 +1453,14 @@ onTabCloseST(event) {
 }
 
 getVendorCode() {
+  const { billProcessId } = this.banInsertData
   if (this.banInsertData.billProcessId === 2) {
     this.banInsertData.vendorConfigId = ""
     this.countryId = null;
     this.vendorReferenceDataList = [];
-    var vendorFilterData = this.vendorReferenceData.filter(x => String(x.vendorCode).startsWith('Z'));
+    var vendorFilterData = this.vendorReferenceData.filter(x => String(x.vendorCode).startsWith('Z')).map(item => {
+      const { vendorLegalEntityName, vendorCode, billedFromCountryCode, billedToCountryCode, currencyCode } = item
+    })
     for (let data of vendorFilterData) {
       let labelService = data.vendorLegalEntityName + ' | ' + data.vendorCode + ' | ' + data.billedFromCountryCode + ' | ' + data.billedToCountryCode + ' | '
         + data.currencyCode;

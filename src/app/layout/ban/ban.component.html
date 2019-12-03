@@ -69,8 +69,7 @@
 									<input class="form-control" [(ngModel)]="banInsertData.vendorFriendlyName" />
 								</div>
 							</div>
-							<app-site-details [detailInfo]="detailInfo" (locationId)="setLocationId($event)" [countryId]="countryId">
-							</app-site-details>
+							<app-site-details [detailInfo]="detailInfo" [countryId]="countryId"></app-site-details>
 							<div class="p-grid ">
 								<div class="p-col-4 item-right"><span class="required">*</span>Buyer Name</div>
 								<div class="p-col-8 item-left">

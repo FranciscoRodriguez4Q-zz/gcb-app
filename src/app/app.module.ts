@@ -11,6 +11,11 @@ import { SampleFormComponent } from './layout/components/sample-form/sample-form
 import { FieldErrorsComponent } from './shared/modules/field-errors/field-errors.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CookieService } from 'ngx-cookie-service';
+import { NgxsModule } from '@ngxs/store';
+import { environment } from '../environments/environment'
+import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
+import { SharedState } from './shared/state/shared.state'
+import { ProductState } from './layout/product/state/product.state';
 
 export const createTranslateLoader = (http: HttpClient) => {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -32,6 +37,8 @@ export const createTranslateLoader = (http: HttpClient) => {
         deps: [HttpClient]
       }
     }),
+    NgxsModule.forRoot([ SharedState, ProductState ], { developmentMode: !environment.production }),
+    NgxsReduxDevtoolsPluginModule.forRoot({ disabled: environment.production })
   ],
   providers: [CookieService],
   bootstrap: [AppComponent],

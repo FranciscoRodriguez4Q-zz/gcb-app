@@ -8,9 +8,11 @@ import { HomeService } from '../home/home.service';
 import { Subscription, Observable } from 'rxjs';
 import { BackupModelService } from '../backupmodel.service';
 import { Store, Select } from '@ngxs/store';
-import { ProductState } from './product.state';
-import { Product } from './product.model';
-import { ProductActions } from './product.action';
+import { ProductState } from './state/product.state';
+import { Product } from './state/product.model';
+import { ProductActions } from './state/product.action';
+import { SharedActions } from '../../shared/state/shared.actions'
+import { SharedState } from '../../shared/state/shared.state';
 import * as  _ from 'lodash'
 
 @Component({
@@ -21,27 +23,21 @@ import * as  _ from 'lodash'
 export class ProductComponent implements OnInit, OnDestroy {
 
   //Dropdown Lists
-  billProcessReferenceList: SelectItem[] = [];
-  public billProcessReference: any;
-  productTypeReferenceList: SelectItem[] = [];
-  public productTypeReference: any;
-  unspscReferenceList: SelectItem[] = [];
-  public unspscReference: any;
+  public billProcessReferenceList: SelectItem[] = [];
+  public productTypeReferenceList: SelectItem[] = [];
+  // public unspscReferenceList: SelectItem[] = [];
+  // public unspscReference: any;
   public downloadCols = [];
-  productDwnData: any = [];
-  // public products: any = [];
+  public productDwnData: any = [];
+  public products: any = [];
   public gcbDwnData: any = [];
   public editFlag = false;
   public errorMessage = "";
-  public saveMessage: any = [];
-  @ViewChild('content1') errorMessagePopUp;
-  public popupErrorMessage: any;
-  closeResult: string;
   public formMode = "New";
   public userFlag = false;
+  public gridLoadFlag: boolean;
   private readonly KEY: string = 'Product'
   private subs: Subscription;
-
 
   public fileName: any = "Product";
   public cols = [
@@ -70,54 +66,21 @@ export class ProductComponent implements OnInit, OnDestroy {
 
   @Select(ProductState.getProducts) products$: Observable<Product[]>
   @Select(ProductState.getProductsFetching) gridLoadFlag$: Observable<boolean>
-  @Select(ProductState.getStatusMessage) statusMessage$: Observable<string>
+  @Select(SharedState.getBillProcesses) billProcessReferenceList$: Observable<[]>
+  @Select(SharedState.getUserDetails) userDetails$: Observable<any>
 
   public totalRecords;
 
-  public products = []
-
   constructor(
-    private router: Router,
-    private productService: ProductService,
-    private modalService: NgbModal,
-    private globals: Globals,
     private homeService: HomeService,
     private backupModelService: BackupModelService,
     private store: Store
-  ) {
-    if (this.globals.roleNM === 'ADMIN') {
-      this.userFlag = false;
-    }
-    else {
-      this.userFlag = true;
-    }
-  }
+  ) { }
 
-  public gridLoadFlag;
 
   async ngOnInit() {
-    // await this.getProductDetails();
-    this.store.dispatch(new ProductActions.FetchProducts())
-    this.products$.subscribe(items => {
-      console.log('products$ executed...')
-      this.products = items
-    })
-    this.gridLoadFlag$.subscribe(band => this.gridLoadFlag = band)
-    this.statusMessage$.subscribe(message => {
-      console.log('[INFO] - StatusMessage')
-      console.log('message', message)
-      console.log('!_.isEmpty(message)', !_.isEmpty(message))
-      if (!_.isEmpty(message)) {
-        this.popupErrorMessage = message
-        this.open(this.errorMessagePopUp)
-      }
-    })
-    for (let i = 0; i < this.cols.length; i++) {
-      this.downloadCols.push(this.cols[i].header);
-    }
-    await this.getBillProcess();
-    //this.getProductType();
-    await this.getUnspsc();
+    this.initStateOnComponent()
+    this.downloadCols = this.cols.map(({ header }) => header)
     this.subs = this.homeService.state$.subscribe(({ [this.KEY]: item }) => {
       if (item) {
         const { id } = item;
@@ -133,6 +96,15 @@ export class ProductComponent implements OnInit, OnDestroy {
       }
   }
 
+  initStateOnComponent() {
+    this.store.dispatch(new ProductActions.FetchProducts())
+    this.store.dispatch(new SharedActions.FetchBillProcesses())
+    this.userDetails$.subscribe(({ roleNM }) => this.userFlag = roleNM !== 'ADMIN')
+    this.products$.subscribe(items => this.getProductDetails(items))
+    this.gridLoadFlag$.subscribe(band => this.gridLoadFlag = band)
+    this.billProcessReferenceList$.subscribe(items => this.getBillProcess(items))
+  }
+
   ngOnDestroy() {
     this.backupModelService.productTabModel = {
       gcbProductFilters: this.gcbProductFilters,
@@ -145,65 +117,21 @@ export class ProductComponent implements OnInit, OnDestroy {
     }
   }
 
-  // getProductDetails() {
-  //   return this.productService.getProductDetails().toPromise().then(
-  //     refData => {
-  //       this.products = refData;
-  //       this.products.map(item => {
-  //         return {
-  //           billProcessName: item.billProcessName,
-  //           productName: item.productName,
-  //           productCode: item.productCode,
-  //           //productType: item.productType, 
-  //           unspsc: item.unspsc,
-  //           updatedBy: item.updatedBy,
-  //           lastUpdated: item.lastUpdated
-  //         }
-  //       }).forEach(item => this.productDwnData.push(item));
-  //     }
-  //   ).catch(console.log)
-  //   // .subscribe(
-  //   //   refData => {
-  //   //     this.products = refData;
-  //   //     this.gridLoadFlag = true;
-  //   //     this.products.map(item => {
-  //   //       return {
-  //   //         billProcessName: item.billProcessName,
-  //   //         productName: item.productName,
-  //   //         productCode: item.productCode,
-  //   //         //productType: item.productType, 
-  //   //         unspsc: item.unspsc,
-  //   //         updatedBy: item.updatedBy,
-  //   //         lastUpdated: item.lastUpdated
-  //   //       }
-  //   //     }).forEach(item => this.productDwnData.push(item));
-  //   //   },
-  //   //   error => {}
-  //   // );
-  // }
+  getProductDetails(items) {
+    this.products = items
+    this.productDwnData = items.map(item => ({
+      billProcessName: item.billProcessName,
+      productName: item.productName,
+      productCode: item.productCode,
+      unspsc: item.unspsc,
+      updatedBy: item.updatedBy,
+      lastUpdated: item.lastUpdated
+    }))
+  }
 
-  getBillProcess() {
-    return this.productService.getBillProcessList().toPromise().then(
-      refData => {
-        let arr: any = [];
-        this.billProcessReference = refData;
-        this.billProcessReferenceList.push({ label: "Select", value: "Select" });
-        for (let data of this.billProcessReference) {
-          this.billProcessReferenceList.push({ label: data.processName, value: data.billProcessId })
-        }
-      }
-    ).catch(console.log)
-    // .subscribe(
-    //   refData => {
-    //     let arr: any = [];
-    //     this.billProcessReference = refData;
-    //     this.billProcessReferenceList.push({ label: "Select", value: "Select" });
-    //     for (let data of this.billProcessReference) {
-    //       this.billProcessReferenceList.push({ label: data.processName, value: data.billProcessId })
-    //     }
-    //   },
-    //   error => {
-    //   });
+  getBillProcess(items) {
+    this.billProcessReferenceList = items.map(({ processName, billProcessId }) => ({ label: processName, value: billProcessId }))
+    this.billProcessReferenceList.unshift({ label: "Select", value: "Select" });
   }
 
   // getProductType(){
@@ -212,33 +140,18 @@ export class ProductComponent implements OnInit, OnDestroy {
   // this.productTypeReferenceList.push({ label: "INDIVIDUAL", value: "INDIVIDUAL" });
   // }
 
-  getUnspsc() {
-    return this.productService.getUnspsc().toPromise().then(
-      refData => {
-        let arr: any = [];
-        this.unspscReference = refData;
-        this.unspscReferenceList.push({ label: "Select", value: "Select" });
-        for (let data of this.unspscReference) {
-          this.unspscReferenceList.push({ label: data.unspscCode, value: data.unspscCode })
-        }
-      }
-    ).catch(console.log)
-    // .subscribe(
-    //   refData => {
-    //     let arr: any = [];
-    //     this.unspscReference = refData;
-    //     this.unspscReferenceList.push({ label: "Select", value: "Select" });
-    //     for (let data of this.unspscReference) {
-    //       this.unspscReferenceList.push({ label: data.unspscCode, value: data.unspscCode })
-    //     }
-    //   },
-    //   error => {
-    //   });
-
-    //this.unspscReferenceList.push({ label: "Select", value: "Select" });
-    //this.unspscReferenceList.push({ label: "81.11.17.00.00", value: "81.11.17.00.00" });
-    //this.unspscReferenceList.push({ label: "84.11.00.00.00", value: "84.11.00.00.00" });
-  }
+  // getUnspsc() {
+  //   return this.productService.getUnspsc().toPromise().then(
+  //     refData => {
+  //       let arr: any = [];
+  //       this.unspscReference = refData;
+  //       this.unspscReferenceList.push({ label: "Select", value: "Select" });
+  //       for (let data of this.unspscReference) {
+  //         this.unspscReferenceList.push({ label: data.unspscCode, value: data.unspscCode })
+  //       }
+  //     }
+  //   ).catch(console.log)
+  // }
 
   showSelectedData(productData) {
     window.scroll(0,0);
@@ -282,32 +195,6 @@ export class ProductComponent implements OnInit, OnDestroy {
     // }
 
     return true;
-  }
-
-  /**
- * Method to open modal pop up.
- * @param: content: @ViewChild
- */
-  open(content) {
-    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
-  }
-
-  /**
- * Private Method to get popup dismissed reason Can be removed if not needed.
- * @param: reason: $event.
- */
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
   }
 
   clearAllFilters() {

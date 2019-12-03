@@ -80,8 +80,6 @@
               <app-file-download [dwnData]="gcbDwnData" [colsHeader]="this.downloadCols" [fileName]="fileName"  (dwnAction)="getAllProduct();"></app-file-download>
           </div>
       </div> -->
-      {{  gridLoadFlag }}
-      Here ptm!!{{ totalRecords }}
       <div class="p-grid">
       <div class="p-col-12">
             <div class="p-col-12" style="text-align:right" *ngIf="!gridLoadFlag"> {{ tt.totalRecords }} records</div>
@@ -92,7 +90,6 @@
        <p-table #tt 
             [columns]="cols" 
             [value]="products"
-            [totalRecords]="totalRecords"
             [style]="{'margin-top':'2px','width':'100%'}" 
             [rows]="10" 
             [paginator]="true" 
@@ -134,18 +131,3 @@
       </div>
       <footer class="ge-footer"></footer>
       </div>
-      
-      <ng-template #content1 let-c="close" let-d="dismiss">
-        <div class="modal-header">
-            <h4 class="modal-title" id="modal-basic-title">Message</h4>
-            <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div class="modal-body">
-            <p class="text-center">{{popupErrorMessage}}</p>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-outline-dark" (click)="c('Save click'); ">Ok</button>
-        </div>
-      </ng-template>

@@ -16,10 +16,6 @@ export class ProductServiceTypeService {
     return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT+"/product");
   }
 
-  public getCountryData(): Observable<Object> {
-    return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/country");
-  }
-
   public getBillingBasis(): Observable<Object> {
     return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/billingBasis");
   }

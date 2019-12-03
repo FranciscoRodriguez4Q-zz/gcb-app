@@ -19,9 +19,6 @@ import {FieldsetModule} from 'primeng/fieldset';
 import { ProductRoutingModule } from './product-routing.module';
 import { ProductComponent } from './product.component';
 import { SharedDirectivesModule } from '../../directives/shared-directives.module';
-import { ProductState } from './product.state';
-import {NgxsModule} from '@ngxs/store';
-
 
 @NgModule({
   declarations: [ProductComponent],
@@ -42,9 +39,6 @@ import {NgxsModule} from '@ngxs/store';
     NgbModule.forRoot(),
     NgbDropdownModule.forRoot(),
     NgbModalModule.forRoot(),
-    NgxsModule.forRoot([
-      ProductState
-    ])
   ]
 })
 export class ProductModule { }

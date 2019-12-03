@@ -2,6 +2,7 @@
   <div class="p-col-4 item-right">Detail Location Type</div>
   <div class="p-col-8 item-left">
     <p-dropdown
+      onEnter
       [(ngModel)]="locationType"
       [options]="locationTypeList"
       [style]="{'width': '100%'}"
@@ -17,6 +18,7 @@
   <div class="p-col-4 item-right">Detailed Location Info</div>
   <div class="p-col-8 item-left">
     <p-dropdown
+      onEnter
       [(ngModel)]="detailedLocationId"
       [disabled]="isLocationType"
       [options]="locationsByCountryList"
