@@ -1,6 +1,6 @@
 
 export interface Product {
-    billProcessId: Number
+    billProcessId: number
     billProcessName: string
     created: string
     lastUpdated: string

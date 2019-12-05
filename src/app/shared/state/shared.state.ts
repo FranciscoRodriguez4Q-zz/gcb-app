@@ -76,12 +76,8 @@ export class SharedState {
         const { countries } = getState()
         if (_.isEmpty(countries)) {
             this.sharedService.getCountryData().toPromise().then(response => {
-                const _countries = response.map(({ countryCode, countryName, countryId }) => ({ 
-                    label: `${countryCode} | ${countryName}`, 
-                    value: countryId
-                }))
                 patchState({
-                    countries: _countries
+                    countries: response
                 })
             })
         }
