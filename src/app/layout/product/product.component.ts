@@ -1,9 +1,5 @@
-import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
-import { SelectItem, MessageService } from 'primeng/api';
-import { ProductService } from './product.service';
-import { Router } from "@angular/router";
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-import { Globals } from '../../shared/constants/globals';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { SelectItem } from 'primeng/api';
 import { HomeService } from '../home/home.service';
 import { Subscription, Observable } from 'rxjs';
 import { BackupModelService } from '../backupmodel.service';
@@ -13,7 +9,6 @@ import { Product } from './state/product.model';
 import { ProductActions } from './state/product.action';
 import { SharedActions } from '../../shared/state/shared.actions'
 import { SharedState } from '../../shared/state/shared.state';
-import * as  _ from 'lodash'
 
 @Component({
   selector: 'app-product',
@@ -54,7 +49,7 @@ export class ProductComponent implements OnInit, OnDestroy {
     productId: "",
     productName: "",
     billProcessName: "",
-    billProcessId: "Select",
+    billProcessId: null,
     productCode: "",
     tDescriptionDesiredValue: "",
     // productType: "",
@@ -68,8 +63,6 @@ export class ProductComponent implements OnInit, OnDestroy {
   @Select(ProductState.getProductsFetching) gridLoadFlag$: Observable<boolean>
   @Select(SharedState.getBillProcesses) billProcessReferenceList$: Observable<[]>
   @Select(SharedState.getUserDetails) userDetails$: Observable<any>
-
-  public totalRecords;
 
   constructor(
     private homeService: HomeService,
@@ -88,12 +81,12 @@ export class ProductComponent implements OnInit, OnDestroy {
         this.showSelectedData(product);
       }
     });
-    if(this.backupModelService.productTabModel != null 
-      && this.backupModelService.productTabModel != undefined){
-        this.gcbProductFilters = this.backupModelService.productTabModel.gcbProductFilters;
-        this.formMode = this.backupModelService.productTabModel.formMode;
-        this.editFlag = this.backupModelService.productTabModel.editFlag;
-      }
+    if (this.backupModelService.productTabModel != null
+      && this.backupModelService.productTabModel != undefined) {
+      this.gcbProductFilters = this.backupModelService.productTabModel.gcbProductFilters;
+      this.formMode = this.backupModelService.productTabModel.formMode;
+      this.editFlag = this.backupModelService.productTabModel.editFlag;
+    }
   }
 
   initStateOnComponent() {
@@ -112,7 +105,7 @@ export class ProductComponent implements OnInit, OnDestroy {
       editFlag: this.editFlag
     }
     this.homeService.setState({ key: this.KEY, data: null });
-    if(this.subs != null && this.subs != undefined){
+    if (this.subs != null && this.subs != undefined) {
       this.subs.unsubscribe()
     }
   }
@@ -131,7 +124,7 @@ export class ProductComponent implements OnInit, OnDestroy {
 
   getBillProcess(items) {
     this.billProcessReferenceList = items.map(({ processName, billProcessId }) => ({ label: processName, value: billProcessId }))
-    this.billProcessReferenceList.unshift({ label: "Select", value: "Select" });
+    this.billProcessReferenceList.unshift({ label: "Select", value: null });
   }
 
   // getProductType(){
@@ -154,22 +147,24 @@ export class ProductComponent implements OnInit, OnDestroy {
   // }
 
   showSelectedData(productData) {
-    window.scroll(0,0);
+    window.scroll(0, 0);
     this.editFlag = true;
     this.gcbProductFilters = { ...productData }
     this.gcbProductFiltersCopy = { ...this.gcbProductFilters };
     this.formMode = "Modify";
   }
 
-  upsertProduct() {
-    if (this.validation()) {
-      this.store.dispatch(new ProductActions.UpsertProduct(this.gcbProductFilters))
-      this.clearAllFilters()
-    }
+  async upsertProduct() {
+    try {
+      if (this.validation()) {
+        await this.store.dispatch(new ProductActions.UpsertProduct(this.gcbProductFilters)).toPromise()
+        this.clearAllFilters()
+      }
+    } catch (e) { }
   }
 
   validation() {
-    if (this.gcbProductFilters.billProcessName == "Select") {
+    if (this.gcbProductFilters.billProcessId === null) {
       this.errorMessage = "Please select Process Name";
       return false;
     }
@@ -207,7 +202,7 @@ export class ProductComponent implements OnInit, OnDestroy {
       productId: "",
       productName: "",
       billProcessName: "",
-      billProcessId: "Select",
+      billProcessId: null,
       productCode: "",
       tDescriptionDesiredValue: "",
       productType: "",
@@ -226,6 +221,3 @@ export class ProductComponent implements OnInit, OnDestroy {
   }
 
 }
-
-
-

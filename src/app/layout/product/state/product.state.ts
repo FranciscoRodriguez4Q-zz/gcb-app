@@ -7,14 +7,14 @@ import swal from 'sweetalert2'
 
 
 export class ProductStateModel {
-    products: Product[]
+    products: { [ productId: string ]: Product }
     fetching: boolean
 }
 
 @State<ProductStateModel>({
     name: 'products',
     defaults: {
-        products: [],
+        products: {},
         fetching: false,
     }
 })
@@ -24,7 +24,7 @@ export class ProductState {
 
     @Selector()
     static getProducts({ products }: ProductStateModel) {
-        return products
+        return _.sortBy(Object.keys(products).map( k => products[k]), ['productName'])
     }
 
     @Selector()
@@ -36,41 +36,32 @@ export class ProductState {
     fetchProducts({ getState, patchState }: StateContext<ProductStateModel>) {
         const { products } = getState()
         if (_.isEmpty(products)) {
-            patchState({
-                fetching: true
-            })
-            this.productService.getProductDetails().toPromise().then(response => {
+            patchState({ fetching: true })
+            this.productService.getProductDetails().toPromise().then(response =>
                 patchState({
-                    products: response,
+                    products: _.keyBy(response, 'productId'),
                     fetching: false
                 })
-            })
+            )
         }
     }
 
     @Action(ProductActions.UpsertProduct)
-    async addProduct({ getState, patchState }: StateContext<ProductStateModel>, { payload }: ProductActions.UpsertProduct) {
+    async upsertProduct({ getState, patchState, }: StateContext<ProductStateModel>, { payload }: ProductActions.UpsertProduct) {
         try {
-            const { productId } = payload
             const { products } = getState()
             const { statusMessage, Error: error, product = null } = await this.productService.upsertProduct(payload).toPromise()
             if (error) throw statusMessage
-            if (_.isEmpty(`${productId}`)) {
-                patchState({ products: [...products, product] })
-            } else {
-                const productIndex = products.findIndex(x => x.productId === productId)
-                products[productIndex] = product
-                patchState({
-                    products: [...products],
-                })
-            }
-            this.open({ message: statusMessage, type: 'success' })
-        } catch(e) {
-            this.open({ message: e, type: 'error'})
+            patchState({ products: { ...products, [product.productId]: product } })
+            await this.open({ message: statusMessage, type: 'success' })
+        } catch (e) {
+            console.error('error', e)
+            this.open({ message: e, type: 'error' })
+            throw e
         }
     }
 
     private open({ message, type }) {
-        swal.fire({ icon: type, text: message })
+        return swal.fire({ icon: type, text: message })
     }
 }
