@@ -1,0 +1,19 @@
+import { ProductServiceType } from "src/app/layout/product-service-type/state/product-service-type.model";
+
+
+export namespace ProductServiceTypeActions
+
+{
+    export class FetchProductServiceTypes {
+        static readonly type = '[ProductServiceType] Fetch'
+    }
+
+    export class FetchProductData {
+        static readonly type = '[ProductServiceType] FetchProductData'
+    }
+
+    export class UpsertProductServiceType {
+        static readonly type = '[ProductServiceType] Upsert'
+        constructor(public payload: any) { }
+    }
+}
