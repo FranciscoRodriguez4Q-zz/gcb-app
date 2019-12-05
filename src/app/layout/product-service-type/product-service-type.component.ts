@@ -11,6 +11,9 @@ import { BackupModelService } from '../backupmodel.service';
 import { Store, Select } from '@ngxs/store';
 import { SharedActions } from 'src/app/shared/state/shared.actions';
 import { SharedState } from 'src/app/shared/state/shared.state';
+import { ProductServiceTypeActions } from 'src/app/layout/product-service-type/state/product-service-type.action';
+import { ProductServiceTypeState } from 'src/app/layout/product-service-type/state/product-service-type.state';
+import { ProductServiceType } from 'src/app/layout/product-service-type/state/product-service-type.model';
 
 @Component({
   selector: 'app-product-service-type',
@@ -76,11 +79,15 @@ export class ProductServiceTypeComponent implements OnInit, OnDestroy {
   public popupErrorMessage: any;
   closeResult: string;
 
-  @Select(SharedState.getCountries) countryCodeReferenceDataList$: Observable<[]>
+  @Select(SharedState.getCountries) countryCodeReferenceDataList$: Observable<any>
   @Select(SharedState.getUserDetails) userDetails$: Observable<any>
+  @Select(SharedState.getBillProcesses) billProcesses$: Observable<any>
+  @Select(ProductServiceTypeState.getProductServiceTypes) productServiceTypes$: Observable<ProductServiceType>
+  @Select(ProductServiceTypeState.getFetching) isFetching$: Observable<boolean>
+  @Select(ProductServiceTypeState.getProductData) productData$: Observable<any>
 
   constructor(
-    private serviceTypeService: ProductServiceTypeService,
+    private productServiceTypeService: ProductServiceTypeService,
     private modalService: NgbModal,
     private globals: Globals,
     private homeService: HomeService,
@@ -97,15 +104,10 @@ export class ProductServiceTypeComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     this.initStateOnComponent()
-    for (let i = 0; i < this.cols.length; i++) {
-      this.downloadCols.push(this.cols[i].header);
-      //this.downloadCols[this.cols[i].header] = "";
-    }
-    await this.getAllServiceType();
-    await this.getAllProductData();
+    this.cols.forEach((_col) => this.downloadCols.push(_col.header))
+    //await this.getAllProductData();
     // await this.getAllCountryData();
     this.getBillingBasisData();
-    await this.getBillProcess()
     this.subs = this.homeService.state$.subscribe(({ [this.KEY]: item }) => {
       if (item) {
         const { id } = item;
@@ -122,8 +124,28 @@ export class ProductServiceTypeComponent implements OnInit, OnDestroy {
 
   initStateOnComponent() {
     this.store.dispatch(new SharedActions.FetchCountry())
+    this.store.dispatch(new SharedActions.FetchBillProcesses())
+    this.store.dispatch(new ProductServiceTypeActions.FetchProductServiceTypes())
     this.userDetails$.subscribe(({ roleNM }) => this.userFlag = roleNM !== 'ADMIN')
-    this.countryCodeReferenceDataList$.subscribe(items => this.countryCodeReferenceDataList = items)
+    this.countryCodeReferenceDataList$.subscribe(items => {
+      this.countryCodeReferenceDataList = items.map(({ countryCode, countryName, countryId }) => ({ 
+        label: `${countryCode} | ${countryName}`, 
+        value: countryId
+      }))
+      this.countryCodeReferenceData = items
+
+    })
+    this.billProcesses$.subscribe( _billProcess => this.billProcessReference = _billProcess)
+    this.productServiceTypes$.subscribe( (_serviceTypes) =>{
+      this.serviceTypes = _serviceTypes;
+      this.gcbDwnData = _serviceTypes;
+    })
+    this.isFetching$.subscribe( is => this.gridLoadFlag = true)
+    this.productData$.subscribe( (_productData) => {
+      this.productReferenceData = _productData;
+      this.productReferenceDataList = _productData.map( ({productCode, productName, productId}) => ({ label: `${productCode} | ${productName}`, value: productId }) )
+      this.productReferenceDataList.unshift({ label: "Select", value: "Select" })
+    })
   }
 
   ngOnDestroy() {
@@ -138,38 +160,8 @@ export class ProductServiceTypeComponent implements OnInit, OnDestroy {
     }
   }
 
-  // getAllCountryData(items) {
-
-  //   return this.serviceTypeService.getCountryData().toPromise().then(
-  //     refData => {
-  //       let arr: any = [];
-  //       this.countryCodeReferenceData = refData;
-  //       this.countryCodeReferenceDataList.push({ label: "Select", value: "Select" })
-
-  //       for (let data of this.countryCodeReferenceData) {
-  //         let labelCountry = data.countryCode + " | " + data.countryName;
-  //         this.countryCodeReferenceDataList.push({ label: labelCountry, value: data.countryId })
-  //       }
-  //     }
-  //   ).catch(console.log)
-  // }
-
-  getAllProductData() {
-    return this.serviceTypeService.getProducts().toPromise().then(
-      refData => {
-        let arr: any = [];
-        this.productReferenceData = refData;
-        this.productReferenceDataList.push({ label: "Select", value: "Select" })
-        for (let data of this.productReferenceData) {
-          let labelProd = data.productCode + " | " + data.productName
-          this.productReferenceDataList.push({ label: labelProd, value: data.productId })
-        }
-      }
-    ).catch(console.log)
-  }
-
   getBillingBasisData() {
-    /*this.serviceTypeService.getBillingBasis().subscribe(
+    /*this.productServiceTypeService.getBillingBasis().subscribe(
       refData => {
         let arr: any = [];
 
@@ -185,13 +177,6 @@ export class ProductServiceTypeComponent implements OnInit, OnDestroy {
     this.billingReferenceDataList.push({ label: "Select", value: "Select" });
     this.billingReferenceDataList.push({ label: "ACCOUNT-BASED", value: "ACCOUNT-BASED" });
     this.billingReferenceDataList.push({ label: "SSO-BASED", value: "SSO-BASED" });
-  }
-  getBillProcess() {
-    return this.serviceTypeService.getBillProcessList().toPromise().then(
-      refData => {
-        this.billProcessReference = refData;
-      }
-    ).catch(console.log)
   }
 
   getServicetype() {
@@ -215,37 +200,13 @@ export class ProductServiceTypeComponent implements OnInit, OnDestroy {
 
   }
 
-  getAllServiceType() {
-    console.log("getAllServiceType");
-    return this.serviceTypeService.getServicetypeData().toPromise().then(
-      refData => {
-        this.serviceTypes = refData;
-        this.gridLoadFlag = true;
-        this.gcbDwnData = refData;
-      }
-    ).catch()
-  }
-
-  upsertServiceType() {
-    this.errorMessage = "";
-    console.log("test button click");
+  async upsertServiceType() {
     if (this.validation()) {
       if (this.gcbDetailFilters.productId != "Select" && this.gcbDetailFilters.countryCode != "Select" && this.gcbDetailFilters.billingBasis != "Select") {
-        this.serviceTypeService.upsertServiceType(this.gcbDetailFilters).subscribe(
-          refData => {
-            this.saveMessage = refData;
-            //this.errorMessage = this.saveMessage.statusMessage;
-            /*  this.msgs = [];
-             this.msgs.push({ severity: 'error', summary: this.errorMessage, detail: '' }); */
-            this.popupErrorMessage = this.saveMessage.statusMessage;
-            this.open(this.errorMessagePopUp);
-            this.getAllServiceType();
-            if (this.saveMessage.status) {
-              this.clearAllFilters();
-            }
-          },
-          error => {
-          });
+        try{
+          await this.store.dispatch(new ProductServiceTypeActions.UpsertProductServiceType(this.gcbDetailFilters))
+          this.clearAllFilters();
+        }catch(e){}
       }
     }
   }
@@ -276,32 +237,6 @@ export class ProductServiceTypeComponent implements OnInit, OnDestroy {
       return false;
     }
     return true;
-  }
-
-  /**
- * Method to open modal pop up.
- * @param: content: @ViewChild
- */
-  open(content) {
-    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
-  }
-
-  /**
- * Private Method to get popup dismissed reason Can be removed if not needed.
- * @param: reason: $event.
- */
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
   }
 
   clearAllFilters() {
