@@ -15,13 +15,29 @@ import { map,delay,catchError,tap} from 'rxjs/operators';
 })
 export class BanService {
 
-  public getBanDetails():Observable<Object> { 
-    return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT+"/ban/ban-details");
+  public getBanDetails(): Observable<any> {
+    return this.http.get(`${environment.APP_BASE_URL_SERVICE_ENDPOINT}/ban/ban-details`);
   }
 
-  public getAllCountryCode(): Observable<Object> {
-     return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT+"/country");
-   }
+  public getAllFocusGroups(): Observable<any> {
+    return this.http.get(`${environment.APP_BASE_URL_SERVICE_ENDPOINT}/focusGroup`);
+  }
+
+  public getVendorConfigDetails(): Observable<any> {
+    return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/vendorconfig-details");
+  }
+
+  public getBuyerDetails(): Observable<any> {
+    return this.http.get(`${environment.APP_BASE_URL_SERVICE_ENDPOINT}/buyer/buyer-details`);
+  }
+
+  public getBillingModelDetails(): Observable<any> {
+    return this.http.get(`${environment.APP_BASE_URL_SERVICE_ENDPOINT}/ban/billingModel-details`);
+  }
+
+  public getBillingModelTypes(): Observable<any> {
+    return this.http.get(`${environment.APP_BASE_URL_SERVICE_ENDPOINT}/ban/billingModelTypes`);
+  }
 
   public getAllLocationsByCountry({ billedToLocationId }): Observable<any> {
     return this.http.get(`${environment.APP_BASE_URL_SERVICE_ENDPOINT}/locations/${billedToLocationId}`);
@@ -31,35 +47,16 @@ export class BanService {
      return this.http.post(environment.APP_BASE_URL_SERVICE_ENDPOINT+"/ban/bans", banInsertData);
    }
 
-  public getAllFocusGroups(): Observable<Object> {
-    return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT+"/focusGroup");
-  }
-
   public getServicetypeData(): Observable<Object> {
     return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT+"/serviceTypesData");
   }
 
-  public getVendorConfigDetails():Observable<Object> { 
-    return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT+"/vendorconfig-details");
-  }
-
-  public getBuyerDetails():Observable<Object> { 
-    return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT+"/buyer/buyer-details");
-  }
   public getVendorServiceType(vendorServiceType):Observable<Object> { 
     return this.http.post(environment.APP_BASE_URL_SERVICE_ENDPOINT+"/fetchServiceType",vendorServiceType);
   }
 
-  public getBillProcessList(): Observable<Object> {
-    return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/billProcess");
-  }
-
   public getServiceType(banInsertData): Observable<Object> {
     return this.http.post(environment.APP_BASE_URL_SERVICE_ENDPOINT+"/fetchServiceType", banInsertData);
-  }
-
-  public getBillingModelDetails(): Observable<Object> {
-    return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT+"/ban/billingModel-details");
   }
 
   public getOtherServiceDet(banInsertData): Observable<Object> {
@@ -123,10 +120,7 @@ export class BanService {
 
   constructor(private http: HttpClient) { }
 
- 
-  public getBillingModelTypes(): Observable<Object> {
-    return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/ban/billingModelTypes");
-  }
+
  
   public getCloneBillingModelTypes(banId): Observable<Object> {
     return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/ban/billingModelTypes/"+banId);
