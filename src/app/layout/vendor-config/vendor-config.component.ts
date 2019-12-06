@@ -5,9 +5,14 @@ import { ServiceTypeService } from '../service-type/service-type.service';
 import { ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Globals } from '../../shared/constants/globals';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
 import { HomeService } from '../home/home.service';
 import { BackupModelService } from '../backupmodel.service';
+import { SharedState } from 'src/app/shared/state/shared.state';
+import { Select, Store } from '@ngxs/store';
+import { SharedActions } from 'src/app/shared/state/shared.actions';
+import { VendorConfigActions } from 'src/app/layout/vendor-config/state/vendor-config.actions';
+import { VendorConfigState } from 'src/app/layout/vendor-config/state/vendor-config.state';
 
 @Component({
   selector: 'app-vendor-config',
@@ -15,14 +20,12 @@ import { BackupModelService } from '../backupmodel.service';
   styleUrls: ['./vendor-config.component.scss']
 })
 export class VendorConfigComponent implements OnInit, OnDestroy {
-  
-public vendorReferenceData : any;
+
 vendorReferenceDataList :SelectItem[] = [];
 public countryCodeReferenceData: any;
 countryCodeReferenceDataList: SelectItem[] = [];
 public currencyCodeReferenceData: any;
 currencyCodeReferenceDataList: SelectItem[] = [];
-public currencyReferenceData: any;
 currencyReferenceDataList:SelectItem[] = [];
 public gridLoadFlag:boolean=false;
 
@@ -95,34 +98,29 @@ public cols = [
 private readonly KEY: string = 'VendorConfig';
 private subs: Subscription;
 
+@Select(SharedState.getCountries) countryCodeReferenceDataList$: Observable<any>
+@Select(SharedState.getUserDetails) userDetails$: Observable<any>
+@Select(VendorConfigState.getCurrency) currencyReferenceDataList$: Observable<any>
+@Select(VendorConfigState.getVendorNames) vendorReferenceDataList$: Observable<any>
+@Select(VendorConfigState.getVendorDetails) vendorGridData$ : Observable<any>
+@Select(VendorConfigState.getFetching) gridLoadFlag$: Observable<any>
+
 constructor(
   private backupModelService: BackupModelService,
   private vendorConfigService: VendorConfigService, 
   private serviceTypeService : ServiceTypeService,
   private modalService: NgbModal,
-  private globals: Globals,
+  private store: Store,
   private homeService: HomeService
-  ) {
-  if (this.globals.roleNM==='ADMIN') {
-    this.userFlag = false;
-  }
-  else {
-    this.userFlag = true;
-  }
-   }
+  ) { }
 
   async ngOnInit() {
+    this.initStateOnComponent();
     this.setReportHeader();
-    await this.getAllVendorsData();
-    await this.getAllCountryData();
-    await this.getAllCurrencyData();
-    await this.getVendorDetailGridData();
-
     for (let i = 0; i < this.cols.length; i++) {
       // console.log("in Download method"+i);
       this.downloadCols.push(this.cols[i].header);
     }
-    await this.getDwnVendorConfigData();
     this.subs = this.homeService.state$.subscribe(({ [this.KEY]: item }) => {
       if (item) {
         const { id } = item;
@@ -147,6 +145,48 @@ constructor(
     }
   }
 
+  initStateOnComponent(): any {
+    this.store.dispatch(new SharedActions.FetchCountry())
+    this.store.dispatch(new VendorConfigActions.FetchCurrency())
+    this.store.dispatch(new VendorConfigActions.FetchVendorNames())
+    this.store.dispatch(new VendorConfigActions.FetchVendorDetails())
+    
+    this.userDetails$.subscribe(({ roleNM }) => this.userFlag = roleNM !== 'ADMIN')
+    this.gridLoadFlag$.subscribe( (isFetching) => this.gridLoadFlag = !isFetching)
+
+    this.countryCodeReferenceDataList$.subscribe(items => {
+      this.countryCodeReferenceDataList = items.map(({ countryCode, countryName, countryId }) => ({ 
+        label: `${countryCode} | ${countryName}`, 
+        value: countryId
+      }))
+    })
+    this.currencyReferenceDataList$.subscribe(items => {
+      this.currencyReferenceDataList = items.map(({ currencyDescription, currencyCode }) => ({ 
+        label: `${currencyCode} |  ${currencyDescription}`, 
+        value: currencyCode
+      }))
+    })
+    this.vendorReferenceDataList$.subscribe(items => {
+      this.vendorReferenceDataList = items.map(({ vendorLegalEntityName, vendorEntityId }) => ({ 
+        label: vendorLegalEntityName,
+        value: vendorEntityId
+      }));
+    })
+    this.vendorGridData$.subscribe(items => {
+      this.vendorGridData = items
+      this.dwnVendor = items.map(item => {
+        return {
+          vendorLegalEntityName: item.vendorLegalEntityName,
+          currencyCode: item.currencyCode,
+          billedFromCountry: item.billedFromCountry,
+          billedToCountry: item.billedToCountry,
+          vendorCode: item.vendorCode,
+          updatedBy: item.updatedBy,
+          lastUpdated: item.lastUpdated,
+        };
+      })
+    })
+  }
 
 setReportHeader()
 {
@@ -156,134 +196,7 @@ setReportHeader()
   }
 }
 
-  getAllVendorsData() {
-    return this.vendorConfigService.getAllVendors().toPromise().then(
-      refData => {
-        let arr: any = [];
-        this.vendorReferenceData = refData;
-        for (let data of this.vendorReferenceData) {
-          this.vendorReferenceDataList.push({ label: data.vendorLegalEntityName, value: data.vendorEntityId })
-        }
-      }
-    ).catch(console.log)
-    // .subscribe(
-    //   refData => {
-    //     let arr: any = [];
-    //     this.vendorReferenceData = refData;
-    //     for (let data of this.vendorReferenceData) {
-    //       this.vendorReferenceDataList.push({ label: data.vendorLegalEntityName, value: data.vendorEntityId })
-    //     }
-    //   },
-    //   error => {
-    //   });
-  }
-
-  getAllCurrencyData() {
-    return this.vendorConfigService.getAllCurrency().toPromise().then(
-      refData => {
-        this.currencyReferenceData = refData;
-        for (let data of this.currencyReferenceData) {
-          let currencyLebel = data.currencyCode + " | " + data.currencyDescription;
-          this.currencyReferenceDataList.push({ label: currencyLebel, value: data.currencyCode })
-        }
-      }
-    ).catch(console.log)
-    // .subscribe(
-    //     refData => {
-    //       this.currencyReferenceData = refData;
-    //       for (let data of this.currencyReferenceData) {
-    //         let currencyLebel = data.currencyCode+" | "+data.currencyDescription;
-    //         this.currencyReferenceDataList.push({ label: currencyLebel, value: data.currencyCode })
-    //       }
-    //     },
-    //     error => {
-    //     });
-  }
-
-  getAllCountryData() {
-    return this.vendorConfigService.getAllCountryCode().toPromise().then(
-      refData => {
-        let arr: any = [];
-        this.countryCodeReferenceData = refData;
-
-        for (let data of this.countryCodeReferenceData) {
-          let labelCountry = data.countryCode + " | " + data.countryName;
-          this.countryCodeReferenceDataList.push({ label: labelCountry, value: data.countryId })
-        }
-      }
-    ).catch(console.log)
-    // .subscribe(
-    //   refData => {
-    //     let arr: any = [];
-    //     this.countryCodeReferenceData = refData;
-
-    //     for (let data of this.countryCodeReferenceData) {
-    //       let labelCountry = data.countryCode + " | " + data.countryName;
-    //       this.countryCodeReferenceDataList.push({ label: labelCountry, value: data.countryId })
-    //     }
-    //   },
-    //   error => {
-    //   });
-  }
-
-  getDwnVendorConfigData() {
-    return this.vendorConfigService.getDwnVendorConfigData().toPromise().then(
-      refData => {
-        //this.vendorGridData = refData;
-        this.dwnVendor = refData;
-        this.dwnVendor.map(item => {
-          return {
-            vendorLegalEntityName: item.vendorLegalEntityName,
-            currencyCode: item.currencyCode,
-            billedFromCountry: item.billedFromCountry,
-            billedToCountry: item.billedToCountry,
-            vendorCode: this.vendorCode,
-            updatedBy: this.updatedBy,
-            lastUpdated: this.lastUpdated,
-          }
-        }).forEach(item => this.dwnVendor.push(item));
-      }
-    ).catch(console.log)
-    // .subscribe(
-    //   refData => {
-    //     //this.vendorGridData = refData;
-    //     this.dwnVendor=refData;
-
-    //     this.dwnVendor.map(item => {
-    //       return {
-    //         vendorLegalEntityName: item.vendorLegalEntityName,
-    //         currencyCode: item.currencyCode,
-    //         billedFromCountry: item.billedFromCountry,
-    //         billedToCountry: item.billedToCountry,
-    //         vendorCode:this.vendorCode,
-    //         updatedBy:this.updatedBy,
-    //         lastUpdated:this.lastUpdated,
-    //       }
-    //     }).forEach(item => this.dwnVendor.push(item));
-    //   },
-    //   error => {
-    //   });
-  }
-
-  getVendorDetailGridData() {
-    return this.vendorConfigService.getVendorGridData().toPromise().then(
-      refData => {
-        this.vendorGridData = refData;
-        this.gridLoadFlag = true;
-        //this.dwnVendor=refData;
-      }
-    ).catch(console.log)
-    // .subscribe(
-    //   refData => {
-    //     this.vendorGridData = refData;
-    //     this.gridLoadFlag=true;
-    //     //this.dwnVendor=refData;
-    //   },
-    //   error => {
-    //   });
-  }
-
-async clearAllFilters() {
+clearAllFilters() {
   this.errorMessage = "";
   this.editFlag = false;
   this.vendorConfigDto={vendorConfigId:0,
@@ -309,48 +222,16 @@ async clearAllFilters() {
     };
   //this.popupErrorMessage = "";
   this.vendorConfigDtoCopy = {};
-  await this.getVendorDetailGridData();
 }
 
-upsertVendorConfig(){
-  this.errorMessage = "";
+async upsertVendorConfig(){
   if (this.validation()) {
-    if (this.vendorConfigDto.vendorEntityId != "Select" 
-    && this.vendorConfigDto.billedFromLocationId!= "Select" 
-    && this.vendorConfigDto.billedToLocationId != "Select") {
-      this.vendorConfigService.upsertVendorConfig(this.vendorConfigDto).subscribe(
-        refData => {
-          this.saveMessage = refData;
-          this.popupErrorMessage =  this.saveMessage.message;
-          this.open(this.errorMessagePopUp);
-          this.clearAllFilters();
-        },
-        error => {
-          this.popupErrorMessage = "An system error occured";          
-          this.open(this.errorMessagePopUp);
-        });
+    if (this.vendorConfigDto.vendorEntityId != "Select" && this.vendorConfigDto.billedFromLocationId!= "Select" && this.vendorConfigDto.billedToLocationId != "Select") {
+      try{
+        await this.store.dispatch(new VendorConfigActions.UpsertVendorConfig(this.vendorConfigDto))
+        this.clearAllFilters()
+      }catch(e){}
     }
-}
-//this.clearAllFilters();
-
-}
-
-open(content) {
-  this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
-    this.closeResult = `Closed with: ${result}`;
-  }, (reason) => {
-    this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-  });
-}
-
-
-private getDismissReason(reason: any): string {
-  if (reason === ModalDismissReasons.ESC) {
-    return 'by pressing ESC';
-  } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-    return 'by clicking on a backdrop';
-  } else {
-    return `with: ${reason}`;
   }
 }
 
