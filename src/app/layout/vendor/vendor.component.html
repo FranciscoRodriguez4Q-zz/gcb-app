@@ -36,7 +36,13 @@
     </div> 
   </div>
 <div class="p-grid">
-    <div class="p-col-12" style="text-align:right">
+    <div class="p-col-6" style="text-align:left">
+        <div *ngIf="editFlag"> 
+            <b>Inserted by: </b> {{vendorInsertData.createdBy}} on {{vendorInsertData.createdDate}} <br>
+            <b>Modified by: </b> {{vendorInsertData.updatedBy}} on {{vendorInsertData.lastUpdatedDate}}
+        </div>
+    </div>
+    <div class="p-col-6" style="text-align:right">
         <button class="ge-button -fill--solid -size--medium" (click)="upsertVendor()" [disabled]="userFlag || disabled">Submit</button>
         <button class="ge-button -fill--solid -size--medium" (click)="cancel()" [disabled]="userFlag">Cancel</button>
         <app-file-download [dwnData]="venDwnData" [colsHeader]="this.downloadCols" [fileName]="fileName"></app-file-download>

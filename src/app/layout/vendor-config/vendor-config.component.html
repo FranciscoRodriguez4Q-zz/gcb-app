@@ -111,7 +111,13 @@
     <label class="errorMessage required">{{errorMessage}}</label>
 </div>
 <div class="p-grid">
-    <div class="p-col-12" style="text-align:right">
+    <div class="p-col-6" style="text-align:left">
+        <div *ngIf="editFlag"> 
+            <b>Inserted by: </b> {{vendorConfigDto.createdBy}} on {{vendorConfigDto.created}} <br>
+            <b>Modified by: </b> {{vendorConfigDto.updatedBy}} on {{vendorConfigDto.lastUpdated}}
+        </div>
+    </div>    
+    <div class="p-col-6" style="text-align:right">
         <button class="ge-button -fill--solid" (click)="upsertVendorConfig()" [disabled]="userFlag || disabled">Submit</button>
         <button class="ge-button -fill--solid" (click)="clearAllFilters()" [disabled]="userFlag">Cancel</button>
         <app-file-download [dwnData]="dwnVendor" [colsHeader]="this.downloadCols" [fileName]="fileName"></app-file-download>
