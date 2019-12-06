@@ -126,6 +126,7 @@ export class ProductServiceTypeComponent implements OnInit, OnDestroy {
     this.store.dispatch(new SharedActions.FetchCountry())
     this.store.dispatch(new SharedActions.FetchBillProcesses())
     this.store.dispatch(new ProductServiceTypeActions.FetchProductServiceTypes())
+    this.store.dispatch(new ProductServiceTypeActions.FetchProductData())
     this.userDetails$.subscribe(({ roleNM }) => this.userFlag = roleNM !== 'ADMIN')
     this.countryCodeReferenceDataList$.subscribe(items => {
       this.countryCodeReferenceDataList = items.map(({ countryCode, countryName, countryId }) => ({ 

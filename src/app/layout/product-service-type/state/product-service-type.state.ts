@@ -1,4 +1,4 @@
-import { State, Action, StateContext, Selector } from '@ngxs/store';
+import { State, Action, StateContext, Selector, Store } from '@ngxs/store';
 import * as _ from 'lodash';
 import swal from 'sweetalert2'
 import { ProductServiceType } from 'src/app/layout/product-service-type/state/product-service-type.model';
@@ -22,7 +22,10 @@ export class ProductServiceTypeStateModel {
 })
 export class ProductServiceTypeState {
     
-    constructor(private productServiceTypeService: ProductServiceTypeService) {}
+    constructor(
+        private productServiceTypeService: ProductServiceTypeService,
+        private store: Store
+    ) {}
     
     @Selector()
     static getProductServiceTypes({ productServiceTypes }: ProductServiceTypeStateModel) {
@@ -55,10 +58,10 @@ export class ProductServiceTypeState {
         }
     }
     
-    @Action(ProductServiceTypeActions.FetchProductServiceTypes)
+    @Action(ProductServiceTypeActions.FetchProductData)
     fetchProductData({ getState, patchState }: StateContext<ProductServiceTypeStateModel>) {
-        const { productServiceTypes } = getState()
-        if (_.isEmpty(productServiceTypes)) {
+        const { productData } = getState()
+        if (_.isEmpty(productData)) {
             this.productServiceTypeService.getProducts().toPromise().then(response => {
                 patchState({
                     productData: response,
