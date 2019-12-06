@@ -12,7 +12,7 @@ export class ProductServiceTypeService {
 
   constructor(private http: HttpClient) { }
 
-  public getProducts(): Observable<Object> {
+  public getProducts(): Observable<any> {
     return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT+"/product");
   }
 
@@ -24,11 +24,11 @@ export class ProductServiceTypeService {
     return this.http.post(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/serviceType", gcbDetailFilters);
   }
 
-  public getServicetypeData(): Observable<Object> {
+  public getServicetypeData(): Observable<any> {
     return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/serviceTypesData");
   }
 
-  public upsertServiceType(gcbDetailFilters): Observable<Object> {
+  public upsertServiceType(gcbDetailFilters): Observable<any> {
     return this.http.post(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/serviceTypes", gcbDetailFilters);
   }
 
