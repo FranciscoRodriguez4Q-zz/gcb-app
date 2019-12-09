@@ -145,7 +145,7 @@ constructor(
     }
   }
 
-  initStateOnComponent(): any {
+  initStateOnComponent() {
     this.store.dispatch(new SharedActions.FetchCountry())
     this.store.dispatch(new VendorConfigActions.FetchCurrency())
     this.store.dispatch(new VendorConfigActions.FetchVendorNames())

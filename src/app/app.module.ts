@@ -18,6 +18,7 @@ import { SharedState } from './shared/state/shared.state'
 import { ProductState } from './layout/product/state/product.state';
 import { ProductServiceTypeState } from 'src/app/layout/product-service-type/state/product-service-type.state';
 import { VendorConfigState } from 'src/app/layout/vendor-config/state/vendor-config.state';
+import { BuyerState } from 'src/app/layout/buyer/state/buyer.state';
 
 export const createTranslateLoader = (http: HttpClient) => {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -39,7 +40,7 @@ export const createTranslateLoader = (http: HttpClient) => {
         deps: [HttpClient]
       }
     }),
-    NgxsModule.forRoot([ SharedState, ProductState, ProductServiceTypeState, VendorConfigState ], { developmentMode: !environment.production }),
+    NgxsModule.forRoot([ SharedState, ProductState, ProductServiceTypeState, VendorConfigState, BuyerState ], { developmentMode: !environment.production }),
     NgxsReduxDevtoolsPluginModule.forRoot({ disabled: environment.production })
   ],
   providers: [CookieService],
