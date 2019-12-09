@@ -4,8 +4,12 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { SelectItem } from 'primeng/primeng';
 import { Globals } from '../../shared/constants/globals';
 import { HomeService } from '../home/home.service';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
 import { BackupModelService } from '../backupmodel.service';
+import { Store, Select } from '@ngxs/store';
+import { SharedState } from 'src/app/shared/state/shared.state';
+import { VendorState } from 'src/app/layout/vendor/state/vendor.state';
+import { VendorActions } from 'src/app/layout/vendor/state/vendor.actions';
 
 @Component({
   selector: 'app-product',
@@ -74,22 +78,19 @@ export class VendorComponent implements OnInit, OnDestroy {
 
   private readonly KEY: string = 'Vendor';
   private subs: Subscription;
+
+  @Select(SharedState.getUserDetails) userDetails$: Observable<any>
+  @Select(VendorState.getFetching) gridLoadFlag$: Observable<any>
+  @Select(VendorState.getVendors) vendors$: Observable<any>
+  @Select(VendorState.getVendorNames) vendorNames$: Observable<any>
   
   constructor(
     private vendorService: VendorService,
     private modalService: NgbModal,
-    private globals: Globals,
+    private store: Store,
     private homeService: HomeService,
     private backupModelService: BackupModelService
-    ) { 
-    //console.log("Role: "+this.globals.roleNM);
-    if (this.globals.roleNM==='ADMIN') {
-      this.userFlag = false;
-    }
-    else {
-      this.userFlag = true;
-    }
-  }
+    ) { }
   
 
   public cols = [
@@ -101,12 +102,11 @@ export class VendorComponent implements OnInit, OnDestroy {
   ];
 
   async ngOnInit() {
-    await this.getAllVendorDetails();
+    this.initStateOnComponent()
     for (let i = 0; i < this.cols.length; i++) {
       // console.log("in Download method"+i);
       this.downloadCols.push(this.cols[i].header);
     } 
-    await this.getAllHlVendorData();
     this.subs = this.homeService.state$.subscribe(({ [this.KEY]: item }) => {
       if (item) {
         const { id } = item;
@@ -121,43 +121,27 @@ export class VendorComponent implements OnInit, OnDestroy {
       }
   }
 
-  getAllVendorDetails() {
-    return this.vendorService.getVendorDetails().toPromise().then(
-      refData => {
-        this.vendorData = refData;
-        this.gridLoadFlag = true;
-
-        this.venDwnData = this.vendorData.map(item => {
-          return {
-            hlVendorName: item.hlVendorName,
-            vendorLegalEntityName: item.vendorLegalEntityName,
-            active: item.active,
-            updatedBy: item.updatedBy,
-            lastUpdatedDate: item.lastUpdatedDate
-          }
-        })
-        console.log('this.venDwnData', this.venDwnData)
-
-        // this.venDwnData = this.vendorData;
-      }
-    ).catch(console.log)
-    // .subscribe(
-    //   refData => {
-    //     this.vendorData=refData;
-    //     this.gridLoadFlag = true;
-
-    //     this.vendorData.map(item => {
-    //       return {
-    //           hlVendorName:item.hlVendorName,
-    //           vendorLegalEntityName: item.vendorLegalEntityName,
-    //           active: item.active,
-    //           updatedBy: item.updatedBy,
-    //           lastUpdatedDate: item.lastUpdatedDate
-    //       }
-    //   }).forEach(item => this.venDwnData.push(item));
-    //   },
-    //   error => {
-    //   });
+  initStateOnComponent(){
+    this.store.dispatch(new VendorActions.FetchVendors())
+    this.store.dispatch(new VendorActions.FetchVendorNames())
+    this.userDetails$.subscribe(({ roleNM }) => this.userFlag = roleNM !== 'ADMIN')
+    this.gridLoadFlag$.subscribe(isFetching => this.gridLoadFlag = !isFetching)
+    this.vendors$.subscribe(items=>{
+      this.vendorData = items;
+      this.venDwnData = items.map(item => {
+        return {
+          hlVendorName: item.hlVendorName,
+          vendorLegalEntityName: item.vendorLegalEntityName,
+          active: item.active,
+          updatedBy: item.updatedBy,
+          lastUpdatedDate: item.lastUpdatedDate
+        }
+      })
+    })
+    this.vendorNames$.subscribe(items=>{
+      this.hlvendorReferenceData = items;
+      this.hlVendorDataList = items.map(({hlVendorName, hlvendorId}) => ({ label: hlVendorName, value: hlvendorId }))
+    })
   }
 
   showSelectedData(vendorEntityId) {  
@@ -193,83 +177,19 @@ export class VendorComponent implements OnInit, OnDestroy {
       active: true,
     }
     this.errorMessage ="";
+    this.clearAllFilters()
   }
 
-  open(content) {
-    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
-  }
-
-  /**
-   * Private Method to get popup dismissed reason Can be removed if not needed.
-   * @param: reason: $event.
-   */
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
-  }
-
-  upsertVendor() {
+  async upsertVendor() {
     this.errorMessage = "";
     //this.msgs = [];
     console.log("test button click");
     if (this.validation()) {
-      // this.vendorInsertData.createdBy="503148032";
-      // this.vendorInsertData.updatedBy="503148032";
-      this.vendorService.saveOrUpdateVendor(this.vendorInsertData).subscribe(
-        async refData => {
-          this.saveMessage = refData;
-          if(!this.saveMessage.Error == undefined)
-            this.errorMessage = " Vendor Legal Entity: "+this.vendorInsertData.vendorLegalEntityName+"  already exist.";
-          if(this.saveMessage.Error == false)
-            this.errorMessage = " Vendor Legal Entity: "+this.vendorInsertData.vendorLegalEntityName+" was successfully saved.";
-          else
-            this.errorMessage =  " Entity cannot be saved due to error.";
-          this.popupErrorMessage =  this.errorMessage;
-          this.open(this.errorMessagePopUp);
-          await this.getAllVendorDetails();
-          this.cancel();
-        },
-        error => {
-        });
-    }else{
-      //this.open(this.errorMessage);
+      try{
+        await this.store.dispatch(new VendorActions.UpsertVendor(this.vendorInsertData))
+        this.cancel()
+      }catch(e){}
     }
-  }
-
-  getAllHlVendorData() {
-    return this.vendorService.getAllHlVendorData().toPromise().then(
-      refData => {
-        let arr: any = [];
-        this.hlvendorReferenceData = refData;
-        //this.hlVendorDataList.push({ label: "Select", value: "Select" })
-        for (let data of this.hlvendorReferenceData) {
-          let labelVendor = data.hlVendorName;
-          this.hlVendorDataList.push({ label: labelVendor, value: data.hlvendorId })
-        }
-      }
-    ).catch(console.log)
-    // .subscribe(
-    //   refData => {
-    //     let arr: any = [];
-    //     this.hlvendorReferenceData = refData;
-    //     //this.hlVendorDataList.push({ label: "Select", value: "Select" })
-
-    //     for (let data of this.hlvendorReferenceData) {
-    //       let labelVendor = data.hlVendorName;
-    //       this.hlVendorDataList.push({ label: labelVendor, value: data.hlvendorId })
-    //     }
-    //   },
-    //   error => {
-    //   });
   }
 
   clearAllFilters() {

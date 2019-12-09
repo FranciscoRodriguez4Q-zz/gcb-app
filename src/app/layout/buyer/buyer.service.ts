@@ -15,19 +15,15 @@ import { map,delay,catchError,tap} from 'rxjs/operators';
 })
 export class BuyerService {
 
-  public getBuyerDetails():Observable<Object> { 
+  public getBuyerDetails():Observable<any> { 
     return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT+"/buyer/buyer-details");
   }
 
-  public getAllCountryCode(): Observable<Object> {
-    return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT+"/country");
-  }
-
-  public upsertBuyer(buyerInsertData): Observable<Object> {
+  public upsertBuyer(buyerInsertData): Observable<any> {
      return this.http.post(environment.APP_BASE_URL_SERVICE_ENDPOINT+"/buyer/buyers", buyerInsertData);
    }
    
-   public getGoldNetList(): Observable<Object> {
+   public getGoldNetList(): Observable<any> {
     return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT+"/buyer/goldNet");
   }
 

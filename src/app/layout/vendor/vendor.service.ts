@@ -15,15 +15,15 @@ import { map,delay,catchError,tap} from 'rxjs/operators';
 })
 export class VendorService {
 
-  public getVendorDetails():Observable<Object> { 
+  public getVendorDetails():Observable<any> { 
     return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT+"/vendor/vendor-details");
   }
 
-  public saveOrUpdateVendor(vendorInsertData): Observable<Object> {
+  public saveOrUpdateVendor(vendorInsertData): Observable<any> {
     return this.http.post(environment.APP_BASE_URL_SERVICE_ENDPOINT+"/vendor/vendors", vendorInsertData);
   }
 
-  public getAllHlVendorData(): Observable<Object> {
+  public getAllHlVendorData(): Observable<any> {
     return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT+"/vendor/hlvendor-details");
   }
   private handleError(error){

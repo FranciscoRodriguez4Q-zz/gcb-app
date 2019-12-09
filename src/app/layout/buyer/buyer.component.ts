@@ -233,13 +233,13 @@ export class BuyerComponent implements OnInit, OnDestroy {
     }
   }
 
-  upsertBuyer() {
+  async upsertBuyer() {
     this.errorMessage = "";
     //this.msgs = [];
     console.log("test button click");
     if (this.validation()) {
       try{
-        this.store.dispatch(new  BuyerActions.UpsertBuyer(this.buyerInsertData))
+        await this.store.dispatch(new  BuyerActions.UpsertBuyer(this.buyerInsertData))
         this.clearAllFilters()
       }catch(e){}
     }

@@ -25,7 +25,7 @@ export class BuyerState {
 
     @Selector()
     static getBuyers({ buyers }: BuyerStateModel) {
-        return _.sortBy(Object.keys(buyers).map( k => buyers[k]), ['buyerName'])
+        return Object.keys(buyers).map( k => buyers[k])
     }
 
     @Selector()
