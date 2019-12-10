@@ -9,31 +9,35 @@
 		</div>
 		<p-panel>
 			<p-header>
-				<div class="p-grid">
-					<div class="p-col ">
-						<div class="p-grid p-dir-col p-nogutter">
-							<div class="p-col p-nogutter">
-								<span class="ui-panel-title" style="font-size:14px;display:inline-block;margin-top:2px">BAN Add/Update</span>
-							</div>
-							<div class="p-col p-nogutter">
-								<span *ngIf="!editFlag">BAN : Create</span>
-								<span *ngIf="editFlag">BAN : Modify</span>
+				<div class="container-fluid">
+					<div class="row align-items-center">
+						<div class="col-5 ml-0">
+							<div class="row">
+								<div class="col-auto p-0 mr-3">
+									<div class="cButton" style="margin-top: 6px;">
+										<span *ngIf="panelExpansionFlag" pTooltip="expand all" tooltipPosition="bottom" showDelay="400" hideDelay="100" (click)="expandAllPanels()">
+											<i class="fa fa-plus-square fa-2x" aria-hidden="true"></i>
+										</span>
+										<span *ngIf="!panelExpansionFlag" pTooltip="collapse all" tooltipPosition="bottom" showDelay="400" hideDelay="100" (click)="collapseAllPanels()">
+											<i class="fa fa-minus-square fa-2x m-0 p-0" aria-hidden="true"></i>
+										</span>
+									</div>
+								</div>
+								<div class="col">
+									<div class="row">
+										<span class="ui-panel-title" style="font-size:14px;display:inline-block;margin-top:2px">BAN Add/Update</span>
+									</div>
+									<div class="row">
+										<span *ngIf="!editFlag">BAN : Create</span>
+										<span *ngIf="editFlag">BAN : Modify</span>
+									</div>
+								</div>
 							</div>
 						</div>
-					</div>
-					<div class="p-col  ">
-						<div class="ui-rtl" dir="rtl" style="text-align:right">
-							<span *ngIf="panelExpansionFlag">
-					<button class="ge-button -fill--solid -size--small " (click)="expandAllPanels()">Expand All
-					<i class="fa fa-plus-square -size--large" aria-hidden="true"></i>
-					</button>
-					</span>
-							<!--   <i class="fa fa-plus fa-fw"></i> -->
-							<span *ngIf="!panelExpansionFlag">
-					<button class="ge-button -fill--solid -size--small" (click)="collapseAllPanels()">Collapse All
-					<i class="fa fa-minus-square -size--large" aria-hidden="true"></i>
-					</button>
-					</span>
+						<div class="col-7 text-right">
+							<button class="ge-button -fill--solid" (click)="cloneRec(true)" *ngIf="editFlag" [disabled]="cloneFlag">Clone</button>
+							<button class="ge-button -fill--solid" (click)="upsertBan()" [disabled]="disabled">Submit</button>
+							<button class="ge-button -fill--solid" (click)="clearAllFilters();clearServiceList()">Cancel</button>
 						</div>
 					</div>
 				</div>
