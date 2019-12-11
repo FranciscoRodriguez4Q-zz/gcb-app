@@ -5,6 +5,11 @@ export namespace VendorConfigActions
         static readonly type = '[VendorConfig] FetchVendorNames'
     }
 
+    export class AddModifyVendorName {
+        static readonly type = '[VendorConfig] AddModifyVendorName'
+        constructor(public payload: any) { }
+    }
+
     export class FetchCurrency {
         static readonly type = '[VendorConfig] FetchCurrency'
     }
