@@ -108,18 +108,6 @@ export class BuyerComponent implements OnInit, OnDestroy {
       // console.log("in Download method"+i);
       this.downloadCols.push(this.cols[i].header);
     }
-    this.subs = this.homeService.state$.subscribe(({ [this.KEY]: item }) => {
-      if(item) {
-        const { id } = item;
-        this.showSelectedData(id);
-      }
-    });
-    if(this.backupModelService.buyerTabModel != null 
-      && this.backupModelService.buyerTabModel != undefined){
-        this.buyerInsertData = this.backupModelService.buyerTabModel.buyerInsertData;
-        this.editFlag = this.backupModelService.buyerTabModel.editFlag;
-        this.formMode = this.backupModelService.buyerTabModel.formMode;
-      }
   }
 
   ngOnDestroy() {
@@ -161,12 +149,28 @@ export class BuyerComponent implements OnInit, OnDestroy {
           lastUpdatedDate: this.lastUpdatedDate,
         }
       })
+      this.initTreeSubscribe()
     })
     this.goldIds$.subscribe(items => {
       this.goldNetReferenceData = items
       this.goldNetIdReferenceDataList = items.map( ({goldId, goldnetName, countryCode}) => ({ label: `${goldId} | ${goldnetName} | ${countryCode}`, value: goldId }) )
       this.goldNetIdReferenceDataList.unshift({ label: "Select", value: "Select" })
     })
+  }
+
+  initTreeSubscribe() {
+    if(this.backupModelService.buyerTabModel != null 
+      && this.backupModelService.buyerTabModel != undefined){
+        this.buyerInsertData = this.backupModelService.buyerTabModel.buyerInsertData;
+        this.editFlag = this.backupModelService.buyerTabModel.editFlag;
+        this.formMode = this.backupModelService.buyerTabModel.formMode;
+      }
+    this.subs = this.homeService.state$.subscribe(({ [this.KEY]: item }) => {
+      if(item) {
+        const { id } = item;
+        this.showSelectedData(id);
+      }
+    });
   }
 
   showSelectedData(buyerId) {

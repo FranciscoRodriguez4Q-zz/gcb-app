@@ -108,18 +108,6 @@ export class ProductServiceTypeComponent implements OnInit, OnDestroy {
     //await this.getAllProductData();
     // await this.getAllCountryData();
     this.getBillingBasisData();
-    this.subs = this.homeService.state$.subscribe(({ [this.KEY]: item }) => {
-      if (item) {
-        const { id } = item;
-        this.showSelectedData(id);
-      }
-    });
-    if(this.backupModelService.serviceTypeTabModel != null 
-        && this.backupModelService.serviceTypeTabModel != undefined){
-          this.gcbDetailFilters = this.backupModelService.serviceTypeTabModel.gcbDetailFilters;
-          this.editFlag = this.backupModelService.serviceTypeTabModel.editFlag;
-          this.formMode = this.backupModelService.serviceTypeTabModel.formMode;
-        }
   }
 
   initStateOnComponent() {
@@ -140,6 +128,7 @@ export class ProductServiceTypeComponent implements OnInit, OnDestroy {
     this.productServiceTypes$.subscribe( (_serviceTypes) =>{
       this.serviceTypes = _serviceTypes;
       this.gcbDwnData = _serviceTypes;
+      this.initTreeSubscribe()
     })
     this.isFetching$.subscribe( is => this.gridLoadFlag = true)
     this.productData$.subscribe( (_productData) => {
@@ -147,6 +136,21 @@ export class ProductServiceTypeComponent implements OnInit, OnDestroy {
       this.productReferenceDataList = _productData.map( ({productCode, productName, productId}) => ({ label: `${productCode} | ${productName}`, value: productId }) )
       this.productReferenceDataList.unshift({ label: "Select", value: "Select" })
     })
+  }
+
+  initTreeSubscribe() {
+    if(this.backupModelService.serviceTypeTabModel != null 
+      && this.backupModelService.serviceTypeTabModel != undefined){
+        this.gcbDetailFilters = this.backupModelService.serviceTypeTabModel.gcbDetailFilters;
+        this.editFlag = this.backupModelService.serviceTypeTabModel.editFlag;
+        this.formMode = this.backupModelService.serviceTypeTabModel.formMode;
+      }
+    this.subs = this.homeService.state$.subscribe(({ [this.KEY]: item }) => {
+      if (item) {
+        const { id } = item;
+        this.showSelectedData(id);
+      }
+    });
   }
 
   ngOnDestroy() {

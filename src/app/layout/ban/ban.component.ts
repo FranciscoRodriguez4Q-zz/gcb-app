@@ -215,30 +215,6 @@ public vendorServiceType : any ={
     this.initStateOnComponent()
     this.downloadCols = this.cols.map(({ header }) => header)
     this.getAllModel();
-    this.subs = this.homeService.state$.subscribe(({ [this.KEY]: item }) => {
-      if (item) {
-        const { id } = item;
-        this.showSelectedData(id);
-      }
-    });
-    if(this.backupModelService.banTabModel != null 
-      && this.backupModelService.banTabModel != undefined){
-      this.banInsertData = this.backupModelService.banTabModel.banInsertData;
-      this.targetSystem = this.backupModelService.banTabModel.targetSystem;
-      this.sourceSystem = this.backupModelService.banTabModel.sourceSystem;
-      this.serviceTypeReferenceData = this.backupModelService.banTabModel.serviceTypeReferenceData;
-      this.serviceList = this.backupModelService.banTabModel.serviceList;
-      this.cloneFlag = this.backupModelService.banTabModel.cloneFlag;
-      this.editFlag = this.backupModelService.banTabModel.editFlag;
-      this.errorFlag = this.backupModelService.banTabModel.errorFlag;
-      this.expansionEventFlag = this.backupModelService.banTabModel.expansionEventFlag;
-      this.modeFlag = this.backupModelService.banTabModel.modeFlag;
-      this.panelExpansionFlag = this.backupModelService.banTabModel.panelExpansionFlag;
-      this.vBanFlag = this.backupModelService.banTabModel.vBanFlag;
-      this.index =  this.backupModelService.banTabModel.index;
-      this.indexST =  this.backupModelService.banTabModel.indexST;
-      this.collapsed = this.backupModelService.banTabModel.collapsed;
-    }
     this.isCharging = false;
   }
 
@@ -262,6 +238,33 @@ public vendorServiceType : any ={
     this.billingModelReferenceData$.subscribe(items => this.getAllBillingModel(items))
     this.billingModelType$.subscribe(items => this.getBillingModelTypes(items))
     this.afterBanData$.subscribe(data => this.aferBanUpsert(data))
+  }
+
+  initTreeSubscribe() {
+    if(this.backupModelService.banTabModel != null 
+      && this.backupModelService.banTabModel != undefined){
+      this.banInsertData = this.backupModelService.banTabModel.banInsertData;
+      this.targetSystem = this.backupModelService.banTabModel.targetSystem;
+      this.sourceSystem = this.backupModelService.banTabModel.sourceSystem;
+      this.serviceTypeReferenceData = this.backupModelService.banTabModel.serviceTypeReferenceData;
+      this.serviceList = this.backupModelService.banTabModel.serviceList;
+      this.cloneFlag = this.backupModelService.banTabModel.cloneFlag;
+      this.editFlag = this.backupModelService.banTabModel.editFlag;
+      this.errorFlag = this.backupModelService.banTabModel.errorFlag;
+      this.expansionEventFlag = this.backupModelService.banTabModel.expansionEventFlag;
+      this.modeFlag = this.backupModelService.banTabModel.modeFlag;
+      this.panelExpansionFlag = this.backupModelService.banTabModel.panelExpansionFlag;
+      this.vBanFlag = this.backupModelService.banTabModel.vBanFlag;
+      this.index =  this.backupModelService.banTabModel.index;
+      this.indexST =  this.backupModelService.banTabModel.indexST;
+      this.collapsed = this.backupModelService.banTabModel.collapsed;
+    }
+    this.subs = this.homeService.state$.subscribe(({ [this.KEY]: item }) => {
+      if (item) {
+        const { id } = item;
+        this.showSelectedData(id);
+      }
+    });
   }
 
   ngOnDestroy() {
@@ -316,6 +319,7 @@ public vendorServiceType : any ={
       updatedBy: item.updatedBy,
       lastUpdated: item.lastUpdated,
     }))
+    this.initTreeSubscribe()
   }
 
   getAllFocusGroups(items) {

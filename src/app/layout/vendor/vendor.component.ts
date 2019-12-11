@@ -106,19 +106,7 @@ export class VendorComponent implements OnInit, OnDestroy {
     for (let i = 0; i < this.cols.length; i++) {
       // console.log("in Download method"+i);
       this.downloadCols.push(this.cols[i].header);
-    } 
-    this.subs = this.homeService.state$.subscribe(({ [this.KEY]: item }) => {
-      if (item) {
-        const { id } = item;
-        this.showSelectedData(id);
-      }
-    });
-    if (this.backupModelService.vendorTabModel != null 
-      && this.backupModelService.vendorTabModel != undefined){
-        this.vendorInsertData = this.backupModelService.vendorTabModel.vendorInsertData;
-        this.formMode = this.backupModelService.vendorTabModel.formMode;
-        this.editFlag = this.backupModelService.vendorTabModel.editFlag;
-      }
+    }
   }
 
   initStateOnComponent(){
@@ -137,11 +125,27 @@ export class VendorComponent implements OnInit, OnDestroy {
           lastUpdatedDate: item.lastUpdatedDate
         }
       })
+      this.initTreeSubscribe()
     })
     this.vendorNames$.subscribe(items=>{
       this.hlvendorReferenceData = items;
       this.hlVendorDataList = items.map(({hlVendorName, hlvendorId}) => ({ label: hlVendorName, value: hlvendorId }))
     })
+  }
+
+  initTreeSubscribe() {
+    if (this.backupModelService.vendorTabModel != null 
+      && this.backupModelService.vendorTabModel != undefined){
+        this.vendorInsertData = this.backupModelService.vendorTabModel.vendorInsertData;
+        this.formMode = this.backupModelService.vendorTabModel.formMode;
+        this.editFlag = this.backupModelService.vendorTabModel.editFlag;
+      }
+    this.subs = this.homeService.state$.subscribe(({ [this.KEY]: item }) => {
+      if (item) {
+        const { id } = item;
+        this.showSelectedData(id);
+      }
+    });
   }
 
   showSelectedData(vendorEntityId) {  

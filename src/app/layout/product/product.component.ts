@@ -9,6 +9,7 @@ import { Product } from './state/product.model';
 import { ProductActions } from './state/product.action';
 import { SharedActions } from '../../shared/state/shared.actions'
 import { SharedState } from '../../shared/state/shared.state';
+import * as _ from 'lodash'
 
 @Component({
   selector: 'app-product',
@@ -74,19 +75,6 @@ export class ProductComponent implements OnInit, OnDestroy {
   async ngOnInit() {
     this.initStateOnComponent()
     this.downloadCols = this.cols.map(({ header }) => header)
-    this.subs = this.homeService.state$.subscribe(({ [this.KEY]: item }) => {
-      if (item) {
-        const { id } = item;
-        const product = this.products.find(x => x.productId === id)
-        this.showSelectedData(product);
-      }
-    });
-    if (this.backupModelService.productTabModel != null
-      && this.backupModelService.productTabModel != undefined) {
-      this.gcbProductFilters = this.backupModelService.productTabModel.gcbProductFilters;
-      this.formMode = this.backupModelService.productTabModel.formMode;
-      this.editFlag = this.backupModelService.productTabModel.editFlag;
-    }
   }
 
   initStateOnComponent() {
@@ -96,6 +84,22 @@ export class ProductComponent implements OnInit, OnDestroy {
     this.products$.subscribe(items => this.getProductDetails(items))
     this.gridLoadFlag$.subscribe(band => this.gridLoadFlag = band)
     this.billProcessReferenceList$.subscribe(items => this.getBillProcess(items))
+  }
+
+  initTreeSubscribe() {
+        if (this.backupModelService.productTabModel != null
+      && this.backupModelService.productTabModel != undefined) {
+      this.gcbProductFilters = this.backupModelService.productTabModel.gcbProductFilters;
+      this.formMode = this.backupModelService.productTabModel.formMode;
+      this.editFlag = this.backupModelService.productTabModel.editFlag;
+    }
+    this.subs = this.homeService.state$.subscribe(({ [this.KEY]: item }) => {
+      if (item) {
+        const { id } = item;
+        const product = this.products.find(x => x.productId === id)
+        this.showSelectedData(product);
+      }
+    });
   }
 
   ngOnDestroy() {
@@ -120,6 +124,7 @@ export class ProductComponent implements OnInit, OnDestroy {
       updatedBy: item.updatedBy,
       lastUpdated: item.lastUpdated
     }))
+    this.initTreeSubscribe()
   }
 
   getBillProcess(items) {

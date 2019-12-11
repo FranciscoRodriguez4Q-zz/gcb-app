@@ -121,17 +121,6 @@ constructor(
       // console.log("in Download method"+i);
       this.downloadCols.push(this.cols[i].header);
     }
-    this.subs = this.homeService.state$.subscribe(({ [this.KEY]: item }) => {
-      if (item) {
-        const { id } = item;
-        this.showSelectedData(id);
-      }
-    })
-    if(this.backupModelService.vendorConfigTabModel != null 
-      && this.backupModelService.vendorConfigTabModel != undefined){
-        this.vendorConfigDto = this.backupModelService.vendorConfigTabModel.vendorConfigDto;
-        this.editFlag = this.backupModelService.vendorConfigTabModel.editFlag;
-      }
   }
 
   ngOnDestroy() {
@@ -185,6 +174,21 @@ constructor(
           lastUpdated: item.lastUpdated,
         };
       })
+      this.initTreeSubscribe()
+    })
+  }
+
+  initTreeSubscribe() {
+    if(this.backupModelService.vendorConfigTabModel != null 
+      && this.backupModelService.vendorConfigTabModel != undefined){
+        this.vendorConfigDto = this.backupModelService.vendorConfigTabModel.vendorConfigDto;
+        this.editFlag = this.backupModelService.vendorConfigTabModel.editFlag;
+      }
+    this.subs = this.homeService.state$.subscribe(({ [this.KEY]: item }) => {
+      if (item) {
+        const { id } = item;
+        this.showSelectedData(id);
+      }
     })
   }
 
