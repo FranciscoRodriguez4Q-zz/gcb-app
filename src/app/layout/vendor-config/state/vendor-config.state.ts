@@ -5,18 +5,18 @@ import { VendorConfigService } from 'src/app/layout/vendor-config/vendor-config.
 import { VendorConfigActions } from 'src/app/layout/vendor-config/state/vendor-config.actions';
 
 export class VendorConfigStateModel {
-    vendorNames: any[]
+    vendorNames: any
     currency: any[]
-    vendorDetails: any[]
+    vendorDetails: any
     fetching: boolean
 }
 
 @State<VendorConfigStateModel>({
     name: 'vendorConfigs',
     defaults: {
-        vendorNames: [],
+        vendorNames: {},
         currency:[],
-        vendorDetails:[],
+        vendorDetails:{},
         fetching: false
     }
 })
@@ -28,10 +28,10 @@ export class VendorConfigState {
     static getCurrency({ currency }: VendorConfigStateModel) { return currency }
 
     @Selector()
-    static getVendorNames({ vendorNames }: VendorConfigStateModel) { return vendorNames }
+    static getVendorNames({ vendorNames }: VendorConfigStateModel) {return Object.keys(vendorNames).map( k => vendorNames[k]) }
 
     @Selector()
-    static getVendorDetails({ vendorDetails }: VendorConfigStateModel){ return vendorDetails }
+    static getVendorDetails({ vendorDetails }: VendorConfigStateModel){ return Object.keys(vendorDetails).map(k => vendorDetails[k]) }
     
     @Selector()
     static getFetching({ fetching }: VendorConfigStateModel){ return fetching }
@@ -54,7 +54,7 @@ export class VendorConfigState {
         if (_.isEmpty(vendorNames)) {
             this.vendorConfigService.getAllVendors().toPromise().then(response => {
                 patchState({
-                    vendorNames: response,
+                    vendorNames: _.keyBy(response, 'vendorEntityId'),
                 })
             })
         }
@@ -67,7 +67,7 @@ export class VendorConfigState {
             patchState({ fetching: true })
             this.vendorConfigService.getVendorGridData().toPromise().then(response => {
                 patchState({
-                    vendorDetails: response,
+                    vendorDetails: _.keyBy(response, 'vendorConfigId'),
                     fetching: false
                 })
             })
@@ -77,25 +77,21 @@ export class VendorConfigState {
     @Action(VendorConfigActions.UpsertVendorConfig)
     async UpsertProductServiceType({ getState, patchState }: StateContext<VendorConfigStateModel>, { payload }: VendorConfigActions.UpsertVendorConfig) {
         try {
-            const { vendorConfigId = null } = payload
             const { vendorDetails } = getState()
             const { Error: error, message, vendorConfigDetail = null } = await this.vendorConfigService.upsertVendorConfig(payload).toPromise()
             if (error) throw message
-            if (vendorConfigId == null || vendorConfigId == 0) {
-                patchState({ vendorDetails: [...vendorDetails, vendorConfigDetail] })
-            } else {
-                const vendorConfigIndex = vendorDetails.findIndex(x => x.vendorConfigId === vendorConfigId)
-                let _vendorDetails = [...vendorDetails]
-                _vendorDetails[vendorConfigIndex] = vendorConfigDetail
-                patchState({
-                    vendorDetails: [..._vendorDetails],
-                })
-            }
+            patchState({ vendorDetails: { ...vendorDetails, [vendorConfigDetail.vendorConfigId]: vendorConfigDetail } })
             await this.open({ message: message, type: 'success' })
         } catch(e) {
             this.open({ message: e, type: 'error'})
             throw e;
         }
+    }
+
+    @Action(VendorConfigActions.AddModifyVendorName)
+    AddModifyVendorName({ getState, patchState }: StateContext<VendorConfigStateModel>, { payload }: VendorConfigActions.AddModifyVendorName) {
+        const { vendorNames } = getState()
+        patchState({ vendorNames: { ...vendorNames, [payload.vendorConfigId]: payload } })
     }
 
     private open({ message, type }) {
