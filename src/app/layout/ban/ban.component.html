@@ -620,7 +620,13 @@
 					<label class="errorMessage">{{errorMessage}}</label>
 				</div>
 				<div class="p-grid">
-					<div class="p-col-12" style="text-align:right">
+					<div class="p-col-6" style="text-align:left">
+							<div *ngIf="editFlag"> 
+								<b>Inserted by: </b> {{banInsertData.createdBy}} on {{banInsertData.created}} <br>
+								<b>Modified by: </b> {{banInsertData.updatedBy}} on {{banInsertData.lastUpdated}}
+							</div>
+						</div>    
+					<div class="p-col-6" style="text-align:right">
 						<!-- <button pButton type="button" label="Submit" class="ui-button-rounded ui-button-secondary" (click)="upsertBan()"></button>
 						<button pButton type="button" label="Cancel" class="ui-button-rounded ui-button-secondary" (click)="clearAllFilters()"></button> -->
 						<button class="ge-button -fill--solid" (click)="cloneRec(true)" *ngIf="editFlag" [disabled]="cloneFlag">Clone</button>

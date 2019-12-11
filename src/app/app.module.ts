@@ -18,6 +18,9 @@ import { SharedState } from './shared/state/shared.state'
 import { ProductState } from './layout/product/state/product.state';
 import { BanState } from './layout/ban/state/ban.state';
 import { ProductServiceTypeState } from 'src/app/layout/product-service-type/state/product-service-type.state';
+import { VendorConfigState } from 'src/app/layout/vendor-config/state/vendor-config.state';
+import { BuyerState } from 'src/app/layout/buyer/state/buyer.state';
+import { VendorState } from 'src/app/layout/vendor/state/vendor.state';
 
 export const createTranslateLoader = (http: HttpClient) => {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -43,6 +46,8 @@ export const createTranslateLoader = (http: HttpClient) => {
       SharedState, 
       ProductState,
       ProductServiceTypeState,
+      VendorConfigState, 
+      BuyerState,
       BanState
     ], { developmentMode: !environment.production }),
     NgxsReduxDevtoolsPluginModule.forRoot({ disabled: environment.production })

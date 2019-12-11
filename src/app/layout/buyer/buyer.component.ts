@@ -3,9 +3,14 @@ import { BuyerService } from './buyer.service';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { SelectItem } from 'primeng/primeng';
 import { Globals } from '../../shared/constants/globals';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
 import { HomeService } from '../home/home.service';
 import { BackupModelService } from '../backupmodel.service';
+import { Select, Store } from '@ngxs/store';
+import { SharedState } from 'src/app/shared/state/shared.state';
+import { SharedActions } from 'src/app/shared/state/shared.actions';
+import { BuyerState } from 'src/app/layout/buyer/state/buyer.state';
+import { BuyerActions } from 'src/app/layout/buyer/state/buyer.actions';
 
 @Component({
   selector: 'app-product',
@@ -59,19 +64,19 @@ export class BuyerComponent implements OnInit, OnDestroy {
  private readonly KEY: string = 'Buyer';
  private subs: Subscription;
   
+ @Select(SharedState.getCountries) countryCodeReferenceDataList$: Observable<any>
+ @Select(SharedState.getUserDetails) userDetails$: Observable<any>
+ @Select(BuyerState.getFetching) gridLoadFlag$: Observable<any>
+ @Select(BuyerState.getBuyers) buyers$: Observable<any>
+ @Select(BuyerState.getGoldIds) goldIds$: Observable<any>
+
   constructor(
     private buyerService: BuyerService,
     private modalService: NgbModal,
-    private globals: Globals,
     private homeService: HomeService,
+    private store: Store,
     private backupModelService: BackupModelService
   ) {
-    if (this.globals.roleNM === 'ADMIN') {
-      this.userFlag = false;
-    }
-    else {
-      this.userFlag = false;
-    }
   }
   
 
@@ -98,13 +103,11 @@ export class BuyerComponent implements OnInit, OnDestroy {
   public buyerInsertDataCopy: any;
 
   async ngOnInit() {
-    await this.getAllBuyerDetails();
+    this.initStateOnComponent()
     for (let i = 0; i < this.cols.length; i++) {
       // console.log("in Download method"+i);
       this.downloadCols.push(this.cols[i].header);
     }
-    await this.getAllCountryData();
-    await this.getGoldNetList();
     this.subs = this.homeService.state$.subscribe(({ [this.KEY]: item }) => {
       if(item) {
         const { id } = item;
@@ -131,100 +134,39 @@ export class BuyerComponent implements OnInit, OnDestroy {
     }
   }
 
-  getAllBuyerDetails() {
-    return this.buyerService.getBuyerDetails().toPromise().then(
-      refData => {
-        this.buyerData = refData;
-        this.gridLoadFlag = true;
-
-        this.buyerData.map(item => {
-          return {
-            erpBuyerLeName: item.erpBuyerLeName,
-            erpOuEntityName: item.erpOuEntityName,
-            erpOuNumber: item.erpOuNumber,
-            locationName: item.locationName,
-            goldId: this.goldId,
-            updatedBy: this.updatedBy,
-            lastUpdatedDate: this.lastUpdatedDate,
-          }
-        }).forEach(item => this.buyerDwnData.push(item));
-      }
-    ).catch(console.log);
-    // .subscribe(
-    //   refData => {
-    //     this.buyerData=refData;
-    //     this.gridLoadFlag = true;
-
-    //     this.buyerData.map(item => {
-    //       return {
-    //           erpBuyerLeName: item.erpBuyerLeName,
-    //           erpOuEntityName: item.erpOuEntityName,
-    //           erpOuNumber: item.erpOuNumber,
-    //           locationName: item.locationName,
-    //           goldId:this.goldId,
-    //           updatedBy:this.updatedBy,
-    //           lastUpdatedDate:this.lastUpdatedDate,
-    //       }
-    //   }).forEach(item => this.buyerDwnData.push(item));
-    //   },
-    //   error => {
-    //   });
-  }
-
-  getAllCountryData() {
-    return this.buyerService.getAllCountryCode().toPromise().then(
-      refData => {
-        let arr: any = [];
-        this.countryCodeReferenceData = refData;
-        this.countryCodeReferenceDataList.push({ label: "Select", value: "Select" })
-
-        for (let data of this.countryCodeReferenceData) {
-          let labelCountry = data.countryCode + " | " + data.countryName;
-          this.countryCodeReferenceDataList.push({ label: labelCountry, value: data.countryId })
+  initStateOnComponent(){
+    this.store.dispatch(new SharedActions.FetchCountry())
+    this.store.dispatch(new BuyerActions.FetchBuyers())
+    this.store.dispatch(new BuyerActions.FetchGoldIds())
+    this.store.dispatch(new BuyerActions.FetchGoldIds())
+    this.userDetails$.subscribe(({ roleNM }) => this.userFlag = roleNM !== 'ADMIN')
+    this.gridLoadFlag$.subscribe(isFetching => this.gridLoadFlag = !isFetching)
+    this.countryCodeReferenceDataList$.subscribe(items => {
+      this.countryCodeReferenceDataList = items.map(({ countryCode, countryName, countryId }) => ({ 
+        label: `${countryCode} | ${countryName}`, 
+        value: countryId
+      }))
+      this.countryCodeReferenceDataList.unshift({ label: "Select", value: "Select" })
+    })
+    this.buyers$.subscribe(items =>{
+      this.buyerData = items;
+      this.buyerDwnData = items.map(item => {
+        return {
+          erpBuyerLeName: item.erpBuyerLeName,
+          erpOuEntityName: item.erpOuEntityName,
+          erpOuNumber: item.erpOuNumber,
+          locationName: item.locationName,
+          goldId: this.goldId,
+          updatedBy: this.updatedBy,
+          lastUpdatedDate: this.lastUpdatedDate,
         }
-      }
-    ).catch(console.log)
-    // .subscribe(
-    //   refData => {
-    //     let arr: any = [];
-    //     this.countryCodeReferenceData = refData;
-    //     this.countryCodeReferenceDataList.push({ label: "Select", value: "Select" })
-
-    //     for (let data of this.countryCodeReferenceData) {
-    //       let labelCountry = data.countryCode + " | " + data.countryName;
-    //       this.countryCodeReferenceDataList.push({ label: labelCountry, value: data.countryId })
-    //     }
-    //   },
-    //   error => {
-    //   });
-  }
-
-  getGoldNetList() {
-    return this.buyerService.getGoldNetList().toPromise().then(
-      refData => {
-        let arr: any = [];
-        this.goldNetReferenceData = refData;
-        this.goldNetIdReferenceDataList.push({ label: "Select", value: "Select" })
-
-        for (let data of this.goldNetReferenceData) {
-          let labelCountry = data.goldId + " | " + data.goldnetName + " | " + data.countryCode;
-          this.goldNetIdReferenceDataList.push({ label: labelCountry, value: data.goldId })
-        }
-      }
-    ).catch(console.log)
-    // .subscribe(
-    //   refData => {
-    //     let arr: any = [];
-    //     this.goldNetReferenceData = refData;
-    //     this.goldNetIdReferenceDataList.push({ label: "Select", value: "Select" })
-
-    //    for (let data of this.goldNetReferenceData) {
-    //       let labelCountry =  data.goldId + " | " + data.goldnetName+ " | " + data.countryCode;
-    //       this.goldNetIdReferenceDataList.push({ label: labelCountry, value: data.goldId })
-    //     }
-    //   },
-    //   error => {
-    //   });
+      })
+    })
+    this.goldIds$.subscribe(items => {
+      this.goldNetReferenceData = items
+      this.goldNetIdReferenceDataList = items.map( ({goldId, goldnetName, countryCode}) => ({ label: `${goldId} | ${goldnetName} | ${countryCode}`, value: goldId }) )
+      this.goldNetIdReferenceDataList.unshift({ label: "Select", value: "Select" })
+    })
   }
 
   showSelectedData(buyerId) {
@@ -291,31 +233,15 @@ export class BuyerComponent implements OnInit, OnDestroy {
     }
   }
 
-  upsertBuyer() {
+  async upsertBuyer() {
     this.errorMessage = "";
     //this.msgs = [];
     console.log("test button click");
     if (this.validation()) {
-      // this.buyerInsertData.createdBy="503148032";
-      // this.buyerInsertData.updatedBy="503148032";
-      this.buyerService.upsertBuyer(this.buyerInsertData).subscribe(
-        refData => {
-          this.saveMessage = refData;
-          if(!this.saveMessage.Error == undefined)
-            this.errorMessage = "Buyer : "+this.buyerInsertData.erpBuyerLeName+" already exists.";
-          if(this.saveMessage.Error == false)
-            this.errorMessage = this.saveMessage.message;
-          else
-            this.errorMessage =  this.saveMessage.message;
-          this.popupErrorMessage =  this.errorMessage;
-          this.open(this.errorMessagePopUp);
-          this.getAllBuyerDetails();
-          this.clearAllFilters();
-        },
-        error => {
-        });
-    }else{
-      //this.open(this.errorMessage);
+      try{
+        await this.store.dispatch(new  BuyerActions.UpsertBuyer(this.buyerInsertData))
+        this.clearAllFilters()
+      }catch(e){}
     }
   }
 
