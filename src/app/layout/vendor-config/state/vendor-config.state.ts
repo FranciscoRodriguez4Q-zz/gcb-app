@@ -1,8 +1,9 @@
-import { State, Action, StateContext, Selector } from '@ngxs/store';
+import { State, Action, StateContext, Selector, Store } from '@ngxs/store';
 import * as _ from 'lodash';
 import swal from 'sweetalert2'
 import { VendorConfigService } from 'src/app/layout/vendor-config/vendor-config.service';
 import { VendorConfigActions } from 'src/app/layout/vendor-config/state/vendor-config.actions';
+import { BanActions } from '../../ban/state/ban.actions';
 
 export class VendorConfigStateModel {
     vendorNames: any
@@ -22,7 +23,10 @@ export class VendorConfigStateModel {
 })
 export class VendorConfigState {
     
-    constructor(private vendorConfigService: VendorConfigService) {}
+    constructor(
+        private vendorConfigService: VendorConfigService,
+        private store: Store
+    ) {}
 
     @Selector()
     static getCurrency({ currency }: VendorConfigStateModel) { return currency }
@@ -81,6 +85,7 @@ export class VendorConfigState {
             const { Error: error, message, vendorConfigDetail = null } = await this.vendorConfigService.upsertVendorConfig(payload).toPromise()
             if (error) throw message
             patchState({ vendorDetails: { ...vendorDetails, [vendorConfigDetail.vendorConfigId]: vendorConfigDetail } })
+            this.store.dispatch(new BanActions.AddVendorDetails(vendorConfigDetail))
             await this.open({ message: message, type: 'success' })
         } catch(e) {
             this.open({ message: e, type: 'error'})

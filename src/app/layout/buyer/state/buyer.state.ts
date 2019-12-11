@@ -1,8 +1,9 @@
-import { State, Action, StateContext, Selector } from '@ngxs/store';
+import { State, Action, StateContext, Selector, Store } from '@ngxs/store';
 import * as _ from 'lodash';
 import swal from 'sweetalert2'
 import { BuyerService } from 'src/app/layout/buyer/buyer.service';
 import { BuyerActions } from 'src/app/layout/buyer/state/buyer.actions';
+import { BanActions } from '../../ban/state/ban.actions';
 
 
 export class BuyerStateModel {
@@ -21,7 +22,10 @@ export class BuyerStateModel {
 })
 export class BuyerState {
 
-    constructor(private buyerService: BuyerService) {}
+    constructor(
+        private buyerService: BuyerService,
+        private store: Store
+    ) {}
 
     @Selector()
     static getBuyers({ buyers }: BuyerStateModel) {
@@ -71,6 +75,7 @@ export class BuyerState {
             const { message, Error: error, buyer = null } = await this.buyerService.upsertBuyer(payload).toPromise()
             if (error) throw message
             patchState({ buyers: { ...buyers, [buyer.buyerId]: buyer } })
+            this.store.dispatch(new BanActions.AddBuyerDetails(buyer))
             await this.open({ message: message, type: 'success' })
         } catch (e) {
             console.error('error', e)
