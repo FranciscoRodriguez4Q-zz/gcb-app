@@ -91,7 +91,7 @@ export class VendorConfigState {
     @Action(VendorConfigActions.AddModifyVendorName)
     AddModifyVendorName({ getState, patchState }: StateContext<VendorConfigStateModel>, { payload }: VendorConfigActions.AddModifyVendorName) {
         const { vendorNames } = getState()
-        patchState({ vendorNames: { ...vendorNames, [payload.vendorConfigId]: payload } })
+        patchState({ vendorNames: { ...vendorNames, [payload.vendorEntityId]: payload } })
     }
 
     private open({ message, type }) {
