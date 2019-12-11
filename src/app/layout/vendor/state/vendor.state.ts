@@ -1,8 +1,9 @@
-import { State, Action, StateContext, Selector } from '@ngxs/store';
+import { State, Action, StateContext, Selector, Store } from '@ngxs/store';
 import * as _ from 'lodash';
 import swal from 'sweetalert2'
 import { VendorService } from 'src/app/layout/vendor/vendor.service';
 import { VendorActions } from 'src/app/layout/vendor/state/vendor.actions';
+import { VendorConfigActions } from 'src/app/layout/vendor-config/state/vendor-config.actions';
 
 
 export class VendorStateModel {
@@ -21,7 +22,7 @@ export class VendorStateModel {
 })
 export class VendorState {
 
-    constructor(private vendorService: VendorService) {}
+    constructor(private vendorService: VendorService, private store: Store) {}
 
     @Selector()
     static getVendors({ vendors }: VendorStateModel) {
@@ -71,6 +72,7 @@ export class VendorState {
             const { message, Error: error, vendor = null } = await this.vendorService.saveOrUpdateVendor(payload).toPromise()
             if (error) throw message
             patchState({ vendors: { ...vendors, [vendor.vendorEntityId]: vendor } })
+            this.store.dispatch(new VendorConfigActions.AddModifyVendorName(vendor))
             await this.open({ message: message, type: 'success' })
         } catch (e) {
             console.error('error', e)

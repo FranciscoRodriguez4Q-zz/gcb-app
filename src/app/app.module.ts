@@ -46,6 +46,7 @@ export const createTranslateLoader = (http: HttpClient) => {
       SharedState, 
       ProductState,
       ProductServiceTypeState,
+      VendorState,
       VendorConfigState, 
       BuyerState,
       BanState
