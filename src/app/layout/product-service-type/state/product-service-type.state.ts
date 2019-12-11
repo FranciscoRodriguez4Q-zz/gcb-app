@@ -8,7 +8,7 @@ import { ProductServiceTypeActions } from 'src/app/layout/product-service-type/s
 
 export class ProductServiceTypeStateModel {
     productServiceTypes: ProductServiceType[]
-    productData: any[]
+    productData: {}
     fetching: boolean
 }
 
@@ -16,7 +16,7 @@ export class ProductServiceTypeStateModel {
     name: 'productServiceTypes',
     defaults: {
         productServiceTypes: [],
-        productData:[],
+        productData: {},
         fetching: false
     }
 })
@@ -39,7 +39,7 @@ export class ProductServiceTypeState {
 
     @Selector()
     static getProductData({ productData }: ProductServiceTypeStateModel) {
-        return productData
+        return Object.keys(productData).map(k => productData[k])
     }
 
     @Action(ProductServiceTypeActions.FetchProductServiceTypes)
@@ -64,7 +64,7 @@ export class ProductServiceTypeState {
         if (_.isEmpty(productData)) {
             this.productServiceTypeService.getProducts().toPromise().then(response => {
                 patchState({
-                    productData: response,
+                    productData: _.keyBy(response, 'productId'),
                 })
             })
         }
@@ -91,6 +91,15 @@ export class ProductServiceTypeState {
         } catch(e) {
             this.open({ message: e, type: 'error'})
             throw e;
+        }
+    }
+
+    @Action(ProductServiceTypeActions.AddProduct)
+    addProduct({ getState, patchState }: StateContext<ProductServiceTypeStateModel>, { payload }: ProductServiceTypeActions.AddProduct) {
+        const { productData } = getState()
+        if (!_.isEmpty(payload)) {
+            const { productId } = payload
+            patchState({ productData: { ...productData, [productId]: payload }})
         }
     }
 

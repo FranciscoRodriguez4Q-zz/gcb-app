@@ -16,4 +16,9 @@ export namespace ProductServiceTypeActions
         static readonly type = '[ProductServiceType] Upsert'
         constructor(public payload: any) { }
     }
+
+    export class AddProduct {
+        static readonly type = '[ProductServiceType] AddProduct'
+        constructor(public payload: any) { }
+    }
 }

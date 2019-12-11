@@ -10,10 +10,11 @@ export class BanStateModel {
     bans: { [ banId: string ]: BanDetail }
     fetching: boolean
     focusGroups: []
-    vendorConfigDetails: []
-    buyerDetails: []
+    vendorConfigDetails: {}
+    buyerDetails: {}
     billingDetails: []
     billingTypes: {}
+    afterBanData: {}
 }
 
 @State<BanStateModel>({
@@ -22,10 +23,11 @@ export class BanStateModel {
         bans: {},
         fetching: false,
         focusGroups: [],
-        vendorConfigDetails: [],
-        buyerDetails: [],
+        vendorConfigDetails: {},
+        buyerDetails: {},
         billingDetails: [],
-        billingTypes: {}
+        billingTypes: {},
+        afterBanData: {}
     }
 })
 export class BanState {
@@ -49,12 +51,12 @@ export class BanState {
 
     @Selector()
     static getVendorConfigDetails({ vendorConfigDetails }: BanStateModel) {
-        return vendorConfigDetails
+        return Object.keys(vendorConfigDetails).map(k => vendorConfigDetails[k])
     }
 
     @Selector()
     static getBuyerDetails({ buyerDetails }: BanStateModel) {
-        return buyerDetails
+        return Object.keys(buyerDetails).map(k => buyerDetails[k])
     }
 
     @Selector()
@@ -65,6 +67,11 @@ export class BanState {
     @Selector()
     static getBillingTypes({ billingTypes }: BanStateModel) {
         return billingTypes
+    }
+
+    @Selector()
+    static getAfterDataBan({ afterBanData }: BanStateModel) {
+        return afterBanData
     }
 
     @Action(BanActions.FetchBans)
@@ -99,7 +106,7 @@ export class BanState {
         if (_.isEmpty(vendorConfigDetails)) {
             this.banService.getVendorConfigDetails().toPromise().then(response =>
                 patchState({
-                    vendorConfigDetails: response
+                    vendorConfigDetails: _.keyBy(response, 'vendorConfigId')
                 })
             )
         }
@@ -111,7 +118,7 @@ export class BanState {
         if (_.isEmpty(buyerDetails)) {
             this.banService.getBuyerDetails().toPromise().then(response =>
                 patchState({
-                    buyerDetails: response
+                    buyerDetails: _.keyBy(response, 'buyerId')
                 })
             )
         }
@@ -141,20 +148,39 @@ export class BanState {
         }
     }
 
-    // @Action(ProductActions.UpsertProduct)
-    // async upsertProduct({ getState, patchState, }: StateContext<ProductStateModel>, { payload }: ProductActions.UpsertProduct) {
-    //     try {
-    //         const { products } = getState()
-    //         const { statusMessage, Error: error, product = null } = await this.productService.upsertProduct(payload).toPromise()
-    //         if (error) throw statusMessage
-    //         patchState({ products: { ...products, [product.productId]: product } })
-    //         await this.open({ message: statusMessage, type: 'success' })
-    //     } catch (e) {
-    //         console.error('error', e)
-    //         this.open({ message: e, type: 'error' })
-    //         throw e
-    //     }
-    // }
+    @Action(BanActions.UpsertBan)
+    async upsertProduct({ getState, patchState, }: StateContext<BanStateModel>, { payload }: BanActions.UpsertBan) {
+        try {
+            const { bans } = getState()
+            const { statusMessage, Error: error, banDetails = null } = await this.banService.upsertBan(payload).toPromise()
+            if (error) throw statusMessage
+            patchState({ bans: { ...bans, [banDetails.banId]: banDetails }, afterBanData: banDetails })
+            await this.open({ message: statusMessage, type: 'success' })
+        } catch (e) {
+            console.error('error', e)
+            this.open({ message: e, type: 'error' })
+            throw e
+        }
+    }
+
+    @Action(BanActions.CleanAfterBanData)
+    cleanAfterBanData({ patchState }: StateContext<BanStateModel>) {
+        patchState({ afterBanData: {}})
+    }
+
+    @Action(BanActions.AddVendorDetails)
+    addVendorDetails({ patchState, getState }: StateContext<BanStateModel>, { payload }: BanActions.AddVendorDetails) {
+        const { vendorConfigDetails } = getState()
+        const { vendorConfigId } = payload
+        patchState({ vendorConfigDetails: { ...vendorConfigDetails, [vendorConfigId]: payload }})
+    }
+
+    @Action(BanActions.AddBuyerDetails)
+    addBuyerDetails({ patchState, getState }: StateContext<BanStateModel>, { payload }: BanActions.AddBuyerDetails) {
+        const { buyerDetails } = getState()
+        const { buyerId } = payload
+        patchState({ buyerDetails: {...buyerDetails, [buyerId]: payload }})
+    }
 
     private open({ message, type }) {
         return swal.fire({ icon: type, text: message })

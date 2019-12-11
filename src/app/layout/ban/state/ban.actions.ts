@@ -25,8 +25,22 @@ export namespace BanActions
         static readonly type = '[Ban] FetchBillingTypes'
     }
 
-    // export class UpsertProduct {
-    //     static readonly type = '[Products] Upsert'
-    //     constructor(public payload: Product) { }
-    // }
+    export class UpsertBan {
+        static readonly type = '[Ban] UpsertBan'
+        constructor(public payload) { }
+    }
+
+    export class AddVendorDetails {
+        static readonly type = '[Ban] AddVendorDetails'
+        constructor(public payload) { }
+    }
+
+    export class AddBuyerDetails {
+        static readonly type = '[Ban] AddVendorDetails'
+        constructor(public payload) { }
+    }
+
+    export class CleanAfterBanData {
+        static readonly type = '[Ban] CleanAfterBanData'
+    }
 }

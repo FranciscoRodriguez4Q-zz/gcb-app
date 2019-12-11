@@ -43,9 +43,9 @@ export class BanService {
     return this.http.get(`${environment.APP_BASE_URL_SERVICE_ENDPOINT}/locations/${billedToLocationId}`);
   }
 
-  public upsertBan(banInsertData): Observable<Object> {
-     return this.http.post(environment.APP_BASE_URL_SERVICE_ENDPOINT+"/ban/bans", banInsertData);
-   }
+  public upsertBan(banInsertData): Observable<any> {
+    return this.http.post(`${environment.APP_BASE_URL_SERVICE_ENDPOINT}/ban/bans`, banInsertData);
+  }
 
   public getServicetypeData(): Observable<Object> {
     return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT+"/serviceTypesData");
@@ -126,8 +126,8 @@ export class BanService {
     return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/ban/billingModelTypes/"+banId);
   }
 
-  public modeChange(banInsertData): Observable<Object> {
-    return this.http.post(environment.APP_BASE_URL_SERVICE_ENDPOINT+"/ban/banMode", banInsertData);
+  public modeChange(banInsertData): Observable<any> {
+    return this.http.post(`${environment.APP_BASE_URL_SERVICE_ENDPOINT}/ban/banMode`, banInsertData);
   }
 
   public getUserData(): Observable<Object> {

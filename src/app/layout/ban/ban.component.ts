@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild, OnDestroy, DoCheck } from '@angular/core';
 import { BanService } from './ban.service';
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { SelectItem } from 'primeng/primeng';
 import { environment } from 'src/environments/environment.prod';	
 import { HomeService } from '../home/home.service';
@@ -11,6 +10,8 @@ import { SharedState } from 'src/app/shared/state/shared.state';
 import { BanState } from './state/ban.state';
 import { BanActions } from './state/ban.actions';
 import { SharedActions } from 'src/app/shared/state/shared.actions';
+import swal from 'sweetalert2'
+import * as _ from 'lodash'
 
 @Component({
   selector: 'app-product',
@@ -121,9 +122,6 @@ public vendorServiceType : any ={
   public popupErrorMessage: any;
   public editFlag = false;
   public vBanFlag = false;
-  @ViewChild('content1') errorMessagePopUp;
-  @ViewChild('content2') modeMessagePopUp;
-  @ViewChild('content3') arrayErrorMessagePopUp;
   public arrayErrorMessage;
   closeResult: string;
   public formMode="New";
@@ -188,10 +186,10 @@ public vendorServiceType : any ={
   @Select(BanState.getBuyerDetails) buyerReferenceData$: Observable<[]>
   @Select(BanState.getBillingDetails) billingModelReferenceData$: Observable<[]>
   @Select(BanState.getBillingTypes) billingModelType$: Observable<[]>
+  @Select(BanState.getAfterDataBan) afterBanData$: Observable<any>
 
   constructor(
     private banService: BanService, 
-    private modalService: NgbModal, 
     private homeService: HomeService,
     private backupModelService: BackupModelService,
     private store: Store
@@ -263,6 +261,7 @@ public vendorServiceType : any ={
     this.buyerReferenceData$.subscribe(items => this.getAllBuyers(items))
     this.billingModelReferenceData$.subscribe(items => this.getAllBillingModel(items))
     this.billingModelType$.subscribe(items => this.getBillingModelTypes(items))
+    this.afterBanData$.subscribe(data => this.aferBanUpsert(data))
   }
 
   ngOnDestroy() {
@@ -388,13 +387,13 @@ public vendorServiceType : any ={
   public detailInfo = null;
 
   showSelectedData(banId) {
+    console.log('[INFO] - showSelectedData - banId: ', banId)
     this.cloneFlag = false;
     this.expandAllPanels();
     window.scrollTo(0, 0);
-    console.log("radio button click" + this.banId);
     this.editFlag = true;
     this.vBanFlag = true;
-    this.formMode="Modify";
+    this.formMode = "Modify";
     this.clearServiceList();
     this.banService.getBanById(banId).subscribe(
       refData => {
@@ -407,40 +406,23 @@ public vendorServiceType : any ={
           billedToLocationId: this.banInsertData.billedToLocationId
         }
       },
-      error => {
-      });
+      error => { });
 
       this.banService.getTaregtServiceType(banId).subscribe(
         refData => {
-          this.targetSystem=refData; 
-          for(let sysData of this.targetSystem){
-            this.banService.getTaregtServiceBanProductDetails(sysData,banId).subscribe(
-              refData => {
-                this.system=refData;
-                this.serviceList.push(this.system);
-                this.onSelectTargetFetch(this.system);
-              }
-            )
-          }
+        this.targetSystem = refData;
+        for (let sysData of this.targetSystem) {
+          this.banService.getTaregtServiceBanProductDetails(sysData, banId).subscribe(
+            refData => {
+              this.system = refData;
+              this.serviceList.push(this.system);
+              this.onSelectTargetFetch(this.system);
+            }
+          )
         }
-      )   
-      this.tableValueChanged(this.banInsertData.erpAwtGroupName,this.banInsertData.erpVatAwtGroupName,this.banInsertData.erpPaymentTerms,this.banInsertData.directOffsetBuc,this.banInsertData.indirectOffsetBuc);
-  }
-
-  open(content) {
-    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
-  }
-
-  asyncOpen(content) {
-    return this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
+      }
+    )
+    this.tableValueChanged(this.banInsertData.erpAwtGroupName, this.banInsertData.erpVatAwtGroupName, this.banInsertData.erpPaymentTerms, this.banInsertData.directOffsetBuc, this.banInsertData.indirectOffsetBuc);
   }
 
   async clearAllFilters(){
@@ -536,14 +518,20 @@ public vendorServiceType : any ={
       return false;
     }
     const { liquidateBillRoutingId, payFromBillRoutingId } = this.banInsertData
-    if (this.isEmpty(liquidateBillRoutingId) && this.isEmpty(payFromBillRoutingId)) {
+    if (_.isEmpty(`${liquidateBillRoutingId}`) && _.isEmpty(`${payFromBillRoutingId}`)) {
       this.errorMessage = "Please provide Liquidation BUC/ADN and Pay from BUC/ADN"
       return false
     }
     const { valid, message } = await this.validateTokensBillHub()
     if (!valid) {
-      this.arrayErrorMessage = message
-      await this.asyncOpen(this.arrayErrorMessagePopUp);
+      const _message = message.filter(n => n)
+      const htmlMessage = _message.reduce((result, item) => `${result}<p>${item}</p>`, '')
+      await swal.fire({
+        title: 'No Tokens Associated',
+        html: htmlMessage,
+        icon: 'warning',
+        confirmButtonText: 'Ok'
+      })
       return false;
     }
     if (this.banInsertData.cloneFlag) {
@@ -570,70 +558,58 @@ public vendorServiceType : any ={
     }
   }
 
+  shouldAssociate: boolean = true
   async upsertBan() {
     this.errorMessage = "";
     if (await this.validation()) {
       if (this.cloneFlag && this.vendorBan != this.banInsertData.vendorBan) {
+        await swal.fire({
+          text: 'Vendor Ban has been modified, so creating a new record instead of a clone',
+          icon: 'warning',
+          confirmButtonText: 'Ok'
+        })
         this.cloneFlag = false;
-        this.modeFlag = false;
         this.banInsertData.cloneOfId = "";
-        this.popupErrorMessage = "Vendor Ban has been modified, so creating a new record instead of a clone";
-        this.open(this.modeMessagePopUp);
-        return false;
       }
-      /* if (this.banInsertData.cloneFlag){
-        this.banInsertData.cloneOfId = this.banInsertData.banId;
-        this.banInsertData.banId = 0;
-      this.banInsertData.invoiceName = this.banInsertData.cloneInvoiceName;
-        this.banInsertData.vendorPaidBy = this.banInsertData.cloneVendorPaidBy;
-        this.banInsertData.liquidatedVia = this.banInsertData.cloneLiquidatedVia;
-        this.banInsertData.taxEngine = this.banInsertData.cloneTaxEngine; 
-      } */
-      //this.cloneFlag = false;
+      try {
+        await this.store.dispatch(new BanActions.UpsertBan(this.banInsertData)).toPromise()
+        this.clearAllFilters()
+        this.shouldAssociate = !this.editFlag
+        this.editFlag = false
+        this.cloneFlag = false
+        this.vBanFlag = false
+        this.errorFlag = false
+      } catch(e) { }
+    }
+  }
 
-      // this.banService.getBillRefIDTokensAssociated(this.banInsertData.liquidateBillRoutingId,
-      //   this.regKey).subscribe(
-      // refData => {
-      //   let response = refData;
-      //   let respArray = [];
-      //   respArray.push(response);
-      //   console.log(response);
-      //   if (respArray[0].message === "No Tokens Associated") {
-      //     this.errorMessage = respArray[0].message;
-      //     this.popupErrorMessage = respArray[0].message;
-      //     this.open(this.errorMessagePopUp);
+  aferBanUpsert({ banId }) {
+    if (banId) {
+      if (this.shouldAssociate) {
+        this.associateBan(banId)
+      }
+      this.upsertBanProduct(banId)
+    }
+  }
 
-      //   }
-      //   else   if (respArray[0].message === "BillRef does not exist"){
-      //     this.errorMessage = "Please Enter BUC/ADN details";
-      //     this.popupErrorMessage = "Please Enter BUC/ADN details";
-      //     this.banInsertData.liquidateBillRoutingId = "";
-      //     this.open(this.errorMessagePopUp);
-
-      //   }
-      //   else {
-      this.banService.upsertBan(this.banInsertData).subscribe(
-        async refData => {
-          this.errorFlag = true;
-          this.saveMessage = refData;
-          this.popupErrorMessage = this.saveMessage.statusMessage;
-          this.open(this.errorMessagePopUp);
-          console.log(this.saveMessage);
-          if (!this.saveMessage.error && this.banInsertData.liquidateBillRoutingId && !this.editFlag) {
-            this.associateBan(this.saveMessage.banId);
+  upsertBanProduct(productBanId) {
+    console.log('[INFO] - upsertBanProduct()')  
+    if (this.validation()) {
+      console.log('[INFO] - upsertBanProduct() - afterValidation')  
+      this.banService.upsertBanProduct(this.serviceList, productBanId).subscribe(
+        refData => {
+          const { Error: error, banProducts, message  } = refData;
+          if (!error) {
+            this.associateProductBan(banProducts)
+          } else {
+            console.log('[INTERNAL-ERROR] - upsertBanProduct()')
+            console.log('error', message)
           }
-          if (null != this.saveMessage.banId) {
-            this.upsertBanProduct(this.saveMessage.banId);
-          }
-          if (!this.saveMessage.Error) {
-            this.clearAllFilters();
-            this.editFlag = false;
-            this.cloneFlag = false;
-            this.vBanFlag = false;
-            this.errorFlag = false;
-          }
+          this.clearServiceList();
         },
         error => {
+          console.log('[SERVER-ERROR] - upsertBanProduct()')
+          console.log('error', error)
         });
     }
   }
@@ -646,18 +622,16 @@ public vendorServiceType : any ={
       const { liquidateBillRoutingId, payFromBillRoutingId } = item
       return [...result, liquidateBillRoutingId, payFromBillRoutingId]
     }, banBillRefs)
-    const request = billRefs.map(billRef => {
-      if (!this.isEmpty(billRef)) {
+    const request = billRefs.filter(n => n).map(billRef => {
         return this.banService.validateBillRefTokens(billRef, regKey).toPromise().then(response => {
           return {
             ...response,
             billRef
           }
         }).catch(e => e)
-      }
-      return null
     })
     return Promise.all(request).then(response => {
+      console.log('response', response)
       const valid = !response.some(({ message }) => message === 'No Tokens Associated')
       const message = response.map(item => {
         if (item) {
@@ -675,9 +649,7 @@ public vendorServiceType : any ={
     const request = banLevelEntities.map(item => {
       const { key } = item
       const billRefId = this.banInsertData[key]
-      if (this.isEmpty(billRefId)) {
-        return this.banService.associateBillReftoAsset(billRefId, banId, regKey).toPromise().catch(e => e)
-      }
+      return this.banService.associateBillReftoAsset(billRefId, banId, regKey).toPromise().catch(e => e)
     })
     Promise.all(request).then(result => {
       console.log('[INFO] - BanComponent - associateBan()')
@@ -690,10 +662,10 @@ public vendorServiceType : any ={
     const requests = banProducts.reduce((result, item) => {
       const { liquidateBillRoutingId, payFromBillRoutingId, banProductId } = item
       const items = []
-      if (!this.isEmpty(liquidateBillRoutingId)) {
+      if (liquidateBillRoutingId !== 0) {
         items.push(this.banService.associateBillReftoAsset(liquidateBillRoutingId, banProductId, regKey).toPromise().catch(e => e))
       }
-      if (!this.isEmpty(payFromBillRoutingId)) {
+      if (payFromBillRoutingId !== 0) {
         items.push(this.banService.associateBillReftoAsset(payFromBillRoutingId, banProductId, regKey).toPromise().catch(e => e))
       }
       return [...result, ...items]
@@ -704,33 +676,26 @@ public vendorServiceType : any ={
     })
   }
 
-  getVendorServiceType()
-  {
+  getVendorServiceType() {
     this.clearServiceList();
-    if(this.banInsertData.vendorConfigId!=null || this.banInsertData.vendorConfigId!="Select")
-    {
-      console.log("selected vendorConfig:",this.banInsertData.vendorConfigId);
+    if (this.banInsertData.vendorConfigId != null || this.banInsertData.vendorConfigId != "Select") {
+      console.log("selected vendorConfig:", this.banInsertData.vendorConfigId);
       let vendorConfigObj = this.vendorReferenceData.filter(x => x.vendorConfigId == this.banInsertData.vendorConfigId)[0];
-      
-      this.vendorServiceType.billedToLocationId=vendorConfigObj.billedToLocationId;
-      this.vendorServiceType.billedFromLocationId=vendorConfigObj.billedFromLocationId;
-      this.vendorServiceType.billProcessId=vendorConfigObj.billProcessId;
+
+      this.vendorServiceType.billedToLocationId = vendorConfigObj.billedToLocationId;
+      this.vendorServiceType.billedFromLocationId = vendorConfigObj.billedFromLocationId;
+      this.vendorServiceType.billProcessId = vendorConfigObj.billProcessId;
 
       this.banService.getVendorServiceType(this.vendorServiceType).subscribe(
-          refData =>{
-            this.serviceTypeReferenceData = refData; 
-            this.sourceSystem=this.sourceSystem.concat(refData);
-        for (let data of this.serviceTypeReferenceData) {
-          let labelService = data.serviceTypeName;
-          this.serviceTypeReferenceDataList.push({ label: labelService, value: data.serviceTypeId })
-        }
-          },
-          error=>
-          {
-
+        refData => {
+          this.serviceTypeReferenceData = refData;
+          this.sourceSystem = this.sourceSystem.concat(refData);
+          for (let data of this.serviceTypeReferenceData) {
+            let labelService = data.serviceTypeName;
+            this.serviceTypeReferenceDataList.push({ label: labelService, value: data.serviceTypeId })
           }
-);
-
+        },
+        error => {});
     }
   }
 
@@ -738,20 +703,6 @@ public vendorServiceType : any ={
     //this.modeReferenceDataList.push({ label: "Select", value: "Select" });
     this.modeReferenceDataList.push({ label: "PRODUCTION", value: "PRODUCTION" });
     this.modeReferenceDataList.push({ label: "TEST", value: "TEST" });
-  }
-
-  /**
-   * Private Method to get popup dismissed reason Can be removed if not needed.
-   * @param: reason: $event.
-   */
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
   }
 
   expandAllPanels(){
@@ -905,6 +856,7 @@ public vendorServiceType : any ={
     "indirectOffsetBuc":"",
     "erpVatAwtGroupName":"",
   }]
+
   serviceList: Array<{
     serviceTypeId: string, 
     overrideErpPmtTerms: string,
@@ -1007,31 +959,6 @@ public vendorServiceType : any ={
     console.log("remove new list"+this.serviceList.length);
   }
 
-  // upsertBanService() {
-  //   this.errorMessage = "";
-  //   //this.msgs = [];
-  //   console.log("test button click");
-  //   if (this.validation()) {
-  //     this.banService.upsertBan(this.serviceList).subscribe(
-  //       refData => {
-  //         this.saveMessage = refData;
-  //         if(!this.saveMessage.Error == undefined)
-  //           this.popupErrorMessage = "Ban Already Exits";
-  //         if(this.saveMessage.Error == false)
-  //           this.popupErrorMessage = "Ban Name "+this.serviceList+" Save Suceesfully.";
-  //         else
-  //           this.popupErrorMessage =  "ban Name "+this.serviceList+" not Saved..";
-  //         this.open(this.errorMessagePopUp);
-  //         this.getAllBanDetails();
-  //         this.clearAllFilters();
-  //       },
-  //       error => {
-  //       });
-  //   }else{
-  //     //this.open(this.errorMessage);
-  //   }
-  // }
-
   private readonly EXTERNAL_SYSTEM_CONFIG = {
     regKey: '63082218-d4d2-4987-8e06-5fb975beca6a',
     billingEntities: [
@@ -1065,9 +992,7 @@ public vendorServiceType : any ={
       const requestorSSO = '999999999' //localStorage.getItem(AppConstants.LABEL_LOGGEDIN_SSO)
       const { OUTPUT: output, BillRefID: billRefId } = await this.banService.getBillHubRefID(regKey, requestorSSO, billingEntityId).toPromise()
       if (output === 'FAIL') {
-        this.errorFlag = true
-        this.popupErrorMessage = billRefId
-        this.open(this.errorMessagePopUp)
+        throw { error: billRefId }
       } else if (billRefId) {
         if (type.includes('ST')) {
           this.systems[key] = billRefId
@@ -1077,9 +1002,11 @@ public vendorServiceType : any ={
         this.editBillRef(type)
       }
     } catch (e) {
-      this.errorFlag = true
-      this.popupErrorMessage = "Internal Server Error!"
-      this.open(this.errorMessagePopUp)
+      const message = e.hasOwnProperty('error') ? e.error : 'Internal Server Error!'
+      swal.fire({
+        text: message,
+        icon: 'error'
+      })
     }
   }
 
@@ -1089,29 +1016,6 @@ public vendorServiceType : any ={
     const { key } = billingEntities.find(({ billingEntityName }) => billingEntityName === type)
     const billRefId = type.includes('ST') ? this.systems[key] : this.banInsertData[key]
     window.open(`${environment.APP_BILLHUB_URL_UI_ENDPOINT}/EditBillReference;billRefId=${billRefId};sso=${requestorSSO};mode=edit`)
-  }
-  
-  upsertBanProduct(productBanId) {
-    console.log("Upsert Ban Product");
-    if (this.validation()) {
-      this.banService.upsertBanProduct(this.serviceList, productBanId).subscribe(
-        refData => {
-          const { Error: error, banProducts, message  } = refData;
-          if (!error) {
-            this.associateProductBan(banProducts)
-          } else {
-            console.log('[ERROR] - upsertBanProduct()')
-            console.log('message', message)
-          }
-          this.clearServiceList();
-        },
-        error => {
-          console.log('[ERROR] - upsertBanProduct()')
-          console.log('error', error)
-        });
-    } else {
-      //this.open(this.errorMessage);
-    }
   }
 
   getSourceServiceType(banId:any){
@@ -1157,58 +1061,39 @@ public vendorServiceType : any ={
     this.triggerindirectOffsetEvent(testSystem.indirectOffsetBucOverrideFlag);
     this.tableValueChanged(this.banInsertData.erpAwtGroupName,this.banInsertData.erpVatAwtGroupName,this.banInsertData.erpPaymentTerms,this.banInsertData.directOffsetBuc,this.banInsertData.indirectOffsetBuc)
   }
+
+  async cloneRec() {
+    console.log('[INFO] - cloneRec()')
+    const { value } = await swal.fire({
+      text: 'Do you want to Clone the record?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No'
+    })
+    if(value) {
+      this.cloneRecord()
+    } else {
+      this.banInsertData.cloneFlag = false;
+      this.cloneFlag = false;
+    }
+  }
       
   cloneRecord() {
+    console.log('[INFO] - cloneRecord()')
     this.cloneFlag = true;
     this.vBanFlag = false;
     this.banInsertData.cloneFlag = true;
     this.banInsertData.cloneOfId = this.banInsertData.banId;
     this.vendorBan = this.banInsertData.vendorBan;
-  //  this.index = [0,1];
-  //  this.collapsed=true;
-  //  this.panelExpansionFlag = true;
-  this.banInsertData.mode = "TEST";
-  this.banInsertData.invoiceName = "UNSPECIFIED";
-  this.banInsertData.vendorPaidBy = "UNSPECIFIED";
-  this.banInsertData.liquidatedVia = "UNSPECIFIED";
+    this.banInsertData.mode = "TEST";
+    this.banInsertData.invoiceName = "UNSPECIFIED";
+    this.banInsertData.vendorPaidBy = "UNSPECIFIED";
+    this.banInsertData.liquidatedVia = "UNSPECIFIED";
     this.banInsertData.taxEngine = "UNSPECIFIED";
     this.banInsertData.banId = 0;
-    this.banInsertData.liquidateBillRoutingId = "";
-    // this.banService.getCloneBillingModelTypes(this.banInsertData.banId).subscribe(
-    //   refData => {
-    //     let arr: any = [];
-    //     this.billingModelType = refData;
-    //     for (let data in this.billingModelType.response) {
-    //       if (data.toUpperCase()==="LIQUIDATED_VIA") {
-    //         this.liquidateViaReferenceDataList = this.billingModelType.response[data];
-    //       } else if (data.toUpperCase()==="PAID_BY") {
-    //         this.paidByReferenceDataList = this.billingModelType.response[data];
-    //       }else if (data.toUpperCase()==="INVOICE_NAME_VALUES") {
-    //         this.invoiceNmReferenceDataList = this.billingModelType.response[data];
-    //       } else {
-    //         this.taxEngineReferenceDataList = this.billingModelType.response[data];
-    //       }
-    //     }
-    //    
-
-    //   },
-    //   error => {
-    //   });
-  }
-
-  cloneRec(flag) {
-    this.popupErrorMessage = "";
-    if (flag) {
-      this.cloneFlag = true;
-      this.modeFlag = false;
-      this.errorFlag = false;
-      this.popupErrorMessage = "Do you want to Clone the record?";
-      this.open(this.errorMessagePopUp);
-    }
-    else {
-      this.banInsertData.cloneFlag = false;
-      this.cloneFlag = false;
-    }
+    this.banInsertData.liquidateBillRoutingId = '';
+    this.banInsertData.payFromBillRoutingId = ''
   }
 
   clearServiceList(){
@@ -1221,7 +1106,7 @@ public vendorServiceType : any ={
     this.triggerErpVatAwtEvent(false);
     this.triggerDirOffsetEvent(false);
     this.triggerindirectOffsetEvent(false);
-    // this.systems ={
+    // this.systems ={ 
     //   serviceTypeId: "", 
     //   overrideErpPmtTerms: "",
     //   overrideErpAwtGroupName: "",
@@ -1242,67 +1127,58 @@ public vendorServiceType : any ={
     this.serviceList=[];
   }
 
-  onModeChange(mode : any) {
-    if (mode.value === "PRODUCTION") { 
-      this.banService.modeChange(this.banInsertData).subscribe(
-        refData => {
-          this.saveMessage = refData;
-          this.modeFlag = true;
-          if (this.saveMessage.status === "Success") {
-            this.popupErrorMessage = this.saveMessage.message;
-            this.open(this.modeMessagePopUp);
-          }
-        },
-        error => {
-        });
-    }
-  }
-
-  changeMode(flag) {
-    this.modeFlag = false;
-    if (flag) {
-      this.banInsertData.mode = "PRODUCTION";
-    } else {
-      this.banInsertData.mode = "TEST";
+  onModeChange(mode: any) {
+    if (mode.value === 'PRODUCTION') {
+      this.banService.modeChange(this.banInsertData).toPromise().then(async response => {
+        const { status, message } = response
+        if (status === 'Success') {
+          const { value } = await swal.fire({
+            text: message,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No'
+          })
+          this.banInsertData.mode = value ? 'PRODUCTION' : 'TEST'
+        }
+      }).catch(console.log)
     }
   }
 
   onTabOpenST(event) {
     console.log(event);
-    this.indexST = [0,1];
-    this.collapsed=false;
-    this.panelExpansionFlag=false; 
-}
-onTabCloseST(event) {
-    this.indexST = [];
-    this.collapsed=true;
-    this.panelExpansionFlag=true; 
-}
+    this.indexST = [0, 1];
+    this.collapsed = false;
+    this.panelExpansionFlag = false;
+  }
 
-getVendorCode() {
-  const { billProcessId } = this.banInsertData
-  if (this.banInsertData.billProcessId === 2) {
-    this.banInsertData.vendorConfigId = ""
-    this.countryId = null;
-    this.vendorReferenceDataList = [];
-    var vendorFilterData = this.vendorReferenceData.filter(x => String(x.vendorCode).startsWith('Z')).map(item => {
-      const { vendorLegalEntityName, vendorCode, billedFromCountryCode, billedToCountryCode, currencyCode } = item
-    })
-    for (let data of vendorFilterData) {
-      let labelService = data.vendorLegalEntityName + ' | ' + data.vendorCode + ' | ' + data.billedFromCountryCode + ' | ' + data.billedToCountryCode + ' | '
-        + data.currencyCode;
-      this.vendorReferenceDataList.push({ label: labelService, value: data.vendorConfigId })
-    }
+  onTabCloseST(event) {
+    this.indexST = [];
+    this.collapsed = true;
+    this.panelExpansionFlag = true;
   }
-  else {
-    this.vendorReferenceDataList = [];
-    for (let data of this.vendorReferenceData) {
-      let labelService = data.vendorLegalEntityName + ' | ' + data.vendorCode + ' | ' + data.billedFromCountryCode + ' | ' + data.billedToCountryCode + ' | '
-        + data.currencyCode;
-      this.vendorReferenceDataList.push({ label: labelService, value: data.vendorConfigId })
+
+  getVendorCode() {
+    if (this.banInsertData.billProcessId === 2) {
+      this.banInsertData.vendorConfigId = ""
+      this.countryId = null;
+      this.vendorReferenceDataList = [];
+      var vendorFilterData = this.vendorReferenceData.filter(x => String(x.vendorCode).startsWith('Z'));
+      for (let data of vendorFilterData) {
+        let labelService = data.vendorLegalEntityName + ' | ' + data.vendorCode + ' | ' + data.billedFromCountryCode + ' | ' + data.billedToCountryCode + ' | '
+          + data.currencyCode;
+        this.vendorReferenceDataList.push({ label: labelService, value: data.vendorConfigId })
+      }
     }
-  }
-} 
+    else {
+      this.vendorReferenceDataList = [];
+      for (let data of this.vendorReferenceData) {
+        let labelService = data.vendorLegalEntityName + ' | ' + data.vendorCode + ' | ' + data.billedFromCountryCode + ' | ' + data.billedToCountryCode + ' | '
+          + data.currencyCode;
+        this.vendorReferenceDataList.push({ label: labelService, value: data.vendorConfigId })
+      }
+    }
+  } 
 
   get disabled() {
     if (this.editFlag) {
@@ -1337,7 +1213,4 @@ getVendorCode() {
     return !this.isSystemsSelected || false;
   }
 
-  isEmpty(val: any) {
-    return (val === '' || val === 0 || val === "" || val === null || val === undefined)
-  }
 }
