@@ -190,7 +190,7 @@ export class VendorComponent implements OnInit, OnDestroy {
     console.log("test button click");
     if (this.validation()) {
       try{
-        await this.store.dispatch(new VendorActions.UpsertVendor(this.vendorInsertData))
+        await this.store.dispatch(new VendorActions.UpsertVendor(this.vendorInsertData)).toPromise()
         this.cancel()
       }catch(e){}
     }

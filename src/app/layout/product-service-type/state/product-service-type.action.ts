@@ -1,5 +1,3 @@
-import { ProductServiceType } from "src/app/layout/product-service-type/state/product-service-type.model";
-
 
 export namespace ProductServiceTypeActions
 

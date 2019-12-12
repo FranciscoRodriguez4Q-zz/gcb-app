@@ -1,21 +1,20 @@
 import { State, Action, StateContext, Selector, Store } from '@ngxs/store';
 import * as _ from 'lodash';
 import swal from 'sweetalert2'
-import { ProductServiceType } from 'src/app/layout/product-service-type/state/product-service-type.model';
 import { ProductServiceTypeService } from 'src/app/layout/product-service-type/product-service-type.service';
 import { ProductServiceTypeActions } from 'src/app/layout/product-service-type/state/product-service-type.action';
 
 
 export class ProductServiceTypeStateModel {
-    productServiceTypes: ProductServiceType[]
-    productData: {}
+    productServiceTypes: any
+    productData: any
     fetching: boolean
 }
 
 @State<ProductServiceTypeStateModel>({
     name: 'productServiceTypes',
     defaults: {
-        productServiceTypes: [],
+        productServiceTypes: {},
         productData: {},
         fetching: false
     }
@@ -29,7 +28,7 @@ export class ProductServiceTypeState {
     
     @Selector()
     static getProductServiceTypes({ productServiceTypes }: ProductServiceTypeStateModel) {
-        return productServiceTypes
+        return Object.keys(productServiceTypes).map(k => productServiceTypes[k])
     }
 
     @Selector()
@@ -46,12 +45,10 @@ export class ProductServiceTypeState {
     fetchProductServiceType({ getState, patchState }: StateContext<ProductServiceTypeStateModel>) {
         const { productServiceTypes } = getState()
         if (_.isEmpty(productServiceTypes)) {
-            patchState({
-                fetching: true
-            })
+            patchState({ fetching: true })
             this.productServiceTypeService.getServicetypeData().toPromise().then(response => {
                 patchState({
-                    productServiceTypes: response,
+                    productServiceTypes: _.keyBy(response,'serviceTypeId'),
                     fetching: false
                 })
             })
@@ -73,20 +70,10 @@ export class ProductServiceTypeState {
     @Action(ProductServiceTypeActions.UpsertProductServiceType)
     async UpsertProductServiceType({ getState, patchState }: StateContext<ProductServiceTypeStateModel>, { payload }: ProductServiceTypeActions.UpsertProductServiceType) {
         try {
-            const { serviceTypeId = null } = payload
             const { productServiceTypes } = getState()
             const { statusMessage, status, productServiceType = null } = await this.productServiceTypeService.upsertServiceType(payload).toPromise()
             if (!status) throw statusMessage
-            if (serviceTypeId == null) {
-                patchState({ productServiceTypes: [...productServiceTypes, productServiceType] })
-            } else {
-                const productIndex = productServiceTypes.findIndex(x => x.serviceTypeId === serviceTypeId)
-                let _productServiceTypes = [...productServiceTypes]
-                _productServiceTypes[productIndex] = productServiceType
-                patchState({
-                    productServiceTypes: [..._productServiceTypes],
-                })
-            }
+            patchState({ productServiceTypes: { ...productServiceTypes, [productServiceType.serviceTypeId]: productServiceType } })
             await this.open({ message: statusMessage, type: 'success' })
         } catch(e) {
             this.open({ message: e, type: 'error'})
@@ -97,10 +84,8 @@ export class ProductServiceTypeState {
     @Action(ProductServiceTypeActions.AddProduct)
     addProduct({ getState, patchState }: StateContext<ProductServiceTypeStateModel>, { payload }: ProductServiceTypeActions.AddProduct) {
         const { productData } = getState()
-        if (!_.isEmpty(payload)) {
-            const { productId } = payload
-            patchState({ productData: { ...productData, [productId]: payload }})
-        }
+        if (!_.isEmpty(productData)) 
+            patchState({ productData: { ...productData, [payload.productId]: payload }})
     }
 
     private open({ message, type }) {

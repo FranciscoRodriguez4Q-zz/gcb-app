@@ -232,7 +232,7 @@ async upsertVendorConfig(){
   if (this.validation()) {
     if (this.vendorConfigDto.vendorEntityId != "Select" && this.vendorConfigDto.billedFromLocationId!= "Select" && this.vendorConfigDto.billedToLocationId != "Select") {
       try{
-        await this.store.dispatch(new VendorConfigActions.UpsertVendorConfig(this.vendorConfigDto))
+        await this.store.dispatch(new VendorConfigActions.UpsertVendorConfig(this.vendorConfigDto)).toPromise()
         this.clearAllFilters()
       }catch(e){}
     }

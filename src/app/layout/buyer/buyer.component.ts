@@ -174,7 +174,6 @@ export class BuyerComponent implements OnInit, OnDestroy {
   }
 
   showSelectedData(buyerId) {
-    console.log("radio button click" + this.buyerId);
     this.editFlag = true;
     this.formMode="Modify";
     const modelTemp = this.buyerData.find(x => x.buyerId == buyerId);
@@ -240,10 +239,9 @@ export class BuyerComponent implements OnInit, OnDestroy {
   async upsertBuyer() {
     this.errorMessage = "";
     //this.msgs = [];
-    console.log("test button click");
     if (this.validation()) {
       try{
-        await this.store.dispatch(new  BuyerActions.UpsertBuyer(this.buyerInsertData))
+        await this.store.dispatch(new  BuyerActions.UpsertBuyer(this.buyerInsertData)).toPromise()
         this.clearAllFilters()
       }catch(e){}
     }

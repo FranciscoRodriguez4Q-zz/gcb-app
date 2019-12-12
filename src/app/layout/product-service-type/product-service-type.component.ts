@@ -209,7 +209,7 @@ export class ProductServiceTypeComponent implements OnInit, OnDestroy {
     if (this.validation()) {
       if (this.gcbDetailFilters.productId != "Select" && this.gcbDetailFilters.countryCode != "Select" && this.gcbDetailFilters.billingBasis != "Select") {
         try{
-          await this.store.dispatch(new ProductServiceTypeActions.UpsertProductServiceType(this.gcbDetailFilters))
+          await this.store.dispatch(new ProductServiceTypeActions.UpsertProductServiceType(this.gcbDetailFilters)).toPromise()
           this.clearAllFilters();
         }catch(e){}
       }

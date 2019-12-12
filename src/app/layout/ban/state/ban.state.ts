@@ -171,15 +171,15 @@ export class BanState {
 	@Action(BanActions.AddVendorDetails)
 	addVendorDetails({ patchState, getState }: StateContext<BanStateModel>, { payload }: BanActions.AddVendorDetails) {
 		const { vendorConfigDetails } = getState()
-		const { vendorConfigId } = payload
-		patchState({ vendorConfigDetails: { ...vendorConfigDetails, [vendorConfigId]: payload } })
+		if (!_.isEmpty(vendorConfigDetails))
+			patchState({ vendorConfigDetails: { ...vendorConfigDetails, [payload.vendorConfigId]: payload } })
 	}
 
 	@Action(BanActions.AddBuyerDetails)
 	addBuyerDetails({ patchState, getState }: StateContext<BanStateModel>, { payload }: BanActions.AddBuyerDetails) {
 		const { buyerDetails } = getState()
-		const { buyerId } = payload
-		patchState({ buyerDetails: { ...buyerDetails, [buyerId]: payload } })
+		if (!_.isEmpty(buyerDetails))
+			patchState({ buyerDetails: { ...buyerDetails, [payload.buyerId]: payload } })
 	}
 
 	private open({ message, type }) {
