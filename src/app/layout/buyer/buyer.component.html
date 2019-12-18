@@ -79,7 +79,6 @@
                     <div class="p-col-6" style="text-align:right">
                       <button class="ge-button -fill--solid" (click)="upsertBuyer()" [disabled]="userFlag || disabled">Submit</button>
                       <button class="ge-button -fill--solid" (click)="clearAllFilters()" [disabled]="userFlag">Cancel</button>
-                      <app-file-download [dwnData]="buyerDwnData" [colsHeader]="this.downloadCols" [fileName]="fileName"></app-file-download>
                   </div>
               </div>
   </p-fieldset>
@@ -87,13 +86,16 @@
   Loading data
   <p-progressSpinner></p-progressSpinner>
 </div> -->
-
-<div class="p-grid">
-  <div class="p-col-12">
-    <div class="p-col-12" style="text-align:right" *ngIf="gridLoadFlag"> {{ tt.totalRecords }} records</div>
-    <div class="p-col-12" style="text-align:right" *ngIf="!gridLoadFlag"> Please wait, loading.
+<p-fieldset>
+    <p-header>Buyer: Existing/Search</p-header>
+<div class="container-fluid">
+  <div class="row justify-content-end">
+    <app-file-download style="margin-top: -20px; margin-bottom: -10px;" class="col-auto p-0" [dwnData]="buyerDwnData" *ngIf="gridLoadFlag" [colsHeader]="this.downloadCols" [fileName]="fileName"></app-file-download>
+    <div class="col-auto pr-4" *ngIf="gridLoadFlag"> {{ tt.totalRecords }} records</div>
+    <div *ngIf="!gridLoadFlag"> Please wait, loading.
         <p-progressSpinner [style]="{width: '30px', height: '30px'}" strokeWidth="8" fill="#EEEEEE" animationDuration=".5s"></p-progressSpinner>
-</div>
+    </div>
+  </div>
       <p-table #tt [columns]="cols" [value]="buyerData" [scrollable]="true" [resizableColumns]="true" [reorderableColumns]="true"
           [style]="{'margin-top':'2px','width':'100%'}" [rows]="10" [paginator]="true" [pageLinks]="3" [responsive]="true">
           <ng-template pTemplate="header" let-columns>
@@ -127,8 +129,8 @@
           </ng-template>
           </p-table>
         </div>
-    </div>
     <footer class="ge-footer"></footer>
+</p-fieldset>
   </div>
    
   <ng-template #content1 let-c="close" let-d="dismiss">

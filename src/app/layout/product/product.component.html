@@ -75,8 +75,6 @@
         <div class="p-col-6" style="text-align:right">
             <button class="ge-button -fill--solid" (click)="upsertProduct()" [disabled]="userFlag || disabled">Submit</button>
             <button class="ge-button -fill--solid" (click)="clearAllFilters()" [disabled]="userFlag">Cancel</button>
-            <app-file-download [dwnData]="productDwnData" [colsHeader]="downloadCols" [fileName]="fileName" ></app-file-download>
-    
         </div>
     </div>
     </p-fieldset>
@@ -86,12 +84,16 @@
               <app-file-download [dwnData]="gcbDwnData" [colsHeader]="this.downloadCols" [fileName]="fileName"  (dwnAction)="getAllProduct();"></app-file-download>
           </div>
       </div> -->
-      <div class="p-grid">
-      <div class="p-col-12">
-            <div class="p-col-12" style="text-align:right" *ngIf="gridLoadFlag"> {{ tt.totalRecords }} records</div>
+      <p-fieldset>
+            <p-header>Product: Existing/Search</p-header>
+      <div class="container-fluid">
+      <div class="row justify-content-end">
+            <app-file-download *ngIf="gridLoadFlag" style="margin-top: -20px; margin-bottom: -10px;" class="col-auto p-0" [dwnData]="productDwnData" [colsHeader]="downloadCols" [fileName]="fileName" ></app-file-download>
+            <div class="col-auto pr-4" *ngIf="gridLoadFlag"> {{ tt.totalRecords }} records</div>
             <div class="p-col-12" style="text-align:right" *ngIf="!gridLoadFlag"> Please wait, loading.
                 <p-progressSpinner [style]="{width: '30px', height: '30px'}" strokeWidth="8" fill="#EEEEEE" animationDuration=".5s"></p-progressSpinner>
-        </div>            
+            </div>
+      </div>
        <p-table #tt [columns]="cols" [value]="products" [style]="{'margin-top':'2px','width':'100%'}" [rows]="10" [paginator]="true" [pageLinks]="3" [responsive]="true">
           <ng-template pTemplate="header" let-columns>
               <tr>
@@ -126,8 +128,8 @@
           </ng-template>
         </p-table>
       </div>
-      </div>
       <footer class="ge-footer"></footer>
+      </p-fieldset>
       </div>
       
       <ng-template #content1 let-c="close" let-d="dismiss">
