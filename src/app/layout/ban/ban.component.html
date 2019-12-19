@@ -9,31 +9,35 @@
 		</div>
 		<p-panel>
 			<p-header>
-				<div class="p-grid">
-					<div class="p-col ">
-						<div class="p-grid p-dir-col p-nogutter">
-							<div class="p-col p-nogutter">
-								<span class="ui-panel-title" style="font-size:14px;display:inline-block;margin-top:2px">BAN Add/Update</span>
-							</div>
-							<div class="p-col p-nogutter">
-								<span *ngIf="!editFlag">BAN : Create</span>
-								<span *ngIf="editFlag">BAN : Modify</span>
+				<div class="container-fluid">
+					<div class="row align-items-center">
+						<div class="col-5 ml-0">
+							<div class="row">
+								<div class="col-auto p-0 mr-3">
+									<div class="cButton" style="margin-top: 6px;">
+										<span *ngIf="panelExpansionFlag" pTooltip="expand all" tooltipPosition="bottom" showDelay="400" hideDelay="100" (click)="expandAllPanels()">
+											<i class="fa fa-plus-square fa-2x" aria-hidden="true"></i>
+										</span>
+										<span *ngIf="!panelExpansionFlag" pTooltip="collapse all" tooltipPosition="bottom" showDelay="400" hideDelay="100" (click)="collapseAllPanels()">
+											<i class="fa fa-minus-square fa-2x m-0 p-0" aria-hidden="true"></i>
+										</span>
+									</div>
+								</div>
+								<div class="col">
+									<div class="row">
+										<span class="ui-panel-title" style="font-size:14px;display:inline-block;margin-top:2px">BAN Add/Update</span>
+									</div>
+									<div class="row">
+										<span *ngIf="!editFlag">BAN : Create</span>
+										<span *ngIf="editFlag">BAN : Modify</span>
+									</div>
+								</div>
 							</div>
 						</div>
-					</div>
-					<div class="p-col  ">
-						<div class="ui-rtl" dir="rtl" style="text-align:right">
-							<span *ngIf="panelExpansionFlag">
-					<button class="ge-button -fill--solid -size--small " (click)="expandAllPanels()">Expand All
-					<i class="fa fa-plus-square -size--large" aria-hidden="true"></i>
-					</button>
-					</span>
-							<!--   <i class="fa fa-plus fa-fw"></i> -->
-							<span *ngIf="!panelExpansionFlag">
-					<button class="ge-button -fill--solid -size--small" (click)="collapseAllPanels()">Collapse All
-					<i class="fa fa-minus-square -size--large" aria-hidden="true"></i>
-					</button>
-					</span>
+						<div class="col-7 text-right">
+							<button class="ge-button -fill--solid" (click)="cloneRec(true)" *ngIf="editFlag" [disabled]="cloneFlag">Clone</button>
+							<button class="ge-button -fill--solid" (click)="upsertBan()" [disabled]="disabled">Submit</button>
+							<button class="ge-button -fill--solid" (click)="clearAllFilters();clearServiceList()">Cancel</button>
 						</div>
 					</div>
 				</div>
@@ -108,6 +112,13 @@
 									<p-calendar [(ngModel)]="banInsertData.activeTo" showButtonBar="true" [style]="{'width': '120%'}" [disabled]="userFlag"></p-calendar>
 								</div>
 							</div>
+							<div class="p-grid">
+								<div class="p-col-4 item-right">
+									Allow Billing Process
+								</div><div class="p-col-1 item-left gridCheckBox">
+									<p-checkbox binary="true" labelStyleClass="chkLabel" [(ngModel)]="banInsertData.allowBillingProcess" [disabled]="userFlag"></p-checkbox><label class="label"></label>
+								</div>
+							</div>							
 							<div class="p-grid">
 								<div class="p-col-4 item-right">
 									<span class="required">*</span>Invoice Name
@@ -206,17 +217,41 @@
 							<div class="container-details p-grid">
 								<div class="p-col-4 align-end">Is Equipment</div>
 								<div class="p-col-1 item-container-details">
-									<p-checkbox binary="true" labelStyleClass="chkLabel" [(ngModel)]="banInsertData.isEquipment"></p-checkbox><label class="label"></label>
+									<p-checkbox binary="true" labelStyleClass="chkLabel" [disabled]="userFlag" [(ngModel)]="banInsertData.isEquipment"></p-checkbox><label class="label"></label>
 								</div>
 							</div>
 							<div class="container-details p-grid">
 								<div class="p-col-4 align-end">LLD CoE</div>
-								<div class="p-col-2 item-container-details">
+								<div class="p-col-3 item-container-details">
 									<p-dropdown onEnter [options]="lldCoeList" [style]="{'width': '100%','min-width':'9.15em'}" [(ngModel)]="banInsertData.lldCoeFlag"
 									[filter]="true" placeholder="Select" [resetFilterOnHide]="true" [disabled]="userFlag"></p-dropdown>
 								</div>
 							</div>
-
+							<div class="container-details p-grid">
+								<div class="p-col-4 align-end">Division Flag</div>
+								<div class="p-col-1 item-container-details">
+									<p-checkbox binary="true" labelStyleClass="chkLabel" [disabled]="userFlag" [(ngModel)]="banInsertData.divisionFlag"></p-checkbox><label class="label"></label>
+								</div>
+							</div>
+							<div class="container-details p-grid">
+								<div class="p-col-4 align-end">Type of division</div>
+								<div class="p-col-6 item-left">
+									<p-dropdown onEnter [options]="divisionTypes" (onChange)="divisionTypeSelected()" [style]="{'width': '100%'}" [(ngModel)]="banInsertData.divisionType"
+									[filter]="true" placeholder="Select" [resetFilterOnHide]="true" [disabled]="!banInsertData.divisionFlag"></p-dropdown>
+								</div>
+							</div>
+							<div class="container-details p-grid">
+								<div class="p-col-4 align-end">Division value</div>
+								<div class="p-col-6 item-left">
+									<p-dropdown onEnter [options]="divisionValues" [virtualScroll]="true" itemSize="30" [style]="{'width': '100%'}" [(ngModel)]="banInsertData.divisionValue"
+									[filter]="true" placeholder="Select" [resetFilterOnHide]="true" [disabled]="!banInsertData.divisionFlag || fetchingDivisionValues || banInsertData.divisionType==''"></p-dropdown>
+								</div>
+								<div *ngIf="fetchingDivisionValues && banInsertData.divisionFlag" class="p-col-1">
+									<div class="spinner-border spinner-border-sm text-primary" role="status">
+										<span class="sr-only">Loading...</span>
+									</div>
+								</div>
+							</div>
 						</p-accordionTab>
 						<p-accordionTab header="Focus Groups">
 							<div class="p-grid">
@@ -339,7 +374,7 @@
 									Ship To Country
 								</div>
 								<div class="p-col-8 item-left">
-									<p-dropdown onEnter [virtualScroll]="true" onEnter itemSize="30" [options]="countryCodeReferenceDataList" [style]="{'width': '100%'}"
+									<p-dropdown onEnter [virtualScroll]="true" itemSize="30" [options]="countryCodeReferenceDataList" [style]="{'width': '100%'}"
 									[filter]="true" placeholder="Select" [(ngModel)]="banInsertData.shipToCountry" [resetFilterOnHide]="true"></p-dropdown>
 								</div>
 							</div>
@@ -632,19 +667,22 @@
 						<button class="ge-button -fill--solid" (click)="cloneRec(true)" *ngIf="editFlag" [disabled]="cloneFlag">Clone</button>
 						<button class="ge-button -fill--solid" (click)="upsertBan()" [disabled]="disabled">Submit</button>
 						<button class="ge-button -fill--solid" (click)="clearAllFilters();clearServiceList()">Cancel</button>
-						<app-file-download [dwnData]="banDwnData" [colsHeader]="this.downloadCols" [fileName]="fileName"></app-file-download>
 					</div>
 				</div>
 			</p-accordion>
 		</p-panel>
 	</div>
-	<div class="p-grid">
-		<div class="p-col-12">
-			<div class="p-col-12" style="text-align:right" *ngIf="!gridLoadFlag"> {{ tt.totalRecords }} records</div>
-			<div class="p-col-12" style="text-align:right" *ngIf="gridLoadFlag">
+<p-fieldset>
+	<p-header>Ban: Existing/Search</p-header>
+	<div class="container-fluid">
+		<div class="row justify-content-end">
+			<app-file-download *ngIf="!gridLoadFlag" style="margin-top: -20px; margin-bottom: -10px;" class="col-auto p-0" [dwnData]="banDwnData" [colsHeader]="this.downloadCols" [fileName]="fileName"></app-file-download>
+			<div class="col-auto pr-4" style="text-align:right" *ngIf="!gridLoadFlag"> {{ tt.totalRecords }} records</div>
+			<div class="col-12" style="text-align:right" *ngIf="gridLoadFlag">
 				Please wait, loading.
 				<p-progressSpinner [style]="{width: '30px', height: '30px'}" strokeWidth="8" fill="#EEEEEE" animationDuration=".5s"></p-progressSpinner>
 			</div>
+		</div>
 			<p-table #tt [columns]="cols" [value]="banData" [scrollable]="true" [resizableColumns]="true" [reorderableColumns]="true"
 				[style]="{'margin-top':'2px','width':'100%'}" [rows]="10" [paginator]="true" [pageLinks]="3" [responsive]="true">
 				<ng-template pTemplate="header" let-columns>
@@ -678,6 +716,6 @@
 				</ng-template>
 			</p-table>
 		</div>
-	</div>
-	<footer class="ge-footer"></footer>
+		<footer class="ge-footer"></footer>
+	</p-fieldset>
 </div>

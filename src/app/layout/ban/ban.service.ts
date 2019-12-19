@@ -15,8 +15,16 @@ import { map,delay,catchError,tap} from 'rxjs/operators';
 })
 export class BanService {
 
-  public getBanDetails(): Observable<any> {
-    return this.http.get(`${environment.APP_BASE_URL_SERVICE_ENDPOINT}/ban/ban-details`);
+  public getBusinessSegment():Observable<any> { 
+    return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT+"/ban/businessSegment");
+  }
+  
+  public getOperatingLedger():Observable<any> { 
+    return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT+"/ban/bucbiz");
+  }
+
+  public getBanDetails():Observable<any> { 
+    return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT+"/ban/ban-details");
   }
 
   public getAllFocusGroups(): Observable<any> {

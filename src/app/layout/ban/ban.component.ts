@@ -28,7 +28,15 @@ export class BanComponent implements OnInit, OnDestroy, DoCheck {
     { label: "N", value: "N" },
     { label: "L", value: "L" }  
   ];
-  
+
+  fetchingDivisionValues: boolean = false;
+  businessSegments: any[] = [];
+  bucsbizs: any[] = [];
+  divisionValues: any[] = [];
+  divisionTypes: SelectItem[] =[
+    { label: "Business Segment", value: "Business Segment" },
+    { label: "Division/Operating Ledger BUC", value: "Division/Operating Ledger BUC" }  
+  ];
 
 public vendorServiceType : any ={
   "billedToLocationId":"",
@@ -41,6 +49,10 @@ public vendorServiceType : any ={
   public billingModelType: any = [];
 
   public banInsertData: any = {
+      allowBillingProcess: false,
+      divisionFlag: false,
+      divisionType: '',
+      divisionValue: "",
       banId:"",
       billProcessName: "",
       billProcessId:"",
@@ -1216,5 +1228,38 @@ public vendorServiceType : any ={
     }
     return !this.isSystemsSelected || false;
   }
+
+  isEmpty(val: any) {
+    return (val === '' || val === 0 || val === "" || val === null || val === undefined)
+  }
+
+  divisionTypeSelected(){
+    if (this.banInsertData.divisionType == "Business Segment"){
+      if(this.businessSegments.length == 0 ){
+        this.fetchingDivisionValues = true;
+        this.banService.getBusinessSegment().subscribe((res) =>{
+          this.businessSegments = res.map(({ id, businessSegment}) => ({
+            label: businessSegment,
+            value: id
+          }))
+          this.divisionValues = this.businessSegments;
+          this.fetchingDivisionValues = false;  
+        })
+      }else this.divisionValues = this.businessSegments;
+    }else{
+      if(this.bucsbizs.length == 0 ){
+        this.fetchingDivisionValues = true;
+        this.banService.getOperatingLedger().subscribe((res) => {
+          this.bucsbizs = res.map(({ buc, bucDescription, sourceDrm }) => ({
+            label: `${buc} | ${bucDescription} | ${sourceDrm}`,
+            value: buc
+          }))
+          this.fetchingDivisionValues = false;  
+          this.divisionValues = this.bucsbizs;
+        })
+      }else this.divisionValues = this.bucsbizs;
+    }
+  }
+
 
 }
