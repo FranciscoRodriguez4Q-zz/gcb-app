@@ -149,7 +149,7 @@ export class BanState {
 	}
 
 	@Action(BanActions.UpsertBan)
-	async upsertProduct({ getState, patchState, }: StateContext<BanStateModel>, { payload }: BanActions.UpsertBan) {
+	async upsertBan({ getState, patchState, }: StateContext<BanStateModel>, { payload }: BanActions.UpsertBan) {
 		try {
 			const { bans } = getState()
 			const { statusMessage, Error: error, banDetails = null } = await this.banService.upsertBan(payload).toPromise()

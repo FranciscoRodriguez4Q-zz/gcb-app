@@ -35,7 +35,7 @@ export class BanComponent implements OnInit, OnDestroy, DoCheck {
   divisionValues: any[] = [];
   divisionTypes: SelectItem[] =[
     { label: "Business Segment", value: "Business Segment" },
-    { label: "Division/Operating Ledger BUC", value: "Division/Operating Ledger BUC" }  
+    { label: "Division/Operating Ledger BUC", value: "Division/Operating Ledger BUC" }
   ];
 
 public vendorServiceType : any ={
@@ -415,6 +415,7 @@ public vendorServiceType : any ={
       refData => {
         this.banInsertData = refData;
         this.setBuyerDetails();
+        this.divisionTypeSelected()
         this.getSourceServiceType(banId);
         this.banInsertDataCopy = { ...this.banInsertData }
         this.detailInfo = {
@@ -1235,12 +1236,12 @@ public vendorServiceType : any ={
 
   divisionTypeSelected(){
     if (this.banInsertData.divisionType == "Business Segment"){
-      if(this.businessSegments.length == 0 ){
+      if(this.businessSegments.length === 0 ){
         this.fetchingDivisionValues = true;
         this.banService.getBusinessSegment().subscribe((res) =>{
           this.businessSegments = res.map(({ id, businessSegment}) => ({
             label: businessSegment,
-            value: id
+            value: `${id}`
           }))
           this.divisionValues = this.businessSegments;
           this.fetchingDivisionValues = false;  
