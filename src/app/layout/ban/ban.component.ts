@@ -1027,12 +1027,23 @@ public vendorServiceType : any ={
     }
   }
 
-  editBillRef(type) {
-    const requestorSSO = '999999999' //localStorage.getItem(AppConstants.LABEL_LOGGEDIN_SSO);
-    const { billingEntities } = this.EXTERNAL_SYSTEM_CONFIG;
-    const { key } = billingEntities.find(({ billingEntityName }) => billingEntityName === type)
-    const billRefId = type.includes('ST') ? this.systems[key] : this.banInsertData[key]
-    window.open(`${environment.APP_BILLHUB_URL_UI_ENDPOINT}/EditBillReference;billRefId=${billRefId};sso=${requestorSSO};mode=edit`)
+  async editBillRef(type) {
+    try {
+      const { billingEntities, regKey } = this.EXTERNAL_SYSTEM_CONFIG;
+      // TODO call api endpoint GetRequestID
+      const { RequestID, Edit, message } =  await this.banService.getRequestIdBillHub(regKey).toPromise()
+      if (message !== 'SUCCESS')  throw 'Something went wrong!'
+      // TODO call api with recent response of GetRequestID EditBillRef
+      const requestorSSO = '999999999' //localStorage.getItem(AppConstants.LABEL_LOGGEDIN_SSO);
+      const { key } = billingEntities.find(({ billingEntityName }) => billingEntityName === type)
+      const billRefId = type.includes('ST') ? this.systems[key] : this.banInsertData[key]
+      window.open(`${environment.APP_BILLHUB_URL_SERVICE_ENDPOINT}/EditBillRef?billRefId=${billRefId}&Mode=${Edit}&reqId=${RequestID}&regKey=${regKey}`)
+    } catch (e){
+      swal.fire({
+        text: e,
+        icon: 'error'
+      })
+    }
   }
 
   getSourceServiceType(banId:any){

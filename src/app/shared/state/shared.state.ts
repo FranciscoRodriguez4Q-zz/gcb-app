@@ -15,7 +15,11 @@ class SharedStateModel {
     name: 'shared',
     defaults: {
         billProcesses: [],
-        userDetails: {},
+        userDetails: {
+            sso: '999999999',
+            firstName: 'Test',
+            lastName: 'User'
+        },
         countries: []
     }
 })
