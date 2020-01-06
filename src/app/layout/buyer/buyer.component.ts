@@ -104,30 +104,28 @@ export class BuyerComponent implements OnInit, OnDestroy {
     "updatedBy": "",
     "buyerInfo":"",
     "goldNetName":"",
-    "aliases": []
+    "buyerAlias": []
   };
   public buyerInsertDataCopy: any;
 
   addAlias(alias){
     this.newAlias = "";
-    if(!this.buyerInsertData.aliases.includes(alias)){
+    if(!this.buyerInsertData.buyerAlias.includes(alias)){
       this.aliases.push({label: alias, value:alias});
-      this.buyerInsertData.aliases.push(alias);
+      this.buyerInsertData.buyerAlias.push({aliasName: alias});
     }
-    console.log(this.aliases)
   }
 
   removeAlias(salias){
-    let i = this.buyerInsertData.aliases.indexOf(salias.label);
-    this.buyerInsertData.aliases.splice(i,1)
+    let i = this.buyerInsertData.buyerAlias.indexOf({aliasName: salias.label});
+    this.buyerInsertData.buyerAlias.splice(i,1)
     this.aliases.splice(i,1);
   }
 
   async ngOnInit() {
-    this.buyerInsertData.aliases = [];
+    this.buyerInsertData.buyerAlias = [];
     this.initStateOnComponent()
     for (let i = 0; i < this.cols.length; i++) {
-      // console.log("in Download method"+i);
       this.downloadCols.push(this.cols[i].header);
     }
   }
@@ -201,7 +199,11 @@ export class BuyerComponent implements OnInit, OnDestroy {
     const modelTemp = this.buyerData.find(x => x.buyerId == buyerId);
     this.buyerInsertData = { ...modelTemp };
     this.buyerService.getBuyerAliases(modelTemp.buyerId).subscribe((data)=>{
-      this.buyerInsertData.aliases = data;
+      this.aliases = [];
+      data.forEach(element => {
+        this.aliases.push({label: element.aliasName, value: element.aliasName});
+      });
+      this.buyerInsertData.buyerAlias = data;
       this.buyerInsertDataCopy = _.cloneDeep(this.buyerInsertData)
     });
   }
@@ -217,8 +219,10 @@ export class BuyerComponent implements OnInit, OnDestroy {
       goldId: "",
       updatedBy: "",
       buyerInfo:"",
-      goldNetName:""
+      goldNetName:"",
+      buyerAlias:[]
     }
+    this.aliases = [];
     this.errorMessage ="";
     this.buyerInsertDataCopy = {}
   }
@@ -258,6 +262,7 @@ export class BuyerComponent implements OnInit, OnDestroy {
     //this.msgs = [];
     if (this.validation()) {
       try{
+        console.log(this.buyerInsertData)
         await this.store.dispatch(new  BuyerActions.UpsertBuyer(this.buyerInsertData)).toPromise()
         this.clearAllFilters()
       }catch(e){}
