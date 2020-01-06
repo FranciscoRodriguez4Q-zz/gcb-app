@@ -13,6 +13,7 @@ import { Select, Store } from '@ngxs/store';
 import { SharedActions } from 'src/app/shared/state/shared.actions';
 import { VendorConfigActions } from 'src/app/layout/vendor-config/state/vendor-config.actions';
 import { VendorConfigState } from 'src/app/layout/vendor-config/state/vendor-config.state';
+import { isEqual, cloneDeep } from 'lodash'
 
 @Component({
   selector: 'app-vendor-config',
@@ -310,12 +311,12 @@ showSelectedData(vendorConfigId) {
   this.editFlag = true;
   const modelTemp = this.vendorGridData.find(x => x.vendorConfigId == vendorConfigId);
   this.vendorConfigDto = { ...modelTemp };
-  this.vendorConfigDtoCopy = { ...this.vendorConfigDto };
+  this.vendorConfigDtoCopy = cloneDeep(this.vendorConfigDto)
 }
 
 get disabled() {
   if (this.editFlag) {
-    return JSON.stringify(this.vendorConfigDto) === JSON.stringify(this.vendorConfigDtoCopy);
+    return isEqual(this.vendorConfigDto, this.vendorConfigDtoCopy)
   }
   return false;
 }

@@ -10,6 +10,7 @@ import { Store, Select } from '@ngxs/store';
 import { SharedState } from 'src/app/shared/state/shared.state';
 import { VendorState } from 'src/app/layout/vendor/state/vendor.state';
 import { VendorActions } from 'src/app/layout/vendor/state/vendor.actions';
+import * as _ from 'lodash'
 
 @Component({
   selector: 'app-product',
@@ -154,7 +155,7 @@ export class VendorComponent implements OnInit, OnDestroy {
       this.formMode="Modify";
       const modelTemp = this.vendorData.find(x => x.vendorEntityId == vendorEntityId);
       this.vendorInsertData = { ...modelTemp };
-      this.vendorInsertDataCopy = { ...this.vendorInsertData }
+      this.vendorInsertDataCopy = _.cloneDeep(this.vendorInsertData)
       this.vendor = this.vendorInsertData;
   }
 
@@ -215,7 +216,7 @@ export class VendorComponent implements OnInit, OnDestroy {
 
   get disabled() {
     if (this.editFlag) {
-      return JSON.stringify(this.vendorInsertData) === JSON.stringify(this.vendorInsertDataCopy)
+      return _.isEqual(this.vendorInsertData, this.vendorInsertDataCopy)
     }
     return false;
   }

@@ -155,7 +155,7 @@ export class ProductComponent implements OnInit, OnDestroy {
     window.scroll(0, 0);
     this.editFlag = true;
     this.gcbProductFilters = { ...productData }
-    this.gcbProductFiltersCopy = { ...this.gcbProductFilters };
+    this.gcbProductFiltersCopy = _.cloneDeep(this.gcbProductFilters)
     this.formMode = "Modify";
   }
 
@@ -220,7 +220,7 @@ export class ProductComponent implements OnInit, OnDestroy {
 
   get disabled() {
     if (this.editFlag) {
-      return JSON.stringify(this.gcbProductFilters) === JSON.stringify(this.gcbProductFiltersCopy)
+      return _.isEqual(this.gcbProductFilters, this.gcbProductFiltersCopy)
     }
     return false;
   }

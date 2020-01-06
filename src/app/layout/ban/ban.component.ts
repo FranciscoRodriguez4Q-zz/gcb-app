@@ -417,7 +417,7 @@ public vendorServiceType : any ={
         this.setBuyerDetails();
         this.divisionTypeSelected()
         this.getSourceServiceType(banId);
-        this.banInsertDataCopy = { ...this.banInsertData }
+        this.banInsertDataCopy = _.cloneDeep(this.banInsertData)
         this.detailInfo = {
           detailedLocationId: this.banInsertData.detailedLocationId,
           billedToLocationId: this.banInsertData.billedToLocationId
@@ -1210,7 +1210,7 @@ public vendorServiceType : any ={
 
   get disabled() {
     if (this.editFlag) {
-      return JSON.stringify(this.banInsertData) === JSON.stringify(this.banInsertDataCopy)
+      return _.isEqual(this.banInsertData, this.banInsertDataCopy)
     }
     return false;
   }

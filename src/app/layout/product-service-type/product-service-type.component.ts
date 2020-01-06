@@ -14,6 +14,7 @@ import { SharedState } from 'src/app/shared/state/shared.state';
 import { ProductServiceTypeActions } from 'src/app/layout/product-service-type/state/product-service-type.action';
 import { ProductServiceTypeState } from 'src/app/layout/product-service-type/state/product-service-type.state';
 import { ProductServiceType } from 'src/app/layout/product-service-type/state/product-service-type.model';
+import * as _ from 'lodash'
 
 @Component({
   selector: 'app-product-service-type',
@@ -276,13 +277,13 @@ export class ProductServiceTypeComponent implements OnInit, OnDestroy {
     this.editFlag = true;
     const test = this.serviceTypes.find(x => x.serviceTypeId == serviceTypeId)
     this.gcbDetailFilters = { ...test }
-    this.gcbDetailFiltersCopy = { ...this.gcbDetailFilters };
+    this.gcbDetailFiltersCopy = _.cloneDeep(this.gcbDetailFilters)
     this.formMode = "Modify";
   }
 
   get disabled() {
     if (this.editFlag) {
-      return JSON.stringify(this.gcbDetailFilters) === JSON.stringify(this.gcbDetailFiltersCopy);
+      return _.isEqual(this.gcbDetailFilters, this.gcbDetailFiltersCopy)
     }
     return false;
   }
