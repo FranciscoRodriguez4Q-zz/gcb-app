@@ -11,15 +11,17 @@ class SharedStateModel {
     countries: []
 }
 
+const userDefault = {
+    sso: '999999999',
+    firstName: 'Test',
+    lastName: 'User'
+}
+
 @State<SharedStateModel>({
     name: 'shared',
     defaults: {
         billProcesses: [],
-        userDetails: {
-            sso: '999999999',
-            firstName: 'Test',
-            lastName: 'User'
-        },
+        userDetails: userDefault,
         countries: []
     }
 })
@@ -59,7 +61,7 @@ export class SharedState {
     @Action(SharedActions.FetchUserDetails)
     fetchUserDetails({ getState, patchState }: StateContext<SharedStateModel>) {
         const { userDetails } = getState()
-        if (_.isEmpty(userDetails)) {
+        if (_.isEmpty(userDetails) || _.isEqual(userDetails, userDefault)) {
             this.sharedService.getUserData().toPromise().then(({ User }) => {
                 const { sso, firstName, lastName, role, roleName } = User
                 patchState({

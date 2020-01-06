@@ -1,5 +1,5 @@
 import { TranslateService } from '@ngx-translate/core';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
@@ -12,13 +12,12 @@ import { Observable } from 'rxjs';
 	templateUrl: './header.component.html',
 	styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements OnInit{
+export class HeaderComponent {
 	pushRightClass: string = 'push-right';
 	cookieExists: boolean = true;
 	headText: String = "";
 
 	@Select(SharedState.getUserDetails) userDetails$: Observable<any>
-	public userDetails: any;
 
 	constructor(private translate: TranslateService, public router: Router, private http: HttpClient,
 		private cookieService: CookieService) {
@@ -38,13 +37,11 @@ export class HeaderComponent implements OnInit{
 			});
 	}
 
-	ngOnInit() {
-		const { firstName, lastName, sso } = this.userDetails
-		this.headText = `${firstName} ${lastName} - ${sso}`;
-	}
-
 	initStateOnComponent() {
-		this.userDetails$.subscribe(userDetails => this.userDetails = userDetails)
+		this.userDetails$.subscribe(userDetails => {
+			const { firstName, lastName, sso } = userDetails
+			this.headText = `${firstName} ${lastName} - ${sso}`;
+		})
 	}
 
 	isToggled(): boolean {
