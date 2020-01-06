@@ -1,14 +1,17 @@
 import { NgModule } from '@angular/core';
 import { DropdownOnEnterDirective } from './dropdown-on-enter.directive';
 import { NumberOnlyDirective } from './num-only.directive';
+import { DoOnEnterDirective } from './do-on-enter.directive';
 @NgModule({
   declarations: [
     DropdownOnEnterDirective,
-    NumberOnlyDirective
+    NumberOnlyDirective,
+    DoOnEnterDirective
   ],
   exports: [
     DropdownOnEnterDirective,
-    NumberOnlyDirective
+    NumberOnlyDirective,
+    DoOnEnterDirective
   ]
 })
 export class SharedDirectivesModule { }

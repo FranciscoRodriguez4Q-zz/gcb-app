@@ -62,7 +62,7 @@
                         </div>
                         <div class="col-8 pl-0">
                             <div class="input-group mb-3">
-                                <input type="text" [(ngModel)]="newAlias" class="form-control" placeholder="New Buyer Alias">
+                                <input doOnEnter (doEnter)="addAlias(newAlias)" type="text" [(ngModel)]="newAlias" class="form-control" placeholder="New Buyer Alias">
                                 <div class="input-group-append">
                                     <button class="btn btn-outline-secondary" (click)="addAlias(newAlias)" type="button" id="button-addon2"> <i class="fa fa-plus"></i> </button>
                                 </div>
