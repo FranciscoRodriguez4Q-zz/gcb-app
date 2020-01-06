@@ -141,4 +141,8 @@ export class BanService {
   public getUserData(): Observable<Object> {
     return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/UserDetails");
    }
+
+  public getRequestIdBillHub(regKey): Observable<any> {
+    return this.http.get(`${environment.APP_BILLHUB_URL_SERVICE_ENDPOINT}/GetRequestId?regKey=${regKey}`)
+  }
 }

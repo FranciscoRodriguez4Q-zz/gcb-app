@@ -11,6 +11,7 @@ import { SharedState } from 'src/app/shared/state/shared.state';
 import { SharedActions } from 'src/app/shared/state/shared.actions';
 import { BuyerState } from 'src/app/layout/buyer/state/buyer.state';
 import { BuyerActions } from 'src/app/layout/buyer/state/buyer.actions';
+import * as _ from 'lodash'
 
 @Component({
   selector: 'app-product',
@@ -203,7 +204,7 @@ export class BuyerComponent implements OnInit, OnDestroy {
         this.aliases.push({label: element.aliasName, value: element.aliasName});
       });
       this.buyerInsertData.buyerAlias = data;
-      this.buyerInsertDataCopy = { ...this.buyerInsertData }
+      this.buyerInsertDataCopy = _.cloneDeep(this.buyerInsertData)
     });
   }
 
@@ -270,7 +271,7 @@ export class BuyerComponent implements OnInit, OnDestroy {
 
   get disabled() {
     if (this.editFlag) {
-      return JSON.stringify(this.buyerInsertData) === JSON.stringify(this.buyerInsertDataCopy)
+      return _.isEqual(this.buyerInsertData, this.buyerInsertDataCopy);
     }
     return false;
   }
