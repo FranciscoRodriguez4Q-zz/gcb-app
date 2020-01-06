@@ -19,6 +19,10 @@ export class BuyerService {
     return this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT+"/buyer/buyer-details");
   }
 
+  public getBuyerAliases(id):Observable<any> { 
+    return this.http.get(`${environment.APP_BASE_URL_SERVICE_ENDPOINT}/buyer/${id}/aliases`);
+  }
+
   public upsertBuyer(buyerInsertData): Observable<any> {
      return this.http.post(environment.APP_BASE_URL_SERVICE_ENDPOINT+"/buyer/buyers", buyerInsertData);
    }

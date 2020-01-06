@@ -90,6 +90,10 @@ export class BuyerComponent implements OnInit, OnDestroy {
     { field: 'lastUpdatedDate', header: 'Updated Date', width: '10%' },
   ];
 
+  newAlias:string = "";
+  aliases: SelectItem[] = [];
+  selectedAlias:SelectItem;
+
   public buyerInsertData: any = {
     "erpBuyerLeName": "",
     "erpOuNumber": "",
@@ -98,11 +102,28 @@ export class BuyerComponent implements OnInit, OnDestroy {
     "goldId": "",
     "updatedBy": "",
     "buyerInfo":"",
-    "goldNetName":""
+    "goldNetName":"",
+    "aliases": []
   };
   public buyerInsertDataCopy: any;
 
+  addAlias(alias){
+    this.newAlias = "";
+    if(!this.buyerInsertData.aliases.includes(alias)){
+      this.aliases.push({label: alias, value:alias});
+      this.buyerInsertData.aliases.push(alias);
+    }
+    console.log(this.aliases)
+  }
+
+  removeAlias(salias){
+    let i = this.buyerInsertData.aliases.indexOf(salias.label);
+    this.buyerInsertData.aliases.splice(i,1)
+    this.aliases.splice(i,1);
+  }
+
   async ngOnInit() {
+    this.buyerInsertData.aliases = [];
     this.initStateOnComponent()
     for (let i = 0; i < this.cols.length; i++) {
       // console.log("in Download method"+i);
@@ -178,14 +199,9 @@ export class BuyerComponent implements OnInit, OnDestroy {
     this.formMode="Modify";
     const modelTemp = this.buyerData.find(x => x.buyerId == buyerId);
     this.buyerInsertData = { ...modelTemp };
-    this.buyerInsertDataCopy = { ...this.buyerInsertData }
-  }
-
-  open(content) {
-    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    this.buyerService.getBuyerAliases(modelTemp.buyerId).subscribe((data)=>{
+      this.buyerInsertData.aliases = data;
+      this.buyerInsertDataCopy = { ...this.buyerInsertData }
     });
   }
 
@@ -247,22 +263,12 @@ export class BuyerComponent implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   * Private Method to get popup dismissed reason Can be removed if not needed.
-   * @param: reason: $event.
-   */
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
-  }
-
   get disabled() {
     if (this.editFlag) {
+      console.log('Model')
+      console.log(this.buyerInsertData);
+      console.log('Copy')
+      console.log(this.buyerInsertDataCopy);
       return JSON.stringify(this.buyerInsertData) === JSON.stringify(this.buyerInsertDataCopy)
     }
     return false;
