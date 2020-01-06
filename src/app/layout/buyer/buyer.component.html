@@ -33,7 +33,7 @@
                             Buyer Info
                         </div>
                         <div class="col-8 pl-0">
-                            <input class="form-control p-0" [(ngModel)]="buyerInsertData.buyerInfo" (ngModelChange)="buyerInsertData.buyerInfo = $event.toUpperCase()" [disabled]="userFlag">
+                            <input class="form-control" [(ngModel)]="buyerInsertData.buyerInfo" (ngModelChange)="buyerInsertData.buyerInfo = $event.toUpperCase()" [disabled]="userFlag">
                         </div>
                     </div>
                     <div class="row  mb-2 align-items-center">
@@ -56,20 +56,24 @@
                                 [(ngModel)]="buyerInsertData.goldId" [filter]="true" placeholder="Select" [resetFilterOnHide]="true" [disabled]="userFlag"></p-dropdown>
                         </div>
                     </div>
-                    <div class="row align-items-center">
+                    <div class="row mb-1 align-items-center">
                         <div class="col-4" style="text-align: right;">
                             Aliases
                         </div>
                         <div class="col-8 pl-0">
-                            <div class="input-group mb-3">
-                                <input doOnEnter (doEnter)="addAlias(newAlias)" type="text" [(ngModel)]="newAlias" class="form-control" placeholder="New Buyer Alias">
-                                <div class="input-group-append">
-                                    <button class="btn btn-outline-secondary" (click)="addAlias(newAlias)" type="button" id="button-addon2"> <i class="fa fa-plus"></i> </button>
+                            <div class="container">
+                                <div class="row justify-content-middle">
+                                    <div class="col pl-0 pr-1">
+                                        <input doOnEnter (doEnter)="addAlias(newAlias)" class="form-control" [(ngModel)]="newAlias" [disabled]="userFlag" placeholder="New Buyer Alias">
+                                    </div>
+                                    <div class="col-auto px-0">
+                                        <button class="btn btn-outline-secondary" style="padding-top: 4px; padding-bottom: 4px;" (click)="addAlias(newAlias)" type="button"> <span style="font-size: 16px"> <i class="fa fa-plus"></i> </span> </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="row mb-2 align-items-center justify-content-end" style="margin-top: -10px;">
+                    <div class="row mb-2 align-items-center justify-content-end">
                         <div class="col-8 pl-0">
                             <p-listbox [options]="aliases" [(ngModel)]="selectedAlias" [style]="{'width':'100%'}" [listStyle]="{'overflow-x':'hidden','height':'115px', 'width':'100%'}">
                                 <ng-template let-Salias pTemplate="item">
