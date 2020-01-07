@@ -117,7 +117,7 @@ export class BuyerComponent implements OnInit, OnDestroy {
   }
 
   removeAlias(salias){
-    let i = this.buyerInsertData.buyerAlias.indexOf({aliasName: salias.label});
+    let i = this.aliases.indexOf(salias);
     this.buyerInsertData.buyerAlias.splice(i,1)
     this.aliases.splice(i,1);
   }
