@@ -110,7 +110,7 @@ export class BuyerComponent implements OnInit, OnDestroy {
 
   addAlias(alias){
     this.newAlias = "";
-    if(!this.buyerInsertData.buyerAlias.includes(alias)){
+    if(alias != "" && !this.aliases.map((ali) => ali.label.toUpperCase()).includes(alias.toUpperCase())){
       this.aliases.push({label: alias, value:alias});
       this.buyerInsertData.buyerAlias.push({aliasName: alias});
     }
