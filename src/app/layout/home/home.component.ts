@@ -35,8 +35,6 @@ export class HomeComponent implements OnInit {
     BAN: 'Ban'
   }
 
-  files: any = {
-  };
   data: any;
   menuItems: any;
   public screenFlag: boolean = false;
@@ -46,52 +44,37 @@ export class HomeComponent implements OnInit {
     private router: Router
   ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.screenFlag = true;
     this.loading = true;
     this.treeData = [{}];
-    this.homeService.getTreeViewData().subscribe(files => {
-      this.data = files;
-      console.log(this.data[0].children);
-      this.treeData = [{
-
-        "label": "Product",
-        "data": "Product",
-        "expandedIcon": "fa fa-folder-open",
-        "collapsedIcon": "fa fa-folder",
-        "children": this.data[0].children
-
-      },
-      {
-
-        "label": "Country",
-        "data": "Country",
-        "expandedIcon": "fa fa-folder-open",
-        "collapsedIcon": "fa fa-folder",
-        "children": this.data[1].children
-
-      },
-      {
-
-        "label": "Vendor",
-        "data": "Vendor",
-        "expandedIcon": "fa fa-folder-open",
-        "collapsedIcon": "fa fa-folder",
-        "children": this.data[2].children
-
-      },
-      {
-
-        "label": "Buyer",
-        "data": "Buyer",
-        "expandedIcon": "fa fa-folder-open",
-        "collapsedIcon": "fa fa-folder",
-        "children": this.data[3].children
-
-      }
-      ]
-      this.screenFlag = false;
-    });
+    const [ product, location, vendor, buyer ] = await this.homeService.getTreeViewData();
+    this.treeData = [{
+      "label": "Product",
+      "data": "Product",
+      "expandedIcon": "fa fa-folder-open",
+      "collapsedIcon": "fa fa-folder",
+      "children": product.children
+    }, {
+      "label": "Country",
+      "data": "Country",
+      "expandedIcon": "fa fa-folder-open",
+      "collapsedIcon": "fa fa-folder",
+      "children": location.children
+    }, {
+      "label": "Vendor",
+      "data": "Vendor",
+      "expandedIcon": "fa fa-folder-open",
+      "collapsedIcon": "fa fa-folder",
+      "children": vendor.children
+    }, {
+      "label": "Buyer",
+      "data": "Buyer",
+      "expandedIcon": "fa fa-folder-open",
+      "collapsedIcon": "fa fa-folder",
+      "children": buyer.children
+    }]
+    this.screenFlag = false;
 
     this.menuItems = [
       { label: 'Product', routerLink: ['Product'] },
@@ -100,7 +83,6 @@ export class HomeComponent implements OnInit {
       { label: 'Vendor Config', routerLink: ['VendorConfig'] },
       { label: 'Buyer', routerLink: ['Buyer'] },
       { label: 'BAN', routerLink: ['Ban'] }
-
     ];
 
   }

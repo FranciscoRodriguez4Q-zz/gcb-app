@@ -29,23 +29,17 @@ export class HomeService {
   state$: Observable<any>;
   private _state$: BehaviorSubject<any>;
 
+  private readonly nameTrees = ['product_json', 'location_json', 'vendor_json', 'buyer_json']
+
   constructor(private http: HttpClient) {
     this._state$ = new BehaviorSubject(this.initialState);
     this.state$ = this._state$.asObservable();
   }
 
-  public getTreeViewData(): Observable<Object> {
-    let product = this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/productTree");
-    let country = this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/locationTree");
-    let vendor = this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/vendorTree");
-    let buyer = this.http.get(environment.APP_BASE_URL_SERVICE_ENDPOINT + "/buyerTree");
-
-    // Using forkjoin property of observable to get multiple service values based on array values.
-    return forkJoin([product, country, vendor, buyer])
-      .pipe(
-        tap(results => this.setTreeViewData(results)),
-        catchError(error => this.handleError(error))
-      );
+  public getTreeViewData(): any {
+    const trees = this.nameTrees.map(name => 
+      this.http.get(`${environment.APP_BASE_URL_SERVICE_ENDPOINT}/tree?name=${name}`).toPromise())
+    return Promise.all(trees)
   }
 
   private setTreeViewData(getTreeViewData: any) {
