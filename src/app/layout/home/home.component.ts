@@ -45,6 +45,14 @@ export class HomeComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
+    this.menuItems = [
+      { label: 'Product', routerLink: ['Product'] },
+      { label: 'Service Type', routerLink: ['ProductServiceType'] },
+      { label: 'Vendor LE', routerLink: ['Vendor'] },
+      { label: 'Vendor Config', routerLink: ['VendorConfig'] },
+      { label: 'Buyer', routerLink: ['Buyer'] },
+      { label: 'BAN', routerLink: ['Ban'] }
+    ];
     this.screenFlag = true;
     this.loading = true;
     this.treeData = [{}];
@@ -75,16 +83,6 @@ export class HomeComponent implements OnInit {
       "children": buyer.children
     }]
     this.screenFlag = false;
-
-    this.menuItems = [
-      { label: 'Product', routerLink: ['Product'] },
-      { label: 'Service Type', routerLink: ['ProductServiceType'] },
-      { label: 'Vendor LE', routerLink: ['Vendor'] },
-      { label: 'Vendor Config', routerLink: ['VendorConfig'] },
-      { label: 'Buyer', routerLink: ['Buyer'] },
-      { label: 'BAN', routerLink: ['Ban'] }
-    ];
-
   }
 
 
