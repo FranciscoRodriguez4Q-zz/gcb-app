@@ -2,81 +2,74 @@
 <div class="-font--serif">
     <p-fieldset>
         <p-header>Product : {{formMode}}</p-header>
-      <div class="p-grid nested-grid">
-          <div class="p-col-6">
-              <div class="p-grid">
-                  <div class="p-col-4 item-right">
-                      <label class="label"><span class="required">*</span>Process Name </label>
-                  </div>
-                  <div class="p-col-7 item-left">
-                    <p-dropdown onEnter
-                  [options]="billProcessReferenceList"
-                  [(ngModel)]="gcbProductFilters.billProcessId"      placeholder="Select"   [autoWidth]="true"
-                  [style]="{'width': '100%' ,'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"   
-                  [filter]="true"  scrollHeight="150px"  [disabled]="editFlag || userFlag"  [resetFilterOnHide]="true">
-                  </p-dropdown>
-                  </div>
-              </div>
-              <div class="p-grid">
-                  <div class="p-col-4 item-right">
-                      <label class="label"><span class="required">*</span>Product Name</label>
-                  </div>
-                  <div class="p-col-7 item-left">
-                      <input class="form-control" [(ngModel)]="gcbProductFilters.productName"  [disabled]="userFlag">
-                  </div>
-              </div>
-              <div class="p-grid">
-                  <div class="p-col-4 item-right" >
-                      <label class="label"><span class="required">*</span>Product Code</label>
-                  </div>
-                  <div class="p-col-7 item-left">
-                      <input class="form-control" [(ngModel)]="gcbProductFilters.productCode" [disabled]="editFlag || userFlag">
-                  </div>
-              </div>
-              <!-- <div class="p-grid">
-                <div class="p-col-4 item-right">
-                     <label class="label"><span class="required">*</span>Product Type </label>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-6">
+                    <div class="row mb-2 align-items-center">
+                        <div class="col-4" style="text-align: right;">
+                            <label class="label"><span class="required">*</span>Process Name </label>
+                        </div>
+                        <div class="col-8 pl-0">
+                            <p-dropdown onEnter [options]="billProcessReferenceList" [(ngModel)]="gcbProductFilters.billProcessId" placeholder="Select"
+                                [autoWidth]="true" [style]="{'width': '100%' ,'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
+                                [filter]="true" scrollHeight="150px" [disabled]="editFlag || userFlag" [resetFilterOnHide]="true">
+                            </p-dropdown>
+                        </div>
+                    </div>
                 </div>
-                <div class="p-col-7 item-left">
-                    <p-dropdown onEnter [virtualScroll]="true" itemSize="30" [options]="productTypeReferenceList" [(ngModel)]="gcbProductFilters.productType" placeholder="Select" [autoWidth]="true"
-                                        [style]="{'width': '50%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
-                                        [filter]="true" scrollHeight="150px">
-                    </p-dropdown>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <div class="row mb-2 align-items-center">
+                        <div class="col-4" style="text-align: right;">
+                            <label class="label"><span class="required">*</span>Product Name</label>
+                        </div>
+                        <div class="col-8 pl-1">
+                            <input class="form-control" [(ngModel)]="gcbProductFilters.productName"  [disabled]="userFlag">
+                        </div>
+                    </div>
                 </div>
-            </div>         -->
-            <div class="p-grid">
-                <div class="p-col-4 item-right">
-                      <label class="label">UNSPSC </label>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <div class="row mb-2 align-items-center">
+                        <div class="col-4" style="text-align: right;">
+                            <label class="label"><span class="required">*</span>Product Code</label>
+                        </div>
+                        <div class="col-8 pl-0">
+                            <input class="form-control" [(ngModel)]="gcbProductFilters.productCode" [disabled]="editFlag || userFlag">
+                        </div>
+                    </div>
                 </div>
-                <div class="p-col-7 item-left">
-                     <!-- <p-dropdown onEnter [virtualScroll]="true" itemSize="30" [options]="unspscReferenceList" [(ngModel)]="gcbProductFilters.unspsc" placeholder="Select" [autoWidth]="true"
-                                        [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
-                                        [filter]="true" scrollHeight="150px">
-                     </p-dropdown> -->
-                     <input class="form-control" [(ngModel)]="gcbProductFilters.unspsc" [disabled]="userFlag">
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <div class="row mb-2 align-items-center">
+                        <div class="col-4" style="text-align: right;">
+                            <label class="label">UNSPSC </label>
+                        </div>
+                        <div class="col-8 pl-1">
+                            <input class="form-control" [(ngModel)]="gcbProductFilters.unspsc" [disabled]="userFlag">
+                        </div>
+                    </div>
                 </div>
-            </div> 
-           
-          </div>
-        
-      </div>
-      <div class="p-grid">
-        <div class="p-col-3" style="text-align:left">
-          <label class="errorMessage">{{errorMessage}}</label>
-        </div> 
-      </div> 
-      <div class="p-grid">
-        <div class="p-col-6" style="text-align:left">
-            <div *ngIf="editFlag"> 
-                <b>Inserted by: </b> {{gcbProductFilters.createdBy}} on {{gcbProductFilters.created}} <br>
-                <b>Modified by: </b> {{gcbProductFilters.updatedBy}} on {{gcbProductFilters.lastUpdated}}
+            </div>
+            <div class="row">
+                <div class="col-6 align-items-start" style="text-align:left">
+                    <label class="errorMessage">{{errorMessage}}</label>
+                    <div *ngIf="editFlag">
+                        <b>Inserted by: </b> {{gcbProductFilters.createdBy}} on {{gcbProductFilters.created}} <br>
+                        <b>Modified by: </b> {{gcbProductFilters.updatedBy}} on {{gcbProductFilters.lastUpdated}}
+                    </div>
+                </div>
+                <div class="col-6 " style="text-align:right">
+                    <div class="row justify-content-end align-items-end h-100">
+                        <button class="ge-button -fill--solid" (click)="upsertProduct()" [disabled]="userFlag || disabled">Submit</button>
+                        <button class="ge-button -fill--solid" (click)="clearAllFilters()" [disabled]="userFlag">Cancel</button>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="p-col-6" style="text-align:right">
-            <button class="ge-button -fill--solid" (click)="upsertProduct()" [disabled]="userFlag || disabled">Submit</button>
-            <button class="ge-button -fill--solid" (click)="clearAllFilters()" [disabled]="userFlag">Cancel</button>
-        </div>
-    </div>
     </p-fieldset>
     
        <!-- <div class="p-grid">

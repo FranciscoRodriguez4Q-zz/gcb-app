@@ -2,97 +2,99 @@
   <!-- <div class="-font--plus-2">Service Type : Add/Modify </div> -->
 <p-fieldset>
     <p-header>Service Type : {{formMode}}</p-header>
-<div class="p-grid nested-grid">
-    <div class="p-col-6">
-        <div class="p-grid">
-            <div class="p-col-5 item-right">
-                <label class="label"><span class="required">*</span>Product Name </label>
-            </div>
-            <div class="p-col-5 item-left">
-                <p-dropdown onEnter [virtualScroll]="true" itemSize="30" [options]="productReferenceDataList"
-                    [(ngModel)]="gcbDetailFilters.productId" placeholder="Select" [autoWidth]="true" [style]="{'width': '130%'}"
-                    [filter]="true" (onChange)="getServicetype()" scrollHeight="150px" [disabled]="editFlag || userFlag"
-                    [resetFilterOnHide]="true">
-                </p-dropdown>
-            </div>
-        </div>
-
-        <div class="p-grid">
-                <div class="p-col-5 item-right">
-                    <label class="label">Process  Name</label>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-6">
+                <div class="row mb-2 align-items-center">
+                    <div class="col-4" style="text-align: right;">
+                        <label class="label"><span class="required">*</span>Product Name </label>
+                    </div>
+                    <div class="col-8 pl-0">
+                            <p-dropdown onEnter [virtualScroll]="true" itemSize="30" [options]="productReferenceDataList"
+                            [(ngModel)]="gcbDetailFilters.productId" placeholder="Select" [autoWidth]="true" [style]="{'width': '100%'}"
+                            [filter]="true" (onChange)="getServicetype()" scrollHeight="150px" [disabled]="editFlag || userFlag"
+                            [resetFilterOnHide]="true">
+                        </p-dropdown>
+                    </div>
                 </div>
-                <div class="p-col-5 item-left">
-                        <input class="form-control widthAdjust" [(ngModel)]="gcbDetailFilters.processName" [disabled]="true || userFlag" >
+                <div class="row mb-2 align-items-center">
+                    <div class="col-4" style="text-align: right;">
+                        <label class="label">Process  Name</label>
+                    </div>
+                    <div class="col-8 pl-0">
+                        <input class="form-control" [(ngModel)]="gcbDetailFilters.processName" [disabled]="true || userFlag" >
+                    </div>
+                </div>
+                <div class="row mb-2 align-items-center">
+                    <div class="col-4" style="text-align: right;">
+                        <label class="label"><span class="required">*</span>Billed From </label>
+                    </div>
+                    <div class="col-8 pl-0">
+                        <p-dropdown onEnter [virtualScroll]="true" itemSize="30" [options]="countryCodeReferenceDataList" (click)="getServicetype()"
+                            [style]="{'width': '100%'}" placeholder="Select" [(ngModel)]="gcbDetailFilters.billedFromLocationId"
+                            [filter]="true" [resetFilterOnHide]="true" [disabled]="editFlag || userFlag"></p-dropdown>
+                    </div>
+                </div>
+                <div class="row mb-2 align-items-center">
+                    <div class="col-4" style="text-align: right;">
+                        <label class="label"><span class="required">*</span>Billed To </label>
+                    </div>
+                    <div class="col-8 pl-0">
+                        <p-dropdown onEnter [virtualScroll]="true" itemSize="30" [options]="countryCodeReferenceDataList" [(ngModel)]="gcbDetailFilters.billedToLocationId"
+                            placeholder="Select" [autoWidth]="true" [style]="{'width': '100%'}" [filter]="true" (click)="getServicetype()"
+                            scrollHeight="150px" [resetFilterOnHide]="true" [disabled]="editFlag || userFlag">
+                        </p-dropdown>
+                    </div>
+                </div>
+                <div class="row mb-2 align-items-center">
+                    <div class="col-4" style="text-align: right;">
+                        <label class="label"><span class="required">*</span>Service Type Name </label>
+                    </div>
+                    <div class="col-8 pl-0">
+                        <input class="form-control"  [disabled]="true ||userFlag" [(ngModel)]="gcbDetailFilters.serviceTypeName" tooltip="gcbDetailFilters.serviceTypeName" >
+                    </div>
+                </div>
+                <div class="row mb-2 align-items-center">
+                    <div class="col-4" style="text-align: right;">
+                        <label class="label">Legacy Service Type Name</label>
+                    </div>
+                    <div class="col-8 pl-0">
+                        <input class="form-control" [(ngModel)]="gcbDetailFilters.legacyServiceTypeName" [disabled]="legacyServiceTypeEnableFlag || userFlag">
+                    </div>
                 </div>
             </div>
-
-
-        <div class="p-grid">
-            <div class="p-col-5 item-right" >
-                <label class="label"><span class="required">*</span>Billed From </label>
-            </div>
-            <div class="p-col-5 item-left">
-                 <!-- <p-dropdown onEnter [virtualScroll]="true" itemSize="30" [options]="countryCodeReferenceDataList" [(ngModel)]="gcbDetailFilters.billedFromLocationId" placeholder="Select" [autoWidth]="true"
-                                    [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
-                                    [filter]="true" (click)="getServicetype()" scrollHeight="150px">
-                </p-dropdown> -->
-                <p-dropdown onEnter [virtualScroll]="true"  itemSize="30" [options]="countryCodeReferenceDataList" (click)="getServicetype()"  [style]="{'width': '130%'}" placeholder="Select" [(ngModel)]="gcbDetailFilters.billedFromLocationId" [filter]="true"  [resetFilterOnHide]="true" [disabled]="editFlag || userFlag"></p-dropdown>
-            </div>
-        </div>
-        <div class="p-grid">
-            <div class="p-col-5 item-right">
-                 <label class="label"><span class="required">*</span>Billed To </label>
-            </div>
-            <div class="p-col-5 item-left">
-                <p-dropdown onEnter [virtualScroll]="true" itemSize="30" [options]="countryCodeReferenceDataList" [(ngModel)]="gcbDetailFilters.billedToLocationId" placeholder="Select" [autoWidth]="true"
-                [style]="{'width': '130%'}"  [filter]="true" (click)="getServicetype()" scrollHeight="150px" [resetFilterOnHide]="true" [disabled]="editFlag || userFlag">
-                </p-dropdown>
-            </div>
-        </div>
-        <div class="p-grid">
-            <div class="p-col-5 item-right">
-                 <label class="label"><span class="required">*</span>Service Type Name </label>
-            </div>
-            <div class="p-col-5 item-left">
-                <input class="form-control widthAdjust"  [disabled]="true ||userFlag" [(ngModel)]="gcbDetailFilters.serviceTypeName" tooltip="gcbDetailFilters.serviceTypeName" >
-            </div>
-        </div>
-        <div class="p-grid">
-            <div class="p-col-5 item-right">
-                <label class="label">Legacy Service Type Name</label>
-            </div>
-            <div class="p-col-5 item-left">
-                <input class="form-control widthAdjust" [(ngModel)]="gcbDetailFilters.legacyServiceTypeName"
-                    [disabled]="legacyServiceTypeEnableFlag || userFlag">
-            </div>
-        </div>
-    </div>
-    <div class="p-col-6">
-            <p-fieldset>
+            <div class="col-6">
+                <p-fieldset>
                     <p-header>Billing Info</p-header>
-                    <div class="p-grid">
-                            <div class="p-col-3 item-right">
-                                  <label class="label"><span class="required">*</span>Billing Basis </label>
-                            </div>
-                            <div class="p-col-5 item-left">
-                                 <p-dropdown onEnter [options]="billingReferenceDataList" [(ngModel)]="gcbDetailFilters.billingBasis" placeholder="Select" [autoWidth]="true"
-                                                    [style]="{'width': '130%' , 'position': 'relative' , 'margin-top' : '-1px' , 'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}"
-                                                    [filter]="true" scrollHeight="150px" [resetFilterOnHide]="true" [disabled]="userFlag">
-                                                </p-dropdown>
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col">
+                                <div class="row mb-2 align-items-center">
+                                    <div class="col-3" style="text-align: right;">
+                                        <label class="label"><span class="required">*</span>Billing Basis </label>
+                                    </div>
+                                    <div class="col-8 pl-0">
+                                        <p-dropdown onEnter [options]="billingReferenceDataList" [(ngModel)]="gcbDetailFilters.billingBasis" placeholder="Select"
+                                            [autoWidth]="true" [style]="{'width': '100%' , 'position': 'relative' , 'margin-top' : '-1px' ,
+                                            'margin-left' : '1px', 'border-color':'#244364' ,'color': '#868e96'}" [filter]="true"
+                                            scrollHeight="150px" [resetFilterOnHide]="true" [disabled]="userFlag">
+                                        </p-dropdown>
+                                    </div>
+                                </div>
+                                <div class="row mb-2 align-items-center">
+                                    <div class="col-3" style="text-align: right;">
+                                            <label class="label"><span class="required">*</span>Cost Center </label>
+                                    </div>
+                                    <div class="col-8 pl-0">
+                                        <input class="form-control" [(ngModel)]="gcbDetailFilters.costCenter"  [disabled]="userFlag">
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="p-grid">
-                            <div class="p-col-3 item-right">
-                                  <label class="label"><span class="required">*</span>Cost Center </label>
-                            </div>
-                            <div class="p-col-5 item-left">
-                                <input class="form-control widthAdjust" [(ngModel)]="gcbDetailFilters.costCenter"  [disabled]="userFlag">
-                
-                            </div>
-                        </div>
+                    </div>
                     <!-- <div class="p-grid">
                             <div class="p-col-3 item-right">
-                                 <label class="label"><span class="required">*</span>VAT Percent</label>
+                                <label class="label"><span class="required">*</span>VAT Percent</label>
                             </div>
                             <div class="p-col-5 item-left">
                                 <input class="form-control" [(ngModel)]="gcbDetailFilters.vatPercent" >
@@ -100,7 +102,7 @@
                     </div>
                     <div class="p-grid">
                             <div class="p-col-3 item-right">
-                                 <label class="label"><span class="required">*</span>WHT Percent</label>
+                                <label class="label"><span class="required">*</span>WHT Percent</label>
                             </div>
                             <div class="p-col-5 item-left">
                                 <input class="form-control" [(ngModel)]="gcbDetailFilters.whtPercent"  >
@@ -108,7 +110,7 @@
                     </div>
                     <div class="p-grid">
                             <div class="p-col-3 item-right">
-                                 <label class="label"><span class="required">*</span>TP Percent</label>
+                                <label class="label"><span class="required">*</span>TP Percent</label>
                             </div>
                             <div class="p-col-5 item-left">
                                 <input class="form-control" [(ngModel)]="gcbDetailFilters.tpPercent"  >
@@ -116,7 +118,7 @@
                     </div> -->
                     <!-- <div class="p-grid">
                             <div class="p-col-4 item-right">
-                                 <label class="label"><span class="required">*</span>UNSPSC Override</label>
+                                <label class="label"><span class="required">*</span>UNSPSC Override</label>
                             </div>
                             <div class="p-col-2 item-left">
                                     <p-checkbox [(ngModel)]="gcbDetailFilters.unspscOverride" binary="false" labelStyleClass="chkLabel"></p-checkbox><label class="label"></label>
@@ -127,30 +129,31 @@
                     </div> -->
                     <!-- <div class="p-grid">
                             <div class="p-col-5 item-right">
-                                 <label class="label"><span class="required">*</span>UNSPSC Map</label>
+                                <label class="label"><span class="required">*</span>UNSPSC Map</label>
                             </div>
                             <div class="p-col-5 item-left">
                                 <input class="form-control" [(ngModel)]="gcbDetailFilters.unspsc" [disabled]="!gcbDetailFilters.unspscOverride" >
                             </div>
                     </div>                      -->
-            </p-fieldset>
-    </div>
-</div>
-<div class="p-grid">
-    <label class="errorMessage">{{errorMessage}}</label>
-    </div>
-<div class="p-grid">
-    <div class="p-col-6" style="text-align:left">
-        <div *ngIf="editFlag"> 
-            <b>Inserted by: </b> {{gcbDetailFilters.createdBy}} on {{gcbDetailFilters.created}} <br>
-            <b>Modified by: </b> {{gcbDetailFilters.updatedBy}} on {{gcbDetailFilters.lastUpdated}}
+                </p-fieldset>
+            </div>
         </div>
-    </div>    
-    <div class="p-col-6" style="text-align:right">
-        <button class="ge-button -fill--solid" (click)="upsertServiceType()" [disabled]="userFlag || disabled">Submit</button>
-        <button class="ge-button -fill--solid" (click)="clearAllFilters()" [disabled]="userFlag">Cancel</button>
+        <div class="row">
+            <div class="col-6 align-items-start" style="text-align:left">
+                    <label class="errorMessage">{{errorMessage}}</label>
+                <div *ngIf="editFlag">
+                    <b>Inserted by: </b> {{gcbDetailFilters.createdBy}} on {{gcbDetailFilters.created}} <br>
+                    <b>Modified by: </b> {{gcbDetailFilters.updatedBy}} on {{gcbDetailFilters.lastUpdated}}
+                </div>
+            </div>
+            <div class="col-6 " style="text-align:right">
+                <div class="row justify-content-end align-items-end h-100">
+                    <button class="ge-button -fill--solid" (click)="upsertServiceType()" [disabled]="userFlag || disabled">Submit</button>
+                    <button class="ge-button -fill--solid" (click)="clearAllFilters()" [disabled]="userFlag">Cancel</button>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
 </p-fieldset>
 
 <p-fieldset>

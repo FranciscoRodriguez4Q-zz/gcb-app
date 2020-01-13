@@ -273,6 +273,7 @@ export class ProductServiceTypeComponent implements OnInit, OnDestroy {
   }
 
   showSelectedData(serviceTypeId) {
+    this.errorMessage = "";
     console.log("radio button click" + serviceTypeId);
     this.editFlag = true;
     const test = this.serviceTypes.find(x => x.serviceTypeId == serviceTypeId)

@@ -3830,8 +3830,7 @@ input.ge-radio-button:checked + .ge-radio-button-style:before {
 input[type="text"],
 .ge-text-area,
 textarea {
-  font-size: 1.125rem;
-  min-height: 3rem;
+  font-size: 14px;
   padding-right: 1rem;
   padding-left: 1rem;
   width: calc(100% - 2rem);

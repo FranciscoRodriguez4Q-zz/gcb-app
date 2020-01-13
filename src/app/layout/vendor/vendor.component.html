@@ -1,56 +1,60 @@
 <div class="-font--serif">
         <p-fieldset>
                 <p-header>Vendor : {{formMode}}</p-header>
-        <div class="p-grid nested-grid">
-            <div class="p-col-8">
-                <div class="p-grid">
-                    <div class="p-col-3 item-right">
-                            <label class="label"><span class="required">*</span>HL Vendor Name</label>
-                    </div>
-                     <div class="p-col-5 item-left">
-                        <p-dropdown onEnter [options]="hlVendorDataList" [style]="{'width': '130%'}" [(ngModel)]="vendorInsertData.hlVendorId" [filter]="true" placeholder="Select" [resetFilterOnHide]="true" [disabled]="userFlag"></p-dropdown>
-                    </div> 
-                </div>
-                <div class="p-grid">
-                    <div class="p-col-3 item-right">
-                        <label class="label"><span class="required">*</span>Vendor Legal Entity Name </label>
-                    </div>
-                    <div class="p-col-5 item-left">
-                            <input style="width: 130%" class="form-control" [(ngModel)]="vendorInsertData.vendorLegalEntityName" (ngModelChange)="vendorInsertData.vendorLegalEntityName = $event.toUpperCase()" [disabled]="userFlag">
-                    </div>
-                </div>
-                <div class="p-grid">
-                    <div class="p-col-3 item-right" >
-                        <label class="label"><span class="required">*</span>Active </label>
-                    </div>
-                    <div class="p-col-5 item-left">
-                            <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="vendorInsertData.active" [disabled]="userFlag"></p-checkbox><label class="label"></label>
-                    </div>
-                </div>                        
-            </div>
-        </div>
 
-  <div class="p-grid">
-    <div class="p-col-3" style="text-align:left">
-      <label class="errorMessage">{{errorMessage}}</label>
-    </div> 
-  </div>
-<div class="p-grid">
-    <div class="p-col-6" style="text-align:left">
-        <div *ngIf="editFlag"> 
-            <b>Inserted by: </b> {{vendorInsertData.createdBy}} on {{vendorInsertData.createdDate}} <br>
-            <b>Modified by: </b> {{vendorInsertData.updatedBy}} on {{vendorInsertData.lastUpdatedDate}}
-        </div>
-    </div>
-    <div class="p-col-6" style="text-align:right">
-        <button class="ge-button -fill--solid -size--medium" (click)="upsertVendor()" [disabled]="userFlag || disabled">Submit</button>
-        <button class="ge-button -fill--solid -size--medium" (click)="cancel()" [disabled]="userFlag">Cancel</button>
-    </div>
-  </div>
-<!-- <div *ngIf="!gridLoadFlag">
-  Loading data
-  <p-progressSpinner></p-progressSpinner>
-</div> -->
+                <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="row mb-2 align-items-center">
+                                    <div class="col-4" style="text-align: right;">
+                                        <label class="label"><span class="required">*</span>HL Vendor Name</label>
+                                    </div>
+                                    <div class="col-8 pl-0">
+                                        <p-dropdown onEnter [options]="hlVendorDataList" [style]="{'width': '100%'}" [(ngModel)]="vendorInsertData.hlVendorId" [filter]="true" placeholder="Select" [resetFilterOnHide]="true" [disabled]="userFlag"></p-dropdown>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="row mb-2 align-items-center">
+                                    <div class="col-4" style="text-align: right;">
+                                        <label class="label"><span class="required">*</span>Vendor Legal Entity Name </label>
+                                    </div>
+                                    <div class="col-8 pl-0">
+                                        <input style="width: 100%" class="form-control" [(ngModel)]="vendorInsertData.vendorLegalEntityName" (ngModelChange)="vendorInsertData.vendorLegalEntityName = $event.toUpperCase()" [disabled]="userFlag">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="row mb-2 align-items-center">
+                                    <div class="col-4" style="text-align: right;">
+                                        <label class="label"><span class="required">*</span>Active </label>
+                                    </div>
+                                    <div class="col-8 pl-0">
+                                        <p-checkbox  binary="true" labelStyleClass="chkLabel" [(ngModel)]="vendorInsertData.active" [disabled]="userFlag"></p-checkbox><label class="label"></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 align-items-start" style="text-align:left">
+                                <label class="errorMessage">{{errorMessage}}</label>
+                                <div *ngIf="editFlag">
+                                    <b>Inserted by: </b> {{vendorInsertData.createdBy}} on {{vendorInsertData.createdDate}} <br>
+                                    <b>Modified by: </b> {{vendorInsertData.updatedBy}} on {{vendorInsertData.lastUpdatedDate}}
+                                </div>
+                            </div>
+                            <div class="col-6 " style="text-align:right">
+                                <div class="row justify-content-end align-items-end h-100">
+                                    <button class="ge-button -fill--solid -size--medium" (click)="upsertVendor()" [disabled]="userFlag || disabled">Submit</button>
+                                    <button class="ge-button -fill--solid -size--medium" (click)="cancel()" [disabled]="userFlag">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 </p-fieldset>
 
 <p-fieldset>

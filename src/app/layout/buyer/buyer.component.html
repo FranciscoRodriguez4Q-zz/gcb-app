@@ -75,7 +75,7 @@
                     </div>
                     <div class="row mb-2 align-items-center justify-content-end">
                         <div class="col-8 pl-0">
-                            <p-listbox [options]="aliases" [(ngModel)]="selectedAlias" [style]="{'width':'100%'}" [listStyle]="{'overflow-x':'hidden','height':'115px', 'width':'100%'}">
+                            <p-listbox [options]="aliases" [(ngModel)]="selectedAlias" [style]="{'width':'100%'}" [listStyle]="{'overflow-x':'hidden','height':'124px', 'width':'100%'}">
                                 <ng-template let-Salias pTemplate="item">
                                     <div class="row justify-content-between">
                                         <div class="col-auto">
@@ -93,19 +93,19 @@
                     </div>
                 </div>
             </div>
-            <div class="row  mb-2 align-items-center">
-                <label class="errorMessage">{{errorMessage}}</label>
-            </div>
             <div class="row">
-                <div class="col-6" style="text-align:left">
+                <div class="col-6 align-items-start" style="text-align:left">
+                    <label class="errorMessage">{{errorMessage}}</label>
                     <div *ngIf="editFlag">
                         <b>Inserted by: </b> {{buyerInsertData.createdBy}} on {{buyerInsertData.createdDate}} <br>
                         <b>Modified by: </b> {{buyerInsertData.updatedBy}} on {{buyerInsertData.lastUpdatedDate}}
                     </div>
                 </div>
-                <div class="col-6" style="text-align:right">
-                    <button class="ge-button -fill--solid" (click)="upsertBuyer()" [disabled]="userFlag || disabled">Submit</button>
-                    <button class="ge-button -fill--solid" (click)="clearAllFilters()" [disabled]="userFlag">Cancel</button>
+                <div class="col-6 " style="text-align:right">
+                    <div class="row justify-content-end align-items-end h-100">
+                        <button class="ge-button -fill--solid" (click)="upsertBuyer()" [disabled]="userFlag || disabled">Submit</button>
+                        <button class="ge-button -fill--solid" (click)="clearAllFilters()" [disabled]="userFlag">Cancel</button>
+                    </div>
                 </div>
             </div>
         </div>
