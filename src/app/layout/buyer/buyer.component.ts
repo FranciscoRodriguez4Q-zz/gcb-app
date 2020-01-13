@@ -194,6 +194,7 @@ export class BuyerComponent implements OnInit, OnDestroy {
   }
 
   showSelectedData(buyerId) {
+    this.errorMessage = "";
     this.editFlag = true;
     this.formMode="Modify";
     const modelTemp = this.buyerData.find(x => x.buyerId == buyerId);

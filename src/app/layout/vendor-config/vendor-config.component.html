@@ -1,127 +1,174 @@
 <div class="-font--serif">
 <p-fieldset>
-  <p-header>
-  <div *ngIf="editFlag; else sayNew">
-      <p>
-          Vendor Config : Modify
-      </p>
-    </div>
-    <ng-template #sayNew>
-      <p>
-          Vendor Config : New
-      </p>
-    </ng-template>
-  </p-header>
-<div class="p-grid ">
-      <div class="p-col-2 p-sm-2 item-right">
-        <span class="required">*</span>Vendor LE
-      </div>
-      <div class="p-col-4">
-        <p-dropdown onEnter [virtualScroll]="true" itemSize="30" [options]="vendorReferenceDataList" [style]="{'width': '100%'}" [(ngModel)]="vendorConfigDto.vendorEntityId" [filter]="true" placeholder="Select"  [resetFilterOnHide]="true" [disabled]="userFlag"></p-dropdown>
-      </div>
-      <div class="p-col-2 item-right">
-        Active
-      </div>
-      <div class="p-col-1" >
-         <p-checkbox [(ngModel)]="vendorConfigDto.active" binary="true" [disabled]="userFlag"></p-checkbox>
-      </div>
-</div>
-<div class="p-grid">
-       <div class="p-col-2 item-right">
-         <span class="required">*</span>Vendor Code
-       </div>
-       <div class="p-col-4 item-left upper">
-          <input class="form-control" [(ngModel)]="vendorConfigDto.vendorCode" style="width: 25%" [disabled]="userFlag">
-       </div>
-       <div class="p-col-2 item-right">
-          Exchange Rate Type
+    <p-header>
+        <div *ngIf="editFlag; else sayNew">
+            <p>
+                Vendor Config : Modify
+            </p>
         </div>
-        <div class="p-col-4 upper">
-            <p-dropdown onEnter [options]="exRateType" [(ngModel)]="vendorConfigDto.exchangeRateType" [filter]="true"  [style]="{'width': '25%'}" placeholder="Select" [resetFilterOnHide]="true" [disabled]="userFlag"></p-dropdown>
+        <ng-template #sayNew>
+            <p>
+                Vendor Config : New
+            </p>
+        </ng-template>
+    </p-header>
+    <div class="container-fluid">
+        <div class="row align-items-center">
+            <div class="col">
+                <div class="row mb-2 align-items-center">
+                    <div class="col-4" style="text-align: right;">
+                        <span class="required">*</span>Vendor LE
+                    </div>
+                    <div class="col-8 pl-0">
+                        <p-dropdown onEnter [virtualScroll]="true" itemSize="30" [options]="vendorReferenceDataList" [style]="{'width': '100%'}"
+                            [(ngModel)]="vendorConfigDto.vendorEntityId" [filter]="true" placeholder="Select" [resetFilterOnHide]="true"
+                            [disabled]="userFlag"></p-dropdown>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="row mb-2 align-items-center">
+                    <div class="col-4" style="text-align: right;">
+                        Active
+                    </div>
+                    <div class="col-8 pl-1">
+                        <p-checkbox [(ngModel)]="vendorConfigDto.active" binary="true" [disabled]="userFlag"></p-checkbox>
+                    </div>
+                </div>
+            </div>
         </div>
-</div>
-<div class="p-grid">
-    <div class="p-col-2 item-right">
-       Vendor Contact Email
-     </div>
-     <div class="p-col-4 upper">
-        <input class="form-control" [(ngModel)]="vendorConfigDto.vendorContactEmail" style="width: 100%" [disabled]="userFlag">
-     </div>
-     <div class="p-col-2 item-right">
-      Payment Approval Email
-    </div>
-    <div class="p-col-4">
-       <input class="form-control" [(ngModel)]="vendorConfigDto.paymentApprovalEmail" style="width: 100%" [disabled]="userFlag">
-    </div>
-</div>
-<div class="p-grid">
-    <div class="p-col-2 item-right">
-      <span class="required">*</span>Currency Code
-    </div>
-    <div class="p-col-4 item-left">
-        <p-dropdown onEnter [virtualScroll]="true" itemSize="30" [options]="currencyReferenceDataList" [(ngModel)]="vendorConfigDto.currencyCode" [filter]="true"  placeholder="Select" [resetFilterOnHide]="true" [disabled]="userFlag"></p-dropdown>
-    </div>
-    <div class="p-col-2 item-right">
-      Expected Feed Date
-    </div>
-    <div class="p-col-4">
-       <p-calendar [(ngModel)]="vendorConfigDto.expectedFeedDate"  [style]="{'width': '50%'}" [disabled]="userFlag"></p-calendar>
-    </div>
-
-</div>
-<div class="p-grid">
-    <div class="p-col-2 item-right">
-      <span class="required">*</span>Billed From
-    </div>
-    <div class="p-col-4 item-left">
-        <p-dropdown onEnter [virtualScroll]="true" itemSize="30" [options]="countryCodeReferenceDataList" [style]="{'width': '100%'}" [(ngModel)]="vendorConfigDto.billedFromLocationId" [filter]="true" placeholder="Select" [disabled]="editFlag || userFlag" [resetFilterOnHide]="true" [disabled]="userFlag"></p-dropdown>
-    </div>
-    <div class="p-col-2 item-right">
-      Final Invoice Date
-    </div>
-    <div class="p-col-4">
-       <p-calendar [(ngModel)]="vendorConfigDto.finalInvoiceDate" [style]="{'width': '50%'}" [disabled]="userFlag"></p-calendar>
-    </div>
-</div>
-<div class="p-grid">
-    <div class="p-col-2 item-right">
-      <span class="required">*</span>Billed To
-    </div>
-    <div class="p-col-4 item-left">
-        <p-dropdown onEnter [virtualScroll]="true" itemSize="30" [options]="countryCodeReferenceDataList" [style]="{'width': '100%'}" [(ngModel)]="vendorConfigDto.billedToLocationId" [filter]="true" placeholder="Select" [disabled]="editFlag || userFlag" [resetFilterOnHide]="true" ></p-dropdown>
-    </div>
-    <!-- <div class="p-col-2 item-right">
-      <span class="required">*</span>Reporting Security DL
-    </div>
-    <div class="p-col-4 upper">
-       <input class="form-control" [(ngModel)]="vendorConfigDto.reportingSecurityDl" >
-    </div> -->
-    <div class="p-col-2 item-right">
-        <span class="required">*</span>Date Format
-      </div>
-      <div class="p-col-4 item-left upper">
-         <input class="form-control" [(ngModel)]="vendorConfigDto.dateFormat" style="width:40%" [disabled]="userFlag">
-      </div>
-</div>
-<div class="p-grid">
-
-
-</div>
-<div class="p-grid">
-    <label class="errorMessage required">{{errorMessage}}</label>
-</div>
-<div class="p-grid">
-    <div class="p-col-6" style="text-align:left">
-        <div *ngIf="editFlag"> 
-            <b>Inserted by: </b> {{vendorConfigDto.createdBy}} on {{vendorConfigDto.created}} <br>
-            <b>Modified by: </b> {{vendorConfigDto.updatedBy}} on {{vendorConfigDto.lastUpdated}}
+        <div class="row align-items-center">
+            <div class="col">
+                <div class="row mb-2 align-items-center">
+                    <div class="col-4" style="text-align: right;">
+                        <span class="required">*</span>Vendor Code
+                    </div>
+                    <div class="col-8 pl-0">
+                        <input class="form-control" [(ngModel)]="vendorConfigDto.vendorCode" style="width: 30%" [disabled]="userFlag">
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="row mb-2 align-items-center">
+                    <div class="col-4" style="text-align: right;">
+                        Exchange Rate Type
+                    </div>
+                    <div class="col-8 pl-0">
+                        <p-dropdown onEnter [options]="exRateType" [(ngModel)]="vendorConfigDto.exchangeRateType" [filter]="true" [style]="{'width': '25%'}"
+                            placeholder="Select" [resetFilterOnHide]="true" [disabled]="userFlag"></p-dropdown>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>    
-    <div class="p-col-6" style="text-align:right">
-        <button class="ge-button -fill--solid" (click)="upsertVendorConfig()" [disabled]="userFlag || disabled">Submit</button>
-        <button class="ge-button -fill--solid" (click)="clearAllFilters()" [disabled]="userFlag">Cancel</button>
+        <div class="row align-items-center">
+            <div class="col">
+                <div class="row mb-2 align-items-center">
+                    <div class="col-4" style="text-align: right;">
+                        Vendor Contact Email
+                    </div>
+                    <div class="col-8 pl-0">
+                        <input class="form-control" [(ngModel)]="vendorConfigDto.vendorContactEmail" style="width: 100%" [disabled]="userFlag">
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="row mb-2 align-items-center">
+                    <div class="col-4" style="text-align: right;">
+                        Payment Approval Email
+                    </div>
+                    <div class="col-8 pl-0">
+                        <input class="form-control" [(ngModel)]="vendorConfigDto.paymentApprovalEmail" style="width: 100%" [disabled]="userFlag">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row align-items-center">
+            <div class="col">
+                <div class="row mb-2 align-items-center">
+                    <div class="col-4" style="text-align: right;">
+                        <span class="required">*</span>Currency Code
+                    </div>
+                    <div class="col-8 pl-0">
+                        <p-dropdown onEnter [virtualScroll]="true" itemSize="30" [options]="currencyReferenceDataList" [(ngModel)]="vendorConfigDto.currencyCode"
+                            [filter]="true" placeholder="Select" [style]="{'width': '100%'}" [resetFilterOnHide]="true" [disabled]="userFlag"></p-dropdown>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="row mb-2 align-items-center">
+                    <div class="col-4" style="text-align: right;">
+                        Expected Feed Date
+                    </div>
+                    <div class="col-8 pl-0">
+                        <p-calendar [(ngModel)]="vendorConfigDto.expectedFeedDate" [style]="{'width': '50%'}" [disabled]="userFlag"></p-calendar>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row align-items-center">
+            <div class="col">
+                <div class="row mb-2 align-items-center">
+                    <div class="col-4" style="text-align: right;">
+                        <span class="required">*</span>Billed From
+                    </div>
+                    <div class="col-8 pl-0">
+                        <p-dropdown onEnter [virtualScroll]="true" itemSize="30" [options]="countryCodeReferenceDataList" [style]="{'width': '100%'}"
+                            [(ngModel)]="vendorConfigDto.billedFromLocationId" [filter]="true" placeholder="Select" [disabled]="editFlag || userFlag"
+                            [resetFilterOnHide]="true" [disabled]="userFlag"></p-dropdown>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="row mb-2 align-items-center">
+                    <div class="col-4" style="text-align: right;">
+                        Final Invoice Date
+                    </div>
+                    <div class="col-8 pl-0">
+                        <p-calendar [(ngModel)]="vendorConfigDto.finalInvoiceDate" [style]="{'width': '50%'}" [disabled]="userFlag"></p-calendar>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row align-items-center">
+            <div class="col">
+                <div class="row mb-2 align-items-center">
+                    <div class="col-4" style="text-align: right;">
+                        <span class="required">*</span>Billed To
+                    </div>
+                    <div class="col-8 pl-0">
+                        <p-dropdown onEnter [virtualScroll]="true" itemSize="30" [options]="countryCodeReferenceDataList" [style]="{'width': '100%'}"
+                            [(ngModel)]="vendorConfigDto.billedToLocationId" [filter]="true" placeholder="Select" [disabled]="editFlag || userFlag"
+                            [resetFilterOnHide]="true"></p-dropdown>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="row mb-2 align-items-center">
+                    <div class="col-4" style="text-align: right;">
+                        <span class="required">*</span>Date Format
+                    </div>
+                    <div class="col-8 pl-0">
+                        <input class="form-control" [(ngModel)]="vendorConfigDto.dateFormat" style="width:40%" [disabled]="userFlag">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6 align-items-start" style="text-align:left">
+                <label class="errorMessage required">{{errorMessage}}</label>
+                <div *ngIf="editFlag">
+                    <b>Inserted by: </b> {{vendorConfigDto.createdBy}} on {{vendorConfigDto.created}} <br>
+                    <b>Modified by: </b> {{vendorConfigDto.updatedBy}} on {{vendorConfigDto.lastUpdated}}
+                </div>
+            </div>
+            <div class="col-6 " style="text-align:right">
+                <div class="row justify-content-end align-items-end h-100">
+                    <button class="ge-button -fill--solid" (click)="upsertVendorConfig()" [disabled]="userFlag || disabled">Submit</button>
+                    <button class="ge-button -fill--solid" (click)="clearAllFilters()" [disabled]="userFlag">Cancel</button>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
 </p-fieldset>
 <p-fieldset>
         <p-header>Vendor Config: Existing/Search</p-header>

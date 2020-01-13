@@ -152,6 +152,7 @@ export class ProductComponent implements OnInit, OnDestroy {
   // }
 
   showSelectedData(productData) {
+    this.errorMessage = "";
     window.scroll(0, 0);
     this.editFlag = true;
     this.gcbProductFilters = { ...productData }
