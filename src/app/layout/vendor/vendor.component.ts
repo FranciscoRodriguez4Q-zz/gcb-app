@@ -150,6 +150,7 @@ export class VendorComponent implements OnInit, OnDestroy {
   }
 
   showSelectedData(vendorEntityId) {  
+    this.errorMessage = "";
       console.log("radio button click" + vendorEntityId);
       this.editFlag = true;
       this.formMode="Modify";

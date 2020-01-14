@@ -39,6 +39,16 @@ export class BanComponent implements OnInit, OnDestroy, DoCheck {
     { label: "Division/Operating Ledger BUC", value: "Division/Operating Ledger BUC" }
   ];
 
+  TOAST = swal.mixin({
+    toast: true,
+    position: 'bottom-end',
+    customClass: {
+      container: "mb-4"
+    },
+    showConfirmButton: true,
+    confirmButtonColor: '#E8101955'
+  })
+
 public vendorServiceType : any ={
   "billedToLocationId":"",
 	"billedFromLocationId":"",
@@ -444,6 +454,7 @@ public vendorServiceType : any ={
   }
 
   async clearAllFilters(){
+    this.hideToast();
    this.banInsertData = {
       banId:"",
       billProcessName: "",
@@ -578,6 +589,7 @@ public vendorServiceType : any ={
 
   shouldAssociate: boolean = true
   async upsertBan() {
+    this.hideToast();
     this.errorMessage = "";
     if (await this.validation()) {
       if (this.cloneFlag && this.vendorBan != this.banInsertData.vendorBan) {
@@ -598,6 +610,12 @@ public vendorServiceType : any ={
         this.vBanFlag = false
         this.errorFlag = false
       } catch(e) { }
+    }else{
+      this.TOAST.fire({
+        icon: 'error',
+        background: '#E8101956',
+        title: `<span style="color: white">${this.errorMessage}</span>`
+      })
     }
   }
 
@@ -1088,6 +1106,7 @@ public vendorServiceType : any ={
   }
 
   async cloneRec() {
+    this.hideToast();
     console.log('[INFO] - cloneRec()')
     const { value } = await swal.fire({
       text: 'Do you want to Clone the record?',
@@ -1267,6 +1286,12 @@ public vendorServiceType : any ={
           this.divisionValues = this.bucsbizs;
         })
       }else this.divisionValues = this.bucsbizs;
+    }
+  }
+
+  hideToast(){
+    if(this.TOAST.isVisible()){
+      this.TOAST.close()
     }
   }
 

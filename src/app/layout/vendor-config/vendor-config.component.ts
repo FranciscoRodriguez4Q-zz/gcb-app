@@ -307,6 +307,7 @@ validation() {
 }
 
 showSelectedData(vendorConfigId) {
+  this.errorMessage = "";
   console.log("vendorConfig modify click :" + vendorConfigId);
   this.editFlag = true;
   const modelTemp = this.vendorGridData.find(x => x.vendorConfigId == vendorConfigId);
