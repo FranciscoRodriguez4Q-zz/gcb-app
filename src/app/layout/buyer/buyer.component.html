@@ -1,7 +1,7 @@
 <div class="-font--serif">
     <p-fieldset>
         <p-header>Buyer: {{formMode}}</p-header>
-        <div class="container-fluid">
+        <div class="container-fluid customForm">
             <div class="row">
                 <div class="col">
                     <div class="row mb-2 align-items-center">
@@ -73,7 +73,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row mb-2 align-items-center justify-content-end">
+                    <div class="row mb-2 align-items-center">
+                        <div class="col-4"></div>
                         <div class="col-8 pl-0">
                             <p-listbox [options]="aliases" [(ngModel)]="selectedAlias" [style]="{'width':'100%'}" [listStyle]="{'overflow-x':'hidden','height':'124px', 'width':'100%'}">
                                 <ng-template let-Salias pTemplate="item">
