@@ -12,6 +12,7 @@ import { BanActions } from './state/ban.actions';
 import { SharedActions } from 'src/app/shared/state/shared.actions';
 import swal from 'sweetalert2'
 import * as _ from 'lodash'
+import { AppConstants } from 'src/app/shared/constants/app.constants';
 
 @Component({
   selector: 'app-product',
@@ -535,7 +536,7 @@ public vendorServiceType : any ={
       return false;
     }
     const { liquidateBillRoutingId, payFromBillRoutingId } = this.banInsertData
-    if (_.isEmpty(`${liquidateBillRoutingId}`) && _.isEmpty(`${payFromBillRoutingId}`)) {
+    if (_.isEmpty(liquidateBillRoutingId) && _.isEmpty(payFromBillRoutingId)) {
       this.errorMessage = "Please provide Liquidation BUC/ADN and Pay from BUC/ADN"
       return false
     }
@@ -978,23 +979,19 @@ public vendorServiceType : any ={
 
   private readonly EXTERNAL_SYSTEM_CONFIG = {
     regKey: '63082218-d4d2-4987-8e06-5fb975beca6a',
-    billingEntities: [
-      {
+    billingEntities: [{
         billingEntityId: '24',
         billingEntityName: 'BAN_ST_LIQ',
         key: 'liquidateBillRoutingId'
-      },
-      {
+      }, {
         billingEntityId: '25',
         billingEntityName: 'BAN_LIQ',
         key: 'liquidateBillRoutingId'
-      },
-      {
+      }, {
         billingEntityId: '26',
         billingEntityName: 'BAN_ST_PAY_FROM',
         key: 'payFromBillRoutingId'
-      },
-      {
+      }, {
         billingEntityId: '27',
         billingEntityName: 'BAN_PAY_FROM',
         key: 'payFromBillRoutingId'
@@ -1006,7 +1003,8 @@ public vendorServiceType : any ={
     try {
       const { regKey, billingEntities } = this.EXTERNAL_SYSTEM_CONFIG;
       const { billingEntityId, key } = billingEntities.find(({ billingEntityName }) => billingEntityName === type)
-      const requestorSSO = '999999999' //localStorage.getItem(AppConstants.LABEL_LOGGEDIN_SSO)
+      // TODO set requestSSO from userdetails in state
+      const requestorSSO = '999999999'
       const { OUTPUT: output, BillRefID: billRefId } = await this.banService.getBillHubRefID(regKey, requestorSSO, billingEntityId).toPromise()
       if (output === 'FAIL') {
         throw { error: billRefId }
@@ -1034,7 +1032,6 @@ public vendorServiceType : any ={
       const { RequestID, Edit, message } =  await this.banService.getRequestIdBillHub(regKey).toPromise()
       if (message !== 'SUCCESS')  throw 'Something went wrong!'
       // TODO call api with recent response of GetRequestID EditBillRef
-      const requestorSSO = '999999999' //localStorage.getItem(AppConstants.LABEL_LOGGEDIN_SSO);
       const { key } = billingEntities.find(({ billingEntityName }) => billingEntityName === type)
       const billRefId = type.includes('ST') ? this.systems[key] : this.banInsertData[key]
       window.open(`${environment.APP_BILLHUB_URL_SERVICE_ENDPOINT}/EditBillRef?billRefId=${billRefId}&Mode=${Edit}&reqId=${RequestID}&regKey=${regKey}`)
